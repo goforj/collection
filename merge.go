@@ -8,10 +8,8 @@ Behavior depends on the type of `other`:
 
   • []T (numeric merges)
       Values are appended to the end of the collection.
-
   • Collection[T]
       Values are appended, same as merging a slice.
-
   • map[string]T (associative merges)
       Keys that already exist overwrite the original values;
       new keys are added.

@@ -8,8 +8,8 @@
 
 {{- spacer -}}
 
-{{- codeBlock "go" .Signature -}}
-{{- spacer -}}
+{{/*- codeBlock "go" .Signature -*/}}
+{{/*- spacer -*/}}
 
 {{- template "doc" .Doc -}}
 

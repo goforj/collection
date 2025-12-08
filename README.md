@@ -131,7 +131,7 @@ AvgBy calculates the average of values extracted by fn from the collection items
 
 Example:
 
-```
+```go
 avgAge := AvgBy(users, func(u User) float64 { return float64(u.Age) })
 ```
 
@@ -144,7 +144,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int
 
 CountBy returns a map of keys extracted by fn to their occurrence counts. K must be comparable. Example:
 
-```
+```go
 counts := CountBy(users, func(u User) string { return u.Role })
 // counts == map[string]int{"admin": 3, "user": 5}
 ```
@@ -158,7 +158,7 @@ func CountByValue[T comparable](c *Collection[T]) map[T]int
 
 CountByValue returns a map of item values to their occurrence counts. T must be comparable. Example:
 
-```
+```go
 counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 // counts == map[string]int{"a": 2, "b": 1}
 ```
@@ -181,7 +181,7 @@ func Median[T Number](c *Collection[T]) (float64, bool)
 
 Median returns the median as float64. Fractional medians handled correctly. False if empty. Example:
 
-```
+```go
 c := collection.New([]int{3,1,2})
 median, ok := Median(c) → 2, true
 ```
@@ -195,7 +195,7 @@ func Min[T Number](c *Collection[T]) (T, bool)
 
 Min returns the smallest numeric item. Second return is false if empty. Example:
 
-```
+```go
 c := collection.New([]int{3,1,2})
 min, ok := Min(c) → 1, true
 ```
@@ -220,7 +220,7 @@ Reduce reduces a collection of T into a single value of type R.
 
 Example:
 
-```
+```go
 sum := Reduce(nums, 0, func(acc, n int) int { return acc + n })
 ```
 
@@ -246,7 +246,7 @@ SumBy returns the sum of a numeric projection from each item.
 
 Example \(structs\):
 
-```
+```go
 type Row struct{ Foo int }
 rows := New([]Row{{10}, {20}})
 total := SumBy(rows, func(r Row) int { return r.Foo }) // 30
@@ -274,7 +274,7 @@ MapTo maps a Collection\[T\] to a Collection\[R\] using fn\(T\) R.
 
 This cannot be a method because methods can't introduce a new type parameter R. Example:
 
-```
+```go
 squared := numbers.MapTo(func(n int) int { return n * n })
 // squared is a Collection[int] of squared numbers
 ```
@@ -297,7 +297,7 @@ func Pluck[T any, R any](c *Collection[T], fn func(T) R) *Collection[R]
 
 Pluck is an alias for MapTo with a more semantic name when projecting fields. Example:
 
-```
+```go
 names := users.Pluck(func(u User) string { return u.Name })
 // names is a Collection[string] of user names
 ```
@@ -324,7 +324,7 @@ Times creates a new collection by running fn\(n\) for i from 1..count. This mirr
 
 Example:
 
-```
+```go
 c := collection.Times(5, func(i int) int { return i * 2 })
 // [2,4,6,8,10]
 ```
@@ -340,7 +340,7 @@ After returns all items after the first element for which pred returns true. If 
 
 Example:
 
-```
+```go
 c := collection.New([]int{1,2,3,4,5})
 c.After(func(v int) bool { return v == 3 })
 // [4,5]
@@ -373,7 +373,7 @@ func (c *Collection[T]) Append(values ...T) *Collection[T]
 
 Append returns a new collection with the given values appended. Example:
 
-```
+```go
 c := collection.New([]int{1, 2})
 newC := c.Append(3, 4) // Collection with items [1, 2, 3, 4]
 // newC.Items() == []int{1, 2, 3, 4}
@@ -399,7 +399,7 @@ Chunk splits the collection into chunks of the given size. The final chunk may b
 
 If size \<= 0, nil is returned. Example:
 
-```
+```go
 c := collection.New([]int{1,2,3,4,5})
 chunks := c.Chunk(2) → [[1,2],[3,4],[5]]
 ```
@@ -417,7 +417,7 @@ This mirrors Laravel's concat\(\): the appended values are numerically reindexed
 
 Example:
 
-```
+```go
 c := collection.New([]string{"John Doe"})
 
     concatenated := c.
@@ -443,7 +443,7 @@ func (c *Collection[T]) Contains(pred func(T) bool) bool
 
 Contains returns true if any item satisfies the predicate. Example:
 
-```
+```go
 c := collection.New([]int{1, 2, 3, 4})
 hasEven := c.Contains(func(v int) bool { return v%2 == 0 }) // true
 ```
@@ -459,7 +459,7 @@ func (c *Collection[T]) Count() int
 
 Count returns the total number of items in the collection. Example:
 
-```
+```go
 c := collection.New([]int{1, 2, 3, 4})
 count := c.Count() // 4
 ```
@@ -475,7 +475,7 @@ Dd prints items then terminates execution.
 
 Example:
 
-```
+```go
 c := collection.New([]string{"a", "b"})
 c.Dd()    // Prints the dump and exits the program
 ```
@@ -497,7 +497,7 @@ Because Dd\(\) exits immediately, DdStr is helpful primarily in tests where exit
 
 Example \(non\-fatal debug\):
 
-```
+```go
 c := collection.New([]int{1})
 s := c.DdStr()
 // Prints the formatted dump, triggers exitFunc, and returns the output.
@@ -516,7 +516,7 @@ Dump prints items with godump and returns the same collection.
 
 Example:
 
-```
+```go
 c := collection.New([]int{1, 2, 3})
 out := c.Dump()
 // Prints a pretty debug dump of [1, 2, 3]
@@ -525,7 +525,7 @@ out := c.Dump()
 
 Dump is typically used while chaining:
 
-```
+```go
 collection.New([]int{1, 2, 3}).
     Filter(func(v int) bool { return v > 1 }).
     Dump()
@@ -544,7 +544,7 @@ DumpStr returns the pretty\-printed dump of the items as a string, without print
 
 Example:
 
-```
+```go
 c := collection.New([]int{10, 20})
 s := c.DumpStr()
 fmt.Println(s)
@@ -573,7 +573,7 @@ Filter keeps only the elements for which fn returns true. This method mutates th
 
 Example:
 
-```
+```go
 c := New([]int{1,2,3,4})
 c.Filter(func(v int) bool { return v%2 == 0 })
 // c.items == []int{2,4}
@@ -592,7 +592,7 @@ FindWhere improves discoverability for developers who naturally search for a "fi
 
 Examples:
 
-```
+```go
 nums := New([]int{1, 2, 3, 4, 5})
 
 v, ok := nums.FindWhere(func(n int) bool {
@@ -617,7 +617,7 @@ First returns the first element in the collection. If the collection is empty, o
 
 Example:
 
-```
+```go
 c := New([]int{1, 2, 3, 4})
 v, ok := c.First()
 // v == 1, ok == true
@@ -625,7 +625,7 @@ v, ok := c.First()
 
 Example \(empty\):
 
-```
+```go
 c := New([]int{})
 v, ok := c.First()
 // v == 0, ok == false
@@ -644,7 +644,7 @@ This method is equivalent to Laravel's collection\-\>first\(fn\) and mirrors the
 
 Examples:
 
-```
+```go
 nums := New([]int{1, 2, 3, 4, 5})
 v, ok := nums.FirstWhere(func(n int) bool {
     return n%2 == 0
@@ -686,7 +686,7 @@ Last returns the last element in the collection. If the collection is empty, ok 
 
 Example:
 
-```
+```go
 c := collection.New([]int{1, 2, 3, 4})
 v, ok := c.Last()
 // v == 4, ok == true
@@ -694,7 +694,7 @@ v, ok := c.Last()
 
 Example \(empty\):
 
-```
+```go
 c := collection.New([]int{})
 v, ok := c.Last()
 // v == 0, ok == false
@@ -711,7 +711,7 @@ LastWhere returns the last element in the collection that satisfies the predicat
 
 Example: LastWhere with predicate
 
-```
+```go
 c := collection.New([]int{1, 2, 3, 4})
 v, ok := c.LastWhere(func(v int, i int) bool {
     return v < 3
@@ -721,7 +721,7 @@ v, ok := c.LastWhere(func(v int, i int) bool {
 
 Example: LastWhere without predicate
 
-```
+```go
 c := collection.New([]int{1, 2, 3, 4})
 v, ok := c.LastWhere(nil)
 // v == 4, ok == true
@@ -729,7 +729,7 @@ v, ok := c.LastWhere(nil)
 
 Example: Empty collection
 
-```
+```go
 c := collection.New([]int{})
 v, ok := c.LastWhere(nil)
 // v == 0, ok == false
@@ -746,7 +746,7 @@ Map applies a same\-type transformation and returns a new collection.
 
 Use this when you're transforming T \-\> T \(e.g., enrichment, normalization\). Example usage:
 
-```
+```go
 c := collection.New([]int{1, 2, 3})
 	mapped := c.Map(func(v int) int { return v * 10 }) // [10, 20, 30]
  // expected := []int{10, 20, 30}
@@ -782,14 +782,14 @@ Multiply creates \`n\` copies of all items in the collection and returns a new c
 
 Example:
 
-```
+```go
 users := New([]User{{Name: "A"}, {Name: "B"}})
 out := users.Multiply(3)
 ```
 
 Resulting items:
 
-```
+```go
 [A, B, A, B, A, B]
 ```
 
@@ -808,7 +808,7 @@ This is useful for inline transformations, aggregations, or "exiting" a chain wi
 
 Example:
 
-```
+```go
 c := New([]int{1, 2, 3})
 sum := c.Pipe(func(col Collection[int]) any {
     return col.Sum()
@@ -846,7 +846,7 @@ func (c *Collection[T]) Prepend(values ...T) *Collection[T]
 
 Prepend returns a new collection with the given values prepended. Example:
 
-```
+```go
 c := collection.New([]int{3, 4})
 newC := c.Prepend(1, 2) // Collection with items [1, 2, 3, 4]
 // newC.Items() == []int{1, 2, 3, 4}
@@ -861,7 +861,7 @@ func (c *Collection[T]) Push(values ...T) *Collection[T]
 
 Push returns a new collection with the given values appended. Example:
 
-```
+```go
 c := collection.New([]int{1, 2})
 newC := c.Push(3, 4) // Collection with items [1, 2, 3, 4]
 // newC.Items() == []int{1, 2, 3, 4}
@@ -880,7 +880,7 @@ less should return true if a should come before b.
 
 Example:
 
-```
+```go
 sorted := users.Sort(func(a, b User) bool { return a.Age < b.Age })
 // sorted by Age ascending
 ```
@@ -898,7 +898,7 @@ Mirrors Laravel's take\(\) semantics.
 
 Examples:
 
-```
+```go
 New([]int{0,1,2,3,4,5}).Take(3)  → [0,1,2]
 New([]int{0,1,2,3,4,5}).Take(-2) → [4,5]
 ```
@@ -912,7 +912,7 @@ func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T]
 
 TakeUntilFn returns items until the predicate function returns true. The matching item is NOT included. Example:
 
-```
+```go
 c := collection.New([]int{1, 2, 3, 4})
 out := c.TakeUntilFn(func(v int) bool { return v >= 3 }) // [1, 2]
 ```
@@ -932,7 +932,7 @@ Tap does NOT modify the collection itself; it simply exposes the current state d
 
 Example:
 
-```
+```go
 captured := []int{}
 c := New([]int{3,1,2}).
     Sort(func(a,b int) bool { return a < b }).  // → [1,2,3]
@@ -959,7 +959,7 @@ This method never panics.
 
 Example:
 
-```
+```go
 c := collection.New([]int{1, 2, 3})
 out, err := c.ToJSON()
 // out: "[1,2,3]"
@@ -968,7 +968,7 @@ out, err := c.ToJSON()
 
 Example \(error\):
 
-```
+```go
 type Bad struct{}
 func (Bad) MarshalJSON() ([]byte, error) {
     return nil, fmt.Errorf("marshal failure")
@@ -1000,7 +1000,7 @@ This method never panics.
 
 Example:
 
-```
+```go
 c := collection.New([]string{"a", "b"})
 out, err := c.ToPrettyJSON()
 // out:
@@ -1013,7 +1013,7 @@ out, err := c.ToPrettyJSON()
 
 Example \(error\):
 
-```
+```go
 type Bad struct{}
 func (Bad) MarshalJSON() ([]byte, error) {
     return nil, fmt.Errorf("marshal failure")
@@ -1039,7 +1039,7 @@ func (c *Collection[T]) Transform(fn func(T) T)
 
 Transform applies fn to every item \*in place\* and replaces the values with the returned values. This matches Laravel's transform\(\), which mutates the collection instead of returning a new one. Example:
 
-```
+```go
 c := collection.New([]int{1,2,3})
 c.Transform(func(v int) int { return v * 2 })
 // c is now [2,4,6]
@@ -1056,7 +1056,7 @@ Unique returns a collection with duplicate items \(according to eq\) removed, pr
 
 eq should return true if the two values are considered equal. Example usage:
 
-```
+```go
 c := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
 unique := c.Unique(func(a, b int) bool { return a == b })
 

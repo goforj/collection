@@ -155,16 +155,10 @@ sum := Reduce(nums, 0, func(acc, n int) int { return acc + n })
 
 
 
-<a name="Collection"></a>
-## type [Collection](<https://github.com/goforj/collection/blob/main/collection.go#L4-L6>)
 
-Collection is a strongly\-typed, fluent wrapper around a slice of T.
 
-```go
-type Collection[T any] struct {
-    // contains filtered or unexported fields
-}
-```
+
+
 
 <a name="MapTo"></a>
 ### MapTo <small>(<a href="https://github.com/goforj/collection/blob/main/pluck.go#L9">Source</a>)</small>
@@ -224,6 +218,8 @@ Example:
 c := collection.Times(5, func(i int) int { return i * 2 })
 // [2,4,6,8,10]
 ```
+
+
 
 
 
@@ -913,33 +909,27 @@ unique := c.Unique(func(a, b int) bool { return a == b })
 
 
 
-<a name="Number"></a>
-## type [Number](<https://github.com/goforj/collection/blob/main/collection.go#L9-L13>)
 
-Number is a constraint that permits any numeric type.
 
-```go
-type Number interface {
-    // contains filtered or unexported methods
-}
-```
 
-<a name="NumericCollection"></a>
-## type [NumericCollection](<https://github.com/goforj/collection/blob/main/collection.go#L22-L24>)
 
-NumericCollection is a Collection specialized for numeric types.
 
-```go
-type NumericCollection[T Number] struct {
-    // contains filtered or unexported fields
-}
-```
+
+
+
+
+
+
+
+
 
 <a name="NewNumeric"></a>
 ### NewNumeric <small>(<a href="https://github.com/goforj/collection/blob/main/collection.go#L28">Source</a>)</small>
 
 
 NewNumeric wraps a slice of numeric types in a NumericCollection. A shallow copy is made so that further operations don't mutate the original slice.
+
+
 
 
 
@@ -1052,6 +1042,7 @@ c := collection.NewNumeric([]float64{1.5, 2.5})
 total := c.Sum()
 // total == 4.0
 ```
+
 
 
 

@@ -55,7 +55,6 @@ import "github.com/goforj/collection"
 
 - [func CountBy\[T any, K comparable\]\(c \*Collection\[T\], fn func\(T\) K\) map\[K\]int](<#CountBy>)
 - [func CountByValue\[T comparable\]\(c \*Collection\[T\]\) map\[T\]int](<#CountByValue>)
-- [func Median\[T Number\]\(c \*Collection\[T\]\) \(float64, bool\)](<#Median>)
 - [func Mode\[T comparable\]\(c \*Collection\[T\]\) \[\]T](<#Mode>)
 - [func Reduce\[T any, R any\]\(c \*Collection\[T\], initial R, fn func\(R, T\) R\) R](<#Reduce>)
 - [type Collection](<#Collection>)
@@ -106,6 +105,7 @@ import "github.com/goforj/collection"
   - [func NewNumeric\[T Number\]\(items \[\]T\) \*NumericCollection\[T\]](<#NewNumeric>)
   - [func \(c \*NumericCollection\[T\]\) Avg\(\) float64](<#NumericCollection[T].Avg>)
   - [func \(c \*NumericCollection\[T\]\) Max\(\) \(T, bool\)](<#NumericCollection[T].Max>)
+  - [func \(c \*NumericCollection\[T\]\) Median\(\) \(float64, bool\)](<#NumericCollection[T].Median>)
   - [func \(c \*NumericCollection\[T\]\) Min\(\) \(T, bool\)](<#NumericCollection[T].Min>)
   - [func \(c \*NumericCollection\[T\]\) Sum\(\) T](<#NumericCollection[T].Sum>)
 
@@ -136,20 +136,6 @@ CountByValue returns a map of item values to their occurrence counts. T must be 
 ```go
 counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 // counts == map[string]int{"a": 2, "b": 1}
-```
-
-<a name="Median"></a>
-## func [Median](<https://github.com/goforj/collection/blob/main/median.go#L11>)
-
-```go
-func Median[T Number](c *Collection[T]) (float64, bool)
-```
-
-Median returns the median as float64. Fractional medians handled correctly. False if empty. Example:
-
-```go
-c := collection.New([]int{3,1,2})
-median, ok := Median(c) → 2, true
 ```
 
 <a name="Mode"></a>
@@ -1046,6 +1032,24 @@ func (c *NumericCollection[T]) Max() (T, bool)
 Max returns the largest numeric item in the collection. The second return value is false if the collection is empty.
 
 Example: c := collection.NewNumeric\(\[\]int\{3, 1, 2\}\) max, ok := c.Max\(\) // → 3, true
+
+<a name="NumericCollection[T].Median"></a>
+### func \(\*NumericCollection\[T\]\) [Median](<https://github.com/goforj/collection/blob/main/median.go#L14>)
+
+```go
+func (c *NumericCollection[T]) Median() (float64, bool)
+```
+
+Median returns the statistical median of the numeric collection as float64. Returns \(0, false\) if the collection is empty.
+
+Odd count → middle value Even count → average of the two middle values
+
+Example:
+
+```go
+c := collection.NewNumeric([]int{3, 1, 2})
+median, ok := c.Median()   // → 2, true
+```
 
 <a name="NumericCollection[T].Min"></a>
 ### func \(\*NumericCollection\[T\]\) [Min](<https://github.com/goforj/collection/blob/main/min.go#L9>)

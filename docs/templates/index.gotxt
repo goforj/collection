@@ -1,31 +1,32 @@
-| Kind | Name |
+| Name | Kind |
 |------|------|
 
 {{- if len .Consts }}
 {{- range .Consts }}
-| Constant | {{ link .Name (rawLocalHref .Anchor) }} |
+| {{ link .Name (rawLocalHref .Anchor) }} | Constant |
 {{- end }}
 {{- end }}
 
 {{- if len .Vars }}
 {{- range .Vars }}
-| Variable | {{ link .Name (rawLocalHref .Anchor) }} |
+| {{ link .Name (rawLocalHref .Anchor) }} | Variable |
 {{- end }}
 {{- end }}
 
 {{- range .Funcs }}
-| Function | {{ link .Signature (rawLocalHref .Anchor) }} |
+| {{ link .Name (rawLocalHref .Anchor) }} | Function |
 {{- end }}
 
 {{- range .Types }}
-| Type | {{ link .Title (rawLocalHref .Anchor) }} |
+
+| {{ link .Title (rawLocalHref .Anchor) }} | Type |
 
     {{- range .Funcs }}
-| Method (func) | {{ link .Signature (rawLocalHref .Anchor) }} |
+| {{ link .Name (rawLocalHref .Anchor) }} | Type Function |
     {{- end }}
 
     {{- range .Methods }}
-| Method | {{ link .Signature (rawLocalHref .Anchor) }} |
+| {{ link .Name (rawLocalHref .Anchor) }} | Method |
     {{- end }}
 
 {{- end }}

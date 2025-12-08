@@ -114,7 +114,7 @@ import "github.com/goforj/collection"
 
 
 <a name="CountBy"></a>
-## CountBy <small>(<a href="https://github.com/goforj/collection/blob/main/count_by.go#L22">Source</a>)</small>
+## CountBy <small>(<a href="https://github.com/goforj/collection/blob/main/count_by.go#L23">Source</a>)</small>
 
 
 CountBy returns a map of keys extracted by fn to their occurrence counts. K must be comparable. Example:
@@ -124,6 +124,7 @@ type User struct {
     Name string
     Role string
 }
+
 users := collection.New([]User{
     {Name: "Alice", Role: "admin"},
     {Name: "Bob", Role: "user"},
@@ -141,7 +142,7 @@ counts := CountBy(users, func(u User) string { return u.Role == "admin" })
 
 
 <a name="CountByValue"></a>
-## CountByValue <small>(<a href="https://github.com/goforj/collection/blob/main/count_by.go#L39">Source</a>)</small>
+## CountByValue <small>(<a href="https://github.com/goforj/collection/blob/main/count_by.go#L40">Source</a>)</small>
 
 
 CountByValue returns a map of item values to their occurrence counts. T must be comparable. Example:

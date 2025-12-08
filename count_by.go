@@ -7,6 +7,7 @@ package collection
 // 	    Name string
 // 	    Role string
 // 	}
+// 
 // 	users := collection.New([]User{
 // 	    {Name: "Alice", Role: "admin"},
 // 	    {Name: "Bob", Role: "user"},

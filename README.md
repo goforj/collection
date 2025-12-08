@@ -53,61 +53,61 @@ import "github.com/goforj/collection"
 
 ## Index
 
-- [func Avg\[T Number\]\(c Collection\[T\]\) float64](<#Avg>)
-- [func AvgBy\[T any\]\(c Collection\[T\], fn func\(T\) float64\) float64](<#AvgBy>)
-- [func CountBy\[T any, K comparable\]\(c Collection\[T\], fn func\(T\) K\) map\[K\]int](<#CountBy>)
-- [func CountByValue\[T comparable\]\(c Collection\[T\]\) map\[T\]int](<#CountByValue>)
-- [func Max\[T Number\]\(c Collection\[T\]\) \(T, bool\)](<#Max>)
-- [func Median\[T Number\]\(c Collection\[T\]\) \(float64, bool\)](<#Median>)
-- [func Min\[T Number\]\(c Collection\[T\]\) \(T, bool\)](<#Min>)
-- [func Mode\[T comparable\]\(c Collection\[T\]\) \[\]T](<#Mode>)
-- [func Reduce\[T any, R any\]\(c Collection\[T\], initial R, fn func\(R, T\) R\) R](<#Reduce>)
-- [func Sum\[T Number\]\(c Collection\[T\]\) T](<#Sum>)
-- [func SumBy\[T any, N Number\]\(c Collection\[T\], fn func\(T\) N\) N](<#SumBy>)
+- [func Avg\[T Number\]\(c \*Collection\[T\]\) float64](<#Avg>)
+- [func AvgBy\[T any\]\(c \*Collection\[T\], fn func\(T\) float64\) float64](<#AvgBy>)
+- [func CountBy\[T any, K comparable\]\(c \*Collection\[T\], fn func\(T\) K\) map\[K\]int](<#CountBy>)
+- [func CountByValue\[T comparable\]\(c \*Collection\[T\]\) map\[T\]int](<#CountByValue>)
+- [func Max\[T Number\]\(c \*Collection\[T\]\) \(T, bool\)](<#Max>)
+- [func Median\[T Number\]\(c \*Collection\[T\]\) \(float64, bool\)](<#Median>)
+- [func Min\[T Number\]\(c \*Collection\[T\]\) \(T, bool\)](<#Min>)
+- [func Mode\[T comparable\]\(c \*Collection\[T\]\) \[\]T](<#Mode>)
+- [func Reduce\[T any, R any\]\(c \*Collection\[T\], initial R, fn func\(R, T\) R\) R](<#Reduce>)
+- [func Sum\[T Number\]\(c \*Collection\[T\]\) T](<#Sum>)
+- [func SumBy\[T any, N Number\]\(c \*Collection\[T\], fn func\(T\) N\) N](<#SumBy>)
 - [type Collection](<#Collection>)
-  - [func MapTo\[T any, R any\]\(c Collection\[T\], fn func\(T\) R\) Collection\[R\]](<#MapTo>)
-  - [func New\[T any\]\(items \[\]T\) Collection\[T\]](<#New>)
-  - [func Pluck\[T any, R any\]\(c Collection\[T\], fn func\(T\) R\) Collection\[R\]](<#Pluck>)
-  - [func TakeUntil\[T comparable\]\(c Collection\[T\], value T\) Collection\[T\]](<#TakeUntil>)
-  - [func Times\[T any\]\(count int, fn func\(int\) T\) Collection\[T\]](<#Times>)
-  - [func \(c Collection\[T\]\) After\(pred func\(T\) bool\) Collection\[T\]](<#Collection[T].After>)
-  - [func \(c Collection\[T\]\) All\(\) \[\]T](<#Collection[T].All>)
-  - [func \(c Collection\[T\]\) Any\(fn func\(T\) bool\) bool](<#Collection[T].Any>)
-  - [func \(c Collection\[T\]\) Append\(values ...T\) Collection\[T\]](<#Collection[T].Append>)
-  - [func \(c Collection\[T\]\) Before\(pred func\(T\) bool\) Collection\[T\]](<#Collection[T].Before>)
-  - [func \(c Collection\[T\]\) Chunk\(size int\) \[\]\[\]T](<#Collection[T].Chunk>)
-  - [func \(c Collection\[T\]\) Concat\(values \[\]T\) Collection\[T\]](<#Collection[T].Concat>)
-  - [func \(c Collection\[T\]\) Contains\(pred func\(T\) bool\) bool](<#Collection[T].Contains>)
-  - [func \(c Collection\[T\]\) Count\(\) int](<#Collection[T].Count>)
-  - [func \(c Collection\[T\]\) Dd\(\)](<#Collection[T].Dd>)
-  - [func \(c Collection\[T\]\) DdStr\(\) string](<#Collection[T].DdStr>)
-  - [func \(c Collection\[T\]\) Dump\(\) Collection\[T\]](<#Collection[T].Dump>)
-  - [func \(c Collection\[T\]\) DumpStr\(\) string](<#Collection[T].DumpStr>)
-  - [func \(c Collection\[T\]\) Each\(fn func\(T\)\) Collection\[T\]](<#Collection[T].Each>)
-  - [func \(c Collection\[T\]\) Filter\(fn func\(T\) bool\) Collection\[T\]](<#Collection[T].Filter>)
-  - [func \(c Collection\[T\]\) FindWhere\(fn func\(T\) bool\) \(T, bool\)](<#Collection[T].FindWhere>)
-  - [func \(c Collection\[T\]\) First\(\) \(value T, ok bool\)](<#Collection[T].First>)
-  - [func \(c Collection\[T\]\) FirstWhere\(fn func\(T\) bool\) \(value T, ok bool\)](<#Collection[T].FirstWhere>)
-  - [func \(c Collection\[T\]\) IsEmpty\(\) bool](<#Collection[T].IsEmpty>)
-  - [func \(c Collection\[T\]\) Items\(\) \[\]T](<#Collection[T].Items>)
-  - [func \(c Collection\[T\]\) Last\(\) \(value T, ok bool\)](<#Collection[T].Last>)
-  - [func \(c Collection\[T\]\) LastWhere\(fn func\(T, int\) bool\) \(value T, ok bool\)](<#Collection[T].LastWhere>)
-  - [func \(c Collection\[T\]\) Map\(fn func\(T\) T\) Collection\[T\]](<#Collection[T].Map>)
-  - [func \(c Collection\[T\]\) Merge\(other any\) Collection\[T\]](<#Collection[T].Merge>)
-  - [func \(c Collection\[T\]\) Multiply\(n int\) Collection\[T\]](<#Collection[T].Multiply>)
-  - [func \(c Collection\[T\]\) Pipe\(fn func\(Collection\[T\]\) any\) any](<#Collection[T].Pipe>)
-  - [func \(c Collection\[T\]\) Pop\(\) \(T, Collection\[T\]\)](<#Collection[T].Pop>)
-  - [func \(c Collection\[T\]\) PopN\(n int\) \(Collection\[T\], Collection\[T\]\)](<#Collection[T].PopN>)
-  - [func \(c Collection\[T\]\) Prepend\(values ...T\) Collection\[T\]](<#Collection[T].Prepend>)
-  - [func \(c Collection\[T\]\) Push\(values ...T\) Collection\[T\]](<#Collection[T].Push>)
-  - [func \(c Collection\[T\]\) Sort\(less func\(a, b T\) bool\) Collection\[T\]](<#Collection[T].Sort>)
-  - [func \(c Collection\[T\]\) Take\(n int\) Collection\[T\]](<#Collection[T].Take>)
-  - [func \(c Collection\[T\]\) TakeUntilFn\(pred func\(T\) bool\) Collection\[T\]](<#Collection[T].TakeUntilFn>)
-  - [func \(c Collection\[T\]\) Tap\(fn func\(Collection\[T\]\)\) Collection\[T\]](<#Collection[T].Tap>)
-  - [func \(c Collection\[T\]\) ToJSON\(\) \(string, error\)](<#Collection[T].ToJSON>)
-  - [func \(c Collection\[T\]\) ToPrettyJSON\(\) \(string, error\)](<#Collection[T].ToPrettyJSON>)
-  - [func \(c Collection\[T\]\) Transform\(fn func\(T\) T\)](<#Collection[T].Transform>)
-  - [func \(c Collection\[T\]\) Unique\(eq func\(a, b T\) bool\) Collection\[T\]](<#Collection[T].Unique>)
+  - [func MapTo\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#MapTo>)
+  - [func New\[T any\]\(items \[\]T\) \*Collection\[T\]](<#New>)
+  - [func Pluck\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#Pluck>)
+  - [func TakeUntil\[T comparable\]\(c \*Collection\[T\], value T\) \*Collection\[T\]](<#TakeUntil>)
+  - [func Times\[T any\]\(count int, fn func\(int\) T\) \*Collection\[T\]](<#Times>)
+  - [func \(c \*Collection\[T\]\) After\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].After>)
+  - [func \(c \*Collection\[T\]\) All\(\) \[\]T](<#Collection[T].All>)
+  - [func \(c \*Collection\[T\]\) Any\(fn func\(T\) bool\) bool](<#Collection[T].Any>)
+  - [func \(c \*Collection\[T\]\) Append\(values ...T\) \*Collection\[T\]](<#Collection[T].Append>)
+  - [func \(c \*Collection\[T\]\) Before\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].Before>)
+  - [func \(c \*Collection\[T\]\) Chunk\(size int\) \[\]\[\]T](<#Collection[T].Chunk>)
+  - [func \(c \*Collection\[T\]\) Concat\(values \[\]T\) \*Collection\[T\]](<#Collection[T].Concat>)
+  - [func \(c \*Collection\[T\]\) Contains\(pred func\(T\) bool\) bool](<#Collection[T].Contains>)
+  - [func \(c \*Collection\[T\]\) Count\(\) int](<#Collection[T].Count>)
+  - [func \(c \*Collection\[T\]\) Dd\(\)](<#Collection[T].Dd>)
+  - [func \(c \*Collection\[T\]\) DdStr\(\) string](<#Collection[T].DdStr>)
+  - [func \(c \*Collection\[T\]\) Dump\(\) \*Collection\[T\]](<#Collection[T].Dump>)
+  - [func \(c \*Collection\[T\]\) DumpStr\(\) string](<#Collection[T].DumpStr>)
+  - [func \(c \*Collection\[T\]\) Each\(fn func\(T\)\) \*Collection\[T\]](<#Collection[T].Each>)
+  - [func \(c \*Collection\[T\]\) Filter\(fn func\(T\) bool\) \*Collection\[T\]](<#Collection[T].Filter>)
+  - [func \(c \*Collection\[T\]\) FindWhere\(fn func\(T\) bool\) \(T, bool\)](<#Collection[T].FindWhere>)
+  - [func \(c \*Collection\[T\]\) First\(\) \(value T, ok bool\)](<#Collection[T].First>)
+  - [func \(c \*Collection\[T\]\) FirstWhere\(fn func\(T\) bool\) \(value T, ok bool\)](<#Collection[T].FirstWhere>)
+  - [func \(c \*Collection\[T\]\) IsEmpty\(\) bool](<#Collection[T].IsEmpty>)
+  - [func \(c \*Collection\[T\]\) Items\(\) \[\]T](<#Collection[T].Items>)
+  - [func \(c \*Collection\[T\]\) Last\(\) \(value T, ok bool\)](<#Collection[T].Last>)
+  - [func \(c \*Collection\[T\]\) LastWhere\(fn func\(T, int\) bool\) \(value T, ok bool\)](<#Collection[T].LastWhere>)
+  - [func \(c \*Collection\[T\]\) Map\(fn func\(T\) T\) \*Collection\[T\]](<#Collection[T].Map>)
+  - [func \(c \*Collection\[T\]\) Merge\(other any\) \*Collection\[T\]](<#Collection[T].Merge>)
+  - [func \(c \*Collection\[T\]\) Multiply\(n int\) \*Collection\[T\]](<#Collection[T].Multiply>)
+  - [func \(c \*Collection\[T\]\) Pipe\(fn func\(\*Collection\[T\]\) any\) any](<#Collection[T].Pipe>)
+  - [func \(c \*Collection\[T\]\) Pop\(\) \(T, \*Collection\[T\]\)](<#Collection[T].Pop>)
+  - [func \(c \*Collection\[T\]\) PopN\(n int\) \(\*Collection\[T\], \*Collection\[T\]\)](<#Collection[T].PopN>)
+  - [func \(c \*Collection\[T\]\) Prepend\(values ...T\) \*Collection\[T\]](<#Collection[T].Prepend>)
+  - [func \(c \*Collection\[T\]\) Push\(values ...T\) \*Collection\[T\]](<#Collection[T].Push>)
+  - [func \(c \*Collection\[T\]\) Sort\(less func\(a, b T\) bool\) \*Collection\[T\]](<#Collection[T].Sort>)
+  - [func \(c \*Collection\[T\]\) Take\(n int\) \*Collection\[T\]](<#Collection[T].Take>)
+  - [func \(c \*Collection\[T\]\) TakeUntilFn\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].TakeUntilFn>)
+  - [func \(c \*Collection\[T\]\) Tap\(fn func\(\*Collection\[T\]\)\) \*Collection\[T\]](<#Collection[T].Tap>)
+  - [func \(c \*Collection\[T\]\) ToJSON\(\) \(string, error\)](<#Collection[T].ToJSON>)
+  - [func \(c \*Collection\[T\]\) ToPrettyJSON\(\) \(string, error\)](<#Collection[T].ToPrettyJSON>)
+  - [func \(c \*Collection\[T\]\) Transform\(fn func\(T\) T\)](<#Collection[T].Transform>)
+  - [func \(c \*Collection\[T\]\) Unique\(eq func\(a, b T\) bool\) \*Collection\[T\]](<#Collection[T].Unique>)
 - [type Number](<#Number>)
 
 
@@ -115,16 +115,16 @@ import "github.com/goforj/collection"
 ## func [Avg](<https://github.com/goforj/collection/blob/main/avg.go#L5>)
 
 ```go
-func Avg[T Number](c Collection[T]) float64
+func Avg[T Number](c *Collection[T]) float64
 ```
 
 Avg returns the average as float64. Even integer averages may be fractional.
 
 <a name="AvgBy"></a>
-## func [AvgBy](<https://github.com/goforj/collection/blob/main/collection.go#L71>)
+## func [AvgBy](<https://github.com/goforj/collection/blob/main/collection.go#L66>)
 
 ```go
-func AvgBy[T any](c Collection[T], fn func(T) float64) float64
+func AvgBy[T any](c *Collection[T], fn func(T) float64) float64
 ```
 
 AvgBy calculates the average of values extracted by fn from the collection items.
@@ -139,7 +139,7 @@ avgAge := AvgBy(users, func(u User) float64 { return float64(u.Age) })
 ## func [CountBy](<https://github.com/goforj/collection/blob/main/count_by.go#L8>)
 
 ```go
-func CountBy[T any, K comparable](c Collection[T], fn func(T) K) map[K]int
+func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int
 ```
 
 CountBy returns a map of keys extracted by fn to their occurrence counts. K must be comparable. Example:
@@ -153,7 +153,7 @@ counts := CountBy(users, func(u User) string { return u.Role })
 ## func [CountByValue](<https://github.com/goforj/collection/blob/main/count_by.go#L25>)
 
 ```go
-func CountByValue[T comparable](c Collection[T]) map[T]int
+func CountByValue[T comparable](c *Collection[T]) map[T]int
 ```
 
 CountByValue returns a map of item values to their occurrence counts. T must be comparable. Example:
@@ -167,7 +167,7 @@ counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 ## func [Max](<https://github.com/goforj/collection/blob/main/max.go#L5>)
 
 ```go
-func Max[T Number](c Collection[T]) (T, bool)
+func Max[T Number](c *Collection[T]) (T, bool)
 ```
 
 Max returns the largest numeric item. Second return is false if empty.
@@ -176,7 +176,7 @@ Max returns the largest numeric item. Second return is false if empty.
 ## func [Median](<https://github.com/goforj/collection/blob/main/median.go#L11>)
 
 ```go
-func Median[T Number](c Collection[T]) (float64, bool)
+func Median[T Number](c *Collection[T]) (float64, bool)
 ```
 
 Median returns the median as float64. Fractional medians handled correctly. False if empty. Example:
@@ -190,7 +190,7 @@ median, ok := Median(c) → 2, true
 ## func [Min](<https://github.com/goforj/collection/blob/main/min.go#L8>)
 
 ```go
-func Min[T Number](c Collection[T]) (T, bool)
+func Min[T Number](c *Collection[T]) (T, bool)
 ```
 
 Min returns the smallest numeric item. Second return is false if empty. Example:
@@ -204,7 +204,7 @@ min, ok := Min(c) → 1, true
 ## func [Mode](<https://github.com/goforj/collection/blob/main/mode.go#L5>)
 
 ```go
-func Mode[T comparable](c Collection[T]) []T
+func Mode[T comparable](c *Collection[T]) []T
 ```
 
 Mode returns the most frequent value\(s\). If tie, returns all values with max freq in first\-seen order.
@@ -213,7 +213,7 @@ Mode returns the most frequent value\(s\). If tie, returns all values with max f
 ## func [Reduce](<https://github.com/goforj/collection/blob/main/reduce.go#L10>)
 
 ```go
-func Reduce[T any, R any](c Collection[T], initial R, fn func(R, T) R) R
+func Reduce[T any, R any](c *Collection[T], initial R, fn func(R, T) R) R
 ```
 
 Reduce reduces a collection of T into a single value of type R.
@@ -230,16 +230,16 @@ sum := Reduce(nums, 0, func(acc, n int) int { return acc + n })
 ## func [Sum](<https://github.com/goforj/collection/blob/main/sum.go#L4>)
 
 ```go
-func Sum[T Number](c Collection[T]) T
+func Sum[T Number](c *Collection[T]) T
 ```
 
 Sum returns the sum of all numeric items.
 
 <a name="SumBy"></a>
-## func [SumBy](<https://github.com/goforj/collection/blob/main/collection.go#L92>)
+## func [SumBy](<https://github.com/goforj/collection/blob/main/collection.go#L87>)
 
 ```go
-func SumBy[T any, N Number](c Collection[T], fn func(T) N) N
+func SumBy[T any, N Number](c *Collection[T], fn func(T) N) N
 ```
 
 SumBy returns the sum of a numeric projection from each item.
@@ -267,7 +267,7 @@ type Collection[T any] struct {
 ### func [MapTo](<https://github.com/goforj/collection/blob/main/pluck.go#L9>)
 
 ```go
-func MapTo[T any, R any](c Collection[T], fn func(T) R) Collection[R]
+func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R]
 ```
 
 MapTo maps a Collection\[T\] to a Collection\[R\] using fn\(T\) R.
@@ -283,7 +283,7 @@ squared := numbers.MapTo(func(n int) int { return n * n })
 ### func [New](<https://github.com/goforj/collection/blob/main/collection.go#L17>)
 
 ```go
-func New[T any](items []T) Collection[T]
+func New[T any](items []T) *Collection[T]
 ```
 
 New wraps a slice in a Collection. A shallow copy is made so that further operations don't mutate the original slice.
@@ -292,7 +292,7 @@ New wraps a slice in a Collection. A shallow copy is made so that further operat
 ### func [Pluck](<https://github.com/goforj/collection/blob/main/pluck.go#L22>)
 
 ```go
-func Pluck[T any, R any](c Collection[T], fn func(T) R) Collection[R]
+func Pluck[T any, R any](c *Collection[T], fn func(T) R) *Collection[R]
 ```
 
 Pluck is an alias for MapTo with a more semantic name when projecting fields. Example:
@@ -306,7 +306,7 @@ names := users.Pluck(func(u User) string { return u.Name })
 ### func [TakeUntil](<https://github.com/goforj/collection/blob/main/take_until.go#L27>)
 
 ```go
-func TakeUntil[T comparable](c Collection[T], value T) Collection[T]
+func TakeUntil[T comparable](c *Collection[T], value T) *Collection[T]
 ```
 
 TakeUntil returns items until the first element equals \`value\`. The matching item is NOT included.
@@ -317,7 +317,7 @@ Uses == comparison, so T must be comparable.
 ### func [Times](<https://github.com/goforj/collection/blob/main/times.go#L9>)
 
 ```go
-func Times[T any](count int, fn func(int) T) Collection[T]
+func Times[T any](count int, fn func(int) T) *Collection[T]
 ```
 
 Times creates a new collection by running fn\(n\) for i from 1..count. This mirrors Laravel's Collection::times\(\), which is 1\-indexed.
@@ -330,10 +330,10 @@ c := collection.Times(5, func(i int) int { return i * 2 })
 ```
 
 <a name="Collection[T].After"></a>
-### func \(Collection\[T\]\) [After](<https://github.com/goforj/collection/blob/main/after.go#L10>)
+### func \(\*Collection\[T\]\) [After](<https://github.com/goforj/collection/blob/main/after.go#L10>)
 
 ```go
-func (c Collection[T]) After(pred func(T) bool) Collection[T]
+func (c *Collection[T]) After(pred func(T) bool) *Collection[T]
 ```
 
 After returns all items after the first element for which pred returns true. If no element matches, an empty collection is returned.
@@ -347,28 +347,28 @@ c.After(func(v int) bool { return v == 3 })
 ```
 
 <a name="Collection[T].All"></a>
-### func \(Collection\[T\]\) [All](<https://github.com/goforj/collection/blob/main/collection.go#L41>)
+### func \(\*Collection\[T\]\) [All](<https://github.com/goforj/collection/blob/main/collection.go#L36>)
 
 ```go
-func (c Collection[T]) All() []T
+func (c *Collection[T]) All() []T
 ```
 
 All returns the underlying slice of items.
 
 <a name="Collection[T].Any"></a>
-### func \(Collection\[T\]\) [Any](<https://github.com/goforj/collection/blob/main/any.go#L8>)
+### func \(\*Collection\[T\]\) [Any](<https://github.com/goforj/collection/blob/main/any.go#L8>)
 
 ```go
-func (c Collection[T]) Any(fn func(T) bool) bool
+func (c *Collection[T]) Any(fn func(T) bool) bool
 ```
 
 Any returns true if at least one item satisfies fn. Example: c := collection.New\(\[\]int\{1, 2, 3, 4\}\) hasEven := c.Any\(func\(v int\) bool \{ return v%2 == 0 \}\) // true // hasEven is true
 
 <a name="Collection[T].Append"></a>
-### func \(Collection\[T\]\) [Append](<https://github.com/goforj/collection/blob/main/append.go#L8>)
+### func \(\*Collection\[T\]\) [Append](<https://github.com/goforj/collection/blob/main/append.go#L8>)
 
 ```go
-func (c Collection[T]) Append(values ...T) Collection[T]
+func (c *Collection[T]) Append(values ...T) *Collection[T]
 ```
 
 Append returns a new collection with the given values appended. Example:
@@ -380,19 +380,19 @@ newC := c.Append(3, 4) // Collection with items [1, 2, 3, 4]
 ```
 
 <a name="Collection[T].Before"></a>
-### func \(Collection\[T\]\) [Before](<https://github.com/goforj/collection/blob/main/collection.go#L53>)
+### func \(\*Collection\[T\]\) [Before](<https://github.com/goforj/collection/blob/main/collection.go#L48>)
 
 ```go
-func (c Collection[T]) Before(pred func(T) bool) Collection[T]
+func (c *Collection[T]) Before(pred func(T) bool) *Collection[T]
 ```
 
 Before returns all items before the first element for which pred returns true. If no element matches, the entire collection is returned.
 
 <a name="Collection[T].Chunk"></a>
-### func \(Collection\[T\]\) [Chunk](<https://github.com/goforj/collection/blob/main/chunk.go#L10>)
+### func \(\*Collection\[T\]\) [Chunk](<https://github.com/goforj/collection/blob/main/chunk.go#L10>)
 
 ```go
-func (c Collection[T]) Chunk(size int) [][]T
+func (c *Collection[T]) Chunk(size int) [][]T
 ```
 
 Chunk splits the collection into chunks of the given size. The final chunk may be smaller if len\(items\) is not divisible by size.
@@ -405,10 +405,10 @@ chunks := c.Chunk(2) → [[1,2],[3,4],[5]]
 ```
 
 <a name="Collection[T].Concat"></a>
-### func \(Collection\[T\]\) [Concat](<https://github.com/goforj/collection/blob/main/concat.go#L26>)
+### func \(\*Collection\[T\]\) [Concat](<https://github.com/goforj/collection/blob/main/concat.go#L26>)
 
 ```go
-func (c Collection[T]) Concat(values []T) Collection[T]
+func (c *Collection[T]) Concat(values []T) *Collection[T]
 ```
 
 Concat appends the values from the given slice onto the end of the collection, returning a new collection. The original collection is never modified.
@@ -420,12 +420,12 @@ Example:
 ```
 c := collection.New([]string{"John Doe"})
 
-concatenated := c.
-    Concat([]string{"Jane Doe"}).
-    Concat([]string{"Johnny Doe"})
+    concatenated := c.
+        Concat([]string{"Jane Doe"}).
+        Concat([]string{"Johnny Doe"}).
+		Items()
 
-// concatenated.Items()
-// ["John Doe", "Jane Doe", "Johnny Doe"]
+    // ["John Doe", "Jane Doe", "Johnny Doe"]
 ```
 
 Notes:
@@ -435,10 +435,10 @@ Notes:
 - To concatenate another Collection\[T\], use: c.Concat\(other.Items\(\)\)
 
 <a name="Collection[T].Contains"></a>
-### func \(Collection\[T\]\) [Contains](<https://github.com/goforj/collection/blob/main/contains.go#L9>)
+### func \(\*Collection\[T\]\) [Contains](<https://github.com/goforj/collection/blob/main/contains.go#L9>)
 
 ```go
-func (c Collection[T]) Contains(pred func(T) bool) bool
+func (c *Collection[T]) Contains(pred func(T) bool) bool
 ```
 
 Contains returns true if any item satisfies the predicate. Example:
@@ -451,10 +451,10 @@ hasEven := c.Contains(func(v int) bool { return v%2 == 0 }) // true
 // hasEven is true
 
 <a name="Collection[T].Count"></a>
-### func \(Collection\[T\]\) [Count](<https://github.com/goforj/collection/blob/main/count.go#L7>)
+### func \(\*Collection\[T\]\) [Count](<https://github.com/goforj/collection/blob/main/count.go#L7>)
 
 ```go
-func (c Collection[T]) Count() int
+func (c *Collection[T]) Count() int
 ```
 
 Count returns the total number of items in the collection. Example:
@@ -465,103 +465,125 @@ count := c.Count() // 4
 ```
 
 <a name="Collection[T].Dd"></a>
-### func \(Collection\[T\]\) [Dd](<https://github.com/goforj/collection/blob/main/dump.go#L25>)
+### func \(\*Collection\[T\]\) [Dd](<https://github.com/goforj/collection/blob/main/dump.go#L40>)
 
 ```go
-func (c Collection[T]) Dd()
+func (c *Collection[T]) Dd()
 ```
 
-Dd pretty\-prints the collection contents using goforj/godump and then exits the program \(just like Laravel's dd\(\)\).
+Dd prints items then terminates execution.
 
 Example:
 
 ```
-users.
-  Filter(func(u User) bool { return u.Age >= 35 }).
-  Dd()
+c := collection.New([]string{"a", "b"})
+c.Dd()    // Prints the dump and exits the program
 ```
+
+Like Laravel's dd\(\), this is intended for debugging and should not be used in production control flow.
+
+This method never returns.
 
 <a name="Collection[T].DdStr"></a>
-### func \(Collection\[T\]\) [DdStr](<https://github.com/goforj/collection/blob/main/dump.go#L50>)
+### func \(\*Collection\[T\]\) [DdStr](<https://github.com/goforj/collection/blob/main/dump.go#L72>)
 
 ```go
-func (c Collection[T]) DdStr() string
+func (c *Collection[T]) DdStr() string
 ```
 
-DdStr pretty\-prints the collection items using godump.DumpStr and returns the string, AND then exits — just like Laravel's dd\(\), except here the exit is performed via godump.exitFunc so tests can override it.
+DdStr behaves like Dd\(\) but also returns the formatted dump string.
 
-Example:
+Because Dd\(\) exits immediately, DdStr is helpful primarily in tests where exit behavior has been overridden.
+
+Example \(non\-fatal debug\):
 
 ```
-output := users.Filter(active).DdStr()
-// program exits after printing
+c := collection.New([]int{1})
+s := c.DdStr()
+// Prints the formatted dump, triggers exitFunc, and returns the output.
 ```
+
+The return value is mostly useful in testing environments where exitFunc has been replaced with a non\-terminating stub.
 
 <a name="Collection[T].Dump"></a>
-### func \(Collection\[T\]\) [Dump](<https://github.com/goforj/collection/blob/main/dump.go#L13>)
+### func \(\*Collection\[T\]\) [Dump](<https://github.com/goforj/collection/blob/main/dump.go#L24>)
 
 ```go
-func (c Collection[T]) Dump() Collection[T]
+func (c *Collection[T]) Dump() *Collection[T]
 ```
 
-Dump pretty\-prints the collection contents using goforj/godump and returns the collection so it can be used mid\-chain.
+Dump prints items with godump and returns the same collection.
 
 Example:
 
 ```
-users.
-  Filter(func(u User) bool { return u.Age >= 35 }).
-  Dump().
-  Sort(func(a, b User) bool { return a.Age < b.Age })
+c := collection.New([]int{1, 2, 3})
+out := c.Dump()
+// Prints a pretty debug dump of [1, 2, 3]
+// out == c
 ```
+
+Dump is typically used while chaining:
+
+```
+collection.New([]int{1, 2, 3}).
+    Filter(func(v int) bool { return v > 1 }).
+    Dump()
+```
+
+This is a no\-op on the collection itself and never panics.
 
 <a name="Collection[T].DumpStr"></a>
-### func \(Collection\[T\]\) [DumpStr](<https://github.com/goforj/collection/blob/main/dump.go#L37>)
+### func \(\*Collection\[T\]\) [DumpStr](<https://github.com/goforj/collection/blob/main/dump.go#L55>)
 
 ```go
-func (c Collection[T]) DumpStr() string
+func (c *Collection[T]) DumpStr() string
 ```
 
-DumpStr pretty\-prints the collection items using godump.DumpStr and returns the string. Unlike Dump\(\), this does not print to stdout and does not interrupt a chain.
+DumpStr returns the pretty\-printed dump of the items as a string, without printing or exiting.
 
 Example:
 
 ```
-s := users.Filter(active).DumpStr()
+c := collection.New([]int{10, 20})
+s := c.DumpStr()
+fmt.Println(s)
+// Produces a multi-line formatted representation of [10, 20]
 ```
 
+Useful for logging, snapshot testing, and non\-interactive debugging.
+
 <a name="Collection[T].Each"></a>
-### func \(Collection\[T\]\) [Each](<https://github.com/goforj/collection/blob/main/each.go#L5>)
+### func \(\*Collection\[T\]\) [Each](<https://github.com/goforj/collection/blob/main/each.go#L5>)
 
 ```go
-func (c Collection[T]) Each(fn func(T)) Collection[T]
+func (c *Collection[T]) Each(fn func(T)) *Collection[T]
 ```
 
 Each runs fn for every item in the collection and returns the same collection, so it can be used in chains for side effects \(logging, debugging, etc.\).
 
 <a name="Collection[T].Filter"></a>
-### func \(Collection\[T\]\) [Filter](<https://github.com/goforj/collection/blob/main/filter.go#L12>)
+### func \(\*Collection\[T\]\) [Filter](<https://github.com/goforj/collection/blob/main/filter.go#L10>)
 
 ```go
-func (c Collection[T]) Filter(fn func(T) bool) Collection[T]
+func (c *Collection[T]) Filter(fn func(T) bool) *Collection[T]
 ```
 
-Filter returns a new collection containing only values for which fn returns true.
+Filter keeps only the elements for which fn returns true. This method mutates the collection in place and returns the same instance.
 
-This keeps T the same, so it can be a method. Example usage:
+Example:
 
 ```
-c := collection.New([]int{1, 2, 3, 4, 5})
-filtered := c.Filter(func(v int) bool { return v%2 == 0 }) // keeps even numbers
+c := New([]int{1,2,3,4})
+c.Filter(func(v int) bool { return v%2 == 0 })
+// c.items == []int{2,4}
 ```
-
-// result: \[2, 4\]
 
 <a name="Collection[T].FindWhere"></a>
-### func \(Collection\[T\]\) [FindWhere](<https://github.com/goforj/collection/blob/main/find_where.go#L25>)
+### func \(\*Collection\[T\]\) [FindWhere](<https://github.com/goforj/collection/blob/main/find_where.go#L25>)
 
 ```go
-func (c Collection[T]) FindWhere(fn func(T) bool) (T, bool)
+func (c *Collection[T]) FindWhere(fn func(T) bool) (T, bool)
 ```
 
 FindWhere returns the first item in the collection for which the provided predicate function returns true. This method is an alias for FirstWhere\(fn\) and is provided for ergonomic parity with functional libraries and languages such as JavaScript, Rust, C\#, and Python.
@@ -585,10 +607,10 @@ v, ok = nums.FindWhere(func(n int) bool {
 ```
 
 <a name="Collection[T].First"></a>
-### func \(Collection\[T\]\) [First](<https://github.com/goforj/collection/blob/main/first.go#L18>)
+### func \(\*Collection\[T\]\) [First](<https://github.com/goforj/collection/blob/main/first.go#L18>)
 
 ```go
-func (c Collection[T]) First() (value T, ok bool)
+func (c *Collection[T]) First() (value T, ok bool)
 ```
 
 First returns the first element in the collection. If the collection is empty, ok will be false.
@@ -610,10 +632,10 @@ v, ok := c.First()
 ```
 
 <a name="Collection[T].FirstWhere"></a>
-### func \(Collection\[T\]\) [FirstWhere](<https://github.com/goforj/collection/blob/main/first_where.go#L23>)
+### func \(\*Collection\[T\]\) [FirstWhere](<https://github.com/goforj/collection/blob/main/first_where.go#L23>)
 
 ```go
-func (c Collection[T]) FirstWhere(fn func(T) bool) (value T, ok bool)
+func (c *Collection[T]) FirstWhere(fn func(T) bool) (value T, ok bool)
 ```
 
 FirstWhere returns the first item in the collection for which the provided predicate function returns true. If no items match, ok=false is returned along with the zero value of T.
@@ -636,28 +658,28 @@ v, ok = nums.FirstWhere(func(n int) bool {
 ```
 
 <a name="Collection[T].IsEmpty"></a>
-### func \(Collection\[T\]\) [IsEmpty](<https://github.com/goforj/collection/blob/main/collection.go#L32>)
+### func \(\*Collection\[T\]\) [IsEmpty](<https://github.com/goforj/collection/blob/main/collection.go#L27>)
 
 ```go
-func (c Collection[T]) IsEmpty() bool
+func (c *Collection[T]) IsEmpty() bool
 ```
 
 IsEmpty returns true if the collection has no items.
 
 <a name="Collection[T].Items"></a>
-### func \(Collection\[T\]\) [Items](<https://github.com/goforj/collection/blob/main/collection.go#L25>)
+### func \(\*Collection\[T\]\) [Items](<https://github.com/goforj/collection/blob/main/collection.go#L22>)
 
 ```go
-func (c Collection[T]) Items() []T
+func (c *Collection[T]) Items() []T
 ```
 
-Items returns a copy of the underlying slice. This avoids callers mutating internal state accidentally.
+Items returns the underlying slice of items.
 
 <a name="Collection[T].Last"></a>
-### func \(Collection\[T\]\) [Last](<https://github.com/goforj/collection/blob/main/last.go#L18>)
+### func \(\*Collection\[T\]\) [Last](<https://github.com/goforj/collection/blob/main/last.go#L18>)
 
 ```go
-func (c Collection[T]) Last() (value T, ok bool)
+func (c *Collection[T]) Last() (value T, ok bool)
 ```
 
 Last returns the last element in the collection. If the collection is empty, ok will be false.
@@ -679,10 +701,10 @@ v, ok := c.Last()
 ```
 
 <a name="Collection[T].LastWhere"></a>
-### func \(Collection\[T\]\) [LastWhere](<https://github.com/goforj/collection/blob/main/last_where.go#L27>)
+### func \(\*Collection\[T\]\) [LastWhere](<https://github.com/goforj/collection/blob/main/last_where.go#L27>)
 
 ```go
-func (c Collection[T]) LastWhere(fn func(T, int) bool) (value T, ok bool)
+func (c *Collection[T]) LastWhere(fn func(T, int) bool) (value T, ok bool)
 ```
 
 LastWhere returns the last element in the collection that satisfies the predicate fn. If fn is nil, LastWhere returns the final element in the underlying slice. If the collection is empty or no element matches, ok will be false.
@@ -714,10 +736,10 @@ v, ok := c.LastWhere(nil)
 ```
 
 <a name="Collection[T].Map"></a>
-### func \(Collection\[T\]\) [Map](<https://github.com/goforj/collection/blob/main/map.go#L11>)
+### func \(\*Collection\[T\]\) [Map](<https://github.com/goforj/collection/blob/main/map.go#L11>)
 
 ```go
-func (c Collection[T]) Map(fn func(T) T) Collection[T]
+func (c *Collection[T]) Map(fn func(T) T) *Collection[T]
 ```
 
 Map applies a same\-type transformation and returns a new collection.
@@ -731,10 +753,10 @@ c := collection.New([]int{1, 2, 3})
 ```
 
 <a name="Collection[T].Merge"></a>
-### func \(Collection\[T\]\) [Merge](<https://github.com/goforj/collection/blob/main/merge.go#L26>)
+### func \(\*Collection\[T\]\) [Merge](<https://github.com/goforj/collection/blob/main/merge.go#L22>)
 
 ```go
-func (c Collection[T]) Merge(other any) Collection[T]
+func (c *Collection[T]) Merge(other any) *Collection[T]
 ```
 
 Merge merges the given data into the current collection using Laravel\-style semantics.
@@ -750,10 +772,10 @@ Behavior depends on the type of \`other\`:
 Unsupported merge types are ignored. This method never panics and always returns a new Collection.
 
 <a name="Collection[T].Multiply"></a>
-### func \(Collection\[T\]\) [Multiply](<https://github.com/goforj/collection/blob/main/multiply.go#L14>)
+### func \(\*Collection\[T\]\) [Multiply](<https://github.com/goforj/collection/blob/main/multiply.go#L14>)
 
 ```go
-func (c Collection[T]) Multiply(n int) Collection[T]
+func (c *Collection[T]) Multiply(n int) *Collection[T]
 ```
 
 Multiply creates \`n\` copies of all items in the collection and returns a new collection.
@@ -774,10 +796,10 @@ Resulting items:
 If n \<= 0, the method returns an empty collection.
 
 <a name="Collection[T].Pipe"></a>
-### func \(Collection\[T\]\) [Pipe](<https://github.com/goforj/collection/blob/main/pipe.go#L18>)
+### func \(\*Collection\[T\]\) [Pipe](<https://github.com/goforj/collection/blob/main/pipe.go#L18>)
 
 ```go
-func (c Collection[T]) Pipe(fn func(Collection[T]) any) any
+func (c *Collection[T]) Pipe(fn func(*Collection[T]) any) any
 ```
 
 Pipe passes the entire collection into the given function and returns the function's result.
@@ -796,10 +818,10 @@ sum := c.Pipe(func(col Collection[int]) any {
 ```
 
 <a name="Collection[T].Pop"></a>
-### func \(Collection\[T\]\) [Pop](<https://github.com/goforj/collection/blob/main/pop.go#L8>)
+### func \(\*Collection\[T\]\) [Pop](<https://github.com/goforj/collection/blob/main/pop.go#L8>)
 
 ```go
-func (c Collection[T]) Pop() (T, Collection[T])
+func (c *Collection[T]) Pop() (T, *Collection[T])
 ```
 
 Pop returns the last item and a new collection with that item removed. The original collection remains unchanged.
@@ -807,19 +829,19 @@ Pop returns the last item and a new collection with that item removed. The origi
 If the collection is empty, the zero value of T is returned along with an empty collection.
 
 <a name="Collection[T].PopN"></a>
-### func \(Collection\[T\]\) [PopN](<https://github.com/goforj/collection/blob/main/pop.go#L24>)
+### func \(\*Collection\[T\]\) [PopN](<https://github.com/goforj/collection/blob/main/pop.go#L24>)
 
 ```go
-func (c Collection[T]) PopN(n int) (Collection[T], Collection[T])
+func (c *Collection[T]) PopN(n int) (*Collection[T], *Collection[T])
 ```
 
 PopN removes and returns the last n items as a new collection, and returns a second collection containing the remaining items.
 
 <a name="Collection[T].Prepend"></a>
-### func \(Collection\[T\]\) [Prepend](<https://github.com/goforj/collection/blob/main/prepend.go#L8>)
+### func \(\*Collection\[T\]\) [Prepend](<https://github.com/goforj/collection/blob/main/prepend.go#L8>)
 
 ```go
-func (c Collection[T]) Prepend(values ...T) Collection[T]
+func (c *Collection[T]) Prepend(values ...T) *Collection[T]
 ```
 
 Prepend returns a new collection with the given values prepended. Example:
@@ -831,10 +853,10 @@ newC := c.Prepend(1, 2) // Collection with items [1, 2, 3, 4]
 ```
 
 <a name="Collection[T].Push"></a>
-### func \(Collection\[T\]\) [Push](<https://github.com/goforj/collection/blob/main/append.go#L20>)
+### func \(\*Collection\[T\]\) [Push](<https://github.com/goforj/collection/blob/main/append.go#L20>)
 
 ```go
-func (c Collection[T]) Push(values ...T) Collection[T]
+func (c *Collection[T]) Push(values ...T) *Collection[T]
 ```
 
 Push returns a new collection with the given values appended. Example:
@@ -846,10 +868,10 @@ newC := c.Push(3, 4) // Collection with items [1, 2, 3, 4]
 ```
 
 <a name="Collection[T].Sort"></a>
-### func \(Collection\[T\]\) [Sort](<https://github.com/goforj/collection/blob/main/sort.go#L12>)
+### func \(\*Collection\[T\]\) [Sort](<https://github.com/goforj/collection/blob/main/sort.go#L12>)
 
 ```go
-func (c Collection[T]) Sort(less func(a, b T) bool) Collection[T]
+func (c *Collection[T]) Sort(less func(a, b T) bool) *Collection[T]
 ```
 
 Sort returns a new collection sorted using the given comparison function.
@@ -864,10 +886,10 @@ sorted := users.Sort(func(a, b User) bool { return a.Age < b.Age })
 ```
 
 <a name="Collection[T].Take"></a>
-### func \(Collection\[T\]\) [Take](<https://github.com/goforj/collection/blob/main/take.go#L12>)
+### func \(\*Collection\[T\]\) [Take](<https://github.com/goforj/collection/blob/main/take.go#L12>)
 
 ```go
-func (c Collection[T]) Take(n int) Collection[T]
+func (c *Collection[T]) Take(n int) *Collection[T]
 ```
 
 Take returns a new collection containing the first \`n\` items when n \> 0, or the last \`|n|\` items when n \< 0. If n exceeds the collection length, the entire slice \(or nothing\) is returned.
@@ -882,10 +904,10 @@ New([]int{0,1,2,3,4,5}).Take(-2) → [4,5]
 ```
 
 <a name="Collection[T].TakeUntilFn"></a>
-### func \(Collection\[T\]\) [TakeUntilFn](<https://github.com/goforj/collection/blob/main/take_until.go#L10>)
+### func \(\*Collection\[T\]\) [TakeUntilFn](<https://github.com/goforj/collection/blob/main/take_until.go#L10>)
 
 ```go
-func (c Collection[T]) TakeUntilFn(pred func(T) bool) Collection[T]
+func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T]
 ```
 
 TakeUntilFn returns items until the predicate function returns true. The matching item is NOT included. Example:
@@ -898,29 +920,35 @@ out := c.TakeUntilFn(func(v int) bool { return v >= 3 }) // [1, 2]
 // result is \[1, 2\]
 
 <a name="Collection[T].Tap"></a>
-### func \(Collection\[T\]\) [Tap](<https://github.com/goforj/collection/blob/main/tap.go#L14>)
+### func \(\*Collection\[T\]\) [Tap](<https://github.com/goforj/collection/blob/main/tap.go#L21>)
 
 ```go
-func (c Collection[T]) Tap(fn func(Collection[T])) Collection[T]
+func (c *Collection[T]) Tap(fn func(*Collection[T])) *Collection[T]
 ```
 
-Tap passes the collection to fn for side effects \(logging, inspection, debugging\) without modifying the collection. The collection is returned so it can continue chaining, matching Laravel's behavior.
+Tap invokes fn with the collection pointer for side effects \(logging, debugging, inspection\) and returns the same collection to allow chaining.
+
+Tap does NOT modify the collection itself; it simply exposes the current state during a fluent chain.
 
 Example:
 
 ```
-c := New([]int{3,1,2}).Sort(func(a,b int) bool { return a < b }).Tap(func(col Collection[int]) {
-    fmt.Println("After sorting:", col.Items())
-})
-
-// c is still the sorted collection.
+captured := []int{}
+c := New([]int{3,1,2}).
+    Sort(func(a,b int) bool { return a < b }).  // → [1,2,3]
+    Tap(func(col *Collection[int]) {
+        captured = append([]int(nil), col.items...) // snapshot
+    }).
+    Filter(func(v int) bool { return v >= 2 })     // → [2,3]
 ```
 
+After Tap, 'captured' contains the sorted state: \[\]int\{1,2,3\} and the chain continues unaffected.
+
 <a name="Collection[T].ToJSON"></a>
-### func \(Collection\[T\]\) [ToJSON](<https://github.com/goforj/collection/blob/main/to_json.go#L38>)
+### func \(\*Collection\[T\]\) [ToJSON](<https://github.com/goforj/collection/blob/main/to_json.go#L38>)
 
 ```go
-func (c Collection[T]) ToJSON() (string, error)
+func (c *Collection[T]) ToJSON() (string, error)
 ```
 
 ToJSON converts the collection's items into a compact JSON string.
@@ -958,10 +986,10 @@ Returns:
 - error : nil on success, or the unwrapped marshalling error
 
 <a name="Collection[T].ToPrettyJSON"></a>
-### func \(Collection\[T\]\) [ToPrettyJSON](<https://github.com/goforj/collection/blob/main/to_json.go#L82>)
+### func \(\*Collection\[T\]\) [ToPrettyJSON](<https://github.com/goforj/collection/blob/main/to_json.go#L82>)
 
 ```go
-func (c Collection[T]) ToPrettyJSON() (string, error)
+func (c *Collection[T]) ToPrettyJSON() (string, error)
 ```
 
 ToPrettyJSON converts the collection's items into an indented, human\-readable JSON string.
@@ -1003,10 +1031,10 @@ Returns:
 - error : nil on success, or the unwrapped marshalling error
 
 <a name="Collection[T].Transform"></a>
-### func \(Collection\[T\]\) [Transform](<https://github.com/goforj/collection/blob/main/transform.go#L10>)
+### func \(\*Collection\[T\]\) [Transform](<https://github.com/goforj/collection/blob/main/transform.go#L10>)
 
 ```go
-func (c Collection[T]) Transform(fn func(T) T)
+func (c *Collection[T]) Transform(fn func(T) T)
 ```
 
 Transform applies fn to every item \*in place\* and replaces the values with the returned values. This matches Laravel's transform\(\), which mutates the collection instead of returning a new one. Example:
@@ -1018,10 +1046,10 @@ c.Transform(func(v int) int { return v * 2 })
 ```
 
 <a name="Collection[T].Unique"></a>
-### func \(Collection\[T\]\) [Unique](<https://github.com/goforj/collection/blob/main/unique.go#L13>)
+### func \(\*Collection\[T\]\) [Unique](<https://github.com/goforj/collection/blob/main/unique.go#L13>)
 
 ```go
-func (c Collection[T]) Unique(eq func(a, b T) bool) Collection[T]
+func (c *Collection[T]) Unique(eq func(a, b T) bool) *Collection[T]
 ```
 
 Unique returns a collection with duplicate items \(according to eq\) removed, preserving the first occurrence of each unique value.

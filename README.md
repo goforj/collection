@@ -114,7 +114,7 @@ import "github.com/goforj/collection"
 
 
 <a name="CountBy"></a>
-## CountBy <small>(<a href="https://github.com/goforj/collection/blob/main/count_by.go#L23">Source</a>)</small>
+## CountBy
 
 
 CountBy returns a map of keys extracted by fn to their occurrence counts. K must be comparable. Example:
@@ -142,7 +142,7 @@ counts := CountBy(users, func(u User) string { return u.Role == "admin" })
 
 
 <a name="CountByValue"></a>
-## CountByValue <small>(<a href="https://github.com/goforj/collection/blob/main/count_by.go#L40">Source</a>)</small>
+## CountByValue
 
 
 CountByValue returns a map of item values to their occurrence counts. T must be comparable. Example:
@@ -155,7 +155,7 @@ counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 
 
 <a name="Reduce"></a>
-## Reduce <small>(<a href="https://github.com/goforj/collection/blob/main/reduce.go#L10">Source</a>)</small>
+## Reduce
 
 
 Reduce reduces a collection of T into a single value of type R.
@@ -176,7 +176,7 @@ sum := Reduce(nums, 0, func(acc, n int) int { return acc + n })
 
 
 <a name="MapTo"></a>
-### MapTo <small>(<a href="https://github.com/goforj/collection/blob/main/pluck.go#L9">Source</a>)</small>
+### MapTo
 
 
 MapTo maps a Collection\[T\] to a Collection\[R\] using fn\(T\) R.
@@ -191,7 +191,7 @@ squared := numbers.MapTo(func(n int) int { return n * n })
 
 
 <a name="New"></a>
-### New <small>(<a href="https://github.com/goforj/collection/blob/main/collection.go#L17">Source</a>)</small>
+### New
 
 
 New wraps a slice in a Collection. A shallow copy is made so that further operations don't mutate the original slice.
@@ -199,7 +199,7 @@ New wraps a slice in a Collection. A shallow copy is made so that further operat
 
 
 <a name="Pluck"></a>
-### Pluck <small>(<a href="https://github.com/goforj/collection/blob/main/pluck.go#L22">Source</a>)</small>
+### Pluck
 
 
 Pluck is an alias for MapTo with a more semantic name when projecting fields. Example:
@@ -212,7 +212,7 @@ names := users.Pluck(func(u User) string { return u.Name })
 
 
 <a name="TakeUntil"></a>
-### TakeUntil <small>(<a href="https://github.com/goforj/collection/blob/main/take_until.go#L27">Source</a>)</small>
+### TakeUntil
 
 
 TakeUntil returns items until the first element equals \`value\`. The matching item is NOT included.
@@ -222,7 +222,7 @@ Uses == comparison, so T must be comparable.
 
 
 <a name="Times"></a>
-### Times <small>(<a href="https://github.com/goforj/collection/blob/main/times.go#L9">Source</a>)</small>
+### Times
 
 
 Times creates a new collection by running fn\(n\) for i from 1..count. This mirrors Laravel's Collection::times\(\), which is 1\-indexed.
@@ -239,7 +239,7 @@ c := collection.Times(5, func(i int) int { return i * 2 })
 
 
 <a name="Collection[T].After"></a>
-### After <small>(<a href="https://github.com/goforj/collection/blob/main/after.go#L10">Source</a>)</small>
+### After
 
 
 After returns all items after the first element for which pred returns true. If no element matches, an empty collection is returned.
@@ -255,7 +255,7 @@ c.After(func(v int) bool { return v == 3 })
 
 
 <a name="Collection[T].Any"></a>
-### Any <small>(<a href="https://github.com/goforj/collection/blob/main/any.go#L8">Source</a>)</small>
+### Any
 
 
 Any returns true if at least one item satisfies fn. Example: c := collection.New\(\[\]int\{1, 2, 3, 4\}\) hasEven := c.Any\(func\(v int\) bool \{ return v%2 == 0 \}\) // true // hasEven is true
@@ -263,7 +263,7 @@ Any returns true if at least one item satisfies fn. Example: c := collection.New
 
 
 <a name="Collection[T].Append"></a>
-### Append <small>(<a href="https://github.com/goforj/collection/blob/main/append.go#L8">Source</a>)</small>
+### Append
 
 
 Append returns a new collection with the given values appended. Example:
@@ -277,7 +277,7 @@ newC := c.Append(3, 4) // Collection with items [1, 2, 3, 4]
 
 
 <a name="Collection[T].Before"></a>
-### Before <small>(<a href="https://github.com/goforj/collection/blob/main/before.go#L5">Source</a>)</small>
+### Before
 
 
 Before returns all items before the first element for which pred returns true. If no element matches, the entire collection is returned.
@@ -285,7 +285,7 @@ Before returns all items before the first element for which pred returns true. I
 
 
 <a name="Collection[T].Chunk"></a>
-### Chunk <small>(<a href="https://github.com/goforj/collection/blob/main/chunk.go#L10">Source</a>)</small>
+### Chunk
 
 
 Chunk splits the collection into chunks of the given size. The final chunk may be smaller if len\(items\) is not divisible by size.
@@ -300,7 +300,7 @@ chunks := c.Chunk(2) → [[1,2],[3,4],[5]]
 
 
 <a name="Collection[T].Concat"></a>
-### Concat <small>(<a href="https://github.com/goforj/collection/blob/main/concat.go#L26">Source</a>)</small>
+### Concat
 
 
 Concat appends the values from the given slice onto the end of the collection, returning a new collection. The original collection is never modified.
@@ -329,7 +329,7 @@ Notes:
 
 
 <a name="Collection[T].Contains"></a>
-### Contains <small>(<a href="https://github.com/goforj/collection/blob/main/contains.go#L9">Source</a>)</small>
+### Contains
 
 
 Contains returns true if any item satisfies the predicate. Example:
@@ -344,7 +344,7 @@ hasEven := c.Contains(func(v int) bool { return v%2 == 0 }) // true
 
 
 <a name="Collection[T].Count"></a>
-### Count <small>(<a href="https://github.com/goforj/collection/blob/main/count.go#L7">Source</a>)</small>
+### Count
 
 
 Count returns the total number of items in the collection. Example:
@@ -357,7 +357,7 @@ count := c.Count() // 4
 
 
 <a name="Collection[T].Dd"></a>
-### Dd <small>(<a href="https://github.com/goforj/collection/blob/main/dump.go#L40">Source</a>)</small>
+### Dd
 
 
 Dd prints items then terminates execution.
@@ -376,7 +376,7 @@ This method never returns.
 
 
 <a name="Collection[T].DdStr"></a>
-### DdStr <small>(<a href="https://github.com/goforj/collection/blob/main/dump.go#L72">Source</a>)</small>
+### DdStr
 
 
 DdStr behaves like Dd\(\) but also returns the formatted dump string.
@@ -396,7 +396,7 @@ The return value is mostly useful in testing environments where exitFunc has bee
 
 
 <a name="Collection[T].Dump"></a>
-### Dump <small>(<a href="https://github.com/goforj/collection/blob/main/dump.go#L24">Source</a>)</small>
+### Dump
 
 
 Dump prints items with godump and returns the same collection.
@@ -423,7 +423,7 @@ This is a no\-op on the collection itself and never panics.
 
 
 <a name="Collection[T].DumpStr"></a>
-### DumpStr <small>(<a href="https://github.com/goforj/collection/blob/main/dump.go#L55">Source</a>)</small>
+### DumpStr
 
 
 DumpStr returns the pretty\-printed dump of the items as a string, without printing or exiting.
@@ -442,7 +442,7 @@ Useful for logging, snapshot testing, and non\-interactive debugging.
 
 
 <a name="Collection[T].Each"></a>
-### Each <small>(<a href="https://github.com/goforj/collection/blob/main/each.go#L5">Source</a>)</small>
+### Each
 
 
 Each runs fn for every item in the collection and returns the same collection, so it can be used in chains for side effects \(logging, debugging, etc.\).
@@ -450,7 +450,7 @@ Each runs fn for every item in the collection and returns the same collection, s
 
 
 <a name="Collection[T].Filter"></a>
-### Filter <small>(<a href="https://github.com/goforj/collection/blob/main/filter.go#L10">Source</a>)</small>
+### Filter
 
 
 Filter keeps only the elements for which fn returns true. This method mutates the collection in place and returns the same instance.
@@ -466,7 +466,7 @@ c.Filter(func(v int) bool { return v%2 == 0 })
 
 
 <a name="Collection[T].FindWhere"></a>
-### FindWhere <small>(<a href="https://github.com/goforj/collection/blob/main/find_where.go#L25">Source</a>)</small>
+### FindWhere
 
 
 FindWhere returns the first item in the collection for which the provided predicate function returns true. This method is an alias for FirstWhere\(fn\) and is provided for ergonomic parity with functional libraries and languages such as JavaScript, Rust, C\#, and Python.
@@ -492,7 +492,7 @@ v, ok = nums.FindWhere(func(n int) bool {
 
 
 <a name="Collection[T].First"></a>
-### First <small>(<a href="https://github.com/goforj/collection/blob/main/first.go#L18">Source</a>)</small>
+### First
 
 
 First returns the first element in the collection. If the collection is empty, ok will be false.
@@ -516,7 +516,7 @@ v, ok := c.First()
 
 
 <a name="Collection[T].FirstWhere"></a>
-### FirstWhere <small>(<a href="https://github.com/goforj/collection/blob/main/first_where.go#L23">Source</a>)</small>
+### FirstWhere
 
 
 FirstWhere returns the first item in the collection for which the provided predicate function returns true. If no items match, ok=false is returned along with the zero value of T.
@@ -541,7 +541,7 @@ v, ok = nums.FirstWhere(func(n int) bool {
 
 
 <a name="Collection[T].IsEmpty"></a>
-### IsEmpty <small>(<a href="https://github.com/goforj/collection/blob/main/is_empty.go#L4">Source</a>)</small>
+### IsEmpty
 
 
 IsEmpty returns true if the collection has no items.
@@ -549,7 +549,7 @@ IsEmpty returns true if the collection has no items.
 
 
 <a name="Collection[T].Items"></a>
-### Items <small>(<a href="https://github.com/goforj/collection/blob/main/collection.go#L35">Source</a>)</small>
+### Items
 
 
 Items returns the underlying slice of items.
@@ -557,7 +557,7 @@ Items returns the underlying slice of items.
 
 
 <a name="Collection[T].Last"></a>
-### Last <small>(<a href="https://github.com/goforj/collection/blob/main/last.go#L18">Source</a>)</small>
+### Last
 
 
 Last returns the last element in the collection. If the collection is empty, ok will be false.
@@ -581,7 +581,7 @@ v, ok := c.Last()
 
 
 <a name="Collection[T].LastWhere"></a>
-### LastWhere <small>(<a href="https://github.com/goforj/collection/blob/main/last_where.go#L27">Source</a>)</small>
+### LastWhere
 
 
 LastWhere returns the last element in the collection that satisfies the predicate fn. If fn is nil, LastWhere returns the final element in the underlying slice. If the collection is empty or no element matches, ok will be false.
@@ -615,7 +615,7 @@ v, ok := c.LastWhere(nil)
 
 
 <a name="Collection[T].Map"></a>
-### Map <small>(<a href="https://github.com/goforj/collection/blob/main/map.go#L11">Source</a>)</small>
+### Map
 
 
 Map applies a same\-type transformation and returns a new collection.
@@ -631,7 +631,7 @@ c := collection.New([]int{1, 2, 3})
 
 
 <a name="Collection[T].Merge"></a>
-### Merge <small>(<a href="https://github.com/goforj/collection/blob/main/merge.go#L20">Source</a>)</small>
+### Merge
 
 
 Merge merges the given data into the current collection using Laravel\-style semantics.
@@ -647,7 +647,7 @@ Unsupported merge types are ignored. This method never panics and always returns
 
 
 <a name="Collection[T].Multiply"></a>
-### Multiply <small>(<a href="https://github.com/goforj/collection/blob/main/multiply.go#L14">Source</a>)</small>
+### Multiply
 
 
 Multiply creates \`n\` copies of all items in the collection and returns a new collection.
@@ -670,7 +670,7 @@ If n \<= 0, the method returns an empty collection.
 
 
 <a name="Collection[T].Pipe"></a>
-### Pipe <small>(<a href="https://github.com/goforj/collection/blob/main/pipe.go#L18">Source</a>)</small>
+### Pipe
 
 
 Pipe passes the entire collection into the given function and returns the function's result.
@@ -691,7 +691,7 @@ sum := c.Pipe(func(col Collection[int]) any {
 
 
 <a name="Collection[T].Pop"></a>
-### Pop <small>(<a href="https://github.com/goforj/collection/blob/main/pop.go#L8">Source</a>)</small>
+### Pop
 
 
 Pop returns the last item and a new collection with that item removed. The original collection remains unchanged.
@@ -701,7 +701,7 @@ If the collection is empty, the zero value of T is returned along with an empty 
 
 
 <a name="Collection[T].PopN"></a>
-### PopN <small>(<a href="https://github.com/goforj/collection/blob/main/pop.go#L24">Source</a>)</small>
+### PopN
 
 
 PopN removes and returns the last n items as a new collection, and returns a second collection containing the remaining items.
@@ -709,7 +709,7 @@ PopN removes and returns the last n items as a new collection, and returns a sec
 
 
 <a name="Collection[T].Prepend"></a>
-### Prepend <small>(<a href="https://github.com/goforj/collection/blob/main/prepend.go#L8">Source</a>)</small>
+### Prepend
 
 
 Prepend returns a new collection with the given values prepended. Example:
@@ -723,7 +723,7 @@ newC := c.Prepend(1, 2) // Collection with items [1, 2, 3, 4]
 
 
 <a name="Collection[T].Push"></a>
-### Push <small>(<a href="https://github.com/goforj/collection/blob/main/append.go#L20">Source</a>)</small>
+### Push
 
 
 Push returns a new collection with the given values appended. Example:
@@ -737,7 +737,7 @@ newC := c.Push(3, 4) // Collection with items [1, 2, 3, 4]
 
 
 <a name="Collection[T].Sort"></a>
-### Sort <small>(<a href="https://github.com/goforj/collection/blob/main/sort.go#L12">Source</a>)</small>
+### Sort
 
 
 Sort returns a new collection sorted using the given comparison function.
@@ -754,7 +754,7 @@ sorted := users.Sort(func(a, b User) bool { return a.Age < b.Age })
 
 
 <a name="Collection[T].Take"></a>
-### Take <small>(<a href="https://github.com/goforj/collection/blob/main/take.go#L12">Source</a>)</small>
+### Take
 
 
 Take returns a new collection containing the first \`n\` items when n \> 0, or the last \`|n|\` items when n \< 0. If n exceeds the collection length, the entire slice \(or nothing\) is returned.
@@ -771,7 +771,7 @@ New([]int{0,1,2,3,4,5}).Take(-2) → [4,5]
 
 
 <a name="Collection[T].TakeUntilFn"></a>
-### TakeUntilFn <small>(<a href="https://github.com/goforj/collection/blob/main/take_until.go#L10">Source</a>)</small>
+### TakeUntilFn
 
 
 TakeUntilFn returns items until the predicate function returns true. The matching item is NOT included. Example:
@@ -786,7 +786,7 @@ out := c.TakeUntilFn(func(v int) bool { return v >= 3 }) // [1, 2]
 
 
 <a name="Collection[T].Tap"></a>
-### Tap <small>(<a href="https://github.com/goforj/collection/blob/main/tap.go#L21">Source</a>)</small>
+### Tap
 
 
 Tap invokes fn with the collection pointer for side effects \(logging, debugging, inspection\) and returns the same collection to allow chaining.
@@ -810,7 +810,7 @@ After Tap, 'captured' contains the sorted state: \[\]int\{1,2,3\} and the chain 
 
 
 <a name="Collection[T].ToJSON"></a>
-### ToJSON <small>(<a href="https://github.com/goforj/collection/blob/main/to_json.go#L38">Source</a>)</small>
+### ToJSON
 
 
 ToJSON converts the collection's items into a compact JSON string.
@@ -850,7 +850,7 @@ Returns:
 
 
 <a name="Collection[T].ToPrettyJSON"></a>
-### ToPrettyJSON <small>(<a href="https://github.com/goforj/collection/blob/main/to_json.go#L82">Source</a>)</small>
+### ToPrettyJSON
 
 
 ToPrettyJSON converts the collection's items into an indented, human\-readable JSON string.
@@ -894,7 +894,7 @@ Returns:
 
 
 <a name="Collection[T].Transform"></a>
-### Transform <small>(<a href="https://github.com/goforj/collection/blob/main/transform.go#L10">Source</a>)</small>
+### Transform
 
 
 Transform applies fn to every item \*in place\* and replaces the values with the returned values. This matches Laravel's transform\(\), which mutates the collection instead of returning a new one. Example:
@@ -908,7 +908,7 @@ c.Transform(func(v int) int { return v * 2 })
 
 
 <a name="Collection[T].Unique"></a>
-### Unique <small>(<a href="https://github.com/goforj/collection/blob/main/unique.go#L13">Source</a>)</small>
+### Unique
 
 
 Unique returns a collection with duplicate items \(according to eq\) removed, preserving the first occurrence of each unique value.
@@ -939,7 +939,7 @@ unique := c.Unique(func(a, b int) bool { return a == b })
 
 
 <a name="NewNumeric"></a>
-### NewNumeric <small>(<a href="https://github.com/goforj/collection/blob/main/collection.go#L28">Source</a>)</small>
+### NewNumeric
 
 
 NewNumeric wraps a slice of numeric types in a NumericCollection. A shallow copy is made so that further operations don't mutate the original slice.
@@ -949,7 +949,7 @@ NewNumeric wraps a slice of numeric types in a NumericCollection. A shallow copy
 
 
 <a name="NumericCollection[T].Avg"></a>
-### Avg <small>(<a href="https://github.com/goforj/collection/blob/main/avg.go#L15">Source</a>)</small>
+### Avg
 
 
 Avg returns the average of the collection values as a float64. If the collection is empty, Avg returns 0.
@@ -973,7 +973,7 @@ avg := c.Avg()
 
 
 <a name="NumericCollection[T].Max"></a>
-### Max <small>(<a href="https://github.com/goforj/collection/blob/main/max.go#L10">Source</a>)</small>
+### Max
 
 
 Max returns the largest numeric item in the collection. The second return value is false if the collection is empty.
@@ -983,7 +983,7 @@ Example: c := collection.NewNumeric\(\[\]int\{3, 1, 2\}\) max, ok := c.Max\(\) /
 
 
 <a name="NumericCollection[T].Median"></a>
-### Median <small>(<a href="https://github.com/goforj/collection/blob/main/median.go#L14">Source</a>)</small>
+### Median
 
 
 Median returns the statistical median of the numeric collection as float64. Returns \(0, false\) if the collection is empty.
@@ -1000,7 +1000,7 @@ median, ok := c.Median()   // → 2, true
 
 
 <a name="NumericCollection[T].Min"></a>
-### Min <small>(<a href="https://github.com/goforj/collection/blob/main/min.go#L9">Source</a>)</small>
+### Min
 
 
 Min returns the smallest numeric item in the collection. The second return value is false if the collection is empty.
@@ -1015,7 +1015,7 @@ min, ok := c.Min()  // → 1, true
 
 
 <a name="NumericCollection[T].Mode"></a>
-### Mode <small>(<a href="https://github.com/goforj/collection/blob/main/mode.go#L14">Source</a>)</small>
+### Mode
 
 
 Mode returns the most frequent numeric value\(s\) in the collection. If multiple values tie for highest frequency, all are returned in first\-seen order.
@@ -1037,7 +1037,7 @@ modes := c.Mode()  // → []int{1, 2}
 
 
 <a name="NumericCollection[T].Sum"></a>
-### Sum <small>(<a href="https://github.com/goforj/collection/blob/main/sum.go#L15">Source</a>)</small>
+### Sum
 
 
 Sum returns the sum of all numeric items in the NumericCollection. If the collection is empty, Sum returns the zero value of T.

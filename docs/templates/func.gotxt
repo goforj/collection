@@ -1,10 +1,8 @@
 {{- rawAnchorHeader .Level
-    (printf "%s <small>(<a href=\"%s\">Source</a>)</small>"
-        (escape .Name)
-        (codeHref .Location)
-    )
+    (escape .Name)
     .Anchor
 -}}
+
 
 {{- spacer -}}
 

@@ -138,8 +138,21 @@ func TestMergeMap_OnlyStringKeys(t *testing.T) {
 		t.Fatalf("expected appended values, got len=%d", len(got))
 	}
 
-	if !(got[0] == 1 && got[1] == 2 && (got[2] == 10 || got[3] == 20)) {
-		t.Fatalf("string-only merge incorrect: %v", got)
+	// First two must be preserved
+	if got[0] != 1 || got[1] != 2 {
+		t.Fatalf("expected first two values to be [1 2], got %v", got[:2])
+	}
+
+	// Remaining values must contain 10 and 20 in ANY order
+	rest := got[2:]
+	want := map[int]bool{10: true, 20: true}
+
+	if len(rest) != 2 {
+		t.Fatalf("expected 2 merged values, got %v", rest)
+	}
+
+	if !want[rest[0]] || !want[rest[1]] || rest[0] == rest[1] {
+		t.Fatalf("expected merged values to contain 10 and 20 in any order, got %v", rest)
 	}
 }
 

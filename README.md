@@ -55,7 +55,6 @@ import "github.com/goforj/collection"
 
 - [func CountBy\[T any, K comparable\]\(c \*Collection\[T\], fn func\(T\) K\) map\[K\]int](<#CountBy>)
 - [func CountByValue\[T comparable\]\(c \*Collection\[T\]\) map\[T\]int](<#CountByValue>)
-- [func Mode\[T comparable\]\(c \*Collection\[T\]\) \[\]T](<#Mode>)
 - [func Reduce\[T any, R any\]\(c \*Collection\[T\], initial R, fn func\(R, T\) R\) R](<#Reduce>)
 - [type Collection](<#Collection>)
   - [func MapTo\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#MapTo>)
@@ -107,6 +106,7 @@ import "github.com/goforj/collection"
   - [func \(c \*NumericCollection\[T\]\) Max\(\) \(T, bool\)](<#NumericCollection[T].Max>)
   - [func \(c \*NumericCollection\[T\]\) Median\(\) \(float64, bool\)](<#NumericCollection[T].Median>)
   - [func \(c \*NumericCollection\[T\]\) Min\(\) \(T, bool\)](<#NumericCollection[T].Min>)
+  - [func \(c \*NumericCollection\[T\]\) Mode\(\) \[\]T](<#NumericCollection[T].Mode>)
   - [func \(c \*NumericCollection\[T\]\) Sum\(\) T](<#NumericCollection[T].Sum>)
 
 
@@ -137,15 +137,6 @@ CountByValue returns a map of item values to their occurrence counts. T must be 
 counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 // counts == map[string]int{"a": 2, "b": 1}
 ```
-
-<a name="Mode"></a>
-## func [Mode](<https://github.com/goforj/collection/blob/main/mode.go#L5>)
-
-```go
-func Mode[T comparable](c *Collection[T]) []T
-```
-
-Mode returns the most frequent value\(s\). If tie, returns all values with max freq in first\-seen order.
 
 <a name="Reduce"></a>
 ## func [Reduce](<https://github.com/goforj/collection/blob/main/reduce.go#L10>)
@@ -1065,6 +1056,29 @@ Example:
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
 min, ok := c.Min()  // → 1, true
+```
+
+<a name="NumericCollection[T].Mode"></a>
+### func \(\*NumericCollection\[T\]\) [Mode](<https://github.com/goforj/collection/blob/main/mode.go#L14>)
+
+```go
+func (c *NumericCollection[T]) Mode() []T
+```
+
+Mode returns the most frequent numeric value\(s\) in the collection. If multiple values tie for highest frequency, all are returned in first\-seen order.
+
+Example:
+
+```go
+c := collection.NewNumeric([]int{1, 2, 2, 3})
+modes := c.Mode()  // → []int{2}
+```
+
+Example \(tie\):
+
+```go
+c := collection.NewNumeric([]int{1, 2, 1, 2})
+modes := c.Mode()  // → []int{1, 2}
 ```
 
 <a name="NumericCollection[T].Sum"></a>

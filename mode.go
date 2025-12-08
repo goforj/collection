@@ -1,19 +1,29 @@
 package collection
 
-// Mode returns the most frequent value(s).
-// If tie, returns all values with max freq in first-seen order.
-func Mode[T comparable](c *Collection[T]) []T {
-	items := c.Items()
-	if len(items) == 0 {
+// Mode returns the most frequent numeric value(s) in the collection.
+// If multiple values tie for highest frequency, all are returned
+// in first-seen order.
+//
+// Example:
+//   c := collection.NewNumeric([]int{1, 2, 2, 3})
+//   modes := c.Mode()  // → []int{2}
+//
+// Example (tie):
+//   c := collection.NewNumeric([]int{1, 2, 1, 2})
+//   modes := c.Mode()  // → []int{1, 2}
+func (c *NumericCollection[T]) Mode() []T {
+	items := c.items
+	n := len(items)
+	if n == 0 {
 		return nil
 	}
 
-	counts := make(map[T]int)
-	order := make([]T, 0, len(items))
+	counts := make(map[T]int, n)
+	order := make([]T, 0, n)
 	maxCount := 0
 
 	for _, v := range items {
-		if _, exists := counts[v]; !exists {
+		if _, seen := counts[v]; !seen {
 			order = append(order, v)
 		}
 		counts[v]++
@@ -23,7 +33,7 @@ func Mode[T comparable](c *Collection[T]) []T {
 		}
 	}
 
-	result := make([]T, 0)
+	result := make([]T, 0, len(order))
 	for _, v := range order {
 		if counts[v] == maxCount {
 			result = append(result, v)

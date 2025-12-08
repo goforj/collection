@@ -3,15 +3,17 @@ package collection
 // Avg returns the average of the collection values as a float64.
 // If the collection is empty, Avg returns 0.
 //
-// Example:
-//	c := collection.New([]int{2, 4, 6})
-//	avg := c.Avg()
-//	// avg == 4
+// Example: int
+//	// int
+//	c := collection.NewNumeric([]int{2, 4, 6})
+//	collection.Dump(c.Avg())
+//	// 4.000000 #float64
 //
-// Example (float collection):
-//	c := collection.New([]float64{1.5, 2.5, 3.0})
-//	avg := c.Avg()
-//	// avg == 2.3333333
+// Example: float
+//	// float64
+//	c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
+//	collection.Dump(c2.Avg())
+//	// 2.333333 #float64
 func (c *NumericCollection[T]) Avg() float64 {
 	if len(c.items) == 0 {
 		return 0

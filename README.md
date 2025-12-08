@@ -70,8 +70,8 @@ import "github.com/goforj/collection"
 | [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L8" target="_blank">Source</a> |
 | [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L8" target="_blank">Source</a> |
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L5" target="_blank">Source</a> |
-| [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L10" target="_blank">Source</a> |
-| [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L26" target="_blank">Source</a> |
+| [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
+| [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L22" target="_blank">Source</a> |
 | [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L9" target="_blank">Source</a> |
 | [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L6" target="_blank">Source</a> |
 | [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L40" target="_blank">Source</a> |
@@ -107,7 +107,7 @@ import "github.com/goforj/collection"
 | [type Number](<#Number>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L9-L13" target="_blank">Source</a> |
 | [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L22-L24" target="_blank">Source</a> |
 | [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L28" target="_blank">Source</a> |
-| [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L15" target="_blank">Source</a> |
+| [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L17" target="_blank">Source</a> |
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L10" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L14" target="_blank">Source</a> |
 | [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L10" target="_blank">Source</a> |
@@ -319,8 +319,67 @@ Chunk splits the collection into chunks of the given size. The final chunk may b
 If size \<= 0, nil is returned. Example:
 
 ```go
-collection.New([]int{1,2,3,4,5}).Chunk(2)
-// [[1,2],[3,4],[5]]
+// integers
+c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
+collection.Dump(c)
+
+// #[][]int [
+//  0 => #[]int [
+//    0 => 1 #int
+//    1 => 2 #int
+//  ]
+//  1 => #[]int [
+//    0 => 3 #int
+//    1 => 4 #int
+//  ]
+//  2 => #[]int [
+//    0 => 5 #int
+//  ]
+//]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := []User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+	{ID: 4, Name: "Dave"},
+}
+
+userChunks := collection.New(users).Chunk(2)
+collection.Dump(userChunks)
+
+// Example Dump output will show [][]User grouped in size-2 chunks, e.g.:
+// #[][]main.User [
+//  0 => #[]main.User [
+//    0 => #main.User {
+//      +ID   => 1 #int
+//      +Name => "Alice" #string
+//    }
+//    1 => #main.User {
+//      +ID   => 2 #int
+//      +Name => "Bob" #string
+//    }
+//  ]
+//  1 => #[]main.User [
+//    0 => #main.User {
+//      +ID   => 3 #int
+//      +Name => "Carol" #string
+//    }
+//    1 => #main.User {
+//      +ID   => 4 #int
+//      +Name => "Dave" #string
+//    }
+//  ]
+//]
 ```
 
 
@@ -337,20 +396,18 @@ Example:
 
 ```go
 c := collection.New([]string{"John Doe"})
+concatenated := c.
+	Concat([]string{"Jane Doe"}).
+	Concat([]string{"Johnny Doe"}).
+	Items()
+collection.Dump(concatenated)
 
-    concatenated := c.
-        Concat([]string{"Jane Doe"}).
-        Concat([]string{"Johnny Doe"}).
-		Items()
-
-    // ["John Doe", "Jane Doe", "Johnny Doe"]
+// #[]string [
+//  0 => "John Doe" #string
+//  1 => "Jane Doe" #string
+//  2 => "Johnny Doe" #string
+// ]
 ```
-
-Notes:
-
-- Concat never mutates the original collection.
-- Keys/indices from the appended slice are ignored; values are simply appended.
-- To concatenate another Collection\[T\], use: c.Concat\(other.Items\(\)\)
 
 
 
@@ -1049,20 +1106,22 @@ NewNumeric wraps a slice of numeric types in a NumericCollection. A shallow copy
 
 Avg returns the average of the collection values as a float64. If the collection is empty, Avg returns 0.
 
-Example:
+Example: int
 
 ```go
-c := collection.New([]int{2, 4, 6})
-avg := c.Avg()
-// avg == 4
+// int
+c := collection.NewNumeric([]int{2, 4, 6})
+collection.Dump(c.Avg())
+// 4.000000 #float64
 ```
 
-Example \(float collection\):
+Example: float
 
 ```go
-c := collection.New([]float64{1.5, 2.5, 3.0})
-avg := c.Avg()
-// avg == 2.3333333
+// float64
+c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
+collection.Dump(c2.Avg())
+// 2.333333 #float64
 ```
 
 

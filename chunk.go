@@ -5,8 +5,64 @@ package collection
 //
 // If size <= 0, nil is returned.
 // Example:
-//   collection.New([]int{1,2,3,4,5}).Chunk(2)
-//   // [[1,2],[3,4],[5]]
+//	// integers
+//	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
+//	collection.Dump(c)
+//
+//	// #[][]int [
+//	//  0 => #[]int [
+//	//    0 => 1 #int
+//	//    1 => 2 #int
+//	//  ]
+//	//  1 => #[]int [
+//	//    0 => 3 #int
+//	//    1 => 4 #int
+//	//  ]
+//	//  2 => #[]int [
+//	//    0 => 5 #int
+//	//  ]
+//	//]
+//
+// Example:
+//	// structs
+//	type User struct {
+//		ID   int
+//		Name string
+//	}
+//
+//	users := []User{
+//		{ID: 1, Name: "Alice"},
+//		{ID: 2, Name: "Bob"},
+//		{ID: 3, Name: "Carol"},
+//		{ID: 4, Name: "Dave"},
+//	}
+//
+//	userChunks := collection.New(users).Chunk(2)
+//	collection.Dump(userChunks)
+//
+//	// Example Dump output will show [][]User grouped in size-2 chunks, e.g.:
+//	// #[][]main.User [
+//	//  0 => #[]main.User [
+//	//    0 => #main.User {
+//	//      +ID   => 1 #int
+//	//      +Name => "Alice" #string
+//	//    }
+//	//    1 => #main.User {
+//	//      +ID   => 2 #int
+//	//      +Name => "Bob" #string
+//	//    }
+//	//  ]
+//	//  1 => #[]main.User [
+//	//    0 => #main.User {
+//	//      +ID   => 3 #int
+//	//      +Name => "Carol" #string
+//	//    }
+//	//    1 => #main.User {
+//	//      +ID   => 4 #int
+//	//      +Name => "Dave" #string
+//	//    }
+//	//  ]
+//	//]
 func (c *Collection[T]) Chunk(size int) [][]T {
 	if size <= 0 {
 		return nil

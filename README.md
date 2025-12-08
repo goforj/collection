@@ -130,9 +130,9 @@ users := collection.New([]User{
     {Name: "Grace", Role: "user"},
     {Name: "Heidi", Role: "user"},
 })
+counts := CountBy(users, func(u User) string { return u.Role == "admin" })
+// map[string]int{"admin": 3, "user": 5}
 ```
-
-counts := CountBy\(users, func\(u User\) string \{ return u.Role == "admin" \}\) // map\[string\]int\{"admin": 3, "user": 5\}
 
 
 

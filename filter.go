@@ -4,9 +4,10 @@ package collection
 // This method mutates the collection in place and returns the same instance.
 //
 // Example:
-//   c := New([]int{1,2,3,4})
-//   c.Filter(func(v int) bool { return v%2 == 0 })
-//   // c.items == []int{2,4}
+//  collection.New([]int{1,2,3,4}).
+//		Filter(func(v int) bool { return v%2 == 0 }).
+// 		Items()
+//	// []int{2,4}
 func (c *Collection[T]) Filter(fn func(T) bool) *Collection[T] {
 	j := 0
 	for i := 0; i < len(c.items); i++ {

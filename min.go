@@ -4,8 +4,9 @@ package collection
 // The second return value is false if the collection is empty.
 //
 // Example:
-//   c := collection.NewNumeric([]int{3, 1, 2})
-//   min, ok := c.Min()  // → 1, true
+//  c := collection.NewNumeric([]int{3, 1, 2})
+//  min, ok := c.Min()
+//	1, true
 func (c *NumericCollection[T]) Min() (T, bool) {
 	var zero T
 

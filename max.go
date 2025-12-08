@@ -4,9 +4,9 @@ package collection
 // The second return value is false if the collection is empty.
 //
 // Example:
-// c := collection.NewNumeric([]int{3, 1, 2})
-// max, ok := c.Max()
-// // → 3, true
+// 	c := collection.NewNumeric([]int{3, 1, 2})
+// 	max, ok := c.Max()
+// 	// → 3, true
 func (c *NumericCollection[T]) Max() (T, bool) {
 	var zero T
 

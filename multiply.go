@@ -4,11 +4,9 @@ package collection
 // and returns a new collection.
 //
 // Example:
-//   users := New([]User{{Name: "A"}, {Name: "B"}})
-//   out := users.Multiply(3)
-//
-// Resulting items:
-//   [A, B, A, B, A, B]
+//  users := collection.New([]User{{Name: "A"}, {Name: "B"}})
+//  out := users.Multiply(3)
+//	// [A, B, A, B, A, B]
 //
 // If n <= 0, the method returns an empty collection.
 func (c *Collection[T]) Multiply(n int) *Collection[T] {

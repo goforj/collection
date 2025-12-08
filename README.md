@@ -71,13 +71,13 @@ import "github.com/goforj/collection"
 | [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L10" target="_blank">Source</a> |
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L26" target="_blank">Source</a> |
 | [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L9" target="_blank">Source</a> |
-| [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L7" target="_blank">Source</a> |
+| [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L6" target="_blank">Source</a> |
 | [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L40" target="_blank">Source</a> |
 | [DdStr](<#Collection[T].DdStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L72" target="_blank">Source</a> |
 | [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L24" target="_blank">Source</a> |
 | [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L55" target="_blank">Source</a> |
 | [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L5" target="_blank">Source</a> |
-| [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L10" target="_blank">Source</a> |
+| [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L11" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L18" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
@@ -87,12 +87,12 @@ import "github.com/goforj/collection"
 | [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L27" target="_blank">Source</a> |
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L11" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L20" target="_blank">Source</a> |
-| [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L14" target="_blank">Source</a> |
+| [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L12" target="_blank">Source</a> |
 | [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L18" target="_blank">Source</a> |
 | [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L8" target="_blank">Source</a> |
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
-| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L20" target="_blank">Source</a> |
+| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L44" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L39" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
@@ -108,7 +108,7 @@ import "github.com/goforj/collection"
 | [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L15" target="_blank">Source</a> |
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L10" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L14" target="_blank">Source</a> |
-| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L9" target="_blank">Source</a> |
+| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L10" target="_blank">Source</a> |
 | [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L12" target="_blank">Source</a> |
 | [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank">Source</a> |
 
@@ -242,7 +242,13 @@ c.After(func(v int) bool { return v == 3 })
 ### Any
 
 
-Any returns true if at least one item satisfies fn. Example: c := collection.New\(\[\]int\{1, 2, 3, 4\}\) hasEven := c.Any\(func\(v int\) bool \{ return v%2 == 0 \}\) // true // hasEven is true
+Any returns true if at least one item satisfies fn. Example:
+
+```go
+c := collection.New([]int{1, 2, 3, 4})
+hasEven := c.Any(func(v int) bool { return v%2 == 0 }) // true
+// hasEven is true
+```
 
 
 
@@ -277,8 +283,8 @@ Chunk splits the collection into chunks of the given size. The final chunk may b
 If size \<= 0, nil is returned. Example:
 
 ```go
-c := collection.New([]int{1,2,3,4,5})
-chunks := c.Chunk(2) → [[1,2],[3,4],[5]]
+collection.New([]int{1,2,3,4,5}).Chunk(2)
+// [[1,2],[3,4],[5]]
 ```
 
 
@@ -334,8 +340,7 @@ hasEven := c.Contains(func(v int) bool { return v%2 == 0 }) // true
 Count returns the total number of items in the collection. Example:
 
 ```go
-c := collection.New([]int{1, 2, 3, 4})
-count := c.Count() // 4
+collection.New([]int{1, 2, 3, 4}).Count() // 4
 ```
 
 
@@ -442,9 +447,10 @@ Filter keeps only the elements for which fn returns true. This method mutates th
 Example:
 
 ```go
-c := New([]int{1,2,3,4})
-c.Filter(func(v int) bool { return v%2 == 0 })
-// c.items == []int{2,4}
+collection.New([]int{1,2,3,4}).
+		Filter(func(v int) bool { return v%2 == 0 }).
+		Items()
+	// []int{2,4}
 ```
 
 
@@ -639,14 +645,9 @@ Multiply creates \`n\` copies of all items in the collection and returns a new c
 Example:
 
 ```go
-users := New([]User{{Name: "A"}, {Name: "B"}})
-out := users.Multiply(3)
-```
-
-Resulting items:
-
-```go
-[A, B, A, B, A, B]
+users := collection.New([]User{{Name: "A"}, {Name: "B"}})
+ out := users.Multiply(3)
+	// [A, B, A, B, A, B]
 ```
 
 If n \<= 0, the method returns an empty collection.
@@ -710,12 +711,35 @@ newC := c.Prepend(1, 2) // Collection with items [1, 2, 3, 4]
 ### Push
 
 
-Push returns a new collection with the given values appended. Example:
+Push returns a new collection with the given values appended.
+
+Examples:
 
 ```go
-c := collection.New([]int{1, 2})
-newC := c.Push(3, 4) // Collection with items [1, 2, 3, 4]
-// newC.Items() == []int{1, 2, 3, 4}
+// Simple type (ints)
+nums := collection.New([]int{1, 2}).Push(3, 4)
+// nums = [1, 2, 3, 4]
+
+// Complex type (structs)
+type User struct {
+    Name string
+    Age  int
+}
+
+users := collection.New([]User{
+    {Name: "Alice", Age: 30},
+    {Name: "Bob",   Age: 25},
+}).Push(
+    User{Name: "Carol", Age: 40},
+    User{Name: "Dave",  Age: 20},
+)
+
+// users = [
+//   {Alice 30},
+//   {Bob 25},
+//   {Carol 40},
+//   {Dave 20},
+// ]
 ```
 
 
@@ -1006,7 +1030,13 @@ avg := c.Avg()
 
 Max returns the largest numeric item in the collection. The second return value is false if the collection is empty.
 
-Example: c := collection.NewNumeric\(\[\]int\{3, 1, 2\}\) max, ok := c.Max\(\) // → 3, true
+Example:
+
+```go
+c := collection.NewNumeric([]int{3, 1, 2})
+max, ok := c.Max()
+// → 3, true
+```
 
 
 
@@ -1037,7 +1067,8 @@ Example:
 
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
-min, ok := c.Min()  // → 1, true
+ min, ok := c.Min()
+	1, true
 ```
 
 

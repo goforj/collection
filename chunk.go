@@ -5,8 +5,8 @@ package collection
 //
 // If size <= 0, nil is returned.
 // Example:
-//   c := collection.New([]int{1,2,3,4,5})
-//   chunks := c.Chunk(2) → [[1,2],[3,4],[5]]
+//   collection.New([]int{1,2,3,4,5}).Chunk(2)
+//   // [[1,2],[3,4],[5]]
 func (c *Collection[T]) Chunk(size int) [][]T {
 	if size <= 0 {
 		return nil

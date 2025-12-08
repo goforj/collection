@@ -109,7 +109,7 @@ import "github.com/goforj/collection"
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L10" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L14" target="_blank">Source</a> |
 | [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L9" target="_blank">Source</a> |
-| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L14" target="_blank">Source</a> |
+| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L12" target="_blank">Source</a> |
 | [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank">Source</a> |
 
 
@@ -1023,15 +1023,13 @@ Mode returns the most frequent numeric value\(s\) in the collection. If multiple
 Example:
 
 ```go
-c := collection.NewNumeric([]int{1, 2, 2, 3})
-modes := c.Mode()  // → []int{2}
+collection.NewNumeric([]int{1, 2, 2, 3}).Mode() // → []int{2}
 ```
 
 Example \(tie\):
 
 ```go
-c := collection.NewNumeric([]int{1, 2, 1, 2})
-modes := c.Mode()  // → []int{1, 2}
+collection.NewNumeric([]int{1, 2, 1, 2}).Mode() // → []int{1, 2}
 ```
 
 

@@ -5,12 +5,10 @@ package collection
 // in first-seen order.
 //
 // Example:
-//   c := collection.NewNumeric([]int{1, 2, 2, 3})
-//   modes := c.Mode()  // → []int{2}
+//   collection.NewNumeric([]int{1, 2, 2, 3}).Mode() // → []int{2}
 //
 // Example (tie):
-//   c := collection.NewNumeric([]int{1, 2, 1, 2})
-//   modes := c.Mode()  // → []int{1, 2}
+//   collection.NewNumeric([]int{1, 2, 1, 2}).Mode() // → []int{1, 2}
 func (c *NumericCollection[T]) Mode() []T {
 	items := c.items
 	n := len(items)

@@ -1,4 +1,10 @@
-{{- rawAnchorHeader .Level (escape .Name) .Anchor -}}
+{{- rawAnchorHeader .Level
+    (printf "%s <sub>(<a href=\"%s\">Source</a>)</sub>"
+        (escape .Name)
+        (codeHref .Location)
+    )
+    .Anchor
+-}}
 
 {{- spacer -}}
 
@@ -17,4 +23,3 @@
 {{- end -}}
 
 {{- spacer -}}
-<a href="{{ codeHref .Location }}" target="_blank" rel="noopener noreferrer">View Source</a>

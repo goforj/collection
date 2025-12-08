@@ -93,7 +93,7 @@ import "github.com/goforj/collection"
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L20" target="_blank">Source</a> |
-| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L18" target="_blank">Source</a> |
+| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L36" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
@@ -729,16 +729,41 @@ Reduce collapses the collection into a single value of type T. The accumulator h
 Example:
 
 ```go
-sum := New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
+sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 	return acc + n
 })
 // 6
 
-joined := New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
+joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
 	return acc + s
 })
 // "abc"
 ```
+
+```go
+type Stats struct {
+    Count int
+    Sum   int
+}
+```
+
+```go
+c := collection.New([]Stats{
+    {Count: 1, Sum: 10},
+    {Count: 1, Sum: 20},
+    {Count: 1, Sum: 30},
+})
+```
+
+```go
+total := c.Reduce(Stats{}, func(acc, s Stats) Stats {
+    acc.Count += s.Count
+    acc.Sum += s.Sum
+    return acc
+})
+```
+
+// Stats\{Count: 3, Sum: 60\}
 
 
 

@@ -53,61 +53,63 @@ import "github.com/goforj/collection"
 
 ## Index
 
-- [func CountBy\[T any, K comparable\]\(c \*Collection\[T\], fn func\(T\) K\) map\[K\]int](<#CountBy>)
-- [func CountByValue\[T comparable\]\(c \*Collection\[T\]\) map\[T\]int](<#CountByValue>)
-- [func Reduce\[T any, R any\]\(c \*Collection\[T\], initial R, fn func\(R, T\) R\) R](<#Reduce>)
-- [type Collection](<#Collection>)
-  - [func MapTo\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#MapTo>)
-  - [func New\[T any\]\(items \[\]T\) \*Collection\[T\]](<#New>)
-  - [func Pluck\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#Pluck>)
-  - [func TakeUntil\[T comparable\]\(c \*Collection\[T\], value T\) \*Collection\[T\]](<#TakeUntil>)
-  - [func Times\[T any\]\(count int, fn func\(int\) T\) \*Collection\[T\]](<#Times>)
-  - [func \(c \*Collection\[T\]\) After\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].After>)
-  - [func \(c \*Collection\[T\]\) Any\(fn func\(T\) bool\) bool](<#Collection[T].Any>)
-  - [func \(c \*Collection\[T\]\) Append\(values ...T\) \*Collection\[T\]](<#Collection[T].Append>)
-  - [func \(c \*Collection\[T\]\) Before\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].Before>)
-  - [func \(c \*Collection\[T\]\) Chunk\(size int\) \[\]\[\]T](<#Collection[T].Chunk>)
-  - [func \(c \*Collection\[T\]\) Concat\(values \[\]T\) \*Collection\[T\]](<#Collection[T].Concat>)
-  - [func \(c \*Collection\[T\]\) Contains\(pred func\(T\) bool\) bool](<#Collection[T].Contains>)
-  - [func \(c \*Collection\[T\]\) Count\(\) int](<#Collection[T].Count>)
-  - [func \(c \*Collection\[T\]\) Dd\(\)](<#Collection[T].Dd>)
-  - [func \(c \*Collection\[T\]\) DdStr\(\) string](<#Collection[T].DdStr>)
-  - [func \(c \*Collection\[T\]\) Dump\(\) \*Collection\[T\]](<#Collection[T].Dump>)
-  - [func \(c \*Collection\[T\]\) DumpStr\(\) string](<#Collection[T].DumpStr>)
-  - [func \(c \*Collection\[T\]\) Each\(fn func\(T\)\) \*Collection\[T\]](<#Collection[T].Each>)
-  - [func \(c \*Collection\[T\]\) Filter\(fn func\(T\) bool\) \*Collection\[T\]](<#Collection[T].Filter>)
-  - [func \(c \*Collection\[T\]\) FindWhere\(fn func\(T\) bool\) \(T, bool\)](<#Collection[T].FindWhere>)
-  - [func \(c \*Collection\[T\]\) First\(\) \(value T, ok bool\)](<#Collection[T].First>)
-  - [func \(c \*Collection\[T\]\) FirstWhere\(fn func\(T\) bool\) \(value T, ok bool\)](<#Collection[T].FirstWhere>)
-  - [func \(c \*Collection\[T\]\) IsEmpty\(\) bool](<#Collection[T].IsEmpty>)
-  - [func \(c \*Collection\[T\]\) Items\(\) \[\]T](<#Collection[T].Items>)
-  - [func \(c \*Collection\[T\]\) Last\(\) \(value T, ok bool\)](<#Collection[T].Last>)
-  - [func \(c \*Collection\[T\]\) LastWhere\(fn func\(T, int\) bool\) \(value T, ok bool\)](<#Collection[T].LastWhere>)
-  - [func \(c \*Collection\[T\]\) Map\(fn func\(T\) T\) \*Collection\[T\]](<#Collection[T].Map>)
-  - [func \(c \*Collection\[T\]\) Merge\(other any\) \*Collection\[T\]](<#Collection[T].Merge>)
-  - [func \(c \*Collection\[T\]\) Multiply\(n int\) \*Collection\[T\]](<#Collection[T].Multiply>)
-  - [func \(c \*Collection\[T\]\) Pipe\(fn func\(\*Collection\[T\]\) any\) any](<#Collection[T].Pipe>)
-  - [func \(c \*Collection\[T\]\) Pop\(\) \(T, \*Collection\[T\]\)](<#Collection[T].Pop>)
-  - [func \(c \*Collection\[T\]\) PopN\(n int\) \(\*Collection\[T\], \*Collection\[T\]\)](<#Collection[T].PopN>)
-  - [func \(c \*Collection\[T\]\) Prepend\(values ...T\) \*Collection\[T\]](<#Collection[T].Prepend>)
-  - [func \(c \*Collection\[T\]\) Push\(values ...T\) \*Collection\[T\]](<#Collection[T].Push>)
-  - [func \(c \*Collection\[T\]\) Sort\(less func\(a, b T\) bool\) \*Collection\[T\]](<#Collection[T].Sort>)
-  - [func \(c \*Collection\[T\]\) Take\(n int\) \*Collection\[T\]](<#Collection[T].Take>)
-  - [func \(c \*Collection\[T\]\) TakeUntilFn\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].TakeUntilFn>)
-  - [func \(c \*Collection\[T\]\) Tap\(fn func\(\*Collection\[T\]\)\) \*Collection\[T\]](<#Collection[T].Tap>)
-  - [func \(c \*Collection\[T\]\) ToJSON\(\) \(string, error\)](<#Collection[T].ToJSON>)
-  - [func \(c \*Collection\[T\]\) ToPrettyJSON\(\) \(string, error\)](<#Collection[T].ToPrettyJSON>)
-  - [func \(c \*Collection\[T\]\) Transform\(fn func\(T\) T\)](<#Collection[T].Transform>)
-  - [func \(c \*Collection\[T\]\) Unique\(eq func\(a, b T\) bool\) \*Collection\[T\]](<#Collection[T].Unique>)
-- [type Number](<#Number>)
-- [type NumericCollection](<#NumericCollection>)
-  - [func NewNumeric\[T Number\]\(items \[\]T\) \*NumericCollection\[T\]](<#NewNumeric>)
-  - [func \(c \*NumericCollection\[T\]\) Avg\(\) float64](<#NumericCollection[T].Avg>)
-  - [func \(c \*NumericCollection\[T\]\) Max\(\) \(T, bool\)](<#NumericCollection[T].Max>)
-  - [func \(c \*NumericCollection\[T\]\) Median\(\) \(float64, bool\)](<#NumericCollection[T].Median>)
-  - [func \(c \*NumericCollection\[T\]\) Min\(\) \(T, bool\)](<#NumericCollection[T].Min>)
-  - [func \(c \*NumericCollection\[T\]\) Mode\(\) \[\]T](<#NumericCollection[T].Mode>)
-  - [func \(c \*NumericCollection\[T\]\) Sum\(\) T](<#NumericCollection[T].Sum>)
+| Kind | Name |
+|------|------|
+| Function | [func CountBy\[T any, K comparable\]\(c \*Collection\[T\], fn func\(T\) K\) map\[K\]int](<#CountBy>) |
+| Function | [func CountByValue\[T comparable\]\(c \*Collection\[T\]\) map\[T\]int](<#CountByValue>) |
+| Function | [func Reduce\[T any, R any\]\(c \*Collection\[T\], initial R, fn func\(R, T\) R\) R](<#Reduce>) |
+| Type | [type Collection](<#Collection>) |
+| Method (func) | [func MapTo\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#MapTo>) |
+| Method (func) | [func New\[T any\]\(items \[\]T\) \*Collection\[T\]](<#New>) |
+| Method (func) | [func Pluck\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#Pluck>) |
+| Method (func) | [func TakeUntil\[T comparable\]\(c \*Collection\[T\], value T\) \*Collection\[T\]](<#TakeUntil>) |
+| Method (func) | [func Times\[T any\]\(count int, fn func\(int\) T\) \*Collection\[T\]](<#Times>) |
+| Method | [func \(c \*Collection\[T\]\) After\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].After>) |
+| Method | [func \(c \*Collection\[T\]\) Any\(fn func\(T\) bool\) bool](<#Collection[T].Any>) |
+| Method | [func \(c \*Collection\[T\]\) Append\(values ...T\) \*Collection\[T\]](<#Collection[T].Append>) |
+| Method | [func \(c \*Collection\[T\]\) Before\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].Before>) |
+| Method | [func \(c \*Collection\[T\]\) Chunk\(size int\) \[\]\[\]T](<#Collection[T].Chunk>) |
+| Method | [func \(c \*Collection\[T\]\) Concat\(values \[\]T\) \*Collection\[T\]](<#Collection[T].Concat>) |
+| Method | [func \(c \*Collection\[T\]\) Contains\(pred func\(T\) bool\) bool](<#Collection[T].Contains>) |
+| Method | [func \(c \*Collection\[T\]\) Count\(\) int](<#Collection[T].Count>) |
+| Method | [func \(c \*Collection\[T\]\) Dd\(\)](<#Collection[T].Dd>) |
+| Method | [func \(c \*Collection\[T\]\) DdStr\(\) string](<#Collection[T].DdStr>) |
+| Method | [func \(c \*Collection\[T\]\) Dump\(\) \*Collection\[T\]](<#Collection[T].Dump>) |
+| Method | [func \(c \*Collection\[T\]\) DumpStr\(\) string](<#Collection[T].DumpStr>) |
+| Method | [func \(c \*Collection\[T\]\) Each\(fn func\(T\)\) \*Collection\[T\]](<#Collection[T].Each>) |
+| Method | [func \(c \*Collection\[T\]\) Filter\(fn func\(T\) bool\) \*Collection\[T\]](<#Collection[T].Filter>) |
+| Method | [func \(c \*Collection\[T\]\) FindWhere\(fn func\(T\) bool\) \(T, bool\)](<#Collection[T].FindWhere>) |
+| Method | [func \(c \*Collection\[T\]\) First\(\) \(value T, ok bool\)](<#Collection[T].First>) |
+| Method | [func \(c \*Collection\[T\]\) FirstWhere\(fn func\(T\) bool\) \(value T, ok bool\)](<#Collection[T].FirstWhere>) |
+| Method | [func \(c \*Collection\[T\]\) IsEmpty\(\) bool](<#Collection[T].IsEmpty>) |
+| Method | [func \(c \*Collection\[T\]\) Items\(\) \[\]T](<#Collection[T].Items>) |
+| Method | [func \(c \*Collection\[T\]\) Last\(\) \(value T, ok bool\)](<#Collection[T].Last>) |
+| Method | [func \(c \*Collection\[T\]\) LastWhere\(fn func\(T, int\) bool\) \(value T, ok bool\)](<#Collection[T].LastWhere>) |
+| Method | [func \(c \*Collection\[T\]\) Map\(fn func\(T\) T\) \*Collection\[T\]](<#Collection[T].Map>) |
+| Method | [func \(c \*Collection\[T\]\) Merge\(other any\) \*Collection\[T\]](<#Collection[T].Merge>) |
+| Method | [func \(c \*Collection\[T\]\) Multiply\(n int\) \*Collection\[T\]](<#Collection[T].Multiply>) |
+| Method | [func \(c \*Collection\[T\]\) Pipe\(fn func\(\*Collection\[T\]\) any\) any](<#Collection[T].Pipe>) |
+| Method | [func \(c \*Collection\[T\]\) Pop\(\) \(T, \*Collection\[T\]\)](<#Collection[T].Pop>) |
+| Method | [func \(c \*Collection\[T\]\) PopN\(n int\) \(\*Collection\[T\], \*Collection\[T\]\)](<#Collection[T].PopN>) |
+| Method | [func \(c \*Collection\[T\]\) Prepend\(values ...T\) \*Collection\[T\]](<#Collection[T].Prepend>) |
+| Method | [func \(c \*Collection\[T\]\) Push\(values ...T\) \*Collection\[T\]](<#Collection[T].Push>) |
+| Method | [func \(c \*Collection\[T\]\) Sort\(less func\(a, b T\) bool\) \*Collection\[T\]](<#Collection[T].Sort>) |
+| Method | [func \(c \*Collection\[T\]\) Take\(n int\) \*Collection\[T\]](<#Collection[T].Take>) |
+| Method | [func \(c \*Collection\[T\]\) TakeUntilFn\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].TakeUntilFn>) |
+| Method | [func \(c \*Collection\[T\]\) Tap\(fn func\(\*Collection\[T\]\)\) \*Collection\[T\]](<#Collection[T].Tap>) |
+| Method | [func \(c \*Collection\[T\]\) ToJSON\(\) \(string, error\)](<#Collection[T].ToJSON>) |
+| Method | [func \(c \*Collection\[T\]\) ToPrettyJSON\(\) \(string, error\)](<#Collection[T].ToPrettyJSON>) |
+| Method | [func \(c \*Collection\[T\]\) Transform\(fn func\(T\) T\)](<#Collection[T].Transform>) |
+| Method | [func \(c \*Collection\[T\]\) Unique\(eq func\(a, b T\) bool\) \*Collection\[T\]](<#Collection[T].Unique>) |
+| Type | [type Number](<#Number>) |
+| Type | [type NumericCollection](<#NumericCollection>) |
+| Method (func) | [func NewNumeric\[T Number\]\(items \[\]T\) \*NumericCollection\[T\]](<#NewNumeric>) |
+| Method | [func \(c \*NumericCollection\[T\]\) Avg\(\) float64](<#NumericCollection[T].Avg>) |
+| Method | [func \(c \*NumericCollection\[T\]\) Max\(\) \(T, bool\)](<#NumericCollection[T].Max>) |
+| Method | [func \(c \*NumericCollection\[T\]\) Median\(\) \(float64, bool\)](<#NumericCollection[T].Median>) |
+| Method | [func \(c \*NumericCollection\[T\]\) Min\(\) \(T, bool\)](<#NumericCollection[T].Min>) |
+| Method | [func \(c \*NumericCollection\[T\]\) Mode\(\) \[\]T](<#NumericCollection[T].Mode>) |
+| Method | [func \(c \*NumericCollection\[T\]\) Sum\(\) T](<#NumericCollection[T].Sum>) |
 
 
 <a name="CountBy"></a>

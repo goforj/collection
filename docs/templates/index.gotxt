@@ -1,37 +1,31 @@
-{{- if len .Consts -}}
+| Kind | Name |
+|------|------|
 
-	{{- localHref "Constants" | link "Constants" | listEntry 0 -}}
-	{{- inlineSpacer -}}
-	
-{{- end -}}
+{{- if len .Consts }}
+{{- range .Consts }}
+| Constant | {{ link .Name (rawLocalHref .Anchor) }} |
+{{- end }}
+{{- end }}
 
-{{- if len .Vars -}}
+{{- if len .Vars }}
+{{- range .Vars }}
+| Variable | {{ link .Name (rawLocalHref .Anchor) }} |
+{{- end }}
+{{- end }}
 
-	{{- localHref "Variables" | link "Variables" | listEntry 0 -}}
-	{{- inlineSpacer -}}
+{{- range .Funcs }}
+| Function | {{ link .Signature (rawLocalHref .Anchor) }} |
+{{- end }}
 
-{{- end -}}
+{{- range .Types }}
+| Type | {{ link .Title (rawLocalHref .Anchor) }} |
 
-{{- range .Funcs -}}
+    {{- range .Funcs }}
+| Method (func) | {{ link .Signature (rawLocalHref .Anchor) }} |
+    {{- end }}
 
-	{{- (link .Signature (rawLocalHref .Anchor)) | listEntry 0 -}}
-	{{- inlineSpacer -}}
+    {{- range .Methods }}
+| Method | {{ link .Signature (rawLocalHref .Anchor) }} |
+    {{- end }}
 
-{{- end -}}
-
-{{- range .Types -}}
-
-	{{- (link .Title (rawLocalHref .Anchor)) | listEntry 0 -}}
-	{{- inlineSpacer -}}
-
-	{{- range .Funcs -}}
-		{{- (link .Signature (rawLocalHref .Anchor)) | listEntry 1 -}}
-		{{- inlineSpacer -}}
-	{{- end -}}
-
-	{{- range .Methods -}}
-		{{- (link .Signature (rawLocalHref .Anchor)) | listEntry 1 -}}
-		{{- inlineSpacer -}}
-	{{- end -}}
-
-{{- end -}}
+{{- end }}

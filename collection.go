@@ -18,77 +18,20 @@ func New[T any](items []T) *Collection[T] {
 	return &Collection[T]{items: items}
 }
 
+// NumericCollection is a Collection specialized for numeric types.
+type NumericCollection[T Number] struct {
+	*Collection[T]
+}
+
+// NewNumeric wraps a slice of numeric types in a NumericCollection.
+// A shallow copy is made so that further operations don't mutate the original slice.
+func NewNumeric[T Number](items []T) *NumericCollection[T] {
+	return &NumericCollection[T]{
+		Collection: &Collection[T]{items: items},
+	}
+}
+
 // Items returns the underlying slice of items.
 func (c *Collection[T]) Items() []T {
 	return c.items
-}
-
-// IsEmpty returns true if the collection has no items.
-func (c *Collection[T]) IsEmpty() bool {
-	return len(c.items) == 0
-}
-
-//
-// ─── SAME-TYPE FLUENT OPERATIONS (METHODS) ─────────────────────────────────────
-//
-
-// All returns the underlying slice of items.
-func (c *Collection[T]) All() []T {
-	out := make([]T, len(c.items))
-	copy(out, c.items)
-	return out
-}
-
-//
-// ─── TYPE-CHANGING OPERATIONS (FREE FUNCTIONS) ─────────────────────────────────
-//
-
-// Before returns all items before the first element for which pred returns true.
-// If no element matches, the entire collection is returned.
-func (c *Collection[T]) Before(pred func(T) bool) *Collection[T] {
-	idx := len(c.items)
-	for i, v := range c.items {
-		if pred(v) {
-			idx = i
-			break
-		}
-	}
-
-	out := make([]T, idx)
-	copy(out, c.items[:idx])
-	return &Collection[T]{items: out}
-}
-
-// AvgBy calculates the average of values extracted by fn from the collection items.
-//
-// Example:
-//   avgAge := AvgBy(users, func(u User) float64 { return float64(u.Age) })
-func AvgBy[T any](c *Collection[T], fn func(T) float64) float64 {
-	items := c.Items()
-
-	if len(items) == 0 {
-		return 0
-	}
-
-	var sum float64
-	for _, v := range items {
-		sum += fn(v)
-	}
-
-	return sum / float64(len(items))
-}
-
-// SumBy returns the sum of a numeric projection from each item.
-//
-// Example (structs):
-//   type Row struct{ Foo int }
-//   rows := New([]Row{{10}, {20}})
-//   total := SumBy(rows, func(r Row) int { return r.Foo }) // 30
-func SumBy[T any, N Number](c *Collection[T], fn func(T) N) N {
-	items := c.Items()
-	var sum N
-	for _, v := range items {
-		sum += fn(v)
-	}
-	return sum
 }

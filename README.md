@@ -53,8 +53,6 @@ import "github.com/goforj/collection"
 
 ## Index
 
-- [func Avg\[T Number\]\(c \*Collection\[T\]\) float64](<#Avg>)
-- [func AvgBy\[T any\]\(c \*Collection\[T\], fn func\(T\) float64\) float64](<#AvgBy>)
 - [func CountBy\[T any, K comparable\]\(c \*Collection\[T\], fn func\(T\) K\) map\[K\]int](<#CountBy>)
 - [func CountByValue\[T comparable\]\(c \*Collection\[T\]\) map\[T\]int](<#CountByValue>)
 - [func Max\[T Number\]\(c \*Collection\[T\]\) \(T, bool\)](<#Max>)
@@ -63,7 +61,6 @@ import "github.com/goforj/collection"
 - [func Mode\[T comparable\]\(c \*Collection\[T\]\) \[\]T](<#Mode>)
 - [func Reduce\[T any, R any\]\(c \*Collection\[T\], initial R, fn func\(R, T\) R\) R](<#Reduce>)
 - [func Sum\[T Number\]\(c \*Collection\[T\]\) T](<#Sum>)
-- [func SumBy\[T any, N Number\]\(c \*Collection\[T\], fn func\(T\) N\) N](<#SumBy>)
 - [type Collection](<#Collection>)
   - [func MapTo\[T any, R any\]\(c \*Collection\[T\], fn func\(T\) R\) \*Collection\[R\]](<#MapTo>)
   - [func New\[T any\]\(items \[\]T\) \*Collection\[T\]](<#New>)
@@ -71,7 +68,6 @@ import "github.com/goforj/collection"
   - [func TakeUntil\[T comparable\]\(c \*Collection\[T\], value T\) \*Collection\[T\]](<#TakeUntil>)
   - [func Times\[T any\]\(count int, fn func\(int\) T\) \*Collection\[T\]](<#Times>)
   - [func \(c \*Collection\[T\]\) After\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].After>)
-  - [func \(c \*Collection\[T\]\) All\(\) \[\]T](<#Collection[T].All>)
   - [func \(c \*Collection\[T\]\) Any\(fn func\(T\) bool\) bool](<#Collection[T].Any>)
   - [func \(c \*Collection\[T\]\) Append\(values ...T\) \*Collection\[T\]](<#Collection[T].Append>)
   - [func \(c \*Collection\[T\]\) Before\(pred func\(T\) bool\) \*Collection\[T\]](<#Collection[T].Before>)
@@ -109,31 +105,10 @@ import "github.com/goforj/collection"
   - [func \(c \*Collection\[T\]\) Transform\(fn func\(T\) T\)](<#Collection[T].Transform>)
   - [func \(c \*Collection\[T\]\) Unique\(eq func\(a, b T\) bool\) \*Collection\[T\]](<#Collection[T].Unique>)
 - [type Number](<#Number>)
+- [type NumericCollection](<#NumericCollection>)
+  - [func NewNumeric\[T Number\]\(items \[\]T\) \*NumericCollection\[T\]](<#NewNumeric>)
+  - [func \(c \*NumericCollection\[T\]\) Avg\(\) float64](<#NumericCollection[T].Avg>)
 
-
-<a name="Avg"></a>
-## func [Avg](<https://github.com/goforj/collection/blob/main/avg.go#L5>)
-
-```go
-func Avg[T Number](c *Collection[T]) float64
-```
-
-Avg returns the average as float64. Even integer averages may be fractional.
-
-<a name="AvgBy"></a>
-## func [AvgBy](<https://github.com/goforj/collection/blob/main/collection.go#L66>)
-
-```go
-func AvgBy[T any](c *Collection[T], fn func(T) float64) float64
-```
-
-AvgBy calculates the average of values extracted by fn from the collection items.
-
-Example:
-
-```go
-avgAge := AvgBy(users, func(u User) float64 { return float64(u.Age) })
-```
 
 <a name="CountBy"></a>
 ## func [CountBy](<https://github.com/goforj/collection/blob/main/count_by.go#L8>)
@@ -235,23 +210,6 @@ func Sum[T Number](c *Collection[T]) T
 
 Sum returns the sum of all numeric items.
 
-<a name="SumBy"></a>
-## func [SumBy](<https://github.com/goforj/collection/blob/main/collection.go#L87>)
-
-```go
-func SumBy[T any, N Number](c *Collection[T], fn func(T) N) N
-```
-
-SumBy returns the sum of a numeric projection from each item.
-
-Example \(structs\):
-
-```go
-type Row struct{ Foo int }
-rows := New([]Row{{10}, {20}})
-total := SumBy(rows, func(r Row) int { return r.Foo }) // 30
-```
-
 <a name="Collection"></a>
 ## type [Collection](<https://github.com/goforj/collection/blob/main/collection.go#L4-L6>)
 
@@ -346,15 +304,6 @@ c.After(func(v int) bool { return v == 3 })
 // [4,5]
 ```
 
-<a name="Collection[T].All"></a>
-### func \(\*Collection\[T\]\) [All](<https://github.com/goforj/collection/blob/main/collection.go#L36>)
-
-```go
-func (c *Collection[T]) All() []T
-```
-
-All returns the underlying slice of items.
-
 <a name="Collection[T].Any"></a>
 ### func \(\*Collection\[T\]\) [Any](<https://github.com/goforj/collection/blob/main/any.go#L8>)
 
@@ -380,7 +329,7 @@ newC := c.Append(3, 4) // Collection with items [1, 2, 3, 4]
 ```
 
 <a name="Collection[T].Before"></a>
-### func \(\*Collection\[T\]\) [Before](<https://github.com/goforj/collection/blob/main/collection.go#L48>)
+### func \(\*Collection\[T\]\) [Before](<https://github.com/goforj/collection/blob/main/before.go#L5>)
 
 ```go
 func (c *Collection[T]) Before(pred func(T) bool) *Collection[T]
@@ -658,7 +607,7 @@ v, ok = nums.FirstWhere(func(n int) bool {
 ```
 
 <a name="Collection[T].IsEmpty"></a>
-### func \(\*Collection\[T\]\) [IsEmpty](<https://github.com/goforj/collection/blob/main/collection.go#L27>)
+### func \(\*Collection\[T\]\) [IsEmpty](<https://github.com/goforj/collection/blob/main/is_empty.go#L4>)
 
 ```go
 func (c *Collection[T]) IsEmpty() bool
@@ -667,7 +616,7 @@ func (c *Collection[T]) IsEmpty() bool
 IsEmpty returns true if the collection has no items.
 
 <a name="Collection[T].Items"></a>
-### func \(\*Collection\[T\]\) [Items](<https://github.com/goforj/collection/blob/main/collection.go#L22>)
+### func \(\*Collection\[T\]\) [Items](<https://github.com/goforj/collection/blob/main/collection.go#L35>)
 
 ```go
 func (c *Collection[T]) Items() []T
@@ -1072,6 +1021,51 @@ Number is a constraint that permits any numeric type.
 type Number interface {
     // contains filtered or unexported methods
 }
+```
+
+<a name="NumericCollection"></a>
+## type [NumericCollection](<https://github.com/goforj/collection/blob/main/collection.go#L22-L24>)
+
+NumericCollection is a Collection specialized for numeric types.
+
+```go
+type NumericCollection[T Number] struct {
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewNumeric"></a>
+### func [NewNumeric](<https://github.com/goforj/collection/blob/main/collection.go#L28>)
+
+```go
+func NewNumeric[T Number](items []T) *NumericCollection[T]
+```
+
+NewNumeric wraps a slice of numeric types in a NumericCollection. A shallow copy is made so that further operations don't mutate the original slice.
+
+<a name="NumericCollection[T].Avg"></a>
+### func \(\*NumericCollection\[T\]\) [Avg](<https://github.com/goforj/collection/blob/main/avg.go#L15>)
+
+```go
+func (c *NumericCollection[T]) Avg() float64
+```
+
+Avg returns the average of the collection values as a float64. If the collection is empty, Avg returns 0.
+
+Example:
+
+```go
+c := collection.New([]int{2, 4, 6})
+avg := c.Avg()
+// avg == 4
+```
+
+Example \(float collection\):
+
+```go
+c := collection.New([]float64{1.5, 2.5, 3.0})
+avg := c.Avg()
+// avg == 2.3333333
 ```
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

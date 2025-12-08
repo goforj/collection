@@ -5,16 +5,19 @@ package collection
 //
 // Example:
 //
+//	// Sum of integers
 //	sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 //		return acc + n
 //	})
 //	// 6
 //
+//	// Concatenate strings
 //	joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
 //		return acc + s
 //	})
 //	// "abc"
 //
+//	// Aggregate struct fields
 //	type Stats struct {
 //	    Count int
 //	    Sum   int

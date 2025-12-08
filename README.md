@@ -58,7 +58,6 @@ import "github.com/goforj/collection"
 | [CountBy](<#CountBy>) | Function |
 | [CountByValue](<#CountByValue>) | Function |
 | [Reduce](<#Reduce>) | Function |
-
 | [type Collection](<#Collection>) | Type |
 | [MapTo](<#MapTo>) | Type Function |
 | [New](<#New>) | Type Function |
@@ -102,9 +101,7 @@ import "github.com/goforj/collection"
 | [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | Method |
 | [Transform](<#Collection[T].Transform>) | Method |
 | [Unique](<#Collection[T].Unique>) | Method |
-
 | [type Number](<#Number>) | Type |
-
 | [type NumericCollection](<#NumericCollection>) | Type |
 | [NewNumeric](<#NewNumeric>) | Type Function |
 | [Avg](<#NumericCollection[T].Avg>) | Method |

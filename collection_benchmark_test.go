@@ -245,11 +245,13 @@ func BenchmarkMultiply(b *testing.B) {
 }
 
 func BenchmarkReduce(b *testing.B) {
-	c := New(makeIntSlice(200000))
+	c := New(makeIntSlice(200_000))
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		_ = Reduce(c, 0, func(acc, v int) int { return acc + v })
+		_ = c.Reduce(0, func(acc, v int) int {
+			return acc + v
+		})
 	}
 }
 

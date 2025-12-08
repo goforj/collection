@@ -1,94 +1,54 @@
 package collection
 
-import (
-	"reflect"
-	"testing"
-)
+import "testing"
 
 func TestReduce_IntSum(t *testing.T) {
 	c := New([]int{1, 2, 3, 4})
 
-	sum := Reduce(c, 0, func(acc, v int) int {
-		return acc + v
+	sum := c.Reduce(0, func(acc, n int) int {
+		return acc + n
 	})
 
 	if sum != 10 {
-		t.Fatalf("expected 10, got %v", sum)
+		t.Fatalf("expected 10, got %d", sum)
 	}
 }
 
 func TestReduce_StringConcat(t *testing.T) {
+	c := New([]string{"go", "forj", "rocks"})
+
+	out := c.Reduce("", func(acc, s string) string {
+		if acc == "" {
+			return s
+		}
+		return acc + " " + s
+	})
+
+	if out != "go forj rocks" {
+		t.Fatalf(`expected "go forj rocks", got %q`, out)
+	}
+}
+
+func TestReduce_EmptyCollectionReturnsInitial(t *testing.T) {
+	c := New([]int{})
+
+	out := c.Reduce(42, func(acc, n int) int {
+		return acc + n
+	})
+
+	if out != 42 {
+		t.Fatalf("expected initial value 42 for empty collection, got %d", out)
+	}
+}
+
+func TestReduce_OrderIsLeftToRight(t *testing.T) {
 	c := New([]string{"a", "b", "c"})
 
-	out := Reduce(c, "", func(acc, v string) string {
-		return acc + v
+	out := c.Reduce("", func(acc, s string) string {
+		return acc + s
 	})
 
 	if out != "abc" {
-		t.Fatalf("expected \"abc\", got %q", out)
-	}
-}
-
-func TestReduce_EmptyCollection(t *testing.T) {
-	c := New([]int{})
-
-	sum := Reduce(c, 10, func(acc, v int) int {
-		return acc + v
-	})
-
-	// Should return the initial value unchanged
-	if sum != 10 {
-		t.Fatalf("expected 10, got %v", sum)
-	}
-}
-
-func TestReduce_StructAccumulator(t *testing.T) {
-	type User struct {
-		ID   int
-		Name string
-	}
-
-	c := New([]User{
-		{1, "Chris"},
-		{2, "Van"},
-		{3, "Shawn"},
-	})
-
-	acc := Reduce(c, []string{}, func(acc []string, u User) []string {
-		return append(acc, u.Name)
-	})
-
-	expected := []string{"Chris", "Van", "Shawn"}
-
-	if !reflect.DeepEqual(acc, expected) {
-		t.Fatalf("expected %v, got %v", expected, acc)
-	}
-}
-
-func TestReduce_MapAccumulator(t *testing.T) {
-	c := New([]int{2, 4, 6})
-
-	acc := Reduce(c, map[int]int{}, func(acc map[int]int, v int) map[int]int {
-		acc[v] = v * 10
-		return acc
-	})
-
-	expected := map[int]int{2: 20, 4: 40, 6: 60}
-
-	if !reflect.DeepEqual(acc, expected) {
-		t.Fatalf("expected %v, got %v", expected, acc)
-	}
-}
-
-func TestReduce_NoMutation(t *testing.T) {
-	c := New([]int{1, 2, 3})
-	orig := append([]int{}, c.items...)
-
-	_ = Reduce(c, 0, func(acc, v int) int {
-		return acc + v
-	})
-
-	if !reflect.DeepEqual(c.items, orig) {
-		t.Fatalf("Reduce mutated the original collection: %v vs %v", c.items, orig)
+		t.Fatalf(`expected "abc" (left-to-right accumulation), got %q`, out)
 	}
 }

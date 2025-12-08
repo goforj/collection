@@ -58,7 +58,6 @@ import "github.com/goforj/collection"
 |------|--------|-------|--------|
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L23" target="_blank">Source</a> |
 | [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L40" target="_blank">Source</a> |
-| [Reduce](<#Reduce>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L10" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank">Source</a> |
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L17" target="_blank">Source</a> |
@@ -94,6 +93,7 @@ import "github.com/goforj/collection"
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L20" target="_blank">Source</a> |
+| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L18" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
@@ -151,22 +151,6 @@ CountByValue returns a map of item values to their occurrence counts. T must be 
 counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 // counts == map[string]int{"a": 2, "b": 1}
 ```
-
-
-
-<a name="Reduce"></a>
-## Reduce
-
-
-Reduce reduces a collection of T into a single value of type R.
-
-Example:
-
-```go
-sum := Reduce(nums, 0, func(acc, n int) int { return acc + n })
-```
-
-// sum is the total of all numbers in nums concatenated := Reduce\(strings, "", func\(acc, s string\) string \{ return acc \+ s \}\) // concatenated is all strings in strings joined together
 
 
 
@@ -732,6 +716,28 @@ Push returns a new collection with the given values appended. Example:
 c := collection.New([]int{1, 2})
 newC := c.Push(3, 4) // Collection with items [1, 2, 3, 4]
 // newC.Items() == []int{1, 2, 3, 4}
+```
+
+
+
+<a name="Collection[T].Reduce"></a>
+### Reduce
+
+
+Reduce collapses the collection into a single value of type T. The accumulator has the same type as the elements.
+
+Example:
+
+```go
+sum := New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
+	return acc + n
+})
+// 6
+
+joined := New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
+	return acc + s
+})
+// "abc"
 ```
 
 

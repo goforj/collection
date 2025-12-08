@@ -1,15 +1,23 @@
 package collection
 
-// Reduce reduces a collection of T into a single value of type R.
+// Reduce collapses the collection into a single value of type T.
+// The accumulator has the same type as the elements.
 //
 // Example:
-//   sum := Reduce(nums, 0, func(acc, n int) int { return acc + n })
-// // sum is the total of all numbers in nums
-// concatenated := Reduce(strings, "", func(acc, s string) string { return acc + s })
-// // concatenated is all strings in strings joined together
-func Reduce[T any, R any](c *Collection[T], initial R, fn func(R, T) R) R {
+//
+//	sum := New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
+//		return acc + n
+//	})
+//	// 6
+//
+//	joined := New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
+//		return acc + s
+//	})
+//	// "abc"
+//
+func (c *Collection[T]) Reduce(initial T, fn func(T, T) T) T {
 	acc := initial
-	for _, v := range c.Items() {
+	for _, v := range c.items {
 		acc = fn(acc, v)
 	}
 	return acc

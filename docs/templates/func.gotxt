@@ -17,4 +17,4 @@
 {{- end -}}
 
 {{- spacer -}}
-[View Source]({{ codeHref .Location }})
+<a href="{{ codeHref .Location }}" target="_blank" rel="noopener noreferrer">View Source</a>

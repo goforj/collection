@@ -126,7 +126,7 @@ counts := CountBy(users, func(u User) string { return u.Role })
 // counts == map[string]int{"admin": 3, "user": 5}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/count_by.go#L8)
+<a href="https://github.com/goforj/collection/blob/main/count_by.go#L8" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="CountByValue"></a>
 ## CountByValue
@@ -142,7 +142,7 @@ counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 // counts == map[string]int{"a": 2, "b": 1}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/count_by.go#L25)
+<a href="https://github.com/goforj/collection/blob/main/count_by.go#L25" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Reduce"></a>
 ## Reduce
@@ -161,7 +161,7 @@ sum := Reduce(nums, 0, func(acc, n int) int { return acc + n })
 
 // sum is the total of all numbers in nums concatenated := Reduce\(strings, "", func\(acc, s string\) string \{ return acc \+ s \}\) // concatenated is all strings in strings joined together
 
-[View Source](https://github.com/goforj/collection/blob/main/reduce.go#L10)
+<a href="https://github.com/goforj/collection/blob/main/reduce.go#L10" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection"></a>
 ## type [Collection](<https://github.com/goforj/collection/blob/main/collection.go#L4-L6>)
@@ -190,7 +190,7 @@ squared := numbers.MapTo(func(n int) int { return n * n })
 // squared is a Collection[int] of squared numbers
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/pluck.go#L9)
+<a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="New"></a>
 ### New
@@ -201,7 +201,7 @@ func New[T any](items []T) *Collection[T]
 
 New wraps a slice in a Collection. A shallow copy is made so that further operations don't mutate the original slice.
 
-[View Source](https://github.com/goforj/collection/blob/main/collection.go#L17)
+<a href="https://github.com/goforj/collection/blob/main/collection.go#L17" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Pluck"></a>
 ### Pluck
@@ -217,7 +217,7 @@ names := users.Pluck(func(u User) string { return u.Name })
 // names is a Collection[string] of user names
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/pluck.go#L22)
+<a href="https://github.com/goforj/collection/blob/main/pluck.go#L22" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="TakeUntil"></a>
 ### TakeUntil
@@ -230,7 +230,7 @@ TakeUntil returns items until the first element equals \`value\`. The matching i
 
 Uses == comparison, so T must be comparable.
 
-[View Source](https://github.com/goforj/collection/blob/main/take_until.go#L27)
+<a href="https://github.com/goforj/collection/blob/main/take_until.go#L27" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Times"></a>
 ### Times
@@ -248,7 +248,7 @@ c := collection.Times(5, func(i int) int { return i * 2 })
 // [2,4,6,8,10]
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/times.go#L9)
+<a href="https://github.com/goforj/collection/blob/main/times.go#L9" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].After"></a>
 ### After
@@ -267,7 +267,7 @@ c.After(func(v int) bool { return v == 3 })
 // [4,5]
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/after.go#L10)
+<a href="https://github.com/goforj/collection/blob/main/after.go#L10" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Any"></a>
 ### Any
@@ -278,7 +278,7 @@ func (c *Collection[T]) Any(fn func(T) bool) bool
 
 Any returns true if at least one item satisfies fn. Example: c := collection.New\(\[\]int\{1, 2, 3, 4\}\) hasEven := c.Any\(func\(v int\) bool \{ return v%2 == 0 \}\) // true // hasEven is true
 
-[View Source](https://github.com/goforj/collection/blob/main/any.go#L8)
+<a href="https://github.com/goforj/collection/blob/main/any.go#L8" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Append"></a>
 ### Append
@@ -295,7 +295,7 @@ newC := c.Append(3, 4) // Collection with items [1, 2, 3, 4]
 // newC.Items() == []int{1, 2, 3, 4}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/append.go#L8)
+<a href="https://github.com/goforj/collection/blob/main/append.go#L8" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Before"></a>
 ### Before
@@ -306,7 +306,7 @@ func (c *Collection[T]) Before(pred func(T) bool) *Collection[T]
 
 Before returns all items before the first element for which pred returns true. If no element matches, the entire collection is returned.
 
-[View Source](https://github.com/goforj/collection/blob/main/before.go#L5)
+<a href="https://github.com/goforj/collection/blob/main/before.go#L5" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Chunk"></a>
 ### Chunk
@@ -324,7 +324,7 @@ c := collection.New([]int{1,2,3,4,5})
 chunks := c.Chunk(2) → [[1,2],[3,4],[5]]
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/chunk.go#L10)
+<a href="https://github.com/goforj/collection/blob/main/chunk.go#L10" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Concat"></a>
 ### Concat
@@ -356,7 +356,7 @@ Notes:
 - Keys/indices from the appended slice are ignored; values are simply appended.
 - To concatenate another Collection\[T\], use: c.Concat\(other.Items\(\)\)
 
-[View Source](https://github.com/goforj/collection/blob/main/concat.go#L26)
+<a href="https://github.com/goforj/collection/blob/main/concat.go#L26" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Contains"></a>
 ### Contains
@@ -374,7 +374,7 @@ hasEven := c.Contains(func(v int) bool { return v%2 == 0 }) // true
 
 // hasEven is true
 
-[View Source](https://github.com/goforj/collection/blob/main/contains.go#L9)
+<a href="https://github.com/goforj/collection/blob/main/contains.go#L9" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Count"></a>
 ### Count
@@ -390,7 +390,7 @@ c := collection.New([]int{1, 2, 3, 4})
 count := c.Count() // 4
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/count.go#L7)
+<a href="https://github.com/goforj/collection/blob/main/count.go#L7" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Dd"></a>
 ### Dd
@@ -412,7 +412,7 @@ Like Laravel's dd\(\), this is intended for debugging and should not be used in 
 
 This method never returns.
 
-[View Source](https://github.com/goforj/collection/blob/main/dump.go#L40)
+<a href="https://github.com/goforj/collection/blob/main/dump.go#L40" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].DdStr"></a>
 ### DdStr
@@ -435,7 +435,7 @@ s := c.DdStr()
 
 The return value is mostly useful in testing environments where exitFunc has been replaced with a non\-terminating stub.
 
-[View Source](https://github.com/goforj/collection/blob/main/dump.go#L72)
+<a href="https://github.com/goforj/collection/blob/main/dump.go#L72" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Dump"></a>
 ### Dump
@@ -465,7 +465,7 @@ collection.New([]int{1, 2, 3}).
 
 This is a no\-op on the collection itself and never panics.
 
-[View Source](https://github.com/goforj/collection/blob/main/dump.go#L24)
+<a href="https://github.com/goforj/collection/blob/main/dump.go#L24" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].DumpStr"></a>
 ### DumpStr
@@ -487,7 +487,7 @@ fmt.Println(s)
 
 Useful for logging, snapshot testing, and non\-interactive debugging.
 
-[View Source](https://github.com/goforj/collection/blob/main/dump.go#L55)
+<a href="https://github.com/goforj/collection/blob/main/dump.go#L55" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Each"></a>
 ### Each
@@ -498,7 +498,7 @@ func (c *Collection[T]) Each(fn func(T)) *Collection[T]
 
 Each runs fn for every item in the collection and returns the same collection, so it can be used in chains for side effects \(logging, debugging, etc.\).
 
-[View Source](https://github.com/goforj/collection/blob/main/each.go#L5)
+<a href="https://github.com/goforj/collection/blob/main/each.go#L5" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Filter"></a>
 ### Filter
@@ -517,7 +517,7 @@ c.Filter(func(v int) bool { return v%2 == 0 })
 // c.items == []int{2,4}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/filter.go#L10)
+<a href="https://github.com/goforj/collection/blob/main/filter.go#L10" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].FindWhere"></a>
 ### FindWhere
@@ -546,7 +546,7 @@ v, ok = nums.FindWhere(func(n int) bool {
 // v = 0, ok = false
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/find_where.go#L25)
+<a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].First"></a>
 ### First
@@ -573,7 +573,7 @@ v, ok := c.First()
 // v == 0, ok == false
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/first.go#L18)
+<a href="https://github.com/goforj/collection/blob/main/first.go#L18" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].FirstWhere"></a>
 ### FirstWhere
@@ -601,7 +601,7 @@ v, ok = nums.FirstWhere(func(n int) bool {
 // v = 0, ok = false
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/first_where.go#L23)
+<a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].IsEmpty"></a>
 ### IsEmpty
@@ -612,7 +612,7 @@ func (c *Collection[T]) IsEmpty() bool
 
 IsEmpty returns true if the collection has no items.
 
-[View Source](https://github.com/goforj/collection/blob/main/is_empty.go#L4)
+<a href="https://github.com/goforj/collection/blob/main/is_empty.go#L4" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Items"></a>
 ### Items
@@ -623,7 +623,7 @@ func (c *Collection[T]) Items() []T
 
 Items returns the underlying slice of items.
 
-[View Source](https://github.com/goforj/collection/blob/main/collection.go#L35)
+<a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Last"></a>
 ### Last
@@ -650,7 +650,7 @@ v, ok := c.Last()
 // v == 0, ok == false
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/last.go#L18)
+<a href="https://github.com/goforj/collection/blob/main/last.go#L18" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].LastWhere"></a>
 ### LastWhere
@@ -687,7 +687,7 @@ v, ok := c.LastWhere(nil)
 // v == 0, ok == false
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/last_where.go#L27)
+<a href="https://github.com/goforj/collection/blob/main/last_where.go#L27" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Map"></a>
 ### Map
@@ -706,7 +706,7 @@ c := collection.New([]int{1, 2, 3})
  // expected := []int{10, 20, 30}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/map.go#L11)
+<a href="https://github.com/goforj/collection/blob/main/map.go#L11" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Merge"></a>
 ### Merge
@@ -725,7 +725,7 @@ Behavior depends on the type of \`other\`:
 
 Unsupported merge types are ignored. This method never panics and always returns a new Collection.
 
-[View Source](https://github.com/goforj/collection/blob/main/merge.go#L20)
+<a href="https://github.com/goforj/collection/blob/main/merge.go#L20" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Multiply"></a>
 ### Multiply
@@ -751,7 +751,7 @@ Resulting items:
 
 If n \<= 0, the method returns an empty collection.
 
-[View Source](https://github.com/goforj/collection/blob/main/multiply.go#L14)
+<a href="https://github.com/goforj/collection/blob/main/multiply.go#L14" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Pipe"></a>
 ### Pipe
@@ -775,7 +775,7 @@ sum := c.Pipe(func(col Collection[int]) any {
 // sum == 6
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/pipe.go#L18)
+<a href="https://github.com/goforj/collection/blob/main/pipe.go#L18" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Pop"></a>
 ### Pop
@@ -788,7 +788,7 @@ Pop returns the last item and a new collection with that item removed. The origi
 
 If the collection is empty, the zero value of T is returned along with an empty collection.
 
-[View Source](https://github.com/goforj/collection/blob/main/pop.go#L8)
+<a href="https://github.com/goforj/collection/blob/main/pop.go#L8" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].PopN"></a>
 ### PopN
@@ -799,7 +799,7 @@ func (c *Collection[T]) PopN(n int) (*Collection[T], *Collection[T])
 
 PopN removes and returns the last n items as a new collection, and returns a second collection containing the remaining items.
 
-[View Source](https://github.com/goforj/collection/blob/main/pop.go#L24)
+<a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Prepend"></a>
 ### Prepend
@@ -816,7 +816,7 @@ newC := c.Prepend(1, 2) // Collection with items [1, 2, 3, 4]
 // newC.Items() == []int{1, 2, 3, 4}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/prepend.go#L8)
+<a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Push"></a>
 ### Push
@@ -833,7 +833,7 @@ newC := c.Push(3, 4) // Collection with items [1, 2, 3, 4]
 // newC.Items() == []int{1, 2, 3, 4}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/append.go#L20)
+<a href="https://github.com/goforj/collection/blob/main/append.go#L20" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Sort"></a>
 ### Sort
@@ -853,7 +853,7 @@ sorted := users.Sort(func(a, b User) bool { return a.Age < b.Age })
 // sorted by Age ascending
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/sort.go#L12)
+<a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Take"></a>
 ### Take
@@ -873,7 +873,7 @@ New([]int{0,1,2,3,4,5}).Take(3)  → [0,1,2]
 New([]int{0,1,2,3,4,5}).Take(-2) → [4,5]
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/take.go#L12)
+<a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].TakeUntilFn"></a>
 ### TakeUntilFn
@@ -891,7 +891,7 @@ out := c.TakeUntilFn(func(v int) bool { return v >= 3 }) // [1, 2]
 
 // result is \[1, 2\]
 
-[View Source](https://github.com/goforj/collection/blob/main/take_until.go#L10)
+<a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Tap"></a>
 ### Tap
@@ -918,7 +918,7 @@ c := New([]int{3,1,2}).
 
 After Tap, 'captured' contains the sorted state: \[\]int\{1,2,3\} and the chain continues unaffected.
 
-[View Source](https://github.com/goforj/collection/blob/main/tap.go#L21)
+<a href="https://github.com/goforj/collection/blob/main/tap.go#L21" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].ToJSON"></a>
 ### ToJSON
@@ -961,7 +961,7 @@ Returns:
 - string: the JSON\-encoded representation of the collection
 - error : nil on success, or the unwrapped marshalling error
 
-[View Source](https://github.com/goforj/collection/blob/main/to_json.go#L38)
+<a href="https://github.com/goforj/collection/blob/main/to_json.go#L38" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].ToPrettyJSON"></a>
 ### ToPrettyJSON
@@ -1008,7 +1008,7 @@ Returns:
 - string: the pretty\-printed JSON representation
 - error : nil on success, or the unwrapped marshalling error
 
-[View Source](https://github.com/goforj/collection/blob/main/to_json.go#L82)
+<a href="https://github.com/goforj/collection/blob/main/to_json.go#L82" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Transform"></a>
 ### Transform
@@ -1025,7 +1025,7 @@ c.Transform(func(v int) int { return v * 2 })
 // c is now [2,4,6]
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/transform.go#L10)
+<a href="https://github.com/goforj/collection/blob/main/transform.go#L10" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Collection[T].Unique"></a>
 ### Unique
@@ -1045,7 +1045,7 @@ unique := c.Unique(func(a, b int) bool { return a == b })
 // result: [1, 2, 3, 4, 5]
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/unique.go#L13)
+<a href="https://github.com/goforj/collection/blob/main/unique.go#L13" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="Number"></a>
 ## type [Number](<https://github.com/goforj/collection/blob/main/collection.go#L9-L13>)
@@ -1078,7 +1078,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T]
 
 NewNumeric wraps a slice of numeric types in a NumericCollection. A shallow copy is made so that further operations don't mutate the original slice.
 
-[View Source](https://github.com/goforj/collection/blob/main/collection.go#L28)
+<a href="https://github.com/goforj/collection/blob/main/collection.go#L28" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="NumericCollection[T].Avg"></a>
 ### Avg
@@ -1105,7 +1105,7 @@ avg := c.Avg()
 // avg == 2.3333333
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/avg.go#L15)
+<a href="https://github.com/goforj/collection/blob/main/avg.go#L15" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="NumericCollection[T].Max"></a>
 ### Max
@@ -1118,7 +1118,7 @@ Max returns the largest numeric item in the collection. The second return value 
 
 Example: c := collection.NewNumeric\(\[\]int\{3, 1, 2\}\) max, ok := c.Max\(\) // → 3, true
 
-[View Source](https://github.com/goforj/collection/blob/main/max.go#L10)
+<a href="https://github.com/goforj/collection/blob/main/max.go#L10" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="NumericCollection[T].Median"></a>
 ### Median
@@ -1138,7 +1138,7 @@ c := collection.NewNumeric([]int{3, 1, 2})
 median, ok := c.Median()   // → 2, true
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/median.go#L14)
+<a href="https://github.com/goforj/collection/blob/main/median.go#L14" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="NumericCollection[T].Min"></a>
 ### Min
@@ -1156,7 +1156,7 @@ c := collection.NewNumeric([]int{3, 1, 2})
 min, ok := c.Min()  // → 1, true
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/min.go#L9)
+<a href="https://github.com/goforj/collection/blob/main/min.go#L9" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="NumericCollection[T].Mode"></a>
 ### Mode
@@ -1181,7 +1181,7 @@ c := collection.NewNumeric([]int{1, 2, 1, 2})
 modes := c.Mode()  // → []int{1, 2}
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/mode.go#L14)
+<a href="https://github.com/goforj/collection/blob/main/mode.go#L14" target="_blank" rel="noopener noreferrer">View Source</a>
 
 <a name="NumericCollection[T].Sum"></a>
 ### Sum
@@ -1208,7 +1208,7 @@ total := c.Sum()
 // total == 4.0
 ```
 
-[View Source](https://github.com/goforj/collection/blob/main/sum.go#L15)
+<a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank" rel="noopener noreferrer">View Source</a>
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
 

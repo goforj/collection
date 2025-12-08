@@ -184,8 +184,20 @@ func TestMergeMap_OutOfRangeKeys(t *testing.T) {
 
 	got := out.Items()
 
-	if !reflect.DeepEqual(got, []int{1, 2, 100, 200}) {
-		t.Fatalf("append on out-of-range keys failed: %v", got)
+	// First two must be unchanged
+	if got[0] != 1 || got[1] != 2 {
+		t.Fatalf("expected first two elements unchanged [1 2], got %v", got[:2])
+	}
+
+	rest := got[2:]
+	if len(rest) != 2 {
+		t.Fatalf("expected 2 appended values, got %v", rest)
+	}
+
+	want := map[int]bool{100: true, 200: true}
+
+	if !want[rest[0]] || !want[rest[1]] || rest[0] == rest[1] {
+		t.Fatalf("expected appended values {100,200} in any order, got %v", rest)
 	}
 }
 

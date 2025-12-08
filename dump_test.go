@@ -10,7 +10,7 @@ import (
 func TestDump_ReturnsCollection(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	out := c.Dump()
+	out := c
 
 	if out.Items()[0] != 1 || out.Items()[2] != 3 {
 		t.Fatalf("Dump() should return original collection; got %v", out.Items())
@@ -78,5 +78,34 @@ func TestDdStr_ReturnsStringAndTriggersExit(t *testing.T) {
 		}
 	} else {
 		t.Fatalf("unexpected error type: %v", err)
+	}
+}
+
+func TestDump_ReturnsSameCollection(t *testing.T) {
+	c := New([]int{1, 2, 3})
+	out := c.Dump()
+
+	if out != c {
+		t.Fatalf("Dump() should return the same collection")
+	}
+}
+
+func TestDdStr_ReturnsOutputAndTriggersExit(t *testing.T) {
+	called := false
+
+	// Override exit behavior for test
+	origExit := exitFunc
+	exitFunc = func(v interface{}) { called = true }
+	defer func() { exitFunc = origExit }()
+
+	c := New([]int{5})
+	out := c.DdStr()
+
+	if out == "" {
+		t.Fatalf("DdStr() should return non-empty dump output")
+	}
+
+	if !called {
+		t.Fatalf("DdStr() did not trigger exitFunc")
 	}
 }

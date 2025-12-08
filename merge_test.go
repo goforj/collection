@@ -98,3 +98,111 @@ func TestMerge_UnsupportedTypeReturnsOriginal(t *testing.T) {
 			want, out3.Items())
 	}
 }
+
+// fastParseInt edge cases
+func TestFastParseInt_EdgeCases(t *testing.T) {
+	tests := []struct {
+		in   string
+		want int
+		ok   bool
+	}{
+		{"", 0, false},
+		{"abc", 0, false},
+		{"12a", 0, false},
+		{"-1", 0, false},     // minus not allowed
+		{"00123", 123, true}, // leading zeros should still parse
+		{"9", 9, true},
+	}
+
+	for _, tc := range tests {
+		got, ok := fastParseInt(tc.in)
+		if got != tc.want || ok != tc.ok {
+			t.Fatalf("fastParseInt(%q) = (%d,%v), want (%d,%v)",
+				tc.in, got, ok, tc.want, tc.ok)
+		}
+	}
+}
+
+// map[string]T → ONLY non-numeric keys
+func TestMergeMap_OnlyStringKeys(t *testing.T) {
+	c := New([]int{1, 2})
+
+	out := c.Merge(map[string]int{
+		"a": 10,
+		"b": 20,
+	})
+
+	got := out.Items()
+
+	if len(got) != 4 {
+		t.Fatalf("expected appended values, got len=%d", len(got))
+	}
+
+	if !(got[0] == 1 && got[1] == 2 && (got[2] == 10 || got[3] == 20)) {
+		t.Fatalf("string-only merge incorrect: %v", got)
+	}
+}
+
+// numeric keys in-range only → pure overwrite, no append
+func TestMergeMap_OnlyOverwrite(t *testing.T) {
+	c := New([]string{"a", "b", "c"})
+
+	out := c.Merge(map[string]string{
+		"0": "X",
+		"2": "Z",
+	})
+
+	got := out.Items()
+
+	want := []string{"X", "b", "Z"}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("overwrite-only merge failed\nwant=%v\ngot=%v", want, got)
+	}
+}
+
+// numeric keys out-of-range only → pure append
+func TestMergeMap_OutOfRangeKeys(t *testing.T) {
+	c := New([]int{1, 2})
+
+	out := c.Merge(map[string]int{
+		"5": 100,
+		"9": 200,
+	})
+
+	got := out.Items()
+
+	if !reflect.DeepEqual(got, []int{1, 2, 100, 200}) {
+		t.Fatalf("append on out-of-range keys failed: %v", got)
+	}
+}
+
+// mixed case: overwrite + append + string keys
+func TestMergeMap_MixedCases(t *testing.T) {
+	c := New([]int{10, 20})
+
+	out := c.Merge(map[string]int{
+		"0":   99,  // overwrite index 0
+		"5":   500, // append
+		"foo": 7,   // append
+	})
+
+	got := out.Items()
+
+	if !(got[0] == 99) {
+		t.Fatalf("expected overwrite at index 0: %v", got)
+	}
+	if len(got) != 4 {
+		t.Fatalf("expected total len 4, got %d", len(got))
+	}
+}
+
+// empty map → return unchanged slice
+func TestMergeMap_EmptyMap(t *testing.T) {
+	c := New([]int{1, 2, 3})
+
+	out := c.Merge(map[string]int{})
+
+	if !reflect.DeepEqual(out.Items(), c.Items()) {
+		t.Fatalf("empty map should return same items")
+	}
+}

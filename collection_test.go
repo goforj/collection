@@ -55,6 +55,5 @@ func TestFluentChainWithStructsDump(t *testing.T) {
 	// Fluent chain across SAME type:
 	users.
 		Filter(func(u User) bool { return u.Age >= 35 }).
-		Sort(func(a, b User) bool { return a.Age < b.Age }).
-		Dump()
+		Sort(func(a, b User) bool { return a.Age < b.Age })
 }

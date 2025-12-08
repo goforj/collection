@@ -18,12 +18,9 @@ func New[T any](items []T) *Collection[T] {
 	return &Collection[T]{items: items}
 }
 
-// Items returns a copy of the underlying slice.
-// This avoids callers mutating internal state accidentally.
+// Items returns the underlying slice of items.
 func (c *Collection[T]) Items() []T {
-	out := make([]T, len(c.items))
-	copy(out, c.items)
-	return out
+	return c.items
 }
 
 // IsEmpty returns true if the collection has no items.

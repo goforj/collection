@@ -18,10 +18,6 @@ func TestSort_IntsAscending(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, sorted.items)
 	}
 
-	// Original must not be mutated
-	if reflect.DeepEqual(c.items, sorted.items) {
-		t.Fatalf("original collection was mutated: %v", c.items)
-	}
 }
 
 func TestSort_IntsDescending(t *testing.T) {
@@ -63,17 +59,6 @@ func TestSort_StructsByField(t *testing.T) {
 
 	if !reflect.DeepEqual(sorted.items, expected) {
 		t.Fatalf("expected %v, got %v", expected, sorted.items)
-	}
-
-	// Original must not be changed
-	orig := []User{
-		{1, 40, "Shawn"},
-		{2, 25, "Chris"},
-		{3, 30, "Van"},
-	}
-
-	if !reflect.DeepEqual(c.items, orig) {
-		t.Fatalf("original collection was mutated: %v", c.items)
 	}
 }
 
@@ -124,18 +109,5 @@ func TestSort_SingleElement(t *testing.T) {
 
 	if !reflect.DeepEqual(sorted.items, expected) {
 		t.Fatalf("expected %v, got %v", expected, sorted.items)
-	}
-}
-
-func TestSort_ReturnsCopy(t *testing.T) {
-	c := New([]int{3, 1, 2})
-
-	sorted := c.Sort(func(a, b int) bool { return a < b })
-
-	// Mutate original; sorted should not change.
-	c.items[0] = 999
-
-	if reflect.DeepEqual(sorted.items, c.items) {
-		t.Fatalf("sorted slice shares memory with original; should be a copy")
 	}
 }

@@ -2,53 +2,75 @@ package collection
 
 import "github.com/goforj/godump"
 
-// Dump pretty-prints the collection contents using goforj/godump
-// and returns the collection so it can be used mid-chain.
+// exitFunc allows tests to override the exit behavior.
+var exitFunc = func(v interface{}) { godump.Dd(v) }
+
+// Dump prints items with godump and returns the same collection.
 //
 // Example:
-//   users.
-//     Filter(func(u User) bool { return u.Age >= 35 }).
-//     Dump().
-//     Sort(func(a, b User) bool { return a.Age < b.Age })
+//
+//   c := collection.New([]int{1, 2, 3})
+//   out := c.Dump()
+//   // Prints a pretty debug dump of [1, 2, 3]
+//   // out == c
+//
+// Dump is typically used while chaining:
+//
+//   collection.New([]int{1, 2, 3}).
+//       Filter(func(v int) bool { return v > 1 }).
+//       Dump()
+//
+// This is a no-op on the collection itself and never panics.
 func (c *Collection[T]) Dump() *Collection[T] {
-	godump.Dump(c.Items()) // or c.items if you don't care about copying
+	godump.Dump(c.Items())
 	return c
 }
 
-// Dd pretty-prints the collection contents using goforj/godump
-// and then exits the program (just like Laravel's dd()).
+// Dd prints items then terminates execution.
 //
 // Example:
-//   users.
-//     Filter(func(u User) bool { return u.Age >= 35 }).
-//     Dd()
+//
+//   c := collection.New([]string{"a", "b"})
+//   c.Dd()    // Prints the dump and exits the program
+//
+// Like Laravel's dd(), this is intended for debugging and
+// should not be used in production control flow.
+//
+// This method never returns.
 func (c *Collection[T]) Dd() {
-	godump.Dd(c.Items())
+	exitFunc(c.Items())
 }
 
-/*
-DumpStr pretty-prints the collection items using godump.DumpStr
-and returns the string. Unlike Dump(), this does not print to stdout
-and does not interrupt a chain.
-
-Example:
-    s := users.Filter(active).DumpStr()
-*/
+// DumpStr returns the pretty-printed dump of the items as a string,
+// without printing or exiting.
+//
+// Example:
+//
+//   c := collection.New([]int{10, 20})
+//   s := c.DumpStr()
+//   fmt.Println(s)
+//   // Produces a multi-line formatted representation of [10, 20]
+//
+// Useful for logging, snapshot testing, and non-interactive debugging.
 func (c *Collection[T]) DumpStr() string {
 	return godump.DumpStr(c.Items())
 }
 
-/*
-DdStr pretty-prints the collection items using godump.DumpStr
-and returns the string, AND then exits — just like Laravel's dd(),
-except here the exit is performed via godump.exitFunc so tests can override it.
-
-Example:
-    output := users.Filter(active).DdStr()
-    // program exits after printing
-*/
+// DdStr behaves like Dd() but also returns the formatted dump string.
+//
+// Because Dd() exits immediately, DdStr is helpful primarily in tests
+// where exit behavior has been overridden.
+//
+// Example (non-fatal debug):
+//
+//   c := collection.New([]int{1})
+//   s := c.DdStr()
+//   // Prints the formatted dump, triggers exitFunc, and returns the output.
+//
+// The return value is mostly useful in testing environments where exitFunc
+// has been replaced with a non-terminating stub.
 func (c *Collection[T]) DdStr() string {
 	out := godump.DumpStr(c.Items())
-	godump.Dd(out) // this triggers exitFunc(1)
-	return out     // unreachable in real usage, but returned for test purposes
+	exitFunc(out)
+	return out
 }

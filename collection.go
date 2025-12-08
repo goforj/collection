@@ -64,31 +64,6 @@ func (c Collection[T]) Before(pred func(T) bool) Collection[T] {
 	return Collection[T]{items: out}
 }
 
-// After returns all items after the first element for which pred returns true.
-// If no element matches, an empty collection is returned.
-//
-// Example:
-//   c := collection.New([]int{1,2,3,4,5})
-//   c.After(func(v int) bool { return v == 3 }) → [4,5]
-func (c Collection[T]) After(pred func(T) bool) Collection[T] {
-	idx := -1
-	for i, v := range c.items {
-		if pred(v) {
-			idx = i
-			break
-		}
-	}
-
-	// If no match found → empty collection
-	if idx == -1 || idx+1 >= len(c.items) {
-		return Collection[T]{items: []T{}}
-	}
-
-	out := make([]T, len(c.items)-(idx+1))
-	copy(out, c.items[idx+1:])
-	return Collection[T]{items: out}
-}
-
 // AvgBy calculates the average of values extracted by fn from the collection items.
 //
 // Example:

@@ -58,6 +58,8 @@ import "github.com/goforj/collection"
 |------|--------|-------|--------|
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L23" target="_blank">Source</a> |
 | [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L40" target="_blank">Source</a> |
+| [Dd](<#Dd>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L96" target="_blank">Source</a> |
+| [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L85" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank">Source</a> |
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L17" target="_blank">Source</a> |
@@ -93,7 +95,7 @@ import "github.com/goforj/collection"
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L44" target="_blank">Source</a> |
-| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L39" target="_blank">Source</a> |
+| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L46" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
@@ -151,6 +153,40 @@ CountByValue returns a map of item values to their occurrence counts. T must be 
 counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 // counts == map[string]int{"a": 2, "b": 1}
 ```
+
+
+
+<a name="Dd"></a>
+## Dd
+
+
+Dd is a convenience function that calls the Dd method on the collection.
+
+Example:
+
+```go
+c := collection.New([]string{"x", "y"})
+c.Dd() // Pretty-prints ["x", "y"] and exits
+```
+
+This function is provided for symmetry with godump.Dd.
+
+
+
+<a name="Dump"></a>
+## Dump
+
+
+Dump is a convenience function that calls the Dump method on the collection.
+
+Example:
+
+```go
+c := collection.New([]int{1, 2, 3})
+c.Dump() // Pretty-prints [1, 2, 3]
+```
+
+This function is provided for symmetry with godump.Dump.
 
 
 
@@ -757,33 +793,40 @@ Example:
 sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 	return acc + n
 })
-// 6
+collection.Dump(sum)
+// 6 #int
 
 // Concatenate strings
 joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
 	return acc + s
 })
-// "abc"
+collection.Dump(joined)
+// "abc" #string
 
 // Aggregate struct fields
 type Stats struct {
-    Count int
-    Sum   int
+	Count int
+	Sum   int
 }
 
 c := collection.New([]Stats{
-    {Count: 1, Sum: 10},
-    {Count: 1, Sum: 20},
-    {Count: 1, Sum: 30},
+	{Count: 1, Sum: 10},
+	{Count: 1, Sum: 20},
+	{Count: 1, Sum: 30},
 })
 
 total := c.Reduce(Stats{}, func(acc, s Stats) Stats {
-    acc.Count += s.Count
-    acc.Sum += s.Sum
-    return acc
+	acc.Count += s.Count
+	acc.Sum += s.Sum
+	return acc
 })
 
-// total == Stats{Count: 3, Sum: 60}
+collection.Dump(total)
+
+// #main.Stats {
+//  +Count => 3 #int
+//  +Sum   => 60 #int
+// }
 ```
 
 

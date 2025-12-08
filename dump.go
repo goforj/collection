@@ -74,3 +74,25 @@ func (c *Collection[T]) DdStr() string {
 	exitFunc(out)
 	return out
 }
+
+// Dump is a convenience function that calls the Dump method on the collection.
+//
+// Example:
+//   c := collection.New([]int{1, 2, 3})
+//   c.Dump() // Pretty-prints [1, 2, 3]
+//
+// This function is provided for symmetry with godump.Dump.
+func Dump(vs ...any) {
+	godump.Dump(vs...)
+}
+
+// Dd is a convenience function that calls the Dd method on the collection.
+//
+// Example:
+//   c := collection.New([]string{"x", "y"})
+//   c.Dd() // Pretty-prints ["x", "y"] and exits
+//
+// This function is provided for symmetry with godump.Dd.
+func Dd(vs ...any) {
+	exitFunc(vs)
+}

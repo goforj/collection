@@ -54,63 +54,63 @@ import "github.com/goforj/collection"
 
 ## Index
 
-| Name | Parent | Kind |
-|------|--------|------|
-| [CountBy](<#CountBy>) |  | Function |
-| [CountByValue](<#CountByValue>) |  | Function |
-| [Reduce](<#Reduce>) |  | Function |
-| [type Collection](<#Collection>) |  | Type |
-| [MapTo](<#MapTo>) | type Collection | Type Function |
-| [New](<#New>) | type Collection | Type Function |
-| [Pluck](<#Pluck>) | type Collection | Type Function |
-| [TakeUntil](<#TakeUntil>) | type Collection | Type Function |
-| [Times](<#Times>) | type Collection | Type Function |
-| [After](<#Collection[T].After>) | type Collection | Method |
-| [Any](<#Collection[T].Any>) | type Collection | Method |
-| [Append](<#Collection[T].Append>) | type Collection | Method |
-| [Before](<#Collection[T].Before>) | type Collection | Method |
-| [Chunk](<#Collection[T].Chunk>) | type Collection | Method |
-| [Concat](<#Collection[T].Concat>) | type Collection | Method |
-| [Contains](<#Collection[T].Contains>) | type Collection | Method |
-| [Count](<#Collection[T].Count>) | type Collection | Method |
-| [Dd](<#Collection[T].Dd>) | type Collection | Method |
-| [DdStr](<#Collection[T].DdStr>) | type Collection | Method |
-| [Dump](<#Collection[T].Dump>) | type Collection | Method |
-| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method |
-| [Each](<#Collection[T].Each>) | type Collection | Method |
-| [Filter](<#Collection[T].Filter>) | type Collection | Method |
-| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method |
-| [First](<#Collection[T].First>) | type Collection | Method |
-| [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method |
-| [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method |
-| [Items](<#Collection[T].Items>) | type Collection | Method |
-| [Last](<#Collection[T].Last>) | type Collection | Method |
-| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method |
-| [Map](<#Collection[T].Map>) | type Collection | Method |
-| [Merge](<#Collection[T].Merge>) | type Collection | Method |
-| [Multiply](<#Collection[T].Multiply>) | type Collection | Method |
-| [Pipe](<#Collection[T].Pipe>) | type Collection | Method |
-| [Pop](<#Collection[T].Pop>) | type Collection | Method |
-| [PopN](<#Collection[T].PopN>) | type Collection | Method |
-| [Prepend](<#Collection[T].Prepend>) | type Collection | Method |
-| [Push](<#Collection[T].Push>) | type Collection | Method |
-| [Sort](<#Collection[T].Sort>) | type Collection | Method |
-| [Take](<#Collection[T].Take>) | type Collection | Method |
-| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method |
-| [Tap](<#Collection[T].Tap>) | type Collection | Method |
-| [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method |
-| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method |
-| [Transform](<#Collection[T].Transform>) | type Collection | Method |
-| [Unique](<#Collection[T].Unique>) | type Collection | Method |
-| [type Number](<#Number>) |  | Type |
-| [type NumericCollection](<#NumericCollection>) |  | Type |
-| [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function |
-| [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method |
-| [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method |
-| [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method |
-| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method |
-| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method |
-| [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method |
+| Name | Parent | Kind | Source |
+|------|--------|-------|--------|
+| [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L23" target="_blank">Source</a> |
+| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L40" target="_blank">Source</a> |
+| [Reduce](<#Reduce>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L10" target="_blank">Source</a> |
+| [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
+| [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank">Source</a> |
+| [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L17" target="_blank">Source</a> |
+| [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L22" target="_blank">Source</a> |
+| [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L27" target="_blank">Source</a> |
+| [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L9" target="_blank">Source</a> |
+| [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L10" target="_blank">Source</a> |
+| [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L8" target="_blank">Source</a> |
+| [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L8" target="_blank">Source</a> |
+| [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L5" target="_blank">Source</a> |
+| [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L10" target="_blank">Source</a> |
+| [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L26" target="_blank">Source</a> |
+| [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L9" target="_blank">Source</a> |
+| [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L7" target="_blank">Source</a> |
+| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L40" target="_blank">Source</a> |
+| [DdStr](<#Collection[T].DdStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L72" target="_blank">Source</a> |
+| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L24" target="_blank">Source</a> |
+| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L55" target="_blank">Source</a> |
+| [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L5" target="_blank">Source</a> |
+| [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L10" target="_blank">Source</a> |
+| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
+| [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L18" target="_blank">Source</a> |
+| [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
+| [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L4" target="_blank">Source</a> |
+| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
+| [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L18" target="_blank">Source</a> |
+| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L27" target="_blank">Source</a> |
+| [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L11" target="_blank">Source</a> |
+| [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L20" target="_blank">Source</a> |
+| [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L14" target="_blank">Source</a> |
+| [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L18" target="_blank">Source</a> |
+| [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L8" target="_blank">Source</a> |
+| [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
+| [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
+| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L20" target="_blank">Source</a> |
+| [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
+| [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
+| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
+| [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L21" target="_blank">Source</a> |
+| [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L38" target="_blank">Source</a> |
+| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L82" target="_blank">Source</a> |
+| [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L10" target="_blank">Source</a> |
+| [Unique](<#Collection[T].Unique>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/unique.go#L13" target="_blank">Source</a> |
+| [type Number](<#Number>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L9-L13" target="_blank">Source</a> |
+| [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L22-L24" target="_blank">Source</a> |
+| [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L28" target="_blank">Source</a> |
+| [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L15" target="_blank">Source</a> |
+| [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L10" target="_blank">Source</a> |
+| [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L14" target="_blank">Source</a> |
+| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L9" target="_blank">Source</a> |
+| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L14" target="_blank">Source</a> |
+| [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank">Source</a> |
 
 
 <a name="CountBy"></a>

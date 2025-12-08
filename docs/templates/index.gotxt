@@ -1,12 +1,21 @@
-| Name | Parent | Kind |
-|------|--------|------|{{- range .Consts }}
-| {{ link .Name (rawLocalHref .Anchor) }} |  | Constant |{{- end }}{{- range .Vars }}
-| {{ link .Name (rawLocalHref .Anchor) }} |  | Variable |{{- end }}{{- range .Funcs }}
-| {{ link .Name (rawLocalHref .Anchor) }} |  | Function |{{- end }}{{- range .Types }}
-| {{ link .Title (rawLocalHref .Anchor) }} |  | Type |
+| Name | Parent | Kind | Source |
+|------|--------|-------|--------|
+{{- range .Consts }}
+| {{ link .Name (rawLocalHref .Anchor) }} |  | Constant | <a href="{{ codeHref .Location }}" target="_blank">Source</a> |
+{{- end }}
+{{- range .Vars }}
+| {{ link .Name (rawLocalHref .Anchor) }} |  | Variable | <a href="{{ codeHref .Location }}" target="_blank">Source</a> |
+{{- end }}
+{{- range .Funcs }}
+| {{ link .Name (rawLocalHref .Anchor) }} |  | Function | <a href="{{ codeHref .Location }}" target="_blank">Source</a> |
+{{- end }}
+{{- range .Types }}
+| {{ link .Title (rawLocalHref .Anchor) }} |  | Type | <a href="{{ codeHref .Location }}" target="_blank">Source</a> |
     {{- $parent := .Title }}
     {{- range .Funcs }}
-| {{ link .Name (rawLocalHref .Anchor) }} | {{ $parent }} | Type Function |{{- end }}
+| {{ link .Name (rawLocalHref .Anchor) }} | {{ $parent }} | Type Function | <a href="{{ codeHref .Location }}" target="_blank">Source</a> |
+    {{- end }}
     {{- range .Methods }}
-| {{ link .Name (rawLocalHref .Anchor) }} | {{ $parent }} | Method |{{- end }}
+| {{ link .Name (rawLocalHref .Anchor) }} | {{ $parent }} | Method | <a href="{{ codeHref .Location }}" target="_blank">Source</a> |
+    {{- end }}
 {{- end }}

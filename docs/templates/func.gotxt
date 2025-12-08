@@ -1,14 +1,15 @@
 {{- if .Receiver -}}
     {{- rawAnchorHeader .Level
-        (codeHref .Location | link (printf "%s (%s)" (escape .Name) (escape .Receiver)))
+        (codeHref .Location | link (printf "%s (%s)" .Name .Receiver))
         .Anchor
     -}}
 {{- else -}}
     {{- rawAnchorHeader .Level
-        (codeHref .Location | link (escape .Name))
+        (codeHref .Location | link .Name)
         .Anchor
     -}}
 {{- end -}}
+
 
 {{- spacer -}}
 

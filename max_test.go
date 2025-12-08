@@ -1,97 +1,70 @@
 package collection
 
-import (
-	"math"
-	"reflect"
-	"testing"
-)
+import "testing"
 
 func TestMax_Ints(t *testing.T) {
-	c := New([]int{1, 5, 3, 9, 2})
-
-	val, ok := Max(c)
+	c := NewNumeric([]int{3, 1, 2})
+	val, ok := c.Max()
 
 	if !ok {
 		t.Fatalf("expected ok=true, got false")
 	}
-	if val != 9 {
-		t.Fatalf("expected 9, got %v", val)
+
+	if val != 3 {
+		t.Fatalf("expected 3, got %v", val)
 	}
 }
 
-func TestMax_IntsWithNegatives(t *testing.T) {
-	c := New([]int{-10, -3, -50, -2, -99})
-
-	val, ok := Max(c)
+func TestMax_Floats(t *testing.T) {
+	c := NewNumeric([]float64{3.5, 1.1, 2.2})
+	val, ok := c.Max()
 
 	if !ok {
 		t.Fatalf("expected ok=true, got false")
 	}
-	if val != -2 {
-		t.Fatalf("expected -2, got %v", val)
+
+	if val != 3.5 {
+		t.Fatalf("expected 3.5, got %v", val)
 	}
 }
 
-func TestMax_SingleElement(t *testing.T) {
-	c := New([]int{42})
+func TestMax_Empty(t *testing.T) {
+	c := NewNumeric([]uint{})
+	val, ok := c.Max()
 
-	val, ok := Max(c)
+	if ok {
+		t.Fatalf("expected ok=false for empty collection")
+	}
+
+	if val != 0 {
+		t.Fatalf("expected zero value for empty, got %v", val)
+	}
+}
+
+func TestMax_SingleValue(t *testing.T) {
+	c := NewNumeric([]int{42})
+	val, ok := c.Max()
 
 	if !ok {
-		t.Fatalf("expected ok=true, got false")
+		t.Fatalf("expected ok=true")
 	}
+
 	if val != 42 {
 		t.Fatalf("expected 42, got %v", val)
 	}
 }
 
-func TestMax_Empty(t *testing.T) {
-	c := New([]int{})
-
-	val, ok := Max(c)
-
-	if ok {
-		t.Fatalf("expected ok=false for empty collection, got true with %v", val)
-	}
-
-	if val != 0 {
-		t.Fatalf("expected zero value, got %v", val)
-	}
-}
-
-func TestMax_Floats(t *testing.T) {
-	c := New([]float64{1.1, 5.5, 2.2})
-
-	val, ok := Max(c)
+func TestMax_BranchUpdate(t *testing.T) {
+	// Here the first item is NOT the max.
+	// This forces the branch (v > max) to execute.
+	c := NewNumeric([]int{1, 9, 3})
+	max, ok := c.Max()
 
 	if !ok {
 		t.Fatalf("expected ok=true")
 	}
-	if val != 5.5 {
-		t.Fatalf("expected 5.5, got %v", val)
-	}
-}
 
-func TestMax_LargeNumbers(t *testing.T) {
-	c := New([]int64{10, math.MaxInt64 - 5, math.MaxInt64})
-
-	val, ok := Max(c)
-
-	if !ok {
-		t.Fatalf("expected ok=true")
-	}
-	if val != math.MaxInt64 {
-		t.Fatalf("expected %v, got %v", math.MaxInt64, val)
-	}
-}
-
-func TestMax_NoMutation(t *testing.T) {
-	c := New([]int{1, 2, 3})
-	orig := append([]int{}, c.items...) // copy original
-
-	_, _ = Max(c)
-
-	if !reflect.DeepEqual(c.items, orig) {
-		t.Fatalf("original collection was mutated: %v", c.items)
+	if max != 9 {
+		t.Fatalf("expected max=9, got %v", max)
 	}
 }

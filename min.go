@@ -1,23 +1,24 @@
 package collection
 
-// Min returns the smallest numeric item.
-// Second return is false if empty.
+// Min returns the smallest numeric item in the collection.
+// The second return value is false if the collection is empty.
+//
 // Example:
-//   c := collection.New([]int{3,1,2})
-//   min, ok := Min(c) → 1, true
-func Min[T Number](c *Collection[T]) (T, bool) {
-	items := c.Items()
+//   c := collection.NewNumeric([]int{3, 1, 2})
+//   min, ok := c.Min()  // → 1, true
+func (c *NumericCollection[T]) Min() (T, bool) {
 	var zero T
 
-	if len(items) == 0 {
+	if len(c.items) == 0 {
 		return zero, false
 	}
 
-	val := items[0]
-	for _, v := range items[1:] {
+	val := c.items[0]
+	for _, v := range c.items[1:] {
 		if v < val {
 			val = v
 		}
 	}
+
 	return val, true
 }

@@ -3,8 +3,18 @@ package collection
 // CountBy returns a map of keys extracted by fn to their occurrence counts.
 // K must be comparable.
 // Example:
-//   counts := CountBy(users, func(u User) string { return u.Role })
-//  // counts == map[string]int{"admin": 3, "user": 5}
+// users := collection.New([]User{
+//     {Name: "Alice", Role: "admin"},
+//     {Name: "Bob", Role: "user"},
+//     {Name: "Charlie", Role: "admin"},
+//     {Name: "David", Role: "user"},
+//     {Name: "Eve", Role: "admin"},
+//     {Name: "Frank", Role: "user"},
+//     {Name: "Grace", Role: "user"},
+//     {Name: "Heidi", Role: "user"},
+// })
+// counts := CountBy(users, func(u User) string { return u.Role == "admin" })
+// // map[string]int{"admin": 3, "user": 5}
 func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 	items := c.Items()
 	result := make(map[K]int, len(items))

@@ -15,24 +15,24 @@ package collection
 //	})
 //	// "abc"
 //
-// type Stats struct {
-//     Count int
-//     Sum   int
-// }
+//	type Stats struct {
+//	    Count int
+//	    Sum   int
+//	}
 //
-// c := collection.New([]Stats{
-//     {Count: 1, Sum: 10},
-//     {Count: 1, Sum: 20},
-//     {Count: 1, Sum: 30},
-// })
+//	c := collection.New([]Stats{
+//	    {Count: 1, Sum: 10},
+//	    {Count: 1, Sum: 20},
+//	    {Count: 1, Sum: 30},
+//	})
 //
-// total := c.Reduce(Stats{}, func(acc, s Stats) Stats {
-//     acc.Count += s.Count
-//     acc.Sum += s.Sum
-//     return acc
-// })
+//	total := c.Reduce(Stats{}, func(acc, s Stats) Stats {
+//	    acc.Count += s.Count
+//	    acc.Sum += s.Sum
+//	    return acc
+//	})
 //
-// // Stats{Count: 3, Sum: 60}
+//	// total == Stats{Count: 3, Sum: 60}
 func (c *Collection[T]) Reduce(initial T, fn func(T, T) T) T {
 	acc := initial
 	for _, v := range c.items {

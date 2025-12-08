@@ -738,32 +738,26 @@ joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string)
 	return acc + s
 })
 // "abc"
-```
 
-```go
 type Stats struct {
     Count int
     Sum   int
 }
-```
 
-```go
 c := collection.New([]Stats{
     {Count: 1, Sum: 10},
     {Count: 1, Sum: 20},
     {Count: 1, Sum: 30},
 })
-```
 
-```go
 total := c.Reduce(Stats{}, func(acc, s Stats) Stats {
     acc.Count += s.Count
     acc.Sum += s.Sum
     return acc
 })
-```
 
-// Stats\{Count: 3, Sum: 60\}
+// total == Stats{Count: 3, Sum: 60}
+```
 
 
 

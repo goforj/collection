@@ -1,8 +1,12 @@
-| Name | Kind |
-|------|------|{{- range .Consts }}
-| {{ link .Name (rawLocalHref .Anchor) }} | Constant |{{- end }}{{- range .Vars }}
-| {{ link .Name (rawLocalHref .Anchor) }} | Variable |{{- end }}{{- range .Funcs }}
-| {{ link .Name (rawLocalHref .Anchor) }} | Function |{{- end }}{{- range .Types }}
-| {{ link .Title (rawLocalHref .Anchor) }} | Type |{{- range .Funcs }}
-| {{ link .Name (rawLocalHref .Anchor) }} | Type Function |{{- end }}{{- range .Methods }}
-| {{ link .Name (rawLocalHref .Anchor) }} | Method |{{- end }}{{- end }}
+| Name | Parent | Kind |
+|------|--------|------|{{- range .Consts }}
+| {{ link .Name (rawLocalHref .Anchor) }} |  | Constant |{{- end }}{{- range .Vars }}
+| {{ link .Name (rawLocalHref .Anchor) }} |  | Variable |{{- end }}{{- range .Funcs }}
+| {{ link .Name (rawLocalHref .Anchor) }} |  | Function |{{- end }}{{- range .Types }}
+| {{ link .Title (rawLocalHref .Anchor) }} |  | Type |
+    {{- $parent := .Title }}
+    {{- range .Funcs }}
+| {{ link .Name (rawLocalHref .Anchor) }} | {{ $parent }} | Type Function |{{- end }}
+    {{- range .Methods }}
+| {{ link .Name (rawLocalHref .Anchor) }} | {{ $parent }} | Method |{{- end }}
+{{- end }}

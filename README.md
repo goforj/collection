@@ -53,63 +53,63 @@ import "github.com/goforj/collection"
 
 ## Index
 
-| Name | Kind |
-|------|------|
-| [CountBy](<#CountBy>) | Function |
-| [CountByValue](<#CountByValue>) | Function |
-| [Reduce](<#Reduce>) | Function |
-| [type Collection](<#Collection>) | Type |
-| [MapTo](<#MapTo>) | Type Function |
-| [New](<#New>) | Type Function |
-| [Pluck](<#Pluck>) | Type Function |
-| [TakeUntil](<#TakeUntil>) | Type Function |
-| [Times](<#Times>) | Type Function |
-| [After](<#Collection[T].After>) | Method |
-| [Any](<#Collection[T].Any>) | Method |
-| [Append](<#Collection[T].Append>) | Method |
-| [Before](<#Collection[T].Before>) | Method |
-| [Chunk](<#Collection[T].Chunk>) | Method |
-| [Concat](<#Collection[T].Concat>) | Method |
-| [Contains](<#Collection[T].Contains>) | Method |
-| [Count](<#Collection[T].Count>) | Method |
-| [Dd](<#Collection[T].Dd>) | Method |
-| [DdStr](<#Collection[T].DdStr>) | Method |
-| [Dump](<#Collection[T].Dump>) | Method |
-| [DumpStr](<#Collection[T].DumpStr>) | Method |
-| [Each](<#Collection[T].Each>) | Method |
-| [Filter](<#Collection[T].Filter>) | Method |
-| [FindWhere](<#Collection[T].FindWhere>) | Method |
-| [First](<#Collection[T].First>) | Method |
-| [FirstWhere](<#Collection[T].FirstWhere>) | Method |
-| [IsEmpty](<#Collection[T].IsEmpty>) | Method |
-| [Items](<#Collection[T].Items>) | Method |
-| [Last](<#Collection[T].Last>) | Method |
-| [LastWhere](<#Collection[T].LastWhere>) | Method |
-| [Map](<#Collection[T].Map>) | Method |
-| [Merge](<#Collection[T].Merge>) | Method |
-| [Multiply](<#Collection[T].Multiply>) | Method |
-| [Pipe](<#Collection[T].Pipe>) | Method |
-| [Pop](<#Collection[T].Pop>) | Method |
-| [PopN](<#Collection[T].PopN>) | Method |
-| [Prepend](<#Collection[T].Prepend>) | Method |
-| [Push](<#Collection[T].Push>) | Method |
-| [Sort](<#Collection[T].Sort>) | Method |
-| [Take](<#Collection[T].Take>) | Method |
-| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | Method |
-| [Tap](<#Collection[T].Tap>) | Method |
-| [ToJSON](<#Collection[T].ToJSON>) | Method |
-| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | Method |
-| [Transform](<#Collection[T].Transform>) | Method |
-| [Unique](<#Collection[T].Unique>) | Method |
-| [type Number](<#Number>) | Type |
-| [type NumericCollection](<#NumericCollection>) | Type |
-| [NewNumeric](<#NewNumeric>) | Type Function |
-| [Avg](<#NumericCollection[T].Avg>) | Method |
-| [Max](<#NumericCollection[T].Max>) | Method |
-| [Median](<#NumericCollection[T].Median>) | Method |
-| [Min](<#NumericCollection[T].Min>) | Method |
-| [Mode](<#NumericCollection[T].Mode>) | Method |
-| [Sum](<#NumericCollection[T].Sum>) | Method |
+| Name | Parent | Kind |
+|------|--------|------|
+| [CountBy](<#CountBy>) |  | Function |
+| [CountByValue](<#CountByValue>) |  | Function |
+| [Reduce](<#Reduce>) |  | Function |
+| [type Collection](<#Collection>) |  | Type |
+| [MapTo](<#MapTo>) | type Collection | Type Function |
+| [New](<#New>) | type Collection | Type Function |
+| [Pluck](<#Pluck>) | type Collection | Type Function |
+| [TakeUntil](<#TakeUntil>) | type Collection | Type Function |
+| [Times](<#Times>) | type Collection | Type Function |
+| [After](<#Collection[T].After>) | type Collection | Method |
+| [Any](<#Collection[T].Any>) | type Collection | Method |
+| [Append](<#Collection[T].Append>) | type Collection | Method |
+| [Before](<#Collection[T].Before>) | type Collection | Method |
+| [Chunk](<#Collection[T].Chunk>) | type Collection | Method |
+| [Concat](<#Collection[T].Concat>) | type Collection | Method |
+| [Contains](<#Collection[T].Contains>) | type Collection | Method |
+| [Count](<#Collection[T].Count>) | type Collection | Method |
+| [Dd](<#Collection[T].Dd>) | type Collection | Method |
+| [DdStr](<#Collection[T].DdStr>) | type Collection | Method |
+| [Dump](<#Collection[T].Dump>) | type Collection | Method |
+| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method |
+| [Each](<#Collection[T].Each>) | type Collection | Method |
+| [Filter](<#Collection[T].Filter>) | type Collection | Method |
+| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method |
+| [First](<#Collection[T].First>) | type Collection | Method |
+| [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method |
+| [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method |
+| [Items](<#Collection[T].Items>) | type Collection | Method |
+| [Last](<#Collection[T].Last>) | type Collection | Method |
+| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method |
+| [Map](<#Collection[T].Map>) | type Collection | Method |
+| [Merge](<#Collection[T].Merge>) | type Collection | Method |
+| [Multiply](<#Collection[T].Multiply>) | type Collection | Method |
+| [Pipe](<#Collection[T].Pipe>) | type Collection | Method |
+| [Pop](<#Collection[T].Pop>) | type Collection | Method |
+| [PopN](<#Collection[T].PopN>) | type Collection | Method |
+| [Prepend](<#Collection[T].Prepend>) | type Collection | Method |
+| [Push](<#Collection[T].Push>) | type Collection | Method |
+| [Sort](<#Collection[T].Sort>) | type Collection | Method |
+| [Take](<#Collection[T].Take>) | type Collection | Method |
+| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method |
+| [Tap](<#Collection[T].Tap>) | type Collection | Method |
+| [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method |
+| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method |
+| [Transform](<#Collection[T].Transform>) | type Collection | Method |
+| [Unique](<#Collection[T].Unique>) | type Collection | Method |
+| [type Number](<#Number>) |  | Type |
+| [type NumericCollection](<#NumericCollection>) |  | Type |
+| [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function |
+| [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method |
+| [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method |
+| [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method |
+| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method |
+| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method |
+| [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method |
 
 
 <a name="CountBy"></a>

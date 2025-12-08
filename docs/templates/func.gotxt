@@ -1,8 +1,15 @@
 {{- if .Receiver -}}
-	{{- rawAnchorHeader .Level (codeHref .Location | link (escape .Name) | printf "func \\(%s\\) %s" (escape .Receiver)) .Anchor -}}
+    {{- rawAnchorHeader .Level
+        (codeHref .Location | link (printf "%s (%s)" (escape .Name) (escape .Receiver)))
+        .Anchor
+    -}}
 {{- else -}}
-	{{- rawAnchorHeader .Level (codeHref .Location | link (escape .Name) | printf "func %s") .Anchor -}}
+    {{- rawAnchorHeader .Level
+        (codeHref .Location | link (escape .Name))
+        .Anchor
+    -}}
 {{- end -}}
+
 {{- spacer -}}
 
 {{- codeBlock "go" .Signature -}}

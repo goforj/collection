@@ -38,11 +38,7 @@ import (
 func (c Collection[T]) ToJSON() (string, error) {
 	b, err := json.Marshal(c.items)
 	if err != nil {
-		// Unwrap json.MarshalerError → return underlying "marshal failure"
-		if u := errors.Unwrap(err); u != nil {
-			return "", u
-		}
-		return "", err
+		return "", errors.Unwrap(err)
 	}
 	return string(b), nil
 }
@@ -86,10 +82,7 @@ func (c Collection[T]) ToJSON() (string, error) {
 func (c Collection[T]) ToPrettyJSON() (string, error) {
 	b, err := json.MarshalIndent(c.items, "", "  ")
 	if err != nil {
-		if u := errors.Unwrap(err); u != nil {
-			return "", u
-		}
-		return "", err
+		return "", errors.Unwrap(err)
 	}
 	return string(b), nil
 }

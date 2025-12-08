@@ -4,9 +4,12 @@ package collection
 // If no element matches, an empty collection is returned.
 //
 // Example:
-//  c := collection.New([]int{1,2,3,4,5})
-//  c.After(func(v int) bool { return v == 3 })
-//  // [4,5]
+//	c := collection.New([]int{1, 2, 3, 4, 5})
+//	c.After(func(v int) bool { return v == 3 }).Dump()
+//	// #[]int [
+//	//  0 => 4 #int
+//	//  1 => 5 #int
+//	// ]
 func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
 	idx := -1
 	for i, v := range c.items {

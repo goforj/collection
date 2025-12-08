@@ -66,9 +66,9 @@ import "github.com/goforj/collection"
 | [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L22" target="_blank">Source</a> |
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L27" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L9" target="_blank">Source</a> |
-| [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L10" target="_blank">Source</a> |
-| [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L8" target="_blank">Source</a> |
-| [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L8" target="_blank">Source</a> |
+| [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L13" target="_blank">Source</a> |
+| [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L9" target="_blank">Source</a> |
+| [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L50" target="_blank">Source</a> |
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L5" target="_blank">Source</a> |
 | [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L22" target="_blank">Source</a> |
@@ -94,7 +94,7 @@ import "github.com/goforj/collection"
 | [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L8" target="_blank">Source</a> |
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
-| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L44" target="_blank">Source</a> |
+| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L86" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L46" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
@@ -267,9 +267,12 @@ After returns all items after the first element for which pred returns true. If 
 Example:
 
 ```go
-c := collection.New([]int{1,2,3,4,5})
-c.After(func(v int) bool { return v == 3 })
-// [4,5]
+c := collection.New([]int{1, 2, 3, 4, 5})
+c.After(func(v int) bool { return v == 3 }).Dump()
+// #[]int [
+//  0 => 4 #int
+//  1 => 5 #int
+// ]
 ```
 
 
@@ -282,8 +285,9 @@ Any returns true if at least one item satisfies fn. Example:
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
-hasEven := c.Any(func(v int) bool { return v%2 == 0 }) // true
-// hasEven is true
+has := c.Any(func(v int) bool { return v%2 == 0 }) // true
+collection.Dump(has)
+// true #bool
 ```
 
 
@@ -295,9 +299,54 @@ hasEven := c.Any(func(v int) bool { return v%2 == 0 }) // true
 Append returns a new collection with the given values appended. Example:
 
 ```go
+// integers
 c := collection.New([]int{1, 2})
-newC := c.Append(3, 4) // Collection with items [1, 2, 3, 4]
-// newC.Items() == []int{1, 2, 3, 4}
+c.Append(3, 4).Dump()
+// #[]int [
+//  0 => 1 #int
+//  1 => 2 #int
+//  2 => 3 #int
+//  3 => 4 #int
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+users.Append(
+	User{ID: 3, Name: "Carol"},
+	User{ID: 4, Name: "Dave"},
+).Dump()
+
+// #[]main.User [
+//  0 => #main.User {
+//    +ID   => 1 #int
+//    +Name => "Alice" #string
+//  }
+//  1 => #main.User {
+//    +ID   => 2 #int
+//    +Name => "Bob" #string
+//  }
+//  2 => #main.User {
+//    +ID   => 3 #int
+//    +Name => "Carol" #string
+//  }
+//  3 => #main.User {
+//    +ID   => 4 #int
+//    +Name => "Dave" #string
+//  }
+// ]
 ```
 
 

@@ -3,6 +3,10 @@ package collection
 // CountBy returns a map of keys extracted by fn to their occurrence counts.
 // K must be comparable.
 // Example:
+// 	type User struct {
+// 	    Name string
+// 	    Role string
+// 	}
 // 	users := collection.New([]User{
 // 	    {Name: "Alice", Role: "admin"},
 // 	    {Name: "Bob", Role: "user"},

@@ -21,8 +21,6 @@
   Designed to feel natural to Go developers - and luxurious to everyone else.
 </p>
 
-<br>
-
 # Features
 
 - 🔗 **Fluent chaining** - pipeline your operations like Laravel Collections

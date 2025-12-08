@@ -9,7 +9,7 @@ package collection
 // Examples:
 //   New([]int{0,1,2,3,4,5}).Take(3)  → [0,1,2]
 //   New([]int{0,1,2,3,4,5}).Take(-2) → [4,5]
-func (c Collection[T]) Take(n int) Collection[T] {
+func (c *Collection[T]) Take(n int) *Collection[T] {
 	length := len(c.items)
 
 	// Zero or empty → empty collection

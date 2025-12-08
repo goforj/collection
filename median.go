@@ -8,7 +8,7 @@ import "sort"
 // Example:
 //   c := collection.New([]int{3,1,2})
 //   median, ok := Median(c) → 2, true
-func Median[T Number](c Collection[T]) (float64, bool) {
+func Median[T Number](c *Collection[T]) (float64, bool) {
 	items := c.Items()
 	n := len(items)
 	if n == 0 {

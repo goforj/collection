@@ -7,7 +7,7 @@ package collection
 //  c := collection.New([]int{1,2,3,4,5})
 //  c.After(func(v int) bool { return v == 3 })
 //  // [4,5]
-func (c Collection[T]) After(pred func(T) bool) Collection[T] {
+func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
 	idx := -1
 	for i, v := range c.items {
 		if pred(v) {
@@ -18,10 +18,10 @@ func (c Collection[T]) After(pred func(T) bool) Collection[T] {
 
 	// If no match found → empty collection
 	if idx == -1 || idx+1 >= len(c.items) {
-		return Collection[T]{items: []T{}}
+		return &Collection[T]{items: []T{}}
 	}
 
 	out := make([]T, len(c.items)-(idx+1))
 	copy(out, c.items[idx+1:])
-	return Collection[T]{items: out}
+	return &Collection[T]{items: out}
 }

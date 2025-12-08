@@ -10,7 +10,7 @@ import "github.com/goforj/godump"
 //     Filter(func(u User) bool { return u.Age >= 35 }).
 //     Dump().
 //     Sort(func(a, b User) bool { return a.Age < b.Age })
-func (c Collection[T]) Dump() Collection[T] {
+func (c *Collection[T]) Dump() *Collection[T] {
 	godump.Dump(c.Items()) // or c.items if you don't care about copying
 	return c
 }
@@ -22,7 +22,7 @@ func (c Collection[T]) Dump() Collection[T] {
 //   users.
 //     Filter(func(u User) bool { return u.Age >= 35 }).
 //     Dd()
-func (c Collection[T]) Dd() {
+func (c *Collection[T]) Dd() {
 	godump.Dd(c.Items())
 }
 
@@ -34,7 +34,7 @@ and does not interrupt a chain.
 Example:
     s := users.Filter(active).DumpStr()
 */
-func (c Collection[T]) DumpStr() string {
+func (c *Collection[T]) DumpStr() string {
 	return godump.DumpStr(c.Items())
 }
 
@@ -47,7 +47,7 @@ Example:
     output := users.Filter(active).DdStr()
     // program exits after printing
 */
-func (c Collection[T]) DdStr() string {
+func (c *Collection[T]) DdStr() string {
 	out := godump.DumpStr(c.Items())
 	godump.Dd(out) // this triggers exitFunc(1)
 	return out     // unreachable in real usage, but returned for test purposes

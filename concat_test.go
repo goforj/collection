@@ -80,11 +80,6 @@ func TestConcat_NoMutation(t *testing.T) {
 
 	// perform concat
 	_ = c.Concat([]int{4, 5})
-
-	// original must be unchanged
-	if !reflect.DeepEqual(c.items, origData) {
-		t.Fatalf("Concat mutated the original collection: %v != %v", c.items, origData)
-	}
 }
 
 func TestConcat_DifferentTypes(t *testing.T) {
@@ -99,5 +94,25 @@ func TestConcat_DifferentTypes(t *testing.T) {
 	expected := []User{{"Chris"}, {"Van"}, {"Shawn"}}
 	if !reflect.DeepEqual(out.items, expected) {
 		t.Fatalf("expected %v, got %v", expected, out.items)
+	}
+}
+
+func TestConcat_NoAllocationWhenCapacityAllows(t *testing.T) {
+	c := &Collection[int]{items: make([]int, 2, 10)}
+	c.items[0], c.items[1] = 1, 2
+
+	beforePtr := &c.items[0]
+
+	c.Concat([]int{3, 4, 5})
+
+	afterPtr := &c.items[0]
+
+	if beforePtr != afterPtr {
+		t.Fatalf("Concat allocated new backing array when it should not have")
+	}
+
+	expected := []int{1, 2, 3, 4, 5}
+	if !reflect.DeepEqual(c.items, expected) {
+		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }

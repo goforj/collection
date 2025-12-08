@@ -1,9 +1,5 @@
 package collection
 
-import (
-	"strconv"
-)
-
 /*
 Merge merges the given data into the current collection using
 Laravel-style semantics.
@@ -23,21 +19,19 @@ Behavior depends on the type of `other`:
 Unsupported merge types are ignored. This method
 never panics and always returns a new Collection.
 */
-func (c Collection[T]) Merge(other any) Collection[T] {
+func (c *Collection[T]) Merge(other any) *Collection[T] {
 	switch v := other.(type) {
 
 	case []T:
 		return c.mergeSlice(v)
 
-	case Collection[T]:
+	case *Collection[T]:
 		return c.mergeSlice(v.items)
 
 	case map[string]T:
 		return c.mergeMap(v)
 
 	default:
-		// Unsupported type — return original collection unchanged.
-		// This matches Laravel's fail-soft behavior.
 		return c
 	}
 }
@@ -49,11 +43,11 @@ Given a slice ([]T), values are appended to the end of the current items.
 
 This function is immutable and returns a new collection.
 */
-func (c Collection[T]) mergeSlice(values []T) Collection[T] {
-	out := make([]T, len(c.items))
+func (c *Collection[T]) mergeSlice(values []T) *Collection[T] {
+	out := make([]T, len(c.items)+len(values))
 	copy(out, c.items)
-	out = append(out, values...)
-	return New(out)
+	copy(out[len(c.items):], values)
+	return &Collection[T]{items: out}
 }
 
 /*
@@ -70,21 +64,58 @@ behavior when working with associative arrays.
 
 This function is immutable.
 */
-func (c Collection[T]) mergeMap(values map[string]T) Collection[T] {
-	tmp := make(map[string]T)
-
-	for i, v := range c.items {
-		tmp[strconv.Itoa(i)] = v
+func (c *Collection[T]) mergeMap(values map[string]T) *Collection[T] {
+	// Precalculate how many values will be appended.
+	// Numeric keys <= len(out) overwrite, others append.
+	appendCount := 0
+	for k := range values {
+		if idx, ok := fastParseInt(k); ok {
+			if idx < 0 || idx >= len(c.items) {
+				appendCount++
+			}
+		} else {
+			appendCount++
+		}
 	}
 
+	// Pre-size output slice for NO reallocs.
+	outLen := len(c.items)
+	out := make([]T, outLen, outLen+appendCount)
+	copy(out, c.items)
+
+	// Apply merge semantics.
 	for k, v := range values {
-		tmp[k] = v
-	}
+		if idx, ok := fastParseInt(k); ok {
+			if idx >= 0 && idx < len(out) {
+				out[idx] = v
+				continue
+			}
+			// numeric but out of range → append
+			out = append(out, v)
+			continue
+		}
 
-	out := make([]T, 0, len(tmp))
-	for _, v := range tmp {
+		// string key → append value (Laravel)
 		out = append(out, v)
 	}
 
-	return New(out)
+	// IMPORTANT: return without copying out again
+	return &Collection[T]{items: out}
+}
+
+// fastParseInt is much lighter than strconv.Atoi
+// Returns (value, ok)
+func fastParseInt(s string) (int, bool) {
+	if len(s) == 0 {
+		return 0, false
+	}
+	n := 0
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		if c < '0' || c > '9' {
+			return 0, false
+		}
+		n = n*10 + int(c-'0')
+	}
+	return n, true
 }

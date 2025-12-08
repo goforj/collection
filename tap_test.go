@@ -10,7 +10,7 @@ func TestTap_InvokesCallback(t *testing.T) {
 
 	c := New([]int{3, 1, 2})
 
-	out := c.Tap(func(col Collection[int]) {
+	out := c.Tap(func(col *Collection[int]) {
 		called = true
 
 		// verify the collection we received is correct
@@ -34,8 +34,8 @@ func TestTap_Chainability(t *testing.T) {
 
 	out := New([]int{3, 1, 2}).
 		Sort(func(a, b int) bool { return a < b }). // → [1,2,3]
-		Tap(func(col Collection[int]) {
-			captured = col.items
+		Tap(func(col *Collection[int]) {
+			captured = append([]int(nil), col.items...) // snapshot
 		}).
 		Filter(func(v int) bool { return v >= 2 }) // → [2,3]
 
@@ -52,7 +52,7 @@ func TestTap_NoMutation(t *testing.T) {
 	orig := []int{10, 20, 30}
 	c := New(orig)
 
-	c2 := c.Tap(func(col Collection[int]) {
+	c2 := c.Tap(func(col *Collection[int]) {
 		// do nothing
 	})
 
@@ -72,7 +72,7 @@ func TestTap_Empty(t *testing.T) {
 
 	called := false
 
-	out := c.Tap(func(col Collection[int]) {
+	out := c.Tap(func(col *Collection[int]) {
 		called = true
 
 		if len(col.items) != 0 {
@@ -102,7 +102,7 @@ func TestTap_WithStructs(t *testing.T) {
 
 	var captured []User
 
-	out := c.Tap(func(col Collection[User]) {
+	out := c.Tap(func(col *Collection[User]) {
 		captured = col.items
 	})
 

@@ -6,7 +6,7 @@ package collection
 // Example:
 //   c := collection.Times(5, func(i int) int { return i * 2 })
 //   // [2,4,6,8,10]
-func Times[T any](count int, fn func(int) T) Collection[T] {
+func Times[T any](count int, fn func(int) T) *Collection[T] {
 	if count <= 0 {
 		return New([]T{})
 	}

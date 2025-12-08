@@ -20,7 +20,7 @@ package collection
 //   })
 //   // v = 0, ok = false
 //
-func (c Collection[T]) FirstWhere(fn func(T) bool) (value T, ok bool) {
+func (c *Collection[T]) FirstWhere(fn func(T) bool) (value T, ok bool) {
 	for _, v := range c.items {
 		if fn(v) {
 			return v, true

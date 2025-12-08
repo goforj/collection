@@ -5,7 +5,7 @@ package collection
 //
 // If the collection is empty, the zero value of T is returned along with
 // an empty collection.
-func (c Collection[T]) Pop() (T, Collection[T]) {
+func (c *Collection[T]) Pop() (T, *Collection[T]) {
 	n := len(c.items)
 
 	if n == 0 {
@@ -21,7 +21,7 @@ func (c Collection[T]) Pop() (T, Collection[T]) {
 
 // PopN removes and returns the last n items as a new collection,
 // and returns a second collection containing the remaining items.
-func (c Collection[T]) PopN(n int) (Collection[T], Collection[T]) {
+func (c *Collection[T]) PopN(n int) (*Collection[T], *Collection[T]) {
 	if n <= 0 || len(c.items) == 0 {
 		return New([]T{}), c
 	}

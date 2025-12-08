@@ -8,10 +8,10 @@ import (
 func TestAppendAndPush(t *testing.T) {
 	ops := []struct {
 		name string
-		fn   func(Collection[int], ...int) Collection[int]
+		fn   func(*Collection[int], ...int) *Collection[int]
 	}{
-		{"Append", Collection[int].Append},
-		{"Push", Collection[int].Push}, // alias
+		{"Append", (*Collection[int]).Append},
+		{"Push", (*Collection[int]).Push}, // alias
 	}
 
 	for _, op := range ops {
@@ -69,10 +69,10 @@ func TestAppendAndPush_Structs(t *testing.T) {
 
 	ops := []struct {
 		name string
-		fn   func(Collection[User], ...User) Collection[User]
+		fn   func(*Collection[User], ...User) *Collection[User]
 	}{
-		{"Append", Collection[User].Append},
-		{"Push", Collection[User].Push}, // alias
+		{"Append", (*Collection[User]).Append},
+		{"Push", (*Collection[User]).Push}, // alias
 	}
 
 	for _, op := range ops {

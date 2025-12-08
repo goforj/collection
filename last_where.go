@@ -24,7 +24,7 @@ package collection
 //    v, ok := c.LastWhere(nil)
 //    // v == 0, ok == false
 //
-func (c Collection[T]) LastWhere(fn func(T, int) bool) (value T, ok bool) {
+func (c *Collection[T]) LastWhere(fn func(T, int) bool) (value T, ok bool) {
 	// No elements?
 	if len(c.items) == 0 {
 		return value, false

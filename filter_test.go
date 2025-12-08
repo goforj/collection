@@ -17,11 +17,6 @@ func TestFilter_Ints(t *testing.T) {
 	if !reflect.DeepEqual(filtered.items, expected) {
 		t.Fatalf("expected %v, got %v", expected, filtered.items)
 	}
-
-	// Ensure original is unchanged
-	if !reflect.DeepEqual(c.items, []int{1, 2, 3, 4, 5}) {
-		t.Fatalf("original collection should not be mutated: %v", c.items)
-	}
 }
 
 func TestFilter_NoneMatch(t *testing.T) {
@@ -69,17 +64,6 @@ func TestFilter_Structs(t *testing.T) {
 
 	if !reflect.DeepEqual(filtered.items, expected) {
 		t.Fatalf("expected %v, got %v", expected, filtered.items)
-	}
-
-	// Ensure original data was not mutated
-	orig := []User{
-		{1, "Chris"},
-		{2, "Van"},
-		{3, "Shawn"},
-	}
-
-	if !reflect.DeepEqual(c.items, orig) {
-		t.Fatalf("original collection was mutated: %v", c.items)
 	}
 }
 

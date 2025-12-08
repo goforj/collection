@@ -1,17 +1,24 @@
 package collection
 
-// Tap passes the collection to fn for side effects (logging, inspection, debugging)
-// without modifying the collection. The collection is returned so it can continue
-// chaining, matching Laravel's behavior.
+// Tap invokes fn with the collection pointer for side effects (logging, debugging,
+// inspection) and returns the same collection to allow chaining.
+//
+// Tap does NOT modify the collection itself; it simply exposes the current state
+// during a fluent chain.
 //
 // Example:
 //
-//   c := New([]int{3,1,2}).Sort(func(a,b int) bool { return a < b }).Tap(func(col Collection[int]) {
-//       fmt.Println("After sorting:", col.Items())
-//   })
+//   captured := []int{}
+//   c := New([]int{3,1,2}).
+//       Sort(func(a,b int) bool { return a < b }).  // → [1,2,3]
+//       Tap(func(col *Collection[int]) {
+//           captured = append([]int(nil), col.items...) // snapshot
+//       }).
+//       Filter(func(v int) bool { return v >= 2 })     // → [2,3]
 //
-//   // c is still the sorted collection.
-func (c Collection[T]) Tap(fn func(Collection[T])) Collection[T] {
-	fn(c) // pass a copy of the collection value (safe)
+// After Tap, 'captured' contains the sorted state: []int{1,2,3}
+// and the chain continues unaffected.
+func (c *Collection[T]) Tap(fn func(*Collection[T])) *Collection[T] {
+	fn(c)
 	return c
 }

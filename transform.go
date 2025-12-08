@@ -7,7 +7,7 @@ package collection
 //   c := collection.New([]int{1,2,3})
 //   c.Transform(func(v int) int { return v * 2 })
 //   // c is now [2,4,6]
-func (c Collection[T]) Transform(fn func(T) T) {
+func (c *Collection[T]) Transform(fn func(T) T) {
 	for i, v := range c.items {
 		c.items[i] = fn(v)
 	}

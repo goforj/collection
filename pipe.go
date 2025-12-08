@@ -15,6 +15,6 @@ package collection
 //
 //   // sum == 6
 //
-func (c Collection[T]) Pipe(fn func(Collection[T]) any) any {
+func (c *Collection[T]) Pipe(fn func(*Collection[T]) any) any {
 	return fn(c)
 }

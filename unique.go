@@ -10,7 +10,7 @@ package collection
 //	unique := c.Unique(func(a, b int) bool { return a == b })
 //
 //	// result: [1, 2, 3, 4, 5]
-func (c Collection[T]) Unique(eq func(a, b T) bool) Collection[T] {
+func (c *Collection[T]) Unique(eq func(a, b T) bool) *Collection[T] {
 	out := make([]T, 0, len(c.items))
 
 	for _, v := range c.items {
@@ -26,5 +26,5 @@ func (c Collection[T]) Unique(eq func(a, b T) bool) Collection[T] {
 		}
 	}
 
-	return Collection[T]{items: out}
+	return &Collection[T]{items: out}
 }

@@ -5,7 +5,7 @@ package collection
 // Example:
 //   c := collection.New([]int{3,1,2})
 //   min, ok := Min(c) → 1, true
-func Min[T Number](c Collection[T]) (T, bool) {
+func Min[T Number](c *Collection[T]) (T, bool) {
 	items := c.Items()
 	var zero T
 

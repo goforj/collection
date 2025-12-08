@@ -9,10 +9,10 @@ import "sort"
 // Example:
 //   sorted := users.Sort(func(a, b User) bool { return a.Age < b.Age })
 //  // sorted by Age ascending
-func (c Collection[T]) Sort(less func(a, b T) bool) Collection[T] {
+func (c *Collection[T]) Sort(less func(a, b T) bool) *Collection[T] {
 	out := c.Items()
 	sort.Slice(out, func(i, j int) bool {
 		return less(out[i], out[j])
 	})
-	return Collection[T]{items: out}
+	return &Collection[T]{items: out}
 }

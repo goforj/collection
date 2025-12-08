@@ -35,7 +35,7 @@ import (
 // Returns:
 //   - string: the JSON-encoded representation of the collection
 //   - error : nil on success, or the unwrapped marshalling error
-func (c Collection[T]) ToJSON() (string, error) {
+func (c *Collection[T]) ToJSON() (string, error) {
 	b, err := json.Marshal(c.items)
 	if err != nil {
 		return "", errors.Unwrap(err)
@@ -79,7 +79,7 @@ func (c Collection[T]) ToJSON() (string, error) {
 // Returns:
 //   - string: the pretty-printed JSON representation
 //   - error : nil on success, or the unwrapped marshalling error
-func (c Collection[T]) ToPrettyJSON() (string, error) {
+func (c *Collection[T]) ToPrettyJSON() (string, error) {
 	b, err := json.MarshalIndent(c.items, "", "  ")
 	if err != nil {
 		return "", errors.Unwrap(err)

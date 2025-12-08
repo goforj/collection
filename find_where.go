@@ -22,6 +22,6 @@ package collection
 //   })
 //   // v = 0, ok = false
 //
-func (c Collection[T]) FindWhere(fn func(T) bool) (T, bool) {
+func (c *Collection[T]) FindWhere(fn func(T) bool) (T, bool) {
 	return c.FirstWhere(fn)
 }

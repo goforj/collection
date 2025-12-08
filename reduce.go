@@ -7,7 +7,7 @@ package collection
 // // sum is the total of all numbers in nums
 // concatenated := Reduce(strings, "", func(acc, s string) string { return acc + s })
 // // concatenated is all strings in strings joined together
-func Reduce[T any, R any](c Collection[T], initial R, fn func(R, T) R) R {
+func Reduce[T any, R any](c *Collection[T], initial R, fn func(R, T) R) R {
 	acc := initial
 	for _, v := range c.Items() {
 		acc = fn(acc, v)

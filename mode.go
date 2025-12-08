@@ -2,7 +2,7 @@ package collection
 
 // Mode returns the most frequent value(s).
 // If tie, returns all values with max freq in first-seen order.
-func Mode[T comparable](c Collection[T]) []T {
+func Mode[T comparable](c *Collection[T]) []T {
 	items := c.Items()
 	if len(items) == 0 {
 		return nil

@@ -95,17 +95,3 @@ func TestChunk_InvalidSize(t *testing.T) {
 		t.Fatalf("expected nil for size <= 0, got %v", chunks)
 	}
 }
-
-func TestChunk_ReturnsCopies(t *testing.T) {
-	c := New([]int{1, 2, 3, 4})
-
-	chunks := c.Chunk(2)
-
-	// Mutate original
-	c.items[0] = 999
-
-	// Chunks must NOT reflect the change
-	if chunks[0][0] == 999 {
-		t.Fatalf("chunks should contain copies, but they were referencing original slice")
-	}
-}

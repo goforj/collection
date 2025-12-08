@@ -5,7 +5,7 @@ package collection
 // Example:
 //   counts := CountBy(users, func(u User) string { return u.Role })
 //  // counts == map[string]int{"admin": 3, "user": 5}
-func CountBy[T any, K comparable](c Collection[T], fn func(T) K) map[K]int {
+func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 	items := c.Items()
 	result := make(map[K]int, len(items))
 
@@ -22,7 +22,7 @@ func CountBy[T any, K comparable](c Collection[T], fn func(T) K) map[K]int {
 // Example:
 //   counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 //  // counts == map[string]int{"a": 2, "b": 1}
-func CountByValue[T comparable](c Collection[T]) map[T]int {
+func CountByValue[T comparable](c *Collection[T]) map[T]int {
 	items := c.Items()
 	result := make(map[T]int, len(items))
 

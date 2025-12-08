@@ -14,22 +14,20 @@ type Number interface {
 
 // New wraps a slice in a Collection.
 // A shallow copy is made so that further operations don't mutate the original slice.
-func New[T any](items []T) Collection[T] {
-	out := make([]T, len(items))
-	copy(out, items)
-	return Collection[T]{items: out}
+func New[T any](items []T) *Collection[T] {
+	return &Collection[T]{items: items}
 }
 
 // Items returns a copy of the underlying slice.
 // This avoids callers mutating internal state accidentally.
-func (c Collection[T]) Items() []T {
+func (c *Collection[T]) Items() []T {
 	out := make([]T, len(c.items))
 	copy(out, c.items)
 	return out
 }
 
 // IsEmpty returns true if the collection has no items.
-func (c Collection[T]) IsEmpty() bool {
+func (c *Collection[T]) IsEmpty() bool {
 	return len(c.items) == 0
 }
 
@@ -38,7 +36,7 @@ func (c Collection[T]) IsEmpty() bool {
 //
 
 // All returns the underlying slice of items.
-func (c Collection[T]) All() []T {
+func (c *Collection[T]) All() []T {
 	out := make([]T, len(c.items))
 	copy(out, c.items)
 	return out
@@ -50,7 +48,7 @@ func (c Collection[T]) All() []T {
 
 // Before returns all items before the first element for which pred returns true.
 // If no element matches, the entire collection is returned.
-func (c Collection[T]) Before(pred func(T) bool) Collection[T] {
+func (c *Collection[T]) Before(pred func(T) bool) *Collection[T] {
 	idx := len(c.items)
 	for i, v := range c.items {
 		if pred(v) {
@@ -61,14 +59,14 @@ func (c Collection[T]) Before(pred func(T) bool) Collection[T] {
 
 	out := make([]T, idx)
 	copy(out, c.items[:idx])
-	return Collection[T]{items: out}
+	return &Collection[T]{items: out}
 }
 
 // AvgBy calculates the average of values extracted by fn from the collection items.
 //
 // Example:
 //   avgAge := AvgBy(users, func(u User) float64 { return float64(u.Age) })
-func AvgBy[T any](c Collection[T], fn func(T) float64) float64 {
+func AvgBy[T any](c *Collection[T], fn func(T) float64) float64 {
 	items := c.Items()
 
 	if len(items) == 0 {
@@ -89,7 +87,7 @@ func AvgBy[T any](c Collection[T], fn func(T) float64) float64 {
 //   type Row struct{ Foo int }
 //   rows := New([]Row{{10}, {20}})
 //   total := SumBy(rows, func(r Row) int { return r.Foo }) // 30
-func SumBy[T any, N Number](c Collection[T], fn func(T) N) N {
+func SumBy[T any, N Number](c *Collection[T], fn func(T) N) N {
 	items := c.Items()
 	var sum N
 	for _, v := range items {

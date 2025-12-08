@@ -7,7 +7,7 @@ package collection
 //	c := collection.New([]int{1, 2, 3, 4})
 //	out := c.TakeUntilFn(func(v int) bool { return v >= 3 }) // [1, 2]
 // // result is [1, 2]
-func (c Collection[T]) TakeUntilFn(pred func(T) bool) Collection[T] {
+func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T] {
 	out := make([]T, 0, len(c.items))
 
 	for _, v := range c.items {
@@ -24,7 +24,7 @@ func (c Collection[T]) TakeUntilFn(pred func(T) bool) Collection[T] {
 // The matching item is NOT included.
 //
 // Uses == comparison, so T must be comparable.
-func TakeUntil[T comparable](c Collection[T], value T) Collection[T] {
+func TakeUntil[T comparable](c *Collection[T], value T) *Collection[T] {
 	out := make([]T, 0, len(c.items))
 
 	for _, v := range c.items {

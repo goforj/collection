@@ -15,7 +15,7 @@ package collection
 //    v, ok := c.First()
 //    // v == 0, ok == false
 //
-func (c Collection[T]) First() (value T, ok bool) {
+func (c *Collection[T]) First() (value T, ok bool) {
 	if len(c.items) == 0 {
 		return value, false
 	}

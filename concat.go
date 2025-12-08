@@ -12,9 +12,9 @@ Example:
 
     concatenated := c.
         Concat([]string{"Jane Doe"}).
-        Concat([]string{"Johnny Doe"})
+        Concat([]string{"Johnny Doe"}).
+		Items()
 
-    // concatenated.Items()
     // ["John Doe", "Jane Doe", "Johnny Doe"]
 
 Notes:
@@ -23,9 +23,22 @@ Notes:
   • To concatenate another Collection[T], use:
         c.Concat(other.Items())
 */
-func (c Collection[T]) Concat(values []T) Collection[T] {
-	out := make([]T, 0, len(c.items)+len(values))
-	out = append(out, c.items...)
-	out = append(out, values...)
-	return Collection[T]{items: out}
+func (c *Collection[T]) Concat(values []T) *Collection[T] {
+	total := len(c.items) + len(values)
+
+	// CASE 1: Enough capacity → NO allocation
+	if cap(c.items) >= total {
+		// Extend length, then copy in-place.
+		oldLen := len(c.items)
+		c.items = c.items[:total]
+		copy(c.items[oldLen:], values)
+		return c
+	}
+
+	// CASE 2: Need to grow → ONE allocation, exact final size
+	out := make([]T, total)
+	copy(out, c.items)
+	copy(out[len(c.items):], values)
+	c.items = out
+	return c
 }

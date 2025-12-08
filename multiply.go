@@ -11,7 +11,7 @@ package collection
 //   [A, B, A, B, A, B]
 //
 // If n <= 0, the method returns an empty collection.
-func (c Collection[T]) Multiply(n int) Collection[T] {
+func (c *Collection[T]) Multiply(n int) *Collection[T] {
 	if n <= 0 {
 		return New([]T{})
 	}

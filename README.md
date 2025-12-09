@@ -83,7 +83,7 @@ import "github.com/goforj/collection"
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L4" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
-| [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L18" target="_blank">Source</a> |
+| [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
 | [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L27" target="_blank">Source</a> |
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L11" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L20" target="_blank">Source</a> |
@@ -912,17 +912,61 @@ Last returns the last element in the collection. If the collection is empty, ok 
 Example:
 
 ```go
-c := collection.New([]int{1, 2, 3, 4})
+// integers
+c := collection.New([]int{10, 20, 30})
+
 v, ok := c.Last()
-// v == 4, ok == true
+collection.Dump(v, ok)
+// 30   #int
+// true #bool
 ```
 
-Example \(empty\):
+Example:
 
 ```go
-c := collection.New([]int{})
-v, ok := c.Last()
-// v == 0, ok == false
+// strings
+c2 := collection.New([]string{"alpha", "beta", "gamma"})
+
+v2, ok2 := c2.Last()
+collection.Dump(v2, ok2)
+// "gamma" #string
+// true    #bool
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Charlie"},
+})
+
+u, ok3 := users.Last()
+collection.Dump(u, ok3)
+// #main.User {
+//   +ID   => 3         #int
+//   +Name => "Charlie" #string
+// }
+// true #bool
+```
+
+Example:
+
+```go
+// empty collection
+c3 := collection.New([]int{})
+
+v3, ok4 := c3.Last()
+collection.Dump(v3, ok4)
+// 0     #int
+// false #bool
 ```
 
 

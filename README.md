@@ -93,7 +93,7 @@ import "github.com/goforj/collection"
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L167" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L74" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L86" target="_blank">Source</a> |
-| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L46" target="_blank">Source</a> |
+| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
@@ -1969,49 +1969,58 @@ users := collection.New([]User{
 ### Reduce
 
 
-Reduce collapses the collection into a single value of type T. The accumulator has the same type as the elements.
+Reduce collapses the collection into a single accumulated value. The accumulator has the same type T as the collection's elements.
+
+This is useful for computing sums, concatenations, aggregates, or any fold\-style reduction.
 
 Example:
 
 ```go
-// Sum of integers
+// Sum integers
 sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 	return acc + n
 })
 collection.Dump(sum)
 // 6 #int
+```
 
+Example:
+
+```go
 // Concatenate strings
 joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
 	return acc + s
 })
 collection.Dump(joined)
 // "abc" #string
+```
 
+Example:
+
+```go
 // Aggregate struct fields
 type Stats struct {
 	Count int
 	Sum   int
 }
 
-c := collection.New([]Stats{
+stats := collection.New([]Stats{
 	{Count: 1, Sum: 10},
 	{Count: 1, Sum: 20},
 	{Count: 1, Sum: 30},
 })
 
-total := c.Reduce(Stats{}, func(acc, s Stats) Stats {
+total := stats.Reduce(Stats{}, func(acc, s Stats) Stats {
 	acc.Count += s.Count
 	acc.Sum += s.Sum
 	return acc
 })
 
 collection.Dump(total)
-
-// #main.Stats {
-//  +Count => 3 #int
-//  +Sum   => 60 #int
-// }
+// #main.Stats [
+//   +Count => 3 #int
+//   +Sum   => 60 #int
+// ]
 ```
 
 

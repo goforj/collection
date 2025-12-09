@@ -1,10 +1,6 @@
 package collection
 
 // Concat appends the values from the given slice onto the end of the collection,
-// returning a new collection. The original collection is never modified.
-//
-// This mirrors Laravel's concat(): the appended values are numerically reindexed
-// in the resulting collection, regardless of their original keys or positions.
 //
 // Example:
 //	c := collection.New([]string{"John Doe"})

@@ -70,7 +70,7 @@ import "github.com/goforj/collection"
 | [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L50" target="_blank">Source</a> |
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L49" target="_blank">Source</a> |
 | [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
-| [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L22" target="_blank">Source</a> |
+| [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L18" target="_blank">Source</a> |
 | [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L40" target="_blank">Source</a> |
 | [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L8" target="_blank">Source</a> |
 | [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L54" target="_blank">Source</a> |
@@ -776,9 +776,7 @@ collection.Dump(userChunks)
 ### Concat
 
 
-Concat appends the values from the given slice onto the end of the collection, returning a new collection. The original collection is never modified.
-
-This mirrors Laravel's concat\(\): the appended values are numerically reindexed in the resulting collection, regardless of their original keys or positions.
+Concat appends the values from the given slice onto the end of the collection,
 
 Example:
 

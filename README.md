@@ -98,8 +98,8 @@ import "github.com/goforj/collection"
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
 | [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L52" target="_blank">Source</a> |
-| [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L38" target="_blank">Source</a> |
-| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L82" target="_blank">Source</a> |
+| [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L24" target="_blank">Source</a> |
+| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L52" target="_blank">Source</a> |
 | [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L10" target="_blank">Source</a> |
 | [Unique](<#Collection[T].Unique>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/unique.go#L13" target="_blank">Source</a> |
 | [type Number](<#Number>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L9-L13" target="_blank">Source</a> |
@@ -2380,35 +2380,20 @@ ToJSON converts the collection's items into a compact JSON string.
 
 If marshalling succeeds, a JSON\-encoded string and a nil error are returned. If marshalling fails, the method unwraps any json.Marshal wrapping so that user\-defined MarshalJSON errors surface directly.
 
-This method never panics.
+Returns:
+
+- string: JSON\-encoded representation of the collection
+- error : nil on success, or the unwrapped marshalling error
 
 Example:
 
 ```go
-c := collection.New([]int{1, 2, 3})
-out, err := c.ToJSON()
-// out: "[1,2,3]"
-// err: nil
+// strings → pretty JSON
+pj1 := collection.New([]string{"a", "b"})
+out1, _ := pj1.ToJSON()
+fmt.Println(out1)
+// ["a","b"]
 ```
-
-Example \(error\):
-
-```go
-type Bad struct{}
-func (Bad) MarshalJSON() ([]byte, error) {
-    return nil, fmt.Errorf("marshal failure")
-}
-
-c := collection.New([]Bad{{}})
-out, err := c.ToJSON()
-// out: ""
-// err.Error(): "marshal failure"
-```
-
-Returns:
-
-- string: the JSON\-encoded representation of the collection
-- error : nil on success, or the unwrapped marshalling error
 
 
 
@@ -2416,43 +2401,27 @@ Returns:
 ### ToPrettyJSON
 
 
-ToPrettyJSON converts the collection's items into an indented, human\-readable JSON string.
+ToPrettyJSON converts the collection's items into a human\-readable, indented JSON string.
 
-If marshalling succeeds, a formatted JSON string and nil error are returned. If marshalling fails, the underlying error is unwrapped so that user\-defined MarshalJSON failures surface directly \(e.g., "marshal failure"\) rather than the json.MarshalIndent wrapper.
-
-This method never panics.
-
-Example:
-
-```go
-c := collection.New([]string{"a", "b"})
-out, err := c.ToPrettyJSON()
-// out:
-// [
-//   "a",
-//   "b"
-// ]
-// err: nil
-```
-
-Example \(error\):
-
-```go
-type Bad struct{}
-func (Bad) MarshalJSON() ([]byte, error) {
-    return nil, fmt.Errorf("marshal failure")
-}
-
-c := collection.New([]Bad{{}})
-out, err := c.ToPrettyJSON()
-// out: ""
-// err.Error(): "marshal failure"
-```
+If marshalling succeeds, a formatted JSON string and nil error are returned. If marshalling fails, the underlying error is unwrapped so user\-defined MarshalJSON failures surface directly.
 
 Returns:
 
 - string: the pretty\-printed JSON representation
 - error : nil on success, or the unwrapped marshalling error
+
+Example:
+
+```go
+// strings → pretty JSON
+pj1 := collection.New([]string{"a", "b"})
+out1, _ := pj1.ToPrettyJSON()
+fmt.Println(out1)
+// [
+//  "a",
+//  "b"
+// ]
+```
 
 
 

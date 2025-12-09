@@ -97,7 +97,7 @@ import "github.com/goforj/collection"
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
-| [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L21" target="_blank">Source</a> |
+| [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L52" target="_blank">Source</a> |
 | [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L38" target="_blank">Source</a> |
 | [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L82" target="_blank">Source</a> |
 | [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L10" target="_blank">Source</a> |
@@ -2260,16 +2260,55 @@ Tap does NOT modify the collection itself; it simply exposes the current state d
 Example:
 
 ```go
-captured := []int{}
-c := New([]int{3,1,2}).
-    Sort(func(a,b int) bool { return a < b }).  // → [1,2,3]
-    Tap(func(col *Collection[int]) {
-        captured = append([]int(nil), col.items...) // snapshot
-    }).
-    Filter(func(v int) bool { return v >= 2 })     // → [2,3]
+// capture intermediate state during a chain
+captured1 := []int{}
+c1 := collection.New([]int{3, 1, 2}).
+	Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
+	Tap(func(col *collection.Collection[int]) {
+		captured1 = append([]int(nil), col.Items()...) // snapshot copy
+	}).
+	Filter(func(v int) bool { return v >= 2 })       // → [2, 3]
+
+// Use BOTH variables so nothing is "declared and not used"
+collection.Dump(c1.Items())
+collection.Dump(captured1)
+// c1 → #[]int [2,3]
+// captured1 → #[]int [1,2,3]
 ```
 
-After Tap, 'captured' contains the sorted state: \[\]int\{1,2,3\} and the chain continues unaffected.
+Example:
+
+```go
+// tap for debugging without changing flow
+c2 := collection.New([]int{10, 20, 30}).
+	Tap(func(col *collection.Collection[int]) {
+		collection.Dump(col.Items())
+	}).
+	Filter(func(v int) bool { return v > 10 })
+
+collection.Dump(c2.Items()) // ensures c2 is used
+```
+
+Example:
+
+```go
+// Tap with struct collection
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+users2 := users.Tap(func(col *collection.Collection[User]) {
+	collection.Dump(col.Items())
+})
+
+collection.Dump(users2.Items()) // ensures users2 is used
+```
 
 
 

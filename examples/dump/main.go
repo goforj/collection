@@ -3,21 +3,30 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// integers
+	c := collection.New([]int{1, 2, 3})
+	c.Dump()
+	// #[]int [
+	//   0 => 1 #int
+	//   1 => 2 #int
+	//   2 => 3 #int
+	// ]
 
-	  c := collection.New([]int{1, 2, 3})
-	  out := c.Dump()
-	Dump is typically used while chaining:
-	  collection.New([]int{1, 2, 3}).
-	      Filter(func(v int) bool { return v > 1 }).
-	      Dump()
-	This is a no-op on the collection itself and never panics.
-	  // Prints a pretty debug dump of [1, 2, 3]
-	  // out == c
+	// chaining
+	collection.New([]int{1, 2, 3}).
+		Filter(func(v int) bool { return v > 1 }).
+		Dump()
+	// #[]int [
+	//   0 => 2 #int
+	//   1 => 3 #int
+	// ]
 
-
-
-	  c := collection.New([]int{1, 2, 3})
-	  c.Dump() // Pretty-prints [1, 2, 3]
-
-	This function is provided for symmetry with godump.Dump.
+	c2 := collection.New([]int{1, 2, 3})
+	collection.Dump(c2.Items())
+	// integers
+	// #[]int [
+	//   0 => 1 #int
+	//   1 => 2 #int
+	//   2 => 3 #int
+	// ]
 }

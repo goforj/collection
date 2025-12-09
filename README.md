@@ -58,7 +58,6 @@ import "github.com/goforj/collection"
 |------|--------|-------|--------|
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
 | [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L70" target="_blank">Source</a> |
-| [Dd](<#Dd>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L96" target="_blank">Source</a> |
 | [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L85" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank">Source</a> |
@@ -74,10 +73,9 @@ import "github.com/goforj/collection"
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L22" target="_blank">Source</a> |
 | [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L40" target="_blank">Source</a> |
 | [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L8" target="_blank">Source</a> |
-| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L40" target="_blank">Source</a> |
-| [DdStr](<#Collection[T].DdStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L72" target="_blank">Source</a> |
-| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L24" target="_blank">Source</a> |
-| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L55" target="_blank">Source</a> |
+| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L52" target="_blank">Source</a> |
+| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L32" target="_blank">Source</a> |
+| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L69" target="_blank">Source</a> |
 | [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L5" target="_blank">Source</a> |
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L11" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
@@ -196,37 +194,24 @@ counts := CountByValue(collection.New([]string{"a", "b", "a"}))
 
 
 
-<a name="Dd"></a>
-## Dd
-
-
-Dd is a convenience function that calls the Dd method on the collection.
-
-Example:
-
-```go
-c := collection.New([]string{"x", "y"})
-c.Dd() // Pretty-prints ["x", "y"] and exits
-```
-
-This function is provided for symmetry with godump.Dd.
-
-
-
 <a name="Dump"></a>
 ## Dump
 
 
-Dump is a convenience function that calls the Dump method on the collection.
+Dump is a convenience function that calls godump.Dump.
 
 Example:
 
 ```go
-c := collection.New([]int{1, 2, 3})
-c.Dump() // Pretty-prints [1, 2, 3]
+// integers
+c2 := collection.New([]int{1, 2, 3})
+collection.Dump(c2.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
 ```
-
-This function is provided for symmetry with godump.Dump.
 
 
 
@@ -570,38 +555,22 @@ collection.Dump(count)
 ### Dd
 
 
-Dd prints items then terminates execution.
+Dd prints items then terminates execution. Like Laravel's dd\(\), this is intended for debugging and should not be used in production control flow.
+
+This method never returns.
 
 Example:
 
 ```go
+// strings
 c := collection.New([]string{"a", "b"})
-c.Dd()    // Prints the dump and exits the program
+c.Dd()
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+// ]
+// Process finished with the exit code 1
 ```
-
-Like Laravel's dd\(\), this is intended for debugging and should not be used in production control flow.
-
-This method never returns.
-
-
-
-<a name="Collection[T].DdStr"></a>
-### DdStr
-
-
-DdStr behaves like Dd\(\) but also returns the formatted dump string.
-
-Because Dd\(\) exits immediately, DdStr is helpful primarily in tests where exit behavior has been overridden.
-
-Example \(non\-fatal debug\):
-
-```go
-c := collection.New([]int{1})
-s := c.DdStr()
-// Prints the formatted dump, triggers exitFunc, and returns the output.
-```
-
-The return value is mostly useful in testing environments where exitFunc has been replaced with a non\-terminating stub.
 
 
 
@@ -609,26 +578,33 @@ The return value is mostly useful in testing environments where exitFunc has bee
 ### Dump
 
 
-Dump prints items with godump and returns the same collection.
+Dump prints items with godump and returns the same collection. This is a no\-op on the collection itself and never panics.
 
 Example:
 
 ```go
+// integers
 c := collection.New([]int{1, 2, 3})
-out := c.Dump()
-// Prints a pretty debug dump of [1, 2, 3]
-// out == c
+c.Dump()
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
 ```
 
-Dump is typically used while chaining:
+Example:
 
 ```go
+// chaining
 collection.New([]int{1, 2, 3}).
-    Filter(func(v int) bool { return v > 1 }).
-    Dump()
+	Filter(func(v int) bool { return v > 1 }).
+	Dump()
+// #[]int [
+//   0 => 2 #int
+//   1 => 3 #int
+// ]
 ```
-
-This is a no\-op on the collection itself and never panics.
 
 
 
@@ -636,18 +612,20 @@ This is a no\-op on the collection itself and never panics.
 ### DumpStr
 
 
-DumpStr returns the pretty\-printed dump of the items as a string, without printing or exiting.
+DumpStr returns the pretty\-printed dump of the items as a string, without printing or exiting. Useful for logging, snapshot testing, and non\-interactive debugging.
 
 Example:
 
 ```go
+// integers
 c := collection.New([]int{10, 20})
 s := c.DumpStr()
 fmt.Println(s)
-// Produces a multi-line formatted representation of [10, 20]
+// #[]int [
+//   0 => 10 #int
+//   1 => 20 #int
+// ]
 ```
-
-Useful for logging, snapshot testing, and non\-interactive debugging.
 
 
 

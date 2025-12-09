@@ -266,9 +266,26 @@ func writeMain(base, funcName string, list []Example) error {
 	}
 
 	var buf bytes.Buffer
+	needsFmt := false
+
+	// Detect fmt usage across all examples
+	for _, ex := range list {
+		if strings.Contains(ex.Code, "fmt.") {
+			needsFmt = true
+			break
+		}
+	}
 
 	buf.WriteString("package main\n\n")
-	buf.WriteString(`import "github.com/goforj/collection"` + "\n\n")
+	if needsFmt {
+		buf.WriteString("import (\n")
+		buf.WriteString("\t\"fmt\"\n")
+		buf.WriteString("\t\"github.com/goforj/collection\"\n")
+		buf.WriteString(")\n\n")
+	} else {
+		buf.WriteString("import \"github.com/goforj/collection\"\n\n")
+	}
+
 	buf.WriteString("func main() {\n")
 
 	for _, ex := range list {

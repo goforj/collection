@@ -1,6 +1,9 @@
 package main
 
-import "github.com/goforj/collection"
+import (
+	"fmt"
+	"github.com/goforj/collection"
+)
 
 func main() {
 

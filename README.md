@@ -106,7 +106,7 @@ import "github.com/goforj/collection"
 | [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L22-L24" target="_blank">Source</a> |
 | [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L28" target="_blank">Source</a> |
 | [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L17" target="_blank">Source</a> |
-| [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L10" target="_blank">Source</a> |
+| [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L32" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L14" target="_blank">Source</a> |
 | [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L10" target="_blank">Source</a> |
 | [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L12" target="_blank">Source</a> |
@@ -1623,9 +1623,37 @@ Max returns the largest numeric item in the collection. The second return value 
 Example:
 
 ```go
+// integers
 c := collection.NewNumeric([]int{3, 1, 2})
-max, ok := c.Max()
-// → 3, true
+
+max1, ok1 := c.Max()
+collection.Dump(max1, ok1)
+// 3    #int
+// true #bool
+```
+
+Example:
+
+```go
+// floats
+c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
+
+max2, ok2 := c2.Max()
+collection.Dump(max2, ok2)
+// 9.200000 #float64
+// true     #bool
+```
+
+Example:
+
+```go
+// empty numeric collection
+c3 := collection.NewNumeric([]int{})
+
+max3, ok3 := c3.Max()
+collection.Dump(max3, ok3)
+// 0     #int
+// false #bool
 ```
 
 

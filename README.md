@@ -77,7 +77,7 @@ import "github.com/goforj/collection"
 | [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L34" target="_blank">Source</a> |
 | [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L71" target="_blank">Source</a> |
 | [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L5" target="_blank">Source</a> |
-| [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L11" target="_blank">Source</a> |
+| [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L18" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
@@ -646,10 +646,64 @@ Filter keeps only the elements for which fn returns true. This method mutates th
 Example:
 
 ```go
-collection.New([]int{1,2,3,4}).
-		Filter(func(v int) bool { return v%2 == 0 }).
-		Items()
-	// []int{2,4}
+// integers
+c := collection.New([]int{1, 2, 3, 4})
+c.Filter(func(v int) bool {
+	return v%2 == 0
+})
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+```
+
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
+c2.Filter(func(v string) bool {
+	return strings.HasPrefix(v, "a")
+})
+collection.Dump(c2.Items())
+// #[]string [
+//   0 => "apple" #string
+//   1 => "avocado" #string
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Andrew"},
+	{ID: 4, Name: "Carol"},
+})
+
+users.Filter(func(u User) bool {
+	return strings.HasPrefix(u.Name, "A")
+})
+
+collection.Dump(users.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Andrew" #string
+//   }
+// ]
 ```
 
 

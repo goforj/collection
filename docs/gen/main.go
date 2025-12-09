@@ -269,28 +269,54 @@ func writeMain(base, funcName string, list []Example) error {
 	}
 
 	var buf bytes.Buffer
-	needsFmt := false
 
-	// Detect fmt usage across all examples
+	// detect needed imports
+	imports := map[string]bool{}
+
 	for _, ex := range list {
-		if strings.Contains(ex.Code, "fmt.") {
-			needsFmt = true
-			break
+		code := ex.Code
+
+		// Simple keyword → import mapping
+		if strings.Contains(code, "fmt.") {
+			imports["fmt"] = true
 		}
+		if strings.Contains(code, "strings.") {
+			imports["strings"] = true
+		}
+		// Add more here easily:
+		// if strings.Contains(code, "errors.") { imports["errors"] = true }
+		// if strings.Contains(code, "time.") { imports["time"] = true }
 	}
 
-	// ignore build tag so we don't get caught in tests
+	// ignore build tag so examples don't run in tests
 	buf.WriteString("//go:build ignore\n")
 	buf.WriteString("// +build ignore\n\n")
 
 	buf.WriteString("package main\n\n")
-	if needsFmt {
-		buf.WriteString("import (\n")
-		buf.WriteString("\t\"fmt\"\n")
-		buf.WriteString("\t\"github.com/goforj/collection\"\n")
-		buf.WriteString(")\n\n")
-	} else {
+
+	// Always need collection
+	imports["github.com/goforj/collection"] = true
+
+	// Write import block
+	if len(imports) == 1 {
+		// only collection
 		buf.WriteString("import \"github.com/goforj/collection\"\n\n")
+	} else {
+		// multi import block
+		buf.WriteString("import (\n")
+
+		// stable ordering
+		keys := make([]string, 0, len(imports))
+		for k := range imports {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		for _, imp := range keys {
+			buf.WriteString("\t\"" + imp + "\"\n")
+		}
+
+		buf.WriteString(")\n\n")
 	}
 
 	buf.WriteString("func main() {\n")

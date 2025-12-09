@@ -72,7 +72,7 @@ import "github.com/goforj/collection"
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L5" target="_blank">Source</a> |
 | [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L22" target="_blank">Source</a> |
-| [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L9" target="_blank">Source</a> |
+| [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L40" target="_blank">Source</a> |
 | [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L6" target="_blank">Source</a> |
 | [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L40" target="_blank">Source</a> |
 | [DdStr](<#Collection[T].DdStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L72" target="_blank">Source</a> |
@@ -467,11 +467,48 @@ collection.Dump(concatenated)
 Contains returns true if any item satisfies the predicate. Example:
 
 ```go
-c := collection.New([]int{1, 2, 3, 4})
-hasEven := c.Contains(func(v int) bool { return v%2 == 0 }) // true
+// integers
+c := collection.New([]int{1, 2, 3, 4, 5})
+hasEven := c.Contains(func(v int) bool {
+	return v%2 == 0
+})
+collection.Dump(hasEven)
+// true #bool
 ```
 
-// hasEven is true
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"apple", "banana", "cherry"})
+hasBanana := c2.Contains(func(v string) bool {
+	return v == "banana"
+})
+collection.Dump(hasBanana)
+// true #bool
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
+
+hasBob := users.Contains(func(u User) bool {
+	return u.Name == "Bob"
+})
+collection.Dump(hasBob)
+// true #bool
+```
 
 
 

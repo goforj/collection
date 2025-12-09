@@ -84,7 +84,7 @@ import "github.com/goforj/collection"
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L4" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
-| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L27" target="_blank">Source</a> |
+| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L11" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L20" target="_blank">Source</a> |
 | [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L12" target="_blank">Source</a> |
@@ -977,30 +977,97 @@ collection.Dump(v3, ok4)
 
 LastWhere returns the last element in the collection that satisfies the predicate fn. If fn is nil, LastWhere returns the final element in the underlying slice. If the collection is empty or no element matches, ok will be false.
 
-Example: LastWhere with predicate
+Example:
 
 ```go
+// integers with predicate
 c := collection.New([]int{1, 2, 3, 4})
+
 v, ok := c.LastWhere(func(v int, i int) bool {
-    return v < 3
+	return v < 3
 })
-// v == 2, ok == true
+collection.Dump(v, ok)
+// 2    #int
+// true #bool
 ```
 
-Example: LastWhere without predicate
+Example:
 
 ```go
-c := collection.New([]int{1, 2, 3, 4})
-v, ok := c.LastWhere(nil)
-// v == 4, ok == true
+// integers without predicate (equivalent to Last())
+c2 := collection.New([]int{10, 20, 30, 40})
+
+v2, ok2 := c2.LastWhere(nil)
+collection.Dump(v2, ok2)
+// 40   #int
+// true #bool
 ```
 
-Example: Empty collection
+Example:
 
 ```go
-c := collection.New([]int{})
-v, ok := c.LastWhere(nil)
-// v == 0, ok == false
+// strings
+c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
+
+v3, ok3 := c3.LastWhere(func(s string, i int) bool {
+	return strings.HasPrefix(s, "g")
+})
+collection.Dump(v3, ok3)
+// "gamma" #string
+// true    #bool
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Alex"},
+	{ID: 4, Name: "Brian"},
+})
+
+u, ok4 := users.LastWhere(func(u User, i int) bool {
+	return strings.HasPrefix(u.Name, "A")
+})
+collection.Dump(u, ok4)
+// #main.User {
+//   +ID   => 3        #int
+//   +Name => "Alex"  #string
+// }
+// true #bool
+```
+
+Example:
+
+```go
+// no matching element
+c4 := collection.New([]int{5, 6, 7})
+
+v4, ok5 := c4.LastWhere(func(v int, i int) bool {
+	return v > 10
+})
+collection.Dump(v4, ok5)
+// 0     #int
+// false #bool
+```
+
+Example:
+
+```go
+// empty collection
+c5 := collection.New([]int{})
+
+v5, ok6 := c5.LastWhere(nil)
+collection.Dump(v5, ok6)
+// 0     #int
+// false #bool
 ```
 
 

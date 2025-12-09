@@ -63,7 +63,7 @@ import "github.com/goforj/collection"
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L58" target="_blank">Source</a> |
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L24" target="_blank">Source</a> |
 | [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L122" target="_blank">Source</a> |
-| [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L27" target="_blank">Source</a> |
+| [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L80" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L9" target="_blank">Source</a> |
 | [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L13" target="_blank">Source</a> |
 | [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L9" target="_blank">Source</a> |
@@ -96,7 +96,7 @@ import "github.com/goforj/collection"
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
-| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
+| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
 | [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L21" target="_blank">Source</a> |
 | [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L38" target="_blank">Source</a> |
 | [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L82" target="_blank">Source</a> |
@@ -379,6 +379,44 @@ collection.Dump(names.Items())
 TakeUntil returns items until the first element equals \`value\`. The matching item is NOT included.
 
 Uses == comparison, so T must be comparable.
+
+Example:
+
+```go
+// stop at value 3
+c4 := collection.New([]int{1, 2, 3, 4})
+out4 := collection.TakeUntil(c4, 3)
+collection.Dump(out4.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+// ]
+```
+
+Example:
+
+```go
+// value never appears → full slice
+c5 := collection.New([]string{"a", "b", "c"})
+out5 := collection.TakeUntil(c5, "x")
+collection.Dump(out5.Items())
+// #[]string [
+//	0 => "a" #string
+//	1 => "b" #string
+//	2 => "c" #string
+// ]
+```
+
+Example:
+
+```go
+// match is first item → empty result
+c6 := collection.New([]int{9, 10, 11})
+out6 := collection.TakeUntil(c6, 9)
+collection.Dump(out6.Items())
+// #[]int [
+// ]
+```
 
 
 
@@ -2169,14 +2207,45 @@ collection.Dump(out4.Items())
 ### TakeUntilFn
 
 
-TakeUntilFn returns items until the predicate function returns true. The matching item is NOT included. Example:
+TakeUntilFn returns items until the predicate function returns true. The matching item is NOT included.
+
+Example:
 
 ```go
-c := collection.New([]int{1, 2, 3, 4})
-out := c.TakeUntilFn(func(v int) bool { return v >= 3 }) // [1, 2]
+// stop when value >= 3
+c1 := collection.New([]int{1, 2, 3, 4})
+out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })
+collection.Dump(out1.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+// ]
 ```
 
-// result is \[1, 2\]
+Example:
+
+```go
+// predicate immediately true → empty result
+c2 := collection.New([]int{10, 20, 30})
+out2 := c2.TakeUntilFn(func(v int) bool { return v < 50 })
+collection.Dump(out2.Items())
+// #[]int [
+// ]
+```
+
+Example:
+
+```go
+// no match → full list returned
+c3 := collection.New([]int{1, 2, 3})
+out3 := c3.TakeUntilFn(func(v int) bool { return v == 99 })
+collection.Dump(out3.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+//	2 => 3 #int
+// ]
+```
 
 
 

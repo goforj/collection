@@ -23,7 +23,7 @@ jobs:
         run: go mod tidy
 
       - name: Run tests
-        run: go test $(go list ./... | grep -v /docs/ | grep -v /examples/) -v
+        run: go test ./... -v
 
       - name: Run tests with coverage
         run: go test -coverprofile=coverage.txt

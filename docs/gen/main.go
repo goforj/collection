@@ -1,3 +1,6 @@
+//go:build ignore
+// +build ignore
+
 package main
 
 import (
@@ -275,6 +278,12 @@ func writeMain(base, funcName string, list []Example) error {
 			break
 		}
 	}
+
+	// write
+	// //go:build ignore
+	//// +build ignore
+	buf.WriteString("//go:build ignore\n")
+	buf.WriteString("// +build ignore\n\n")
 
 	buf.WriteString("package main\n\n")
 	if needsFmt {

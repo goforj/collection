@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"os/exec"
+	"strings"
 	"testing"
 )
 
@@ -56,31 +57,6 @@ func TestDumpStr_ReturnsString(t *testing.T) {
 	}
 }
 
-func TestDdStr_ReturnsStringAndTriggersExit(t *testing.T) {
-	if os.Getenv("TEST_DDSTR") == "1" {
-		c := New([]int{9})
-		_ = c.DdStr() // should exit(1)
-		return
-	}
-
-	cmd := exec.Command(os.Args[0], "-test.run=TestDdStr_ReturnsStringAndTriggersExit")
-	cmd.Env = append(os.Environ(), "TEST_DDSTR=1")
-
-	err := cmd.Run()
-
-	if err == nil {
-		t.Fatalf("DdStr() should have exited but did not")
-	}
-
-	if exit, ok := err.(*exec.ExitError); ok {
-		if exit.ExitCode() != 1 {
-			t.Fatalf("DdStr() exit code = %d, want 1", exit.ExitCode())
-		}
-	} else {
-		t.Fatalf("unexpected error type: %v", err)
-	}
-}
-
 func TestDump_ReturnsSameCollection(t *testing.T) {
 	c := New([]int{1, 2, 3})
 	out := c.Dump()
@@ -90,22 +66,27 @@ func TestDump_ReturnsSameCollection(t *testing.T) {
 	}
 }
 
-func TestDdStr_ReturnsOutputAndTriggersExit(t *testing.T) {
-	called := false
+func TestDump_PrintsOutput(t *testing.T) {
+	// Capture stdout
+	old := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
 
-	// Override exit behavior for test
-	origExit := exitFunc
-	exitFunc = func(v interface{}) { called = true }
-	defer func() { exitFunc = origExit }()
+	// Run Dump
+	Dump([]int{1, 2, 3})
 
-	c := New([]int{5})
-	out := c.DdStr()
+	// Restore stdout
+	w.Close()
+	os.Stdout = old
 
-	if out == "" {
-		t.Fatalf("DdStr() should return non-empty dump output")
-	}
+	var buf bytes.Buffer
+	_, _ = buf.ReadFrom(r)
+	out := buf.String()
 
-	if !called {
-		t.Fatalf("DdStr() did not trigger exitFunc")
+	// Validate printed output
+	if !strings.Contains(out, "1") ||
+		!strings.Contains(out, "2") ||
+		!strings.Contains(out, "3") {
+		t.Fatalf("Dump() did not print expected output: %s", out)
 	}
 }

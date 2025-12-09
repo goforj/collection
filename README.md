@@ -60,9 +60,9 @@ import "github.com/goforj/collection"
 | [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L70" target="_blank">Source</a> |
 | [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L95" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
-| [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank">Source</a> |
+| [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L58" target="_blank">Source</a> |
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L24" target="_blank">Source</a> |
-| [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L22" target="_blank">Source</a> |
+| [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L122" target="_blank">Source</a> |
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L27" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L9" target="_blank">Source</a> |
 | [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L13" target="_blank">Source</a> |
@@ -226,11 +226,67 @@ collection.Dump(c2.Items())
 
 MapTo maps a Collection\[T\] to a Collection\[R\] using fn\(T\) R.
 
-This cannot be a method because methods can't introduce a new type parameter R. Example:
+This cannot be a method because methods can't introduce a new type parameter R.
+
+Example:
 
 ```go
-squared := numbers.MapTo(func(n int) int { return n * n })
-// squared is a Collection[int] of squared numbers
+// integers → extract parity label
+nums := collection.New([]int{1, 2, 3, 4})
+parity := collection.MapTo(nums, func(n int) string {
+	if n%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(parity.Items())
+// #[]string [
+//   0 => "odd" #string
+//   1 => "even" #string
+//   2 => "odd" #string
+//   3 => "even" #string
+// ]
+```
+
+Example:
+
+```go
+// strings → length of each value
+words := collection.New([]string{"go", "forj", "rocks"})
+lengths := collection.MapTo(words, func(s string) int {
+	return len(s)
+})
+collection.Dump(lengths.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+//   2 => 5 #int
+// ]
+```
+
+Example:
+
+```go
+// structs → MapTo a field
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+names := collection.MapTo(users, func(u User) string {
+	return u.Name
+})
+
+collection.Dump(names.Items())
+// #[]string [
+//   0 => "Alice" #string
+//   1 => "Bob" #string
+// ]
 ```
 
 
@@ -251,11 +307,67 @@ The underlying slice is stored as\-is \(no copy is made\), allowing New to be bo
 ### Pluck
 
 
-Pluck is an alias for MapTo with a more semantic name when projecting fields. Example:
+Pluck is an alias for MapTo with a more semantic name when projecting fields. It extracts a single field or computed value from every element and returns a new typed collection.
+
+Example:
 
 ```go
-names := users.Pluck(func(u User) string { return u.Name })
-// names is a Collection[string] of user names
+// integers → extract parity label
+nums := collection.New([]int{1, 2, 3, 4})
+parity := collection.Pluck(nums, func(n int) string {
+	if n%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(parity.Items())
+// #[]string [
+//   0 => "odd" #string
+//   1 => "even" #string
+//   2 => "odd" #string
+//   3 => "even" #string
+// ]
+```
+
+Example:
+
+```go
+// strings → length of each value
+words := collection.New([]string{"go", "forj", "rocks"})
+lengths := collection.Pluck(words, func(s string) int {
+	return len(s)
+})
+collection.Dump(lengths.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+//   2 => 5 #int
+// ]
+```
+
+Example:
+
+```go
+// structs → pluck a field
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+names := collection.Pluck(users, func(u User) string {
+	return u.Name
+})
+
+collection.Dump(names.Items())
+// #[]string [
+//   0 => "Alice" #string
+//   1 => "Bob" #string
+// ]
 ```
 
 

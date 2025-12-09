@@ -58,7 +58,7 @@ import "github.com/goforj/collection"
 |------|--------|-------|--------|
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
 | [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L70" target="_blank">Source</a> |
-| [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L85" target="_blank">Source</a> |
+| [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L95" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank">Source</a> |
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L17" target="_blank">Source</a> |
@@ -73,9 +73,9 @@ import "github.com/goforj/collection"
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L22" target="_blank">Source</a> |
 | [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L40" target="_blank">Source</a> |
 | [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L8" target="_blank">Source</a> |
-| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L52" target="_blank">Source</a> |
-| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L32" target="_blank">Source</a> |
-| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L69" target="_blank">Source</a> |
+| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L54" target="_blank">Source</a> |
+| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L34" target="_blank">Source</a> |
+| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L71" target="_blank">Source</a> |
 | [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L5" target="_blank">Source</a> |
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L11" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |

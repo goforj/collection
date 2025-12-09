@@ -2,6 +2,8 @@ package collection
 
 import (
 	"github.com/goforj/godump"
+	"io"
+	"os"
 )
 
 // exitFunc allows tests to override the exit behavior.
@@ -70,6 +72,14 @@ func (c *Collection[T]) DumpStr() string {
 	return godump.DumpStr(c.Items())
 }
 
+var dumpWriter io.Writer = os.Stdout
+
+// setDumpWriter allows tests to redirect dump output.
+// Not exported — production code never needs this.
+func setDumpWriter(w io.Writer) {
+	dumpWriter = w
+}
+
 // Dump is a convenience function that calls godump.Dump.
 //
 // Example:
@@ -83,5 +93,6 @@ func (c *Collection[T]) DumpStr() string {
 //	//   2 => 3 #int
 //	// ]
 func Dump(vs ...any) {
-	godump.Dump(vs...)
+	d := godump.NewDumper(godump.WithWriter(dumpWriter))
+	d.Dump(vs...)
 }

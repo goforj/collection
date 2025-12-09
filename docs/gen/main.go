@@ -279,9 +279,7 @@ func writeMain(base, funcName string, list []Example) error {
 		}
 	}
 
-	// write
-	// //go:build ignore
-	//// +build ignore
+	// ignore build tag so we don't get caught in tests
 	buf.WriteString("//go:build ignore\n")
 	buf.WriteString("// +build ignore\n\n")
 

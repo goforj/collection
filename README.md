@@ -61,7 +61,7 @@ import "github.com/goforj/collection"
 | [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L95" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L9" target="_blank">Source</a> |
-| [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L17" target="_blank">Source</a> |
+| [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L24" target="_blank">Source</a> |
 | [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L22" target="_blank">Source</a> |
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L27" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L9" target="_blank">Source</a> |
@@ -82,7 +82,7 @@ import "github.com/goforj/collection"
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
-| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
+| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L42" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
 | [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
@@ -103,8 +103,8 @@ import "github.com/goforj/collection"
 | [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L10" target="_blank">Source</a> |
 | [Unique](<#Collection[T].Unique>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/unique.go#L13" target="_blank">Source</a> |
 | [type Number](<#Number>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L9-L13" target="_blank">Source</a> |
-| [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L22-L24" target="_blank">Source</a> |
-| [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L28" target="_blank">Source</a> |
+| [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L29-L31" target="_blank">Source</a> |
+| [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
 | [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L17" target="_blank">Source</a> |
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L32" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L46" target="_blank">Source</a> |
@@ -239,7 +239,11 @@ squared := numbers.MapTo(func(n int) int { return n * n })
 ### New
 
 
-New wraps a slice in a Collection. A shallow copy is made so that further operations don't mutate the original slice.
+New creates a new Collection from the provided slice.
+
+The returned Collection is a lightweight, strongly\-typed wrapper around the slice, enabling fluent, chainable operations such as filtering, mapping, reducing, sorting, and more.
+
+The underlying slice is stored as\-is \(no copy is made\), allowing New to be both fast and allocation\-friendly. Callers should clone the input beforehand if they need to prevent shared mutation.
 
 
 

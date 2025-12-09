@@ -12,8 +12,15 @@ type Number interface {
 	~float32 | ~float64
 }
 
-// New wraps a slice in a Collection.
-// A shallow copy is made so that further operations don't mutate the original slice.
+// New creates a new Collection from the provided slice.
+//
+// The returned Collection is a lightweight, strongly-typed wrapper
+// around the slice, enabling fluent, chainable operations such as
+// filtering, mapping, reducing, sorting, and more.
+//
+// The underlying slice is stored as-is (no copy is made), allowing
+// New to be both fast and allocation-friendly. Callers should clone
+// the input beforehand if they need to prevent shared mutation.
 func New[T any](items []T) *Collection[T] {
 	return &Collection[T]{items: items}
 }

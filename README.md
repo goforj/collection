@@ -91,7 +91,7 @@ import "github.com/goforj/collection"
 | [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L60" target="_blank">Source</a> |
 | [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L64" target="_blank">Source</a> |
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L167" target="_blank">Source</a> |
-| [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
+| [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L74" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L86" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L46" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
@@ -1840,12 +1840,90 @@ collection.Dump(popped5.Items(), rest5.Items())
 ### Prepend
 
 
-Prepend returns a new collection with the given values prepended. Example:
+Prepend returns a new collection with the given values added to the \*beginning\* of the collection.
+
+The original collection is not modified.
+
+Example:
 
 ```go
 c := collection.New([]int{3, 4})
-newC := c.Prepend(1, 2) // Collection with items [1, 2, 3, 4]
-// newC.Items() == []int{1, 2, 3, 4}
+newC := c.Prepend(1, 2)
+collection.Dump(newC.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+// ]
+```
+
+Example:
+
+```go
+// prepending strings
+letters := collection.New([]string{"c", "d"})
+out := letters.Prepend("a", "b")
+collection.Dump(out.Items())
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+//   2 => "c" #string
+//   3 => "d" #string
+// ]
+```
+
+Example:
+
+```go
+// prepending a struct
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 2, Name: "Bob"},
+})
+
+out2 := users.Prepend(User{ID: 1, Name: "Alice"})
+collection.Dump(out2.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+// ]
+```
+
+Example:
+
+```go
+// Prepending into an empty collection
+empty := collection.New([]int{})
+out3 := empty.Prepend(9, 8)
+collection.Dump(out3.Items())
+// #[]int [
+//   0 => 9 #int
+//   1 => 8 #int
+// ]
+```
+
+Example:
+
+```go
+// Prepending no values → returns a copy of original
+c2 := collection.New([]int{1, 2})
+out4 := c2.Prepend()
+collection.Dump(out4.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+// ]
 ```
 
 

@@ -94,7 +94,7 @@ import "github.com/goforj/collection"
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L74" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L86" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
-| [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L12" target="_blank">Source</a> |
+| [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
 | [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L21" target="_blank">Source</a> |
@@ -2029,15 +2029,75 @@ collection.Dump(total)
 ### Sort
 
 
-Sort returns a new collection sorted using the given comparison function.
+Sort returns a new collection sorted using the provided comparison function.
 
-less should return true if a should come before b.
+The comparison function \`less\(a, b\)\` should return true if \`a\` should come before \`b\` in the sorted order.
+
+Sorting does NOT mutate the original collection—Sort always returns a new one.
 
 Example:
 
 ```go
-sorted := users.Sort(func(a, b User) bool { return a.Age < b.Age })
-// sorted by Age ascending
+// integers
+c := collection.New([]int{5, 1, 4, 2})
+sorted := c.Sort(func(a, b int) bool { return a < b })
+collection.Dump(sorted.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 4 #int
+//   3 => 5 #int
+// ]
+```
+
+Example:
+
+```go
+// strings (descending)
+c2 := collection.New([]string{"apple", "banana", "cherry"})
+sorted2 := c2.Sort(func(a, b string) bool { return a > b })
+collection.Dump(sorted2.Items())
+// #[]string [
+//   0 => "cherry" #string
+//   1 => "banana" #string
+//   2 => "apple" #string
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	Name string
+	Age  int
+}
+
+users := collection.New([]User{
+	{Name: "Alice", Age: 30},
+	{Name: "Bob", Age: 25},
+	{Name: "Carol", Age: 40},
+})
+
+// Sort by age ascending
+sortedUsers := users.Sort(func(a, b User) bool {
+	return a.Age < b.Age
+})
+collection.Dump(sortedUsers.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +Name => "Bob" #string
+//     +Age  => 25 #int
+//   }
+//   1 => #main.User {
+//     +Name => "Alice" #string
+//     +Age  => 30 #int
+//   }
+//   2 => #main.User {
+//     +Name => "Carol" #string
+//     +Age  => 40 #int
+//   }
+// ]
 ```
 
 

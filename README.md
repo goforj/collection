@@ -85,7 +85,7 @@ import "github.com/goforj/collection"
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
 | [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
-| [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L11" target="_blank">Source</a> |
+| [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L20" target="_blank">Source</a> |
 | [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L12" target="_blank">Source</a> |
 | [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L18" target="_blank">Source</a> |
@@ -1078,12 +1078,74 @@ collection.Dump(v5, ok6)
 
 Map applies a same\-type transformation and returns a new collection.
 
-Use this when you're transforming T \-\> T \(e.g., enrichment, normalization\). Example usage:
+Use this when you're transforming T \-\> T \(e.g., enrichment, normalization\).
+
+Example:
 
 ```go
+// integers
 c := collection.New([]int{1, 2, 3})
-	mapped := c.Map(func(v int) int { return v * 10 }) // [10, 20, 30]
- // expected := []int{10, 20, 30}
+
+mapped := c.Map(func(v int) int {
+	return v * 10
+})
+
+collection.Dump(mapped.Items())
+// #[]int [
+//   0 => 10 #int
+//   1 => 20 #int
+//   2 => 30 #int
+// ]
+```
+
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"apple", "banana", "cherry"})
+
+upper := c2.Map(func(s string) string {
+	return strings.ToUpper(s)
+})
+
+collection.Dump(upper.Items())
+// #[]string [
+//   0 => "APPLE"  #string
+//   1 => "BANANA" #string
+//   2 => "CHERRY" #string
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+updated := users.Map(func(u User) User {
+	u.Name = strings.ToUpper(u.Name)
+	return u
+})
+
+collection.Dump(updated.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1        #int
+//     +Name => "ALICE"  #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2        #int
+//     +Name => "BOB"    #string
+//   }
+// ]
 ```
 
 

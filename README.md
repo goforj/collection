@@ -108,7 +108,7 @@ import "github.com/goforj/collection"
 | [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L17" target="_blank">Source</a> |
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L32" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L46" target="_blank">Source</a> |
-| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L10" target="_blank">Source</a> |
+| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L29" target="_blank">Source</a> |
 | [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L12" target="_blank">Source</a> |
 | [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank">Source</a> |
 
@@ -1897,9 +1897,34 @@ Min returns the smallest numeric item in the collection. The second return value
 Example:
 
 ```go
+// integers
 c := collection.NewNumeric([]int{3, 1, 2})
- min, ok := c.Min()
-	1, true
+min, ok := c.Min()
+collection.Dump(min, ok)
+// 1 #int
+// true #bool
+```
+
+Example:
+
+```go
+// floats
+c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
+min2, ok2 := c2.Min()
+collection.Dump(min2, ok2)
+// 1.200000 #float64
+// true #bool
+```
+
+Example:
+
+```go
+// empty collection
+empty := collection.NewNumeric([]int{})
+min3, ok3 := empty.Min()
+collection.Dump(min3, ok3)
+// 0 #int
+// false #bool
 ```
 
 

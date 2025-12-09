@@ -88,7 +88,7 @@ import "github.com/goforj/collection"
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L70" target="_blank">Source</a> |
 | [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L62" target="_blank">Source</a> |
-| [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L18" target="_blank">Source</a> |
+| [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L60" target="_blank">Source</a> |
 | [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L8" target="_blank">Source</a> |
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
@@ -1477,12 +1477,62 @@ This is useful for inline transformations, aggregations, or "exiting" a chain wi
 Example:
 
 ```go
-c := New([]int{1, 2, 3})
-sum := c.Pipe(func(col Collection[int]) any {
-    return col.Sum()
+// integers – computing a sum
+c := collection.New([]int{1, 2, 3})
+sum := c.Pipe(func(col *collection.Collection[int]) any {
+	total := 0
+	for _, v := range col.Items() {
+		total += v
+	}
+	return total
+})
+collection.Dump(sum)
+// 6 #int
+```
+
+Example:
+
+```go
+// strings – joining values
+c2 := collection.New([]string{"a", "b", "c"})
+joined := c2.Pipe(func(col *collection.Collection[string]) any {
+	out := ""
+	for _, v := range col.Items() {
+		out += v
+	}
+	return out
+})
+collection.Dump(joined)
+// "abc" #string
+```
+
+Example:
+
+```go
+// structs – extracting just the names
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
 })
 
-// sum == 6
+names := users.Pipe(func(col *collection.Collection[User]) any {
+	result := make([]string, 0, len(col.Items()))
+	for _, u := range col.Items() {
+		result = append(result, u.Name)
+	}
+	return result
+})
+
+collection.Dump(names)
+// #[]string [
+//   0 => "Alice" #string
+//   1 => "Bob" #string
+// ]
 ```
 
 

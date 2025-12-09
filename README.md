@@ -81,7 +81,7 @@ import "github.com/goforj/collection"
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
-| [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L4" target="_blank">Source</a> |
+| [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
 | [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
@@ -892,6 +892,57 @@ v, ok = nums.FirstWhere(func(n int) bool {
 
 
 IsEmpty returns true if the collection has no items.
+
+Example:
+
+```go
+// integers (non-empty)
+c := collection.New([]int{1, 2, 3})
+
+empty := c.IsEmpty()
+collection.Dump(empty)
+// false #bool
+```
+
+Example:
+
+```go
+// strings (empty)
+c2 := collection.New([]string{})
+
+empty2 := c2.IsEmpty()
+collection.Dump(empty2)
+// true #bool
+```
+
+Example:
+
+```go
+// structs (non-empty)
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+})
+
+empty3 := users.IsEmpty()
+collection.Dump(empty3)
+// false #bool
+```
+
+Example:
+
+```go
+// structs (empty)
+none := collection.New([]User{})
+
+empty4 := none.IsEmpty()
+collection.Dump(empty4)
+// true #bool
+```
 
 
 

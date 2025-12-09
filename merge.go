@@ -1,25 +1,74 @@
 package collection
 
-/*
-Merge merges the given data into the current collection using
-Laravel-style semantics.
-
-Behavior depends on the type of `other`:
-
-  • []T (numeric merges)
-      Values are appended to the end of the collection.
-  • Collection[T]
-      Values are appended, same as merging a slice.
-  • map[string]T (associative merges)
-      Keys that already exist overwrite the original values;
-      new keys are added.
-
-Unsupported merge types are ignored. This method
-never panics and always returns a new Collection.
-*/
+// Merge merges the given data into the current collection.
+//
+// Example: merging slices
+//	// integers
+//	ints := collection.New([]int{1, 2})
+//	extra := []int{3, 4}
+//
+//	merged1 := ints.Merge(extra)
+//	collection.Dump(merged1.Items())
+//	// #[]int [
+//	//   0 => 1 #int
+//	//   1 => 2 #int
+//	//   2 => 3 #int
+//	//   3 => 4 #int
+//	// ]
+//
+// Example: merging another collection
+//	// strings
+//	strs := collection.New([]string{"a", "b"})
+//	more := collection.New([]string{"c", "d"})
+//
+//	merged2 := strs.Merge(more)
+//	collection.Dump(merged2.Items())
+//	// #[]string [
+//	//   0 => "a" #string
+//	//   1 => "b" #string
+//	//   2 => "c" #string
+//	//   3 => "d" #string
+//	// ]
+//
+// Example: merging struct slices
+//	// structs
+//	type User struct {
+//		ID   int
+//		Name string
+//	}
+//
+//	users := collection.New([]User{
+//		{ID: 1, Name: "Alice"},
+//		{ID: 2, Name: "Bob"},
+//	})
+//
+//	moreUsers := []User{
+//		{ID: 3, Name: "Carol"},
+//		{ID: 4, Name: "Dave"},
+//	}
+//
+//	merged3 := users.Merge(moreUsers)
+//	collection.Dump(merged3.Items())
+//	// #[]main.User [
+//	//   0 => #main.User {
+//	//     +ID   => 1 #int
+//	//     +Name => "Alice" #string
+//	//   }
+//	//   1 => #main.User {
+//	//     +ID   => 2 #int
+//	//     +Name => "Bob" #string
+//	//   }
+//	//   2 => #main.User {
+//	//     +ID   => 3 #int
+//	//     +Name => "Carol" #string
+//	//   }
+//	//   3 => #main.User {
+//	//     +ID   => 4 #int
+//	//     +Name => "Dave" #string
+//	//   }
+//	// ]
 func (c *Collection[T]) Merge(other any) *Collection[T] {
 	switch v := other.(type) {
-
 	case []T:
 		return c.mergeSlice(v)
 

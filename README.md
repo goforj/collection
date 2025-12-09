@@ -79,7 +79,7 @@ import "github.com/goforj/collection"
 | [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L58" target="_blank">Source</a> |
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
-| [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L18" target="_blank">Source</a> |
+| [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L4" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
@@ -805,17 +805,59 @@ First returns the first element in the collection. If the collection is empty, o
 Example:
 
 ```go
-c := New([]int{1, 2, 3, 4})
+// integers
+c := collection.New([]int{10, 20, 30})
+
 v, ok := c.First()
-// v == 1, ok == true
+collection.Dump(v, ok)
+// 10   #int
+// true #bool
 ```
 
-Example \(empty\):
+Example:
 
 ```go
-c := New([]int{})
-v, ok := c.First()
-// v == 0, ok == false
+// strings
+c2 := collection.New([]string{"alpha", "beta", "gamma"})
+
+v2, ok2 := c2.First()
+collection.Dump(v2, ok2)
+// "alpha" #string
+// true    #bool
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+u, ok3 := users.First()
+collection.Dump(u, ok3)
+// #main.User {
+//   +ID   => 1      #int
+//   +Name => "Alice" #string
+// }
+// true #bool
+```
+
+Example:
+
+```go
+// empty collection
+c3 := collection.New([]int{})
+v3, ok4 := c3.First()
+collection.Dump(v3, ok4)
+// 0    #int
+// false #bool
 ```
 
 

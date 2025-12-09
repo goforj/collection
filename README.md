@@ -57,7 +57,7 @@ import "github.com/goforj/collection"
 | Name | Parent | Kind | Source |
 |------|--------|-------|--------|
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
-| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L70" target="_blank">Source</a> |
+| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L110" target="_blank">Source</a> |
 | [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L95" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L58" target="_blank">Source</a> |
@@ -185,11 +185,58 @@ collection.Dump(roleCounts)
 ## CountByValue
 
 
-CountByValue returns a map of item values to their occurrence counts. T must be comparable. Example:
+CountByValue returns a map where each distinct item in the collection is mapped to the number of times it appears.
+
+T must be comparable.
+
+Example:
 
 ```go
-counts := CountByValue(collection.New([]string{"a", "b", "a"}))
-// counts == map[string]int{"a": 2, "b": 1}
+// strings
+c1 := collection.New([]string{"a", "b", "a"})
+counts1 := collection.CountByValue(c1)
+collection.Dump(counts1)
+// #map[string]int [
+//	"a" => 2 #int
+//	"b" => 1 #int
+// ]
+```
+
+Example:
+
+```go
+// integers
+c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
+counts2 := collection.CountByValue(c2)
+collection.Dump(counts2)
+// #map[int]int [
+//	1 => 1 #int
+//	2 => 2 #int
+//	3 => 3 #int
+// ]
+```
+
+Example:
+
+```go
+// structs (comparable)
+type Point struct {
+	X int
+	Y int
+}
+
+c3 := collection.New([]Point{
+	{X: 1, Y: 1},
+	{X: 2, Y: 2},
+	{X: 1, Y: 1},
+})
+
+counts3 := collection.CountByValue(c3)
+collection.Dump(counts3)
+// #map[collection.Point]int [
+//	{X:1 Y:1} => 2 #int
+//	{X:2 Y:2} => 1 #int
+// ]
 ```
 
 

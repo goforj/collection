@@ -6,6 +6,41 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	  counts := CountByValue(collection.New([]string{"a", "b", "a"}))
-	 // counts == map[string]int{"a": 2, "b": 1}
+	// strings
+	c1 := collection.New([]string{"a", "b", "a"})
+	counts1 := collection.CountByValue(c1)
+	collection.Dump(counts1)
+	// #map[string]int [
+	//	"a" => 2 #int
+	//	"b" => 1 #int
+	// ]
+
+	// integers
+	c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
+	counts2 := collection.CountByValue(c2)
+	collection.Dump(counts2)
+	// #map[int]int [
+	//	1 => 1 #int
+	//	2 => 2 #int
+	//	3 => 3 #int
+	// ]
+
+	// structs (comparable)
+	type Point struct {
+		X int
+		Y int
+	}
+
+	c3 := collection.New([]Point{
+		{X: 1, Y: 1},
+		{X: 2, Y: 2},
+		{X: 1, Y: 1},
+	})
+
+	counts3 := collection.CountByValue(c3)
+	collection.Dump(counts3)
+	// #map[collection.Point]int [
+	//	{X:1 Y:1} => 2 #int
+	//	{X:2 Y:2} => 1 #int
+	// ]
 }

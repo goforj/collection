@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 package collection_test
 
 import (

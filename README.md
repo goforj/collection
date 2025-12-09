@@ -64,7 +64,7 @@ import "github.com/goforj/collection"
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L24" target="_blank">Source</a> |
 | [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L122" target="_blank">Source</a> |
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L80" target="_blank">Source</a> |
-| [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L9" target="_blank">Source</a> |
+| [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L63" target="_blank">Source</a> |
 | [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L13" target="_blank">Source</a> |
 | [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L9" target="_blank">Source</a> |
 | [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L50" target="_blank">Source</a> |
@@ -424,13 +424,73 @@ collection.Dump(out6.Items())
 ### Times
 
 
-Times creates a new collection by running fn\(n\) for i from 1..count. This mirrors Laravel's Collection::times\(\), which is 1\-indexed.
+Times creates a new collection by calling fn\(i\) for i = 1..count. This mirrors Laravel's Collection::times\(\), which is 1\-indexed.
+
+If count \<= 0, an empty collection is returned.
 
 Example:
 
 ```go
-c := collection.Times(5, func(i int) int { return i * 2 })
-// [2,4,6,8,10]
+// integers: double each index
+cTimes1 := collection.Times(5, func(i int) int {
+	return i * 2
+})
+collection.Dump(cTimes1.Items())
+// #[]int [
+//	0 => 2  #int
+//	1 => 4  #int
+//	2 => 6  #int
+//	3 => 8  #int
+//	4 => 10 #int
+// ]
+```
+
+Example:
+
+```go
+// generating strings
+cTimes2 := collection.Times(3, func(i int) string {
+	return fmt.Sprintf("item-%d", i)
+})
+collection.Dump(cTimes2.Items())
+// #[]string [
+//	0 => "item-1" #string
+//	1 => "item-2" #string
+//	2 => "item-3" #string
+// ]
+```
+
+Example:
+
+```go
+// struct generation
+type Point struct {
+	X int
+	Y int
+}
+
+cTimes3 := collection.Times(4, func(i int) Point {
+	return Point{X: i, Y: i * i}
+})
+collection.Dump(cTimes3.Items())
+// #[]main.Point [
+//	0 => #main.Point {
+//		+X => 1 #int
+//		+Y => 1 #int
+//	}
+//	1 => #main.Point {
+//		+X => 2 #int
+//		+Y => 4 #int
+//	}
+//	2 => #main.Point {
+//		+X => 3 #int
+//		+Y => 9 #int
+//	}
+//	3 => #main.Point {
+//		+X => 4 #int
+//		+Y => 16 #int
+//	}
+// ]
 ```
 
 

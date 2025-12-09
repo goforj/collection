@@ -109,7 +109,7 @@ import "github.com/goforj/collection"
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L32" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L46" target="_blank">Source</a> |
 | [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L29" target="_blank">Source</a> |
-| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L12" target="_blank">Source</a> |
+| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L41" target="_blank">Source</a> |
 | [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank">Source</a> |
 
 
@@ -1938,13 +1938,48 @@ Mode returns the most frequent numeric value\(s\) in the collection. If multiple
 Example:
 
 ```go
-collection.NewNumeric([]int{1, 2, 2, 3}).Mode() // → []int{2}
+// integers – single mode
+c := collection.NewNumeric([]int{1, 2, 2, 3})
+mode := c.Mode()
+collection.Dump(mode)
+// #[]int [
+//   0 => 2 #int
+// ]
 ```
 
-Example \(tie\):
+Example:
 
 ```go
-collection.NewNumeric([]int{1, 2, 1, 2}).Mode() // → []int{1, 2}
+// integers – tie for mode
+c2 := collection.NewNumeric([]int{1, 2, 1, 2})
+mode2 := c2.Mode()
+collection.Dump(mode2)
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+// ]
+```
+
+Example:
+
+```go
+// floats
+c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
+mode3 := c3.Mode()
+collection.Dump(mode3)
+// #[]float64 [
+//   0 => 1.100000 #float64
+// ]
+```
+
+Example:
+
+```go
+// empty collection
+empty := collection.NewNumeric([]int{})
+mode4 := empty.Mode()
+collection.Dump(mode4)
+// <nil>
 ```
 
 

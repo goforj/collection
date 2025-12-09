@@ -63,9 +63,8 @@ package collection
 //	//   }
 //	// ]
 func (c *Collection[T]) Map(fn func(T) T) *Collection[T] {
-	out := make([]T, len(c.items))
-	for i, v := range c.items {
-		out[i] = fn(v)
+	for i := range c.items {
+		c.items[i] = fn(c.items[i])
 	}
-	return &Collection[T]{items: out}
+	return c
 }

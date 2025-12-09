@@ -49,34 +49,26 @@ package collection
 func (c *Collection[T]) Take(n int) *Collection[T] {
 	length := len(c.items)
 
-	// Zero or empty → empty collection
+	// Empty or zero → empty collection
 	if n == 0 || length == 0 {
 		return New([]T{})
 	}
 
-	// n > 0 → take from start
+	// Positive → take from start
 	if n > 0 {
 		if n >= length {
-			out := make([]T, length)
-			copy(out, c.items)
-			return New(out)
+			// no need to allocate; just reuse original
+			return &Collection[T]{items: c.items}
 		}
-		out := make([]T, n)
-		copy(out, c.items[:n])
-		return New(out)
+		return &Collection[T]{items: c.items[:n]}
 	}
 
-	// n < 0 → take from end
-	n = -n // absolute count
+	// Negative → take from end
+	n = -n
 	if n >= length {
-		out := make([]T, length)
-		copy(out, c.items)
-		return New(out)
+		return &Collection[T]{items: c.items}
 	}
 
 	start := length - n
-	out := make([]T, n)
-	copy(out, c.items[start:])
-
-	return New(out)
+	return &Collection[T]{items: c.items[start:]}
 }

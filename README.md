@@ -89,8 +89,8 @@ import "github.com/goforj/collection"
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L70" target="_blank">Source</a> |
 | [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L62" target="_blank">Source</a> |
 | [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L60" target="_blank">Source</a> |
-| [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L8" target="_blank">Source</a> |
-| [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L24" target="_blank">Source</a> |
+| [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L64" target="_blank">Source</a> |
+| [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L80" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L8" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L86" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L46" target="_blank">Source</a> |
@@ -1656,6 +1656,74 @@ collection.Dump(names)
 Pop returns the last item and a new collection with that item removed. The original collection remains unchanged.
 
 If the collection is empty, the zero value of T is returned along with an empty collection.
+
+Example:
+
+```go
+// integers
+c := collection.New([]int{1, 2, 3})
+item, rest := c.Pop()
+collection.Dump(item, rest.Items())
+// 3 #int
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+// ]
+```
+
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"a", "b", "c"})
+item2, rest2 := c2.Pop()
+collection.Dump(item2, rest2.Items())
+// "c" #string
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+item3, rest3 := users.Pop()
+collection.Dump(item3, rest3.Items())
+// #main.User {
+//   +ID   => 2 #int
+//   +Name => "Bob" #string
+// }
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+// ]
+```
+
+Example:
+
+```go
+// empty collection
+empty := collection.New([]int{})
+item4, rest4 := empty.Pop()
+collection.Dump(item4, rest4.Items())
+// 0 #int
+// #[]int [
+// ]
+```
 
 
 

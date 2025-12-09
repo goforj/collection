@@ -76,7 +76,7 @@ import "github.com/goforj/collection"
 | [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L54" target="_blank">Source</a> |
 | [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L34" target="_blank">Source</a> |
 | [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L71" target="_blank">Source</a> |
-| [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L5" target="_blank">Source</a> |
+| [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L58" target="_blank">Source</a> |
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L18" target="_blank">Source</a> |
@@ -634,6 +634,68 @@ fmt.Println(s)
 
 
 Each runs fn for every item in the collection and returns the same collection, so it can be used in chains for side effects \(logging, debugging, etc.\).
+
+Example:
+
+```go
+// integers
+c := collection.New([]int{1, 2, 3})
+
+sum := 0
+c.Each(func(v int) {
+	sum += v
+})
+
+collection.Dump(sum)
+// 6 #int
+```
+
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"apple", "banana", "cherry"})
+
+var out []string
+c2.Each(func(s string) {
+	out = append(out, strings.ToUpper(s))
+})
+
+collection.Dump(out)
+// #[]string [
+//   0 => "APPLE"  #string
+//   1 => "BANANA" #string
+//   2 => "CHERRY" #string
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Charlie"},
+})
+
+var names []string
+users.Each(func(u User) {
+	names = append(names, u.Name)
+})
+
+collection.Dump(names)
+// #[]string [
+//   0 => "Alice"   #string
+//   1 => "Bob"     #string
+//   2 => "Charlie" #string
+// ]
+```
 
 
 

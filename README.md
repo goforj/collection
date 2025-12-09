@@ -100,7 +100,7 @@ import "github.com/goforj/collection"
 | [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L52" target="_blank">Source</a> |
 | [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L24" target="_blank">Source</a> |
 | [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L52" target="_blank">Source</a> |
-| [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L10" target="_blank">Source</a> |
+| [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L52" target="_blank">Source</a> |
 | [Unique](<#Collection[T].Unique>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/unique.go#L13" target="_blank">Source</a> |
 | [type Number](<#Number>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L9-L13" target="_blank">Source</a> |
 | [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L29-L31" target="_blank">Source</a> |
@@ -2429,12 +2429,62 @@ fmt.Println(out1)
 ### Transform
 
 
-Transform applies fn to every item \*in place\* and replaces the values with the returned values. This matches Laravel's transform\(\), which mutates the collection instead of returning a new one. Example:
+Transform applies fn to every item \*in place\*, mutating the collection.
+
+This mirrors Laravel's transform\(\), which modifies the underlying values instead of returning a new collection.
+
+Example:
 
 ```go
-c := collection.New([]int{1,2,3})
-c.Transform(func(v int) int { return v * 2 })
-// c is now [2,4,6]
+// integers
+c1 := collection.New([]int{1, 2, 3})
+c1.Transform(func(v int) int { return v * 2 })
+collection.Dump(c1.Items())
+// #[]int [
+//	0 => 2 #int
+//	1 => 4 #int
+//	2 => 6 #int
+// ]
+```
+
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"a", "b", "c"})
+c2.Transform(func(s string) string { return strings.ToUpper(s) })
+collection.Dump(c2.Items())
+// #[]string [
+//	0 => "A" #string
+//	1 => "B" #string
+//	2 => "C" #string
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+c3 := collection.New([]User{
+	{ID: 1, Name: "alice"},
+	{ID: 2, Name: "bob"},
+})
+
+c3.Transform(func(u User) User {
+	u.Name = strings.ToUpper(u.Name)
+	return u
+})
+
+collection.Dump(c3.Items())
+// #[]collection.User [
+//	0 => {ID:1 Name:"ALICE"} #collection.User
+//	1 => {ID:2 Name:"BOB"}   #collection.User
+// ]
 ```
 
 

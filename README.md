@@ -82,7 +82,7 @@ import "github.com/goforj/collection"
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
-| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L42" target="_blank">Source</a> |
+| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L88" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
 | [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
@@ -1001,6 +1001,61 @@ collection.Dump(empty4)
 
 
 Items returns the underlying slice of items.
+
+Example:
+
+```go
+// integers
+c := collection.New([]int{1, 2, 3})
+items := c.Items()
+collection.Dump(items)
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"apple", "banana"})
+items2 := c2.Items()
+collection.Dump(items2)
+// #[]string [
+//   0 => "apple" #string
+//   1 => "banana" #string
+// ]
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+out := users.Items()
+collection.Dump(out)
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+// ]
+```
 
 
 

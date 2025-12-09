@@ -1,0 +1,43 @@
+//go:build ignore
+// +build ignore
+
+package main
+
+import "github.com/goforj/collection"
+
+func main() {
+	// take first 3
+	c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
+	out1 := c1.Take(3)
+	collection.Dump(out1.Items())
+	// #[]int [
+	//	0 => 0 #int
+	//	1 => 1 #int
+	//	2 => 2 #int
+	// ]
+
+	// take last 2 (negative n)
+	c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
+	out2 := c2.Take(-2)
+	collection.Dump(out2.Items())
+	// #[]int [
+	//	0 => 4 #int
+	//	1 => 5 #int
+	// ]
+
+	// n exceeds length → whole collection
+	c3 := collection.New([]int{10, 20})
+	out3 := c3.Take(10)
+	collection.Dump(out3.Items())
+	// #[]int [
+	//	0 => 10 #int
+	//	1 => 20 #int
+	// ]
+
+	// zero → empty
+	c4 := collection.New([]int{1, 2, 3})
+	out4 := c4.Take(0)
+	collection.Dump(out4.Items())
+	// #[]int [
+	// ]
+}

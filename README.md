@@ -95,7 +95,7 @@ import "github.com/goforj/collection"
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L86" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
-| [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L12" target="_blank">Source</a> |
+| [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L10" target="_blank">Source</a> |
 | [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L21" target="_blank">Source</a> |
 | [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L38" target="_blank">Source</a> |
@@ -2106,15 +2106,61 @@ collection.Dump(sortedUsers.Items())
 ### Take
 
 
-Take returns a new collection containing the first \`n\` items when n \> 0, or the last \`|n|\` items when n \< 0. If n exceeds the collection length, the entire slice \(or nothing\) is returned.
+Take returns a new collection containing the first \`n\` items when n \> 0, or the last \`|n|\` items when n \< 0.
+
+If n exceeds the collection length, the entire collection is returned. If n == 0, an empty collection is returned.
 
 Mirrors Laravel's take\(\) semantics.
 
-Examples:
+Example:
 
 ```go
-New([]int{0,1,2,3,4,5}).Take(3)  → [0,1,2]
-New([]int{0,1,2,3,4,5}).Take(-2) → [4,5]
+// take first 3
+c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
+out1 := c1.Take(3)
+collection.Dump(out1.Items())
+// #[]int [
+//	0 => 0 #int
+//	1 => 1 #int
+//	2 => 2 #int
+// ]
+```
+
+Example:
+
+```go
+// take last 2 (negative n)
+c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
+out2 := c2.Take(-2)
+collection.Dump(out2.Items())
+// #[]int [
+//	0 => 4 #int
+//	1 => 5 #int
+// ]
+```
+
+Example:
+
+```go
+// n exceeds length → whole collection
+c3 := collection.New([]int{10, 20})
+out3 := c3.Take(10)
+collection.Dump(out3.Items())
+// #[]int [
+//	0 => 10 #int
+//	1 => 20 #int
+// ]
+```
+
+Example:
+
+```go
+// zero → empty
+c4 := collection.New([]int{1, 2, 3})
+out4 := c4.Take(0)
+collection.Dump(out4.Items())
+// #[]int [
+// ]
 ```
 
 

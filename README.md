@@ -78,7 +78,7 @@ import "github.com/goforj/collection"
 | [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L71" target="_blank">Source</a> |
 | [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L58" target="_blank">Source</a> |
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
-| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L25" target="_blank">Source</a> |
+| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L59" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
@@ -774,24 +774,70 @@ collection.Dump(users.Items())
 ### FindWhere
 
 
-FindWhere returns the first item in the collection for which the provided predicate function returns true. This method is an alias for FirstWhere\(fn\) and is provided for ergonomic parity with functional libraries and languages such as JavaScript, Rust, C\#, and Python.
+FindWhere returns the first item in the collection for which the provided predicate function returns true. This is an alias for FirstWhere\(fn\) and exists for ergonomic parity with functional languages \(JavaScript, Rust, C\#, Python\) where developers expect a “find” helper.
 
-FindWhere improves discoverability for developers who naturally search for a "find" helper when retrieving an element that matches a condition.
-
-Examples:
+Example:
 
 ```go
-nums := New([]int{1, 2, 3, 4, 5})
+// simple match
+nums := collection.New([]int{1, 2, 3, 4, 5})
 
-v, ok := nums.FindWhere(func(n int) bool {
-    return n == 3
+v1, ok1 := nums.FindWhere(func(n int) bool {
+	return n == 3
 })
-// v = 3, ok = true
+collection.Dump(v1, ok1)
+// 3    #int
+// true #bool
+```
 
-v, ok = nums.FindWhere(func(n int) bool {
-    return n > 10
+Example:
+
+```go
+// no match
+v2, ok2 := nums.FindWhere(func(n int) bool {
+	return n > 10
 })
-// v = 0, ok = false
+collection.Dump(v2, ok2)
+// 0     #int
+// false #bool
+```
+
+Example:
+
+```go
+// structs
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Charlie"},
+})
+
+u, ok3 := users.FindWhere(func(u User) bool {
+	return u.ID == 2
+})
+collection.Dump(u, ok3)
+// #collection.User {
+//   +ID    => 2   #int
+//   +Name  => "Bob" #string
+// }
+// true #bool
+```
+
+Example:
+
+```go
+// empty collection
+empty := collection.New([]int{})
+
+v4, ok4 := empty.FindWhere(func(n int) bool { return n == 1 })
+collection.Dump(v4, ok4)
+// 0     #int
+// false #bool
 ```
 
 

@@ -107,7 +107,7 @@ import "github.com/goforj/collection"
 | [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L28" target="_blank">Source</a> |
 | [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L17" target="_blank">Source</a> |
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L32" target="_blank">Source</a> |
-| [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L14" target="_blank">Source</a> |
+| [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L46" target="_blank">Source</a> |
 | [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L10" target="_blank">Source</a> |
 | [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L12" target="_blank">Source</a> |
 | [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank">Source</a> |
@@ -1669,8 +1669,49 @@ Odd count → middle value Even count → average of the two middle values
 Example:
 
 ```go
+// odd number of items
 c := collection.NewNumeric([]int{3, 1, 2})
-median, ok := c.Median()   // → 2, true
+
+median1, ok1 := c.Median()
+collection.Dump(median1, ok1)
+// 2.000000 #float64
+// true     #bool
+```
+
+Example:
+
+```go
+// even number of items
+c2 := collection.NewNumeric([]int{10, 2, 4, 6})
+
+median2, ok2 := c2.Median()
+collection.Dump(median2, ok2)
+// 5.000000 #float64
+// true     #bool
+```
+
+Example:
+
+```go
+// floating-point values
+c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
+
+median3, ok3 := c3.Median()
+collection.Dump(median3, ok3)
+// 3.300000 #float64
+// true     #bool
+```
+
+Example:
+
+```go
+// empty numeric collection
+c4 := collection.NewNumeric([]int{})
+
+median4, ok4 := c4.Median()
+collection.Dump(median4, ok4)
+// 0.000000 #float64
+// false    #bool
 ```
 
 

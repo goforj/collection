@@ -6,12 +6,21 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	  c := collection.NewNumeric([]int{1, 2, 3})
-	  total := c.Sum()
-	Example (float):
-	  c := collection.NewNumeric([]float64{1.5, 2.5})
-	  total := c.Sum()
-	  // total == 6
+	// integers
+	c := collection.NewNumeric([]int{1, 2, 3})
+	total := c.Sum()
+	collection.Dump(total)
+	// 6 #int
 
-	  // total == 4.0
+	// floats
+	c2 := collection.NewNumeric([]float64{1.5, 2.5})
+	total2 := c2.Sum()
+	collection.Dump(total2)
+	// 4.000000 #float64
+
+	// empty collection
+	c3 := collection.NewNumeric([]int{})
+	total3 := c3.Sum()
+	collection.Dump(total3)
+	// 0 #int
 }

@@ -110,7 +110,7 @@ import "github.com/goforj/collection"
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L46" target="_blank">Source</a> |
 | [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L29" target="_blank">Source</a> |
 | [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L41" target="_blank">Source</a> |
-| [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L15" target="_blank">Source</a> |
+| [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L26" target="_blank">Source</a> |
 
 
 <a name="CountBy"></a>
@@ -2530,17 +2530,31 @@ Sum returns the sum of all numeric items in the NumericCollection. If the collec
 Example:
 
 ```go
+// integers
 c := collection.NewNumeric([]int{1, 2, 3})
 total := c.Sum()
-// total == 6
+collection.Dump(total)
+// 6 #int
 ```
 
-Example \(float\):
+Example:
 
 ```go
-c := collection.NewNumeric([]float64{1.5, 2.5})
-total := c.Sum()
-// total == 4.0
+// floats
+c2 := collection.NewNumeric([]float64{1.5, 2.5})
+total2 := c2.Sum()
+collection.Dump(total2)
+// 4.000000 #float64
+```
+
+Example:
+
+```go
+// empty collection
+c3 := collection.NewNumeric([]int{})
+total3 := c3.Sum()
+collection.Dump(total3)
+// 0 #int
 ```
 
 

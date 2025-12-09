@@ -4,7 +4,6 @@ import "github.com/goforj/collection"
 
 func main() {
 
-
 	  c := collection.New([]int{10, 20})
 	  s := c.DumpStr()
 	  fmt.Println(s)

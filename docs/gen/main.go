@@ -269,7 +269,7 @@ func writeMain(base, funcName string, list []Example) error {
 
 	buf.WriteString("package main\n\n")
 	buf.WriteString(`import "github.com/goforj/collection"` + "\n\n")
-	buf.WriteString("func main() {\n\n")
+	buf.WriteString("func main() {\n")
 
 	for _, ex := range list {
 

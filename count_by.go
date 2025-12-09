@@ -2,33 +2,63 @@ package collection
 
 // CountBy returns a map of keys extracted by fn to their occurrence counts.
 // K must be comparable.
-// Example:
-// 	type User struct {
-// 	    Name string
-// 	    Role string
-// 	}
 //
-// 	users := collection.New([]User{
-// 	    {Name: "Alice", Role: "admin"},
-// 	    {Name: "Bob", Role: "user"},
-// 	    {Name: "Charlie", Role: "admin"},
-// 	    {Name: "David", Role: "user"},
-// 	    {Name: "Eve", Role: "admin"},
-// 	    {Name: "Frank", Role: "user"},
-// 	    {Name: "Grace", Role: "user"},
-// 	    {Name: "Heidi", Role: "user"},
-// 	})
-// 	counts := CountBy(users, func(u User) string { return u.Role == "admin" })
-// 	// map[string]int{"admin": 3, "user": 5}
+// Example:
+//	// integers
+//	c := collection.New([]int{1, 2, 2, 3, 3, 3})
+//	counts := collection.CountBy(c, func(v int) int {
+//		return v
+//	})
+//	collection.Dump(counts)
+//	// map[int]int {
+//	//   1: 1 #int
+//	//   2: 2 #int
+//	//   3: 3 #int
+//	// }
+//
+// Example:
+//	// strings
+//	c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
+//	counts2 := collection.CountBy(c2, func(v string) string {
+//		return v
+//	})
+//	collection.Dump(counts2)
+//	// map[string]int {
+//	//   "apple":  2 #int
+//	//   "banana": 2 #int
+//	//   "cherry": 1 #int
+//	// }
+//
+// Example:
+//	// structs
+//	type User struct {
+//		Name string
+//		Role string
+//	}
+//
+//	users := collection.New([]User{
+//		{Name: "Alice", Role: "admin"},
+//		{Name: "Bob",   Role: "user"},
+//		{Name: "Carol", Role: "admin"},
+//		{Name: "Dave",  Role: "user"},
+//		{Name: "Eve",   Role: "admin"},
+//	})
+//
+//	roleCounts := collection.CountBy(users, func(u User) string {
+//		return u.Role
+//	})
+//
+//	collection.Dump(roleCounts)
+//	// map[string]int {
+//	//   "admin": 3 #int
+//	//   "user":  2 #int
+//	// }
 func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 	items := c.Items()
 	result := make(map[K]int, len(items))
-
 	for _, v := range items {
-		key := fn(v)
-		result[key]++
+		result[fn(v)]++
 	}
-
 	return result
 }
 

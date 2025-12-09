@@ -4,7 +4,6 @@ import "github.com/goforj/collection"
 
 func main() {
 
-
 	  c := collection.New([]int{1, 2, 3})
 	  out := c.Dump()
 	Dump is typically used while chaining:

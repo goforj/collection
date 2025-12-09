@@ -3,7 +3,6 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-
 	// int
 	c := collection.NewNumeric([]int{2, 4, 6})
 	collection.Dump(c.Avg())

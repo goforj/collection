@@ -56,8 +56,8 @@ import "github.com/goforj/collection"
 
 | Name | Parent | Kind | Source |
 |------|--------|-------|--------|
-| [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L23" target="_blank">Source</a> |
-| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L40" target="_blank">Source</a> |
+| [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
+| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L70" target="_blank">Source</a> |
 | [Dd](<#Dd>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L96" target="_blank">Source</a> |
 | [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L85" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
@@ -73,7 +73,7 @@ import "github.com/goforj/collection"
 | [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L22" target="_blank">Source</a> |
 | [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L40" target="_blank">Source</a> |
-| [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L6" target="_blank">Source</a> |
+| [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L8" target="_blank">Source</a> |
 | [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L40" target="_blank">Source</a> |
 | [DdStr](<#Collection[T].DdStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L72" target="_blank">Source</a> |
 | [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L24" target="_blank">Source</a> |
@@ -119,26 +119,66 @@ import "github.com/goforj/collection"
 ## CountBy
 
 
-CountBy returns a map of keys extracted by fn to their occurrence counts. K must be comparable. Example:
+CountBy returns a map of keys extracted by fn to their occurrence counts. K must be comparable.
+
+Example:
 
 ```go
+// integers
+c := collection.New([]int{1, 2, 2, 3, 3, 3})
+counts := collection.CountBy(c, func(v int) int {
+	return v
+})
+collection.Dump(counts)
+// map[int]int {
+//   1: 1 #int
+//   2: 2 #int
+//   3: 3 #int
+// }
+```
+
+Example:
+
+```go
+// strings
+c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
+counts2 := collection.CountBy(c2, func(v string) string {
+	return v
+})
+collection.Dump(counts2)
+// map[string]int {
+//   "apple":  2 #int
+//   "banana": 2 #int
+//   "cherry": 1 #int
+// }
+```
+
+Example:
+
+```go
+// structs
 type User struct {
-    Name string
-    Role string
+	Name string
+	Role string
 }
 
 users := collection.New([]User{
-    {Name: "Alice", Role: "admin"},
-    {Name: "Bob", Role: "user"},
-    {Name: "Charlie", Role: "admin"},
-    {Name: "David", Role: "user"},
-    {Name: "Eve", Role: "admin"},
-    {Name: "Frank", Role: "user"},
-    {Name: "Grace", Role: "user"},
-    {Name: "Heidi", Role: "user"},
+	{Name: "Alice", Role: "admin"},
+	{Name: "Bob",   Role: "user"},
+	{Name: "Carol", Role: "admin"},
+	{Name: "Dave",  Role: "user"},
+	{Name: "Eve",   Role: "admin"},
 })
-counts := CountBy(users, func(u User) string { return u.Role == "admin" })
-// map[string]int{"admin": 3, "user": 5}
+
+roleCounts := collection.CountBy(users, func(u User) string {
+	return u.Role
+})
+
+collection.Dump(roleCounts)
+// map[string]int {
+//   "admin": 3 #int
+//   "user":  2 #int
+// }
 ```
 
 
@@ -519,7 +559,9 @@ collection.Dump(hasBob)
 Count returns the total number of items in the collection. Example:
 
 ```go
-collection.New([]int{1, 2, 3, 4}).Count() // 4
+count := collection.New([]int{1, 2, 3, 4}).Count()
+collection.Dump(count)
+// 4 #int
 ```
 
 

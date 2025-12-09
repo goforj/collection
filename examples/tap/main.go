@@ -4,7 +4,6 @@ import "github.com/goforj/collection"
 
 func main() {
 
-
 	  captured := []int{}
 	  c := New([]int{3,1,2}).
 	      Sort(func(a,b int) bool { return a < b }).  // → [1,2,3]

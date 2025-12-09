@@ -3,7 +3,6 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-
 	// integers
 	c := collection.New([]int{1, 2, 3, 4, 5})
 	hasEven := c.Contains(func(v int) bool {

@@ -3,7 +3,6 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-
 	  c := collection.NewNumeric([]int{1, 2, 3})
 	  total := c.Sum()
 	Example (float):

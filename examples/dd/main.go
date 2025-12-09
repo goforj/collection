@@ -4,7 +4,6 @@ import "github.com/goforj/collection"
 
 func main() {
 
-
 	  c := collection.New([]string{"a", "b"})
 	  c.Dd()    // Prints the dump and exits the program
 

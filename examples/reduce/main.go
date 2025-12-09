@@ -4,7 +4,6 @@ import "github.com/goforj/collection"
 
 func main() {
 
-
 	sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 		return acc + n
 	})

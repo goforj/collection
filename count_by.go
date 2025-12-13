@@ -38,10 +38,10 @@ package collection
 //
 //	users := collection.New([]User{
 //		{Name: "Alice", Role: "admin"},
-//		{Name: "Bob",   Role: "user"},
+//		{Name: "Bob", Role: "user"},
 //		{Name: "Carol", Role: "admin"},
-//		{Name: "Dave",  Role: "user"},
-//		{Name: "Eve",   Role: "admin"},
+//		{Name: "Dave", Role: "user"},
+//		{Name: "Eve", Role: "admin"},
 //	})
 //
 //	roleCounts := collection.CountBy(users, func(u User) string {

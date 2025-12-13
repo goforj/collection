@@ -159,10 +159,10 @@ type User struct {
 
 users := collection.New([]User{
 	{Name: "Alice", Role: "admin"},
-	{Name: "Bob",   Role: "user"},
+	{Name: "Bob", Role: "user"},
 	{Name: "Carol", Role: "admin"},
-	{Name: "Dave",  Role: "user"},
-	{Name: "Eve",   Role: "admin"},
+	{Name: "Dave", Role: "user"},
+	{Name: "Eve", Role: "admin"},
 })
 
 roleCounts := collection.CountBy(users, func(u User) string {
@@ -665,8 +665,8 @@ type User struct {
 
 c3 := collection.New([]User{
 	{Name: "Alice", Admin: false},
-	{Name: "Bob",   Admin: false},
-	{Name: "Eve",   Admin: true},
+	{Name: "Bob", Admin: false},
+	{Name: "Eve", Admin: true},
 	{Name: "Mallory", Admin: false},
 })
 
@@ -1202,14 +1202,14 @@ Example: integers
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
 v, ok := nums.FirstWhere(func(n int) bool {
-    return n%2 == 0
+	return n%2 == 0
 })
 collection.Dump(v, ok)
 // 2 #int
 // true #bool
 
 v, ok = nums.FirstWhere(func(n int) bool {
-    return n > 10
+	return n > 10
 })
 collection.Dump(v, ok)
 // 0 #int

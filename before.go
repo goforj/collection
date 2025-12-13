@@ -35,8 +35,8 @@ package collection
 //
 //	c3 := collection.New([]User{
 //		{Name: "Alice", Admin: false},
-//		{Name: "Bob",   Admin: false},
-//		{Name: "Eve",   Admin: true},
+//		{Name: "Bob", Admin: false},
+//		{Name: "Eve", Admin: true},
 //		{Name: "Mallory", Admin: false},
 //	})
 //

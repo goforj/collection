@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{10, 20, 30})
 
 	v, ok := c.First()

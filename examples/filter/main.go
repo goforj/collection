@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4})
 	c.Filter(func(v int) bool {
 		return v%2 == 0
@@ -20,7 +20,7 @@ func main() {
 	//   1 => 4 #int
 	// ]
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
 	c2.Filter(func(v string) bool {
 		return strings.HasPrefix(v, "a")
@@ -31,7 +31,7 @@ func main() {
 	//   1 => "avocado" #string
 	// ]
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string

@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers – single mode
+	// Example: integers – single mode
 	c := collection.NewNumeric([]int{1, 2, 2, 3})
 	mode := c.Mode()
 	collection.Dump(mode)
@@ -14,7 +14,7 @@ func main() {
 	//   0 => 2 #int
 	// ]
 
-	// integers – tie for mode
+	// Example: integers – tie for mode
 	c2 := collection.NewNumeric([]int{1, 2, 1, 2})
 	mode2 := c2.Mode()
 	collection.Dump(mode2)
@@ -23,7 +23,7 @@ func main() {
 	//   1 => 2 #int
 	// ]
 
-	// floats
+	// Example: floats
 	c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
 	mode3 := c3.Mode()
 	collection.Dump(mode3)
@@ -31,7 +31,7 @@ func main() {
 	//   0 => 1.100000 #float64
 	// ]
 
-	// empty collection
+	// Example: integers - empty collection
 	empty := collection.NewNumeric([]int{})
 	mode4 := empty.Mode()
 	collection.Dump(mode4)

@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// capture intermediate state during a chain
+	// Example: integers - capture intermediate state during a chain
 	captured1 := []int{}
 	c1 := collection.New([]int{3, 1, 2}).
 		Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
@@ -21,7 +21,7 @@ func main() {
 	// c1 → #[]int [2,3]
 	// captured1 → #[]int [1,2,3]
 
-	// tap for debugging without changing flow
+	// Example: integers - tap for debugging without changing flow
 	c2 := collection.New([]int{10, 20, 30}).
 		Tap(func(col *collection.Collection[int]) {
 			collection.Dump(col.Items())
@@ -30,7 +30,7 @@ func main() {
 
 	collection.Dump(c2.Items()) // ensures c2 is used
 
-	// Tap with struct collection
+	// Example: structs - Tap with struct collection
 	type User struct {
 		ID   int
 		Name string

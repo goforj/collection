@@ -6,8 +6,7 @@ package collection
 // This is useful for inline transformations, aggregations,
 // or "exiting" a chain with a non-collection value.
 //
-// Example:
-//	// integers – computing a sum
+// Example: integers – computing a sum
 //	c := collection.New([]int{1, 2, 3})
 //	sum := c.Pipe(func(col *collection.Collection[int]) any {
 //		total := 0

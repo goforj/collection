@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// integers
+	// Example: integers
 	c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
 	out1 := c1.Unique(func(a, b int) bool { return a == b })
 	collection.Dump(out1.Items())
@@ -21,7 +21,7 @@ func main() {
 	//	4 => 5 #int
 	// ]
 
-	// strings (case-insensitive uniqueness)
+	// Example: strings (case-insensitive uniqueness)
 	c2 := collection.New([]string{"A", "a", "B", "b", "A"})
 	out2 := c2.Unique(func(a, b string) bool {
 		return strings.EqualFold(a, b)
@@ -32,7 +32,7 @@ func main() {
 	//	1 => "B" #string
 	// ]
 
-	// structs (unique by ID)
+	// Example: structs (unique by ID)
 	type User struct {
 		ID   int
 		Name string

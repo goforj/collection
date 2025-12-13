@@ -3,8 +3,7 @@ package collection
 // Multiply creates `n` copies of all items in the collection
 // and returns a new collection.
 //
-// Example:
-//	// integers
+// Example: integers
 //	ints := collection.New([]int{1, 2})
 //	out := ints.Multiply(3)
 //	collection.Dump(out.Items())

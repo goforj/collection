@@ -6,8 +6,7 @@ package collection
 // Tap does NOT modify the collection itself; it simply exposes the current state
 // during a fluent chain.
 //
-// Example:
-//	// capture intermediate state during a chain
+// Example: integers - capture intermediate state during a chain
 //	captured1 := []int{}
 //	c1 := collection.New([]int{3, 1, 2}).
 //		Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
@@ -22,8 +21,7 @@ package collection
 //	// c1 → #[]int [2,3]
 //	// captured1 → #[]int [1,2,3]
 //
-// Example:
-//	// tap for debugging without changing flow
+// Example: integers - tap for debugging without changing flow
 //	c2 := collection.New([]int{10, 20, 30}).
 //		Tap(func(col *collection.Collection[int]) {
 //			collection.Dump(col.Items())
@@ -32,8 +30,7 @@ package collection
 //
 //	collection.Dump(c2.Items()) // ensures c2 is used
 //
-// Example:
-//	// Tap with struct collection
+// Example: structs - Tap with struct collection
 //	type User struct {
 //		ID   int
 //		Name string

@@ -4,8 +4,7 @@ package collection
 // If fn is nil, LastWhere returns the final element in the underlying slice.
 // If the collection is empty or no element matches, ok will be false.
 //
-// Example:
-//	// integers with predicate
+// Example: integers
 //	c := collection.New([]int{1, 2, 3, 4})
 //
 //	v, ok := c.LastWhere(func(v int, i int) bool {

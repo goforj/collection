@@ -6,8 +6,7 @@ package collection
 // If the collection is empty, the zero value of T is returned along with
 // an empty collection.
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2, 3})
 //	item, rest := c.Pop()
 //	collection.Dump(item, rest.Items())
@@ -17,8 +16,7 @@ package collection
 //	//   1 => 2 #int
 //	// ]
 //
-// Example:
-//	// strings
+// Example: strings
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	item2, rest2 := c2.Pop()
 //	collection.Dump(item2, rest2.Items())
@@ -28,8 +26,7 @@ package collection
 //	//   1 => "b" #string
 //	// ]
 //
-// Example:
-//	// structs
+// Example: structs
 //	type User struct {
 //		ID   int
 //		Name string

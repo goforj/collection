@@ -1,7 +1,7 @@
 package collection
 
 // Count returns the total number of items in the collection.
-// Example:
+// Example: integers
 //	count := collection.New([]int{1, 2, 3, 4}).Count()
 //	collection.Dump(count)
 //	// 4 #int

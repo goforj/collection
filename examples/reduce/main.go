@@ -6,21 +6,21 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Sum integers
+	// Example: integers - sum
 	sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 		return acc + n
 	})
 	collection.Dump(sum)
 	// 6 #int
 
-	// Concatenate strings
+	// Example: strings
 	joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
 		return acc + s
 	})
 	collection.Dump(joined)
 	// "abc" #string
 
-	// Aggregate struct fields
+	// Example: structs
 	type Stats struct {
 		Count int
 		Sum   int

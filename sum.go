@@ -3,22 +3,19 @@ package collection
 // Sum returns the sum of all numeric items in the NumericCollection.
 // If the collection is empty, Sum returns the zero value of T.
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.NewNumeric([]int{1, 2, 3})
 //	total := c.Sum()
 //	collection.Dump(total)
 //	// 6 #int
 //
-// Example:
-//	// floats
+// Example: floats
 //	c2 := collection.NewNumeric([]float64{1.5, 2.5})
 //	total2 := c2.Sum()
 //	collection.Dump(total2)
 //	// 4.000000 #float64
 //
-// Example:
-//	// empty collection
+// Example: integers - empty collection
 //	c3 := collection.NewNumeric([]int{})
 //	total3 := c3.Sum()
 //	collection.Dump(total3)

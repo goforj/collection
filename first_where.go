@@ -7,7 +7,7 @@ package collection
 // This method is equivalent to Laravel's collection->first(fn) and mirrors
 // the behavior found in functional collections in other languages.
 //
-// Examples:
+// Example: integers
 //
 //   nums := New([]int{1, 2, 3, 4, 5})
 //   v, ok := nums.FirstWhere(func(n int) bool {

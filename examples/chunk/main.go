@@ -6,7 +6,6 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
 	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 	collection.Dump(c)
 
@@ -24,7 +23,7 @@ func main() {
 	//  ]
 	//]
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string
@@ -40,7 +39,7 @@ func main() {
 	userChunks := collection.New(users).Chunk(2)
 	collection.Dump(userChunks)
 
-	// Example Dump output will show [][]User grouped in size-2 chunks, e.g.:
+	// Dump output will show [][]User grouped in size-2 chunks, e.g.:
 	// #[][]main.User [
 	//  0 => #[]main.User [
 	//    0 => #main.User {

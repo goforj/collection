@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{1, 2, 3})
 
 	mapped := c.Map(func(v int) int {
@@ -23,7 +23,7 @@ func main() {
 	//   2 => 30 #int
 	// ]
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"apple", "banana", "cherry"})
 
 	upper := c2.Map(func(s string) string {
@@ -37,7 +37,7 @@ func main() {
 	//   2 => "CHERRY" #string
 	// ]
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string

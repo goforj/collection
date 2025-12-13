@@ -12,8 +12,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 // Dump prints items with godump and returns the same collection.
 // This is a no-op on the collection itself and never panics.
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2, 3})
 //	c.Dump()
 //	// #[]int [

@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.NewNumeric([]int{3, 1, 2})
 
 	max1, ok1 := c.Max()
@@ -14,7 +14,7 @@ func main() {
 	// 3    #int
 	// true #bool
 
-	// floats
+	// Example: floats
 	c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
 
 	max2, ok2 := c2.Max()
@@ -22,7 +22,7 @@ func main() {
 	// 9.200000 #float64
 	// true     #bool
 
-	// empty numeric collection
+	// Example: empty numeric collection
 	c3 := collection.NewNumeric([]int{})
 
 	max3, ok3 := c3.Max()

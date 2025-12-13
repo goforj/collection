@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{1, 2, 2, 3, 3, 3})
 	counts := collection.CountBy(c, func(v int) int {
 		return v
@@ -18,7 +18,7 @@ func main() {
 	//   3: 3 #int
 	// }
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
 	counts2 := collection.CountBy(c2, func(v string) string {
 		return v
@@ -30,7 +30,7 @@ func main() {
 	//   "cherry": 1 #int
 	// }
 
-	// structs
+	// Example: structs
 	type User struct {
 		Name string
 		Role string

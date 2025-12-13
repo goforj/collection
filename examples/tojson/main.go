@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// strings → pretty JSON
+	// Example: strings - pretty JSON
 	pj1 := collection.New([]string{"a", "b"})
 	out1, _ := pj1.ToJSON()
 	fmt.Println(out1)

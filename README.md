@@ -56,61 +56,61 @@ import "github.com/goforj/collection"
 
 | Name | Parent | Kind | Source |
 |------|--------|-------|--------|
-| [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
-| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L110" target="_blank">Source</a> |
-| [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L95" target="_blank">Source</a> |
+| [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L53" target="_blank">Source</a> |
+| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L105" target="_blank">Source</a> |
+| [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L94" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
-| [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L58" target="_blank">Source</a> |
+| [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L56" target="_blank">Source</a> |
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L24" target="_blank">Source</a> |
-| [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L122" target="_blank">Source</a> |
-| [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L80" target="_blank">Source</a> |
-| [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L63" target="_blank">Source</a> |
+| [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L120" target="_blank">Source</a> |
+| [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L74" target="_blank">Source</a> |
+| [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L60" target="_blank">Source</a> |
 | [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L13" target="_blank">Source</a> |
 | [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L9" target="_blank">Source</a> |
-| [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L50" target="_blank">Source</a> |
+| [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L48" target="_blank">Source</a> |
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L49" target="_blank">Source</a> |
-| [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
+| [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L64" target="_blank">Source</a> |
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L18" target="_blank">Source</a> |
-| [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L40" target="_blank">Source</a> |
+| [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L38" target="_blank">Source</a> |
 | [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L8" target="_blank">Source</a> |
-| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L54" target="_blank">Source</a> |
-| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L34" target="_blank">Source</a> |
-| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L71" target="_blank">Source</a> |
-| [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L58" target="_blank">Source</a> |
-| [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
-| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L59" target="_blank">Source</a> |
-| [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
+| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L53" target="_blank">Source</a> |
+| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L33" target="_blank">Source</a> |
+| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L70" target="_blank">Source</a> |
+| [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L55" target="_blank">Source</a> |
+| [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L56" target="_blank">Source</a> |
+| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L58" target="_blank">Source</a> |
+| [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L50" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L23" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
-| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L88" target="_blank">Source</a> |
-| [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
-| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
-| [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
+| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L85" target="_blank">Source</a> |
+| [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L52" target="_blank">Source</a> |
+| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L80" target="_blank">Source</a> |
+| [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L62" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L70" target="_blank">Source</a> |
-| [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L62" target="_blank">Source</a> |
-| [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L60" target="_blank">Source</a> |
-| [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L64" target="_blank">Source</a> |
-| [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L167" target="_blank">Source</a> |
-| [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L74" target="_blank">Source</a> |
-| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L86" target="_blank">Source</a> |
-| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
-| [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
-| [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
-| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
-| [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L52" target="_blank">Source</a> |
-| [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L24" target="_blank">Source</a> |
-| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L52" target="_blank">Source</a> |
-| [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L52" target="_blank">Source</a> |
-| [Unique](<#Collection[T].Unique>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/unique.go#L56" target="_blank">Source</a> |
+| [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L61" target="_blank">Source</a> |
+| [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L59" target="_blank">Source</a> |
+| [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L61" target="_blank">Source</a> |
+| [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L164" target="_blank">Source</a> |
+| [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L70" target="_blank">Source</a> |
+| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L83" target="_blank">Source</a> |
+| [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L46" target="_blank">Source</a> |
+| [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L64" target="_blank">Source</a> |
+| [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L45" target="_blank">Source</a> |
+| [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L31" target="_blank">Source</a> |
+| [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L49" target="_blank">Source</a> |
+| [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L23" target="_blank">Source</a> |
+| [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L50" target="_blank">Source</a> |
+| [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L49" target="_blank">Source</a> |
+| [Unique](<#Collection[T].Unique>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/unique.go#L53" target="_blank">Source</a> |
 | [type Number](<#Number>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L9-L13" target="_blank">Source</a> |
 | [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L29-L31" target="_blank">Source</a> |
 | [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
-| [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L17" target="_blank">Source</a> |
-| [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L32" target="_blank">Source</a> |
-| [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L46" target="_blank">Source</a> |
-| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L29" target="_blank">Source</a> |
-| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L41" target="_blank">Source</a> |
-| [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L26" target="_blank">Source</a> |
+| [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L15" target="_blank">Source</a> |
+| [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L29" target="_blank">Source</a> |
+| [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L42" target="_blank">Source</a> |
+| [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L26" target="_blank">Source</a> |
+| [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L37" target="_blank">Source</a> |
+| [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L23" target="_blank">Source</a> |
 
 
 <a name="CountBy"></a>
@@ -119,10 +119,9 @@ import "github.com/goforj/collection"
 
 CountBy returns a map of keys extracted by fn to their occurrence counts. K must be comparable.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 2, 3, 3, 3})
 counts := collection.CountBy(c, func(v int) int {
 	return v
@@ -135,10 +134,9 @@ collection.Dump(counts)
 // }
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
 counts2 := collection.CountBy(c2, func(v string) string {
 	return v
@@ -151,10 +149,9 @@ collection.Dump(counts2)
 // }
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	Name string
 	Role string
@@ -189,10 +186,9 @@ CountByValue returns a map where each distinct item in the collection is mapped 
 
 T must be comparable.
 
-Example:
+Example: strings
 
 ```go
-// strings
 c1 := collection.New([]string{"a", "b", "a"})
 counts1 := collection.CountByValue(c1)
 collection.Dump(counts1)
@@ -202,10 +198,9 @@ collection.Dump(counts1)
 // ]
 ```
 
-Example:
+Example: integers
 
 ```go
-// integers
 c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
 counts2 := collection.CountByValue(c2)
 collection.Dump(counts2)
@@ -295,10 +290,9 @@ collection.Dump(parity.Items())
 // ]
 ```
 
-Example:
+Example: strings \- length of each value
 
 ```go
-// strings → length of each value
 words := collection.New([]string{"go", "forj", "rocks"})
 lengths := collection.MapTo(words, func(s string) int {
 	return len(s)
@@ -311,10 +305,9 @@ collection.Dump(lengths.Items())
 // ]
 ```
 
-Example:
+Example: structs \- MapTo a field
 
 ```go
-// structs → MapTo a field
 type User struct {
 	ID   int
 	Name string
@@ -427,10 +420,9 @@ TakeUntil returns items until the first element equals \`value\`. The matching i
 
 Uses == comparison, so T must be comparable.
 
-Example:
+Example: integers \- stop at value 3
 
 ```go
-// stop at value 3
 c4 := collection.New([]int{1, 2, 3, 4})
 out4 := collection.TakeUntil(c4, 3)
 collection.Dump(out4.Items())
@@ -440,10 +432,9 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-Example:
+Example: strings \- value never appears → full slice
 
 ```go
-// value never appears → full slice
 c5 := collection.New([]string{"a", "b", "c"})
 out5 := collection.TakeUntil(c5, "x")
 collection.Dump(out5.Items())
@@ -454,10 +445,9 @@ collection.Dump(out5.Items())
 // ]
 ```
 
-Example:
+Example: integers \- match is first item → empty result
 
 ```go
-// match is first item → empty result
 c6 := collection.New([]int{9, 10, 11})
 out6 := collection.TakeUntil(c6, 9)
 collection.Dump(out6.Items())
@@ -475,10 +465,9 @@ Times creates a new collection by calling fn\(i\) for i = 1..count. This mirrors
 
 If count \<= 0, an empty collection is returned.
 
-Example:
+Example: integers \- double each index
 
 ```go
-// integers: double each index
 cTimes1 := collection.Times(5, func(i int) int {
 	return i * 2
 })
@@ -492,10 +481,9 @@ collection.Dump(cTimes1.Items())
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// generating strings
 cTimes2 := collection.Times(3, func(i int) string {
 	return fmt.Sprintf("item-%d", i)
 })
@@ -507,10 +495,9 @@ collection.Dump(cTimes2.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// struct generation
 type Point struct {
 	X int
 	Y int
@@ -550,7 +537,7 @@ collection.Dump(cTimes3.Items())
 
 After returns all items after the first element for which pred returns true. If no element matches, an empty collection is returned.
 
-Example:
+Example: integers
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
@@ -567,7 +554,7 @@ c.After(func(v int) bool { return v == 3 }).Dump()
 ### Any
 
 
-Any returns true if at least one item satisfies fn. Example:
+Any returns true if at least one item satisfies fn. Example: integers
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
@@ -582,10 +569,9 @@ collection.Dump(has)
 ### Append
 
 
-Append returns a new collection with the given values appended. Example:
+Append returns a new collection with the given values appended. Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2})
 c.Append(3, 4).Dump()
 // #[]int [
@@ -596,10 +582,9 @@ c.Append(3, 4).Dump()
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -704,7 +689,6 @@ Chunk splits the collection into chunks of the given size. The final chunk may b
 If size \<= 0, nil is returned. Example:
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 collection.Dump(c)
 
@@ -723,10 +707,9 @@ collection.Dump(c)
 //]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -742,7 +725,7 @@ users := []User{
 userChunks := collection.New(users).Chunk(2)
 collection.Dump(userChunks)
 
-// Example Dump output will show [][]User grouped in size-2 chunks, e.g.:
+// Dump output will show [][]User grouped in size-2 chunks, e.g.:
 // #[][]main.User [
 //  0 => #[]main.User [
 //    0 => #main.User {
@@ -775,7 +758,7 @@ collection.Dump(userChunks)
 
 Concat appends the values from the given slice onto the end of the collection,
 
-Example:
+Example: strings
 
 ```go
 c := collection.New([]string{"John Doe"})
@@ -798,10 +781,9 @@ collection.Dump(concatenated)
 ### Contains
 
 
-Contains returns true if any item satisfies the predicate. Example:
+Contains returns true if any item satisfies the predicate. Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3, 4, 5})
 hasEven := c.Contains(func(v int) bool {
 	return v%2 == 0
@@ -810,10 +792,9 @@ collection.Dump(hasEven)
 // true #bool
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"apple", "banana", "cherry"})
 hasBanana := c2.Contains(func(v string) bool {
 	return v == "banana"
@@ -850,7 +831,7 @@ collection.Dump(hasBob)
 ### Count
 
 
-Count returns the total number of items in the collection. Example:
+Count returns the total number of items in the collection. Example: integers
 
 ```go
 count := collection.New([]int{1, 2, 3, 4}).Count()
@@ -889,10 +870,9 @@ c.Dd()
 
 Dump prints items with godump and returns the same collection. This is a no\-op on the collection itself and never panics.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3})
 c.Dump()
 // #[]int [
@@ -944,10 +924,9 @@ fmt.Println(s)
 
 Each runs fn for every item in the collection and returns the same collection, so it can be used in chains for side effects \(logging, debugging, etc.\).
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3})
 
 sum := 0
@@ -959,10 +938,9 @@ collection.Dump(sum)
 // 6 #int
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"apple", "banana", "cherry"})
 
 var out []string
@@ -978,10 +956,9 @@ collection.Dump(out)
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1014,10 +991,9 @@ collection.Dump(names)
 
 Filter keeps only the elements for which fn returns true. This method mutates the collection in place and returns the same instance.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3, 4})
 c.Filter(func(v int) bool {
 	return v%2 == 0
@@ -1029,10 +1005,9 @@ collection.Dump(c.Items())
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
 c2.Filter(func(v string) bool {
 	return strings.HasPrefix(v, "a")
@@ -1044,10 +1019,9 @@ collection.Dump(c2.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1085,10 +1059,9 @@ collection.Dump(users.Items())
 
 FindWhere returns the first item in the collection for which the provided predicate function returns true. This is an alias for FirstWhere\(fn\) and exists for ergonomic parity with functional languages \(JavaScript, Rust, C\#, Python\) where developers expect a “find” helper.
 
-Example:
+Example: integers
 
 ```go
-// simple match
 nums := collection.New([]int{1, 2, 3, 4, 5})
 
 v1, ok1 := nums.FindWhere(func(n int) bool {
@@ -1157,10 +1130,9 @@ collection.Dump(v4, ok4)
 
 First returns the first element in the collection. If the collection is empty, ok will be false.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{10, 20, 30})
 
 v, ok := c.First()
@@ -1225,7 +1197,7 @@ FirstWhere returns the first item in the collection for which the provided predi
 
 This method is equivalent to Laravel's collection\-\>first\(fn\) and mirrors the behavior found in functional collections in other languages.
 
-Examples:
+Example: integers
 
 ```go
 nums := New([]int{1, 2, 3, 4, 5})
@@ -1307,10 +1279,9 @@ collection.Dump(empty4)
 
 Items returns the underlying slice of items.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3})
 items := c.Items()
 collection.Dump(items)
@@ -1321,10 +1292,9 @@ collection.Dump(items)
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"apple", "banana"})
 items2 := c2.Items()
 collection.Dump(items2)
@@ -1334,10 +1304,9 @@ collection.Dump(items2)
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1370,10 +1339,9 @@ collection.Dump(out)
 
 Last returns the last element in the collection. If the collection is empty, ok will be false.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{10, 20, 30})
 
 v, ok := c.Last()
@@ -1438,10 +1406,9 @@ collection.Dump(v3, ok4)
 
 LastWhere returns the last element in the collection that satisfies the predicate fn. If fn is nil, LastWhere returns the final element in the underlying slice. If the collection is empty or no element matches, ok will be false.
 
-Example:
+Example: integers
 
 ```go
-// integers with predicate
 c := collection.New([]int{1, 2, 3, 4})
 
 v, ok := c.LastWhere(func(v int, i int) bool {
@@ -1541,10 +1508,9 @@ Map applies a same\-type transformation and returns a new collection.
 
 Use this when you're transforming T \-\> T \(e.g., enrichment, normalization\).
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3})
 
 mapped := c.Map(func(v int) int {
@@ -1559,10 +1525,9 @@ collection.Dump(mapped.Items())
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"apple", "banana", "cherry"})
 
 upper := c2.Map(func(s string) string {
@@ -1577,10 +1542,9 @@ collection.Dump(upper.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1697,10 +1661,9 @@ collection.Dump(merged3.Items())
 
 Multiply creates \`n\` copies of all items in the collection and returns a new collection.
 
-Example:
+Example: integers
 
 ```go
-// integers
 ints := collection.New([]int{1, 2})
 out := ints.Multiply(3)
 collection.Dump(out.Items())
@@ -1776,10 +1739,9 @@ Pipe passes the entire collection into the given function and returns the functi
 
 This is useful for inline transformations, aggregations, or "exiting" a chain with a non\-collection value.
 
-Example:
+Example: integers – computing a sum
 
 ```go
-// integers – computing a sum
 c := collection.New([]int{1, 2, 3})
 sum := c.Pipe(func(col *collection.Collection[int]) any {
 	total := 0
@@ -1847,10 +1809,9 @@ Pop returns the last item and a new collection with that item removed. The origi
 
 If the collection is empty, the zero value of T is returned along with an empty collection.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{1, 2, 3})
 item, rest := c.Pop()
 collection.Dump(item, rest.Items())
@@ -1861,10 +1822,9 @@ collection.Dump(item, rest.Items())
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"a", "b", "c"})
 item2, rest2 := c2.Pop()
 collection.Dump(item2, rest2.Items())
@@ -1875,10 +1835,9 @@ collection.Dump(item2, rest2.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -2034,7 +1993,7 @@ Prepend returns a new collection with the given values added to the \*beginning\
 
 The original collection is not modified.
 
-Example:
+Example: integers
 
 ```go
 c := collection.New([]int{3, 4})
@@ -2048,10 +2007,9 @@ collection.Dump(newC.Items())
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// prepending strings
 letters := collection.New([]string{"c", "d"})
 out := letters.Prepend("a", "b")
 collection.Dump(out.Items())
@@ -2063,10 +2021,9 @@ collection.Dump(out.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// prepending a struct
 type User struct {
 	ID   int
 	Name string
@@ -2090,10 +2047,9 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-Example:
+Example: integers \- Prepending into an empty collection
 
 ```go
-// Prepending into an empty collection
 empty := collection.New([]int{})
 out3 := empty.Prepend(9, 8)
 collection.Dump(out3.Items())
@@ -2103,10 +2059,9 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-Example:
+Example: integers \- Prepending no values → returns a copy of original
 
 ```go
-// Prepending no values → returns a copy of original
 c2 := collection.New([]int{1, 2})
 out4 := c2.Prepend()
 collection.Dump(out4.Items())
@@ -2124,10 +2079,9 @@ collection.Dump(out4.Items())
 
 Push returns a new collection with the given values appended.
 
-Examples:
+Example: integers
 
 ```go
-// Simple type (ints)
 nums := collection.New([]int{1, 2}).Push(3, 4)
 // nums = [1, 2, 3, 4]
 
@@ -2163,10 +2117,9 @@ Reduce collapses the collection into a single accumulated value. The accumulator
 
 This is useful for computing sums, concatenations, aggregates, or any fold\-style reduction.
 
-Example:
+Example: integers \- sum
 
 ```go
-// Sum integers
 sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 	return acc + n
 })
@@ -2174,10 +2127,9 @@ collection.Dump(sum)
 // 6 #int
 ```
 
-Example:
+Example: strings
 
 ```go
-// Concatenate strings
 joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
 	return acc + s
 })
@@ -2185,10 +2137,9 @@ collection.Dump(joined)
 // "abc" #string
 ```
 
-Example:
+Example: structs
 
 ```go
-// Aggregate struct fields
 type Stats struct {
 	Count int
 	Sum   int
@@ -2225,10 +2176,9 @@ The comparison function \`less\(a, b\)\` should return true if \`a\` should come
 
 Sorting does NOT mutate the original collection—Sort always returns a new one.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{5, 1, 4, 2})
 sorted := c.Sort(func(a, b int) bool { return a < b })
 collection.Dump(sorted.Items())
@@ -2240,10 +2190,9 @@ collection.Dump(sorted.Items())
 // ]
 ```
 
-Example:
+Example: strings \(descending\)
 
 ```go
-// strings (descending)
 c2 := collection.New([]string{"apple", "banana", "cherry"})
 sorted2 := c2.Sort(func(a, b string) bool { return a > b })
 collection.Dump(sorted2.Items())
@@ -2254,10 +2203,9 @@ collection.Dump(sorted2.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	Name string
 	Age  int
@@ -2302,10 +2250,9 @@ If n exceeds the collection length, the entire collection is returned. If n == 0
 
 Mirrors Laravel's take\(\) semantics.
 
-Example:
+Example: integers \- take first 3
 
 ```go
-// take first 3
 c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
 out1 := c1.Take(3)
 collection.Dump(out1.Items())
@@ -2316,10 +2263,9 @@ collection.Dump(out1.Items())
 // ]
 ```
 
-Example:
+Example: integers \- take last 2 \(negative n\)
 
 ```go
-// take last 2 (negative n)
 c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
 out2 := c2.Take(-2)
 collection.Dump(out2.Items())
@@ -2329,10 +2275,9 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-Example:
+Example: integers \- n exceeds length → whole collection
 
 ```go
-// n exceeds length → whole collection
 c3 := collection.New([]int{10, 20})
 out3 := c3.Take(10)
 collection.Dump(out3.Items())
@@ -2342,10 +2287,9 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-Example:
+Example: integers \- zero → empty
 
 ```go
-// zero → empty
 c4 := collection.New([]int{1, 2, 3})
 out4 := c4.Take(0)
 collection.Dump(out4.Items())
@@ -2361,10 +2305,9 @@ collection.Dump(out4.Items())
 
 TakeUntilFn returns items until the predicate function returns true. The matching item is NOT included.
 
-Example:
+Example: integers \- stop when value \>= 3
 
 ```go
-// stop when value >= 3
 c1 := collection.New([]int{1, 2, 3, 4})
 out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })
 collection.Dump(out1.Items())
@@ -2374,10 +2317,9 @@ collection.Dump(out1.Items())
 // ]
 ```
 
-Example:
+Example: integers \- predicate immediately true → empty result
 
 ```go
-// predicate immediately true → empty result
 c2 := collection.New([]int{10, 20, 30})
 out2 := c2.TakeUntilFn(func(v int) bool { return v < 50 })
 collection.Dump(out2.Items())
@@ -2385,10 +2327,9 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-Example:
+Example: integers \- no match → full list returned
 
 ```go
-// no match → full list returned
 c3 := collection.New([]int{1, 2, 3})
 out3 := c3.TakeUntilFn(func(v int) bool { return v == 99 })
 collection.Dump(out3.Items())
@@ -2409,10 +2350,9 @@ Tap invokes fn with the collection pointer for side effects \(logging, debugging
 
 Tap does NOT modify the collection itself; it simply exposes the current state during a fluent chain.
 
-Example:
+Example: integers \- capture intermediate state during a chain
 
 ```go
-// capture intermediate state during a chain
 captured1 := []int{}
 c1 := collection.New([]int{3, 1, 2}).
 	Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
@@ -2428,10 +2368,9 @@ collection.Dump(captured1)
 // captured1 → #[]int [1,2,3]
 ```
 
-Example:
+Example: integers \- tap for debugging without changing flow
 
 ```go
-// tap for debugging without changing flow
 c2 := collection.New([]int{10, 20, 30}).
 	Tap(func(col *collection.Collection[int]) {
 		collection.Dump(col.Items())
@@ -2441,10 +2380,9 @@ c2 := collection.New([]int{10, 20, 30}).
 collection.Dump(c2.Items()) // ensures c2 is used
 ```
 
-Example:
+Example: structs \- Tap with struct collection
 
 ```go
-// Tap with struct collection
 type User struct {
 	ID   int
 	Name string
@@ -2477,10 +2415,9 @@ Returns:
 - string: JSON\-encoded representation of the collection
 - error : nil on success, or the unwrapped marshalling error
 
-Example:
+Example: strings \- pretty JSON
 
 ```go
-// strings → pretty JSON
 pj1 := collection.New([]string{"a", "b"})
 out1, _ := pj1.ToJSON()
 fmt.Println(out1)
@@ -2502,10 +2439,9 @@ Returns:
 - string: the pretty\-printed JSON representation
 - error : nil on success, or the unwrapped marshalling error
 
-Example:
+Example: strings \- pretty JSON
 
 ```go
-// strings → pretty JSON
 pj1 := collection.New([]string{"a", "b"})
 out1, _ := pj1.ToPrettyJSON()
 fmt.Println(out1)
@@ -2525,10 +2461,9 @@ Transform applies fn to every item \*in place\*, mutating the collection.
 
 This mirrors Laravel's transform\(\), which modifies the underlying values instead of returning a new collection.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c1 := collection.New([]int{1, 2, 3})
 c1.Transform(func(v int) int { return v * 2 })
 collection.Dump(c1.Items())
@@ -2539,10 +2474,9 @@ collection.Dump(c1.Items())
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"a", "b", "c"})
 c2.Transform(func(s string) string { return strings.ToUpper(s) })
 collection.Dump(c2.Items())
@@ -2553,10 +2487,9 @@ collection.Dump(c2.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -2589,10 +2522,9 @@ Unique returns a new collection with duplicate items removed, based on the equal
 
 The \`eq\` function should return true when two values are considered equal.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
 out1 := c1.Unique(func(a, b int) bool { return a == b })
 collection.Dump(out1.Items())
@@ -2605,10 +2537,9 @@ collection.Dump(out1.Items())
 // ]
 ```
 
-Example:
+Example: strings \(case\-insensitive uniqueness\)
 
 ```go
-// strings (case-insensitive uniqueness)
 c2 := collection.New([]string{"A", "a", "B", "b", "A"})
 out2 := c2.Unique(func(a, b string) bool {
 	return strings.EqualFold(a, b)
@@ -2620,10 +2551,9 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-Example:
+Example: structs \(unique by ID\)
 
 ```go
-// structs (unique by ID)
 type User struct {
 	ID   int
 	Name string
@@ -2678,10 +2608,9 @@ NewNumeric wraps a slice of numeric types in a NumericCollection. A shallow copy
 
 Avg returns the average of the collection values as a float64. If the collection is empty, Avg returns 0.
 
-Example: int
+Example: integers
 
 ```go
-// int
 c := collection.NewNumeric([]int{2, 4, 6})
 collection.Dump(c.Avg())
 // 4.000000 #float64
@@ -2690,7 +2619,6 @@ collection.Dump(c.Avg())
 Example: float
 
 ```go
-// float64
 c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
 collection.Dump(c2.Avg())
 // 2.333333 #float64
@@ -2704,10 +2632,9 @@ collection.Dump(c2.Avg())
 
 Max returns the largest numeric item in the collection. The second return value is false if the collection is empty.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.NewNumeric([]int{3, 1, 2})
 
 max1, ok1 := c.Max()
@@ -2716,10 +2643,9 @@ collection.Dump(max1, ok1)
 // true #bool
 ```
 
-Example:
+Example: floats
 
 ```go
-// floats
 c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
 
 max2, ok2 := c2.Max()
@@ -2728,10 +2654,9 @@ collection.Dump(max2, ok2)
 // true     #bool
 ```
 
-Example:
+Example: empty numeric collection
 
 ```go
-// empty numeric collection
 c3 := collection.NewNumeric([]int{})
 
 max3, ok3 := c3.Max()
@@ -2750,10 +2675,9 @@ Median returns the statistical median of the numeric collection as float64. Retu
 
 Odd count → middle value Even count → average of the two middle values
 
-Example:
+Example: integers \- odd number of items
 
 ```go
-// odd number of items
 c := collection.NewNumeric([]int{3, 1, 2})
 
 median1, ok1 := c.Median()
@@ -2762,10 +2686,9 @@ collection.Dump(median1, ok1)
 // true     #bool
 ```
 
-Example:
+Example: integers \- even number of items
 
 ```go
-// even number of items
 c2 := collection.NewNumeric([]int{10, 2, 4, 6})
 
 median2, ok2 := c2.Median()
@@ -2774,10 +2697,9 @@ collection.Dump(median2, ok2)
 // true     #bool
 ```
 
-Example:
+Example: floats
 
 ```go
-// floating-point values
 c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
 
 median3, ok3 := c3.Median()
@@ -2786,10 +2708,9 @@ collection.Dump(median3, ok3)
 // true     #bool
 ```
 
-Example:
+Example: integers \- empty numeric collection
 
 ```go
-// empty numeric collection
 c4 := collection.NewNumeric([]int{})
 
 median4, ok4 := c4.Median()
@@ -2806,10 +2727,9 @@ collection.Dump(median4, ok4)
 
 Min returns the smallest numeric item in the collection. The second return value is false if the collection is empty.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.NewNumeric([]int{3, 1, 2})
 min, ok := c.Min()
 collection.Dump(min, ok)
@@ -2817,10 +2737,9 @@ collection.Dump(min, ok)
 // true #bool
 ```
 
-Example:
+Example: floats
 
 ```go
-// floats
 c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
 min2, ok2 := c2.Min()
 collection.Dump(min2, ok2)
@@ -2828,10 +2747,9 @@ collection.Dump(min2, ok2)
 // true #bool
 ```
 
-Example:
+Example: integers \- empty collection
 
 ```go
-// empty collection
 empty := collection.NewNumeric([]int{})
 min3, ok3 := empty.Min()
 collection.Dump(min3, ok3)
@@ -2847,10 +2765,9 @@ collection.Dump(min3, ok3)
 
 Mode returns the most frequent numeric value\(s\) in the collection. If multiple values tie for highest frequency, all are returned in first\-seen order.
 
-Example:
+Example: integers – single mode
 
 ```go
-// integers – single mode
 c := collection.NewNumeric([]int{1, 2, 2, 3})
 mode := c.Mode()
 collection.Dump(mode)
@@ -2859,10 +2776,9 @@ collection.Dump(mode)
 // ]
 ```
 
-Example:
+Example: integers – tie for mode
 
 ```go
-// integers – tie for mode
 c2 := collection.NewNumeric([]int{1, 2, 1, 2})
 mode2 := c2.Mode()
 collection.Dump(mode2)
@@ -2872,10 +2788,9 @@ collection.Dump(mode2)
 // ]
 ```
 
-Example:
+Example: floats
 
 ```go
-// floats
 c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
 mode3 := c3.Mode()
 collection.Dump(mode3)
@@ -2884,10 +2799,9 @@ collection.Dump(mode3)
 // ]
 ```
 
-Example:
+Example: integers \- empty collection
 
 ```go
-// empty collection
 empty := collection.NewNumeric([]int{})
 mode4 := empty.Mode()
 collection.Dump(mode4)
@@ -2902,30 +2816,27 @@ collection.Dump(mode4)
 
 Sum returns the sum of all numeric items in the NumericCollection. If the collection is empty, Sum returns the zero value of T.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.NewNumeric([]int{1, 2, 3})
 total := c.Sum()
 collection.Dump(total)
 // 6 #int
 ```
 
-Example:
+Example: floats
 
 ```go
-// floats
 c2 := collection.NewNumeric([]float64{1.5, 2.5})
 total2 := c2.Sum()
 collection.Dump(total2)
 // 4.000000 #float64
 ```
 
-Example:
+Example: integers \- empty collection
 
 ```go
-// empty collection
 c3 := collection.NewNumeric([]int{})
 total3 := c3.Sum()
 collection.Dump(total3)

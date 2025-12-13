@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// integers
+	// Example: integers
 	c1 := collection.New([]int{1, 2, 3})
 	c1.Transform(func(v int) int { return v * 2 })
 	collection.Dump(c1.Items())
@@ -19,7 +19,7 @@ func main() {
 	//	2 => 6 #int
 	// ]
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"a", "b", "c"})
 	c2.Transform(func(s string) string { return strings.ToUpper(s) })
 	collection.Dump(c2.Items())
@@ -29,7 +29,7 @@ func main() {
 	//	2 => "C" #string
 	// ]
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string

@@ -6,6 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Example: integers
 	c := collection.New([]int{3, 4})
 	newC := c.Prepend(1, 2)
 	collection.Dump(newC.Items())
@@ -16,7 +17,7 @@ func main() {
 	//   3 => 4 #int
 	// ]
 
-	// prepending strings
+	// Example: strings
 	letters := collection.New([]string{"c", "d"})
 	out := letters.Prepend("a", "b")
 	collection.Dump(out.Items())
@@ -27,7 +28,7 @@ func main() {
 	//   3 => "d" #string
 	// ]
 
-	// prepending a struct
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string
@@ -50,7 +51,7 @@ func main() {
 	//   }
 	// ]
 
-	// Prepending into an empty collection
+	// Example: integers - Prepending into an empty collection
 	empty := collection.New([]int{})
 	out3 := empty.Prepend(9, 8)
 	collection.Dump(out3.Items())
@@ -59,7 +60,7 @@ func main() {
 	//   1 => 8 #int
 	// ]
 
-	// Prepending no values → returns a copy of original
+	// Example: integers - Prepending no values → returns a copy of original
 	c2 := collection.New([]int{1, 2})
 	out4 := c2.Prepend()
 	collection.Dump(out4.Items())

@@ -6,6 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Example: strings
 	c := collection.New([]string{"John Doe"})
 	concatenated := c.
 		Concat([]string{"Jane Doe"}).

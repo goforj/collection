@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// strings
+	// Example: strings
 	c1 := collection.New([]string{"a", "b", "a"})
 	counts1 := collection.CountByValue(c1)
 	collection.Dump(counts1)
@@ -15,7 +15,7 @@ func main() {
 	//	"b" => 1 #int
 	// ]
 
-	// integers
+	// Example: integers
 	c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
 	counts2 := collection.CountByValue(c2)
 	collection.Dump(counts2)

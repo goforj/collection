@@ -3,8 +3,7 @@ package collection
 // Each runs fn for every item in the collection and returns the same collection,
 // so it can be used in chains for side effects (logging, debugging, etc.).
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2, 3})
 //
 //	sum := 0
@@ -15,8 +14,7 @@ package collection
 //	collection.Dump(sum)
 //	// 6 #int
 //
-// Example:
-//	// strings
+// Example: strings
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
 //
 //	var out []string
@@ -31,8 +29,7 @@ package collection
 //	//   2 => "CHERRY" #string
 //	// ]
 //
-// Example:
-//	// structs
+// Example: structs
 //	type User struct {
 //		ID   int
 //		Name string

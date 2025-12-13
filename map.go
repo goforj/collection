@@ -4,8 +4,7 @@ package collection
 //
 // Use this when you're transforming T -> T (e.g., enrichment, normalization).
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2, 3})
 //
 //	mapped := c.Map(func(v int) int {
@@ -19,8 +18,7 @@ package collection
 //	//   2 => 30 #int
 //	// ]
 //
-// Example:
-//	// strings
+// Example: strings
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
 //
 //	upper := c2.Map(func(s string) string {
@@ -34,8 +32,7 @@ package collection
 //	//   2 => "CHERRY" #string
 //	// ]
 //
-// Example:
-//	// structs
+// Example: structs
 //	type User struct {
 //		ID   int
 //		Name string

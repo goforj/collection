@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// odd number of items
+	// Example: integers - odd number of items
 	c := collection.NewNumeric([]int{3, 1, 2})
 
 	median1, ok1 := c.Median()
@@ -14,7 +14,7 @@ func main() {
 	// 2.000000 #float64
 	// true     #bool
 
-	// even number of items
+	// Example: integers - even number of items
 	c2 := collection.NewNumeric([]int{10, 2, 4, 6})
 
 	median2, ok2 := c2.Median()
@@ -22,7 +22,7 @@ func main() {
 	// 5.000000 #float64
 	// true     #bool
 
-	// floating-point values
+	// Example: floats
 	c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
 
 	median3, ok3 := c3.Median()
@@ -30,7 +30,7 @@ func main() {
 	// 3.300000 #float64
 	// true     #bool
 
-	// empty numeric collection
+	// Example: integers - empty numeric collection
 	c4 := collection.NewNumeric([]int{})
 
 	median4, ok4 := c4.Median()

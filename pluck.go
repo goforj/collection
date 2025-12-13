@@ -21,8 +21,7 @@ package collection
 //	//   3 => "even" #string
 //	// ]
 //
-// Example:
-//	// strings → length of each value
+// Example: strings - length of each value
 //	words := collection.New([]string{"go", "forj", "rocks"})
 //	lengths := collection.MapTo(words, func(s string) int {
 //		return len(s)
@@ -34,8 +33,7 @@ package collection
 //	//   2 => 5 #int
 //	// ]
 //
-// Example:
-//	// structs → MapTo a field
+// Example: structs - MapTo a field
 //	type User struct {
 //		ID   int
 //		Name string

@@ -5,8 +5,7 @@ package collection
 // This mirrors Laravel's transform(), which modifies the underlying values
 // instead of returning a new collection.
 //
-// Example:
-//	// integers
+// Example: integers
 //	c1 := collection.New([]int{1, 2, 3})
 //	c1.Transform(func(v int) int { return v * 2 })
 //	collection.Dump(c1.Items())
@@ -16,8 +15,7 @@ package collection
 //	//	2 => 6 #int
 //	// ]
 //
-// Example:
-//	// strings
+// Example: strings
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	c2.Transform(func(s string) string { return strings.ToUpper(s) })
 //	collection.Dump(c2.Items())
@@ -27,8 +25,7 @@ package collection
 //	//	2 => "C" #string
 //	// ]
 //
-// Example:
-//	// structs
+// Example: structs
 //	type User struct {
 //		ID   int
 //		Name string

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// integers with predicate
+	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4})
 
 	v, ok := c.LastWhere(func(v int, i int) bool {

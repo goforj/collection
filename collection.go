@@ -40,8 +40,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 
 // Items returns the underlying slice of items.
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2, 3})
 //	items := c.Items()
 //	collection.Dump(items)
@@ -51,8 +50,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 //	//   2 => 3 #int
 //	// ]
 //
-// Example:
-//	// strings
+// Example: strings
 //	c2 := collection.New([]string{"apple", "banana"})
 //	items2 := c2.Items()
 //	collection.Dump(items2)
@@ -61,8 +59,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 //	//   1 => "banana" #string
 //	// ]
 //
-// Example:
-//	// structs
+// Example: structs
 //	type User struct {
 //		ID   int
 //		Name string

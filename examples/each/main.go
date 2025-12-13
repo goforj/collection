@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{1, 2, 3})
 
 	sum := 0
@@ -20,7 +20,7 @@ func main() {
 	collection.Dump(sum)
 	// 6 #int
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"apple", "banana", "cherry"})
 
 	var out []string
@@ -35,7 +35,7 @@ func main() {
 	//   2 => "CHERRY" #string
 	// ]
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string

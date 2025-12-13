@@ -3,8 +3,7 @@ package collection
 // First returns the first element in the collection.
 // If the collection is empty, ok will be false.
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{10, 20, 30})
 //
 //	v, ok := c.First()

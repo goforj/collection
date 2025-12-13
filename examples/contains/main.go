@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})
 	hasEven := c.Contains(func(v int) bool {
 		return v%2 == 0
@@ -14,7 +14,7 @@ func main() {
 	collection.Dump(hasEven)
 	// true #bool
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"apple", "banana", "cherry"})
 	hasBanana := c2.Contains(func(v string) bool {
 		return v == "banana"

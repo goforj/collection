@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{5, 1, 4, 2})
 	sorted := c.Sort(func(a, b int) bool { return a < b })
 	collection.Dump(sorted.Items())
@@ -17,7 +17,7 @@ func main() {
 	//   3 => 5 #int
 	// ]
 
-	// strings (descending)
+	// Example: strings (descending)
 	c2 := collection.New([]string{"apple", "banana", "cherry"})
 	sorted2 := c2.Sort(func(a, b string) bool { return a > b })
 	collection.Dump(sorted2.Items())
@@ -27,7 +27,7 @@ func main() {
 	//   2 => "apple" #string
 	// ]
 
-	// structs
+	// Example: structs
 	type User struct {
 		Name string
 		Age  int

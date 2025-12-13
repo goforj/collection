@@ -1,8 +1,7 @@
 package collection
 
 // Contains returns true if any item satisfies the predicate.
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2, 3, 4, 5})
 //	hasEven := c.Contains(func(v int) bool {
 //		return v%2 == 0
@@ -10,8 +9,7 @@ package collection
 //	collection.Dump(hasEven)
 //	// true #bool
 //
-// Example:
-//	// strings
+// Example: strings
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
 //	hasBanana := c2.Contains(func(v string) bool {
 //		return v == "banana"

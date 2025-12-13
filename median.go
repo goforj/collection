@@ -8,8 +8,7 @@ import "sort"
 // Odd count  → middle value
 // Even count → average of the two middle values
 //
-// Example:
-//	// odd number of items
+// Example: integers - odd number of items
 //	c := collection.NewNumeric([]int{3, 1, 2})
 //
 //	median1, ok1 := c.Median()
@@ -17,8 +16,7 @@ import "sort"
 //	// 2.000000 #float64
 //	// true     #bool
 //
-// Example:
-//	// even number of items
+// Example: integers - even number of items
 //	c2 := collection.NewNumeric([]int{10, 2, 4, 6})
 //
 //	median2, ok2 := c2.Median()
@@ -26,8 +24,7 @@ import "sort"
 //	// 5.000000 #float64
 //	// true     #bool
 //
-// Example:
-//	// floating-point values
+// Example: floats
 //	c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
 //
 //	median3, ok3 := c3.Median()
@@ -35,8 +32,7 @@ import "sort"
 //	// 3.300000 #float64
 //	// true     #bool
 //
-// Example:
-//	// empty numeric collection
+// Example: integers - empty numeric collection
 //	c4 := collection.NewNumeric([]int{})
 //
 //	median4, ok4 := c4.Median()

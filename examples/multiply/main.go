@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	ints := collection.New([]int{1, 2})
 	out := ints.Multiply(3)
 	collection.Dump(out.Items())

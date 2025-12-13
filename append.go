@@ -1,8 +1,7 @@
 package collection
 
 // Append returns a new collection with the given values appended.
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2})
 //	c.Append(3, 4).Dump()
 //	// #[]int [
@@ -12,8 +11,7 @@ package collection
 //	//  3 => 4 #int
 //	// ]
 //
-// Example:
-//	// structs
+// Example: structs
 //	type User struct {
 //		ID   int
 //		Name string
@@ -56,9 +54,8 @@ func (c *Collection[T]) Append(values ...T) *Collection[T] {
 
 // Push returns a new collection with the given values appended.
 //
-// Examples:
+// Example: integers
 //
-//  // Simple type (ints)
 //  nums := collection.New([]int{1, 2}).Push(3, 4)
 //  // nums = [1, 2, 3, 4]
 //

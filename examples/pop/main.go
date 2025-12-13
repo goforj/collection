@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{1, 2, 3})
 	item, rest := c.Pop()
 	collection.Dump(item, rest.Items())
@@ -16,7 +16,7 @@ func main() {
 	//   1 => 2 #int
 	// ]
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"a", "b", "c"})
 	item2, rest2 := c2.Pop()
 	collection.Dump(item2, rest2.Items())
@@ -26,7 +26,7 @@ func main() {
 	//   1 => "b" #string
 	// ]
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string

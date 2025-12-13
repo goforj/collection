@@ -3,8 +3,7 @@ package collection
 // Filter keeps only the elements for which fn returns true.
 // This method mutates the collection in place and returns the same instance.
 //
-// Example:
-//	// integers
+// Example: integers
 //	c := collection.New([]int{1, 2, 3, 4})
 //	c.Filter(func(v int) bool {
 //		return v%2 == 0
@@ -15,8 +14,7 @@ package collection
 //	//   1 => 4 #int
 //	// ]
 //
-// Example:
-//	// strings
+// Example: strings
 //	c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
 //	c2.Filter(func(v string) bool {
 //		return strings.HasPrefix(v, "a")
@@ -27,8 +25,7 @@ package collection
 //	//   1 => "avocado" #string
 //	// ]
 //
-// Example:
-//	// structs
+// Example: structs
 //	type User struct {
 //		ID   int
 //		Name string

@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers - merging slices
+	// Example: integers - merging slices
 	ints := collection.New([]int{1, 2})
 	extra := []int{3, 4}
 	// Merge the extra slice into the ints collection
@@ -19,7 +19,7 @@ func main() {
 	//   3 => 4 #int
 	// ]
 
-	// strings - merging another collection
+	// Example: strings - merging another collection
 	strs := collection.New([]string{"a", "b"})
 	more := collection.New([]string{"c", "d"})
 
@@ -32,7 +32,7 @@ func main() {
 	//   3 => "d" #string
 	// ]
 
-	// structs - merging struct slices
+	// Example: structs - merging struct slices
 	type User struct {
 		ID   int
 		Name string

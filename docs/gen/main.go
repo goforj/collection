@@ -292,9 +292,8 @@ func writeMain(base, funcName string, list []Example) error {
 	buf.WriteString("func main() {\n")
 
 	for _, ex := range list {
-
 		if ex.Label != "" {
-			buf.WriteString("\t// " + ex.Label + "\n")
+			buf.WriteString("\t// Example: " + ex.Label + "\n")
 		}
 
 		ex.Code = strings.TrimLeft(ex.Code, "\n")

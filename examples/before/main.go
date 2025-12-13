@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers
+	// Example: integers
 	c1 := collection.New([]int{1, 2, 3, 4, 5})
 	out1 := c1.Before(func(v int) bool { return v >= 3 })
 	collection.Dump(out1.Items())
@@ -15,7 +15,7 @@ func main() {
 	//	1 => 2 #int
 	// ]
 
-	// predicate never matches → whole collection returned
+	// Example: predicate never matches → whole collection returned
 	c2 := collection.New([]int{10, 20, 30})
 	out2 := c2.Before(func(v int) bool { return v == 99 })
 	collection.Dump(out2.Items())
@@ -25,7 +25,7 @@ func main() {
 	//	2 => 30 #int
 	// ]
 
-	// structs: get all users before the first admin
+	// Example: structs: get all users before the first admin
 	type User struct {
 		Name  string
 		Admin bool

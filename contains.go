@@ -19,9 +19,8 @@ package collection
 //	collection.Dump(hasBanana)
 //	// true #bool
 //
-// Example:
+// Example: structs
 //
-//	// structs
 //	type User struct {
 //		ID   int
 //		Name string

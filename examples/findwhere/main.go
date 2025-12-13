@@ -16,7 +16,7 @@ func main() {
 	// 3    #int
 	// true #bool
 
-	// no match
+	// Example: no match
 	v2, ok2 := nums.FindWhere(func(n int) bool {
 		return n > 10
 	})
@@ -24,7 +24,7 @@ func main() {
 	// 0     #int
 	// false #bool
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string
@@ -46,7 +46,7 @@ func main() {
 	// }
 	// true #bool
 
-	// empty collection
+	// Example: integers - empty collection
 	empty := collection.New([]int{})
 
 	v4, ok4 := empty.FindWhere(func(n int) bool { return n == 1 })

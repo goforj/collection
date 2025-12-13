@@ -88,9 +88,8 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 //	//	3 => 3 #int
 //	// ]
 //
-// Example:
+// Example: structs (comparable)
 //
-//	// structs (comparable)
 //	type Point struct {
 //		X int
 //		Y int

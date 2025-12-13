@@ -6,21 +6,21 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers (non-empty)
+	// Example: integers (non-empty)
 	c := collection.New([]int{1, 2, 3})
 
 	empty := c.IsEmpty()
 	collection.Dump(empty)
 	// false #bool
 
-	// strings (empty)
+	// Example: strings (empty)
 	c2 := collection.New([]string{})
 
 	empty2 := c2.IsEmpty()
 	collection.Dump(empty2)
 	// true #bool
 
-	// structs (non-empty)
+	// Example: structs (non-empty)
 	type User struct {
 		ID   int
 		Name string
@@ -34,7 +34,7 @@ func main() {
 	collection.Dump(empty3)
 	// false #bool
 
-	// structs (empty)
+	// Example: structs (empty)
 	none := collection.New([]User{})
 
 	empty4 := none.IsEmpty()

@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// strings
+	// Example: strings
 	c := collection.New([]string{"a", "b"})
 	c.Dd()
 	// #[]string [

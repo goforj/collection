@@ -19,7 +19,7 @@ func main() {
 	// 2    #int
 	// true #bool
 
-	// integers without predicate (equivalent to Last())
+	// Example: integers without predicate (equivalent to Last())
 	c2 := collection.New([]int{10, 20, 30, 40})
 
 	v2, ok2 := c2.LastWhere(nil)
@@ -27,7 +27,7 @@ func main() {
 	// 40   #int
 	// true #bool
 
-	// strings
+	// Example: strings
 	c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
 
 	v3, ok3 := c3.LastWhere(func(s string, i int) bool {
@@ -37,7 +37,7 @@ func main() {
 	// "gamma" #string
 	// true    #bool
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string
@@ -60,7 +60,7 @@ func main() {
 	// }
 	// true #bool
 
-	// no matching element
+	// Example: no matching element
 	c4 := collection.New([]int{5, 6, 7})
 
 	v4, ok5 := c4.LastWhere(func(v int, i int) bool {
@@ -70,7 +70,7 @@ func main() {
 	// 0     #int
 	// false #bool
 
-	// empty collection
+	// Example: empty collection
 	c5 := collection.New([]int{})
 
 	v5, ok6 := c5.LastWhere(nil)

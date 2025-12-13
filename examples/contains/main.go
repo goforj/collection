@@ -22,7 +22,7 @@ func main() {
 	collection.Dump(hasBanana)
 	// true #bool
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string

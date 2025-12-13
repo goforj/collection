@@ -19,9 +19,8 @@ package collection
 //	collection.Dump(sum)
 //	// 6 #int
 //
-// Example:
+// Example: strings – joining values
 //
-//	// strings – joining values
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	joined := c2.Pipe(func(col *collection.Collection[string]) any {
 //		out := ""
@@ -33,9 +32,8 @@ package collection
 //	collection.Dump(joined)
 //	// "abc" #string
 //
-// Example:
+// Example: structs – extracting just the names
 //
-//	// structs – extracting just the names
 //	type User struct {
 //		ID   int
 //		Name string

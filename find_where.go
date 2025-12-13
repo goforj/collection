@@ -16,9 +16,8 @@ package collection
 //	// 3    #int
 //	// true #bool
 //
-// Example:
+// Example: no match
 //
-//	// no match
 //	v2, ok2 := nums.FindWhere(func(n int) bool {
 //		return n > 10
 //	})
@@ -26,9 +25,8 @@ package collection
 //	// 0     #int
 //	// false #bool
 //
-// Example:
+// Example: structs
 //
-//	// structs
 //	type User struct {
 //		ID   int
 //		Name string
@@ -50,9 +48,8 @@ package collection
 //	// }
 //	// true #bool
 //
-// Example:
+// Example: integers - empty collection
 //
-//	// empty collection
 //	empty := collection.New([]int{})
 //
 //	v4, ok4 := empty.FindWhere(func(n int) bool { return n == 1 })

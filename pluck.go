@@ -4,9 +4,8 @@ package collection
 //
 // This cannot be a method because methods can't introduce a new type parameter R.
 //
-// Example:
+// Example: integers - extract parity label
 //
-//	// integers → extract parity label
 //	nums := collection.New([]int{1, 2, 3, 4})
 //	parity := collection.MapTo(nums, func(n int) string {
 //		if n%2 == 0 {
@@ -69,9 +68,8 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 // It extracts a single field or computed value from every element and returns a
 // new typed collection.
 //
-// Example:
+// Example: integers - extract parity label
 //
-//	// integers → extract parity label
 //	nums := collection.New([]int{1, 2, 3, 4})
 //	parity := collection.Pluck(nums, func(n int) string {
 //		if n%2 == 0 {
@@ -87,9 +85,8 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 //	//   3 => "even" #string
 //	// ]
 //
-// Example:
+// Example: strings - length of each value
 //
-//	// strings → length of each value
 //	words := collection.New([]string{"go", "forj", "rocks"})
 //	lengths := collection.Pluck(words, func(s string) int {
 //		return len(s)
@@ -101,9 +98,8 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 //	//   2 => 5 #int
 //	// ]
 //
-// Example:
+// Example: structs - pluck a field
 //
-//	// structs → pluck a field
 //	type User struct {
 //		ID   int
 //		Name string

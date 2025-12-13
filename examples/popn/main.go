@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers – pop 2
+	// Example: integers – pop 2
 	c := collection.New([]int{1, 2, 3, 4})
 	popped, rest := c.PopN(2)
 	collection.Dump(popped.Items(), rest.Items())
@@ -19,7 +19,7 @@ func main() {
 	//   1 => 2 #int
 	// ]
 
-	// strings – pop 1
+	// Example: strings – pop 1
 	c2 := collection.New([]string{"a", "b", "c"})
 	popped2, rest2 := c2.PopN(1)
 	collection.Dump(popped2.Items(), rest2.Items())
@@ -31,7 +31,7 @@ func main() {
 	//   1 => "b" #string
 	// ]
 
-	// structs – pop 2
+	// Example: structs – pop 2
 	type User struct {
 		ID   int
 		Name string
@@ -62,7 +62,7 @@ func main() {
 	//   }
 	// ]
 
-	// n <= 0 → returns empty popped + original collection
+	// Example: integers - n <= 0 → returns empty popped + original collection
 	c3 := collection.New([]int{1, 2, 3})
 	popped4, rest4 := c3.PopN(0)
 	collection.Dump(popped4.Items(), rest4.Items())
@@ -74,7 +74,7 @@ func main() {
 	//   2 => 3 #int
 	// ]
 
-	// n exceeds length → all items popped, rest empty
+	// Example: strings - n exceeds length → all items popped, rest empty
 	c4 := collection.New([]string{"x", "y"})
 	popped5, rest5 := c4.PopN(10)
 	collection.Dump(popped5.Items(), rest5.Items())

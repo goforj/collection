@@ -53,9 +53,8 @@ package collection
 //	//   }
 //	// ]
 //
-// Example:
+// Example: empty collection
 //
-//	// empty collection
 //	empty := collection.New([]int{})
 //	item4, rest4 := empty.Pop()
 //	collection.Dump(item4, rest4.Items())
@@ -82,9 +81,8 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 // The popped items are returned in reverse order, matching the behavior
 // of repeated Pop() calls.
 //
-// Example:
+// Example: integers – pop 2
 //
-//	// integers – pop 2
 //	c := collection.New([]int{1, 2, 3, 4})
 //	popped, rest := c.PopN(2)
 //	collection.Dump(popped.Items(), rest.Items())
@@ -97,9 +95,8 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	//   1 => 2 #int
 //	// ]
 //
-// Example:
+// Example: strings – pop 1
 //
-//	// strings – pop 1
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	popped2, rest2 := c2.PopN(1)
 //	collection.Dump(popped2.Items(), rest2.Items())
@@ -111,9 +108,8 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	//   1 => "b" #string
 //	// ]
 //
-// Example:
+// Example: structs – pop 2
 //
-//	// structs – pop 2
 //	type User struct {
 //		ID   int
 //		Name string
@@ -144,9 +140,8 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	//   }
 //	// ]
 //
-// Example:
+// Example: integers - n <= 0 → returns empty popped + original collection
 //
-//	// n <= 0 → returns empty popped + original collection
 //	c3 := collection.New([]int{1, 2, 3})
 //	popped4, rest4 := c3.PopN(0)
 //	collection.Dump(popped4.Items(), rest4.Items())
@@ -158,9 +153,8 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	//   2 => 3 #int
 //	// ]
 //
-// Example:
+// Example: strings - n exceeds length → all items popped, rest empty
 //
-//	// n exceeds length → all items popped, rest empty
 //	c4 := collection.New([]string{"x", "y"})
 //	popped5, rest5 := c4.PopN(10)
 //	collection.Dump(popped5.Items(), rest5.Items())

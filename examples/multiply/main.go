@@ -19,7 +19,7 @@ func main() {
 	//   5 => 2 #int
 	// ]
 
-	// strings
+	// Example: strings
 	strs := collection.New([]string{"a", "b"})
 	out2 := strs.Multiply(2)
 	collection.Dump(out2.Items())
@@ -30,7 +30,7 @@ func main() {
 	//   3 => "b" #string
 	// ]
 
-	// structs
+	// Example: structs
 	type User struct {
 		Name string
 	}
@@ -53,7 +53,7 @@ func main() {
 	//   }
 	// ]
 
-	// multiplying by zero or negative returns empty
+	// Example: multiplying by zero or negative returns empty
 	none := ints.Multiply(0)
 	collection.Dump(none.Items())
 	// #[]int [

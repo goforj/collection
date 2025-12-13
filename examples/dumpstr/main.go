@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// integers
+	// Example: integers
 	c := collection.New([]int{10, 20})
 	s := c.DumpStr()
 	fmt.Println(s)

@@ -6,6 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 	collection.Dump(c)
 

@@ -12,9 +12,8 @@ package collection
 //	// 30   #int
 //	// true #bool
 //
-// Example:
+// Example: strings
 //
-//	// strings
 //	c2 := collection.New([]string{"alpha", "beta", "gamma"})
 //
 //	v2, ok2 := c2.Last()
@@ -22,9 +21,8 @@ package collection
 //	// "gamma" #string
 //	// true    #bool
 //
-// Example:
+// Example: structs
 //
-//	// structs
 //	type User struct {
 //		ID   int
 //		Name string
@@ -44,9 +42,8 @@ package collection
 //	// }
 //	// true #bool
 //
-// Example:
+// Example: empty collection
 //
-//	// empty collection
 //	c3 := collection.New([]int{})
 //
 //	v3, ok4 := c3.Last()

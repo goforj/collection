@@ -15,9 +15,8 @@ package collection
 //	// 2    #int
 //	// true #bool
 //
-// Example:
+// Example: integers without predicate (equivalent to Last())
 //
-//	// integers without predicate (equivalent to Last())
 //	c2 := collection.New([]int{10, 20, 30, 40})
 //
 //	v2, ok2 := c2.LastWhere(nil)
@@ -25,9 +24,8 @@ package collection
 //	// 40   #int
 //	// true #bool
 //
-// Example:
+// Example: strings
 //
-//	// strings
 //	c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
 //
 //	v3, ok3 := c3.LastWhere(func(s string, i int) bool {
@@ -37,9 +35,8 @@ package collection
 //	// "gamma" #string
 //	// true    #bool
 //
-// Example:
+// Example: structs
 //
-//	// structs
 //	type User struct {
 //		ID   int
 //		Name string
@@ -62,9 +59,8 @@ package collection
 //	// }
 //	// true #bool
 //
-// Example:
+// Example: no matching element
 //
-//	// no matching element
 //	c4 := collection.New([]int{5, 6, 7})
 //
 //	v4, ok5 := c4.LastWhere(func(v int, i int) bool {
@@ -74,9 +70,8 @@ package collection
 //	// 0     #int
 //	// false #bool
 //
-// Example:
+// Example: empty collection
 //
-//	// empty collection
 //	c5 := collection.New([]int{})
 //
 //	v5, ok6 := c5.LastWhere(nil)

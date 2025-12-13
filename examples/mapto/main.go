@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers → extract parity label
+	// Example: integers - extract parity label
 	nums := collection.New([]int{1, 2, 3, 4})
 	parity := collection.MapTo(nums, func(n int) string {
 		if n%2 == 0 {

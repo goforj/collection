@@ -22,9 +22,8 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 //	//   2 => 3 #int
 //	// ]
 //
-// Example:
+// Example: integers - chaining
 //
-//	// chaining
 //	collection.New([]int{1, 2, 3}).
 //		Filter(func(v int) bool { return v > 1 }).
 //		Dump()
@@ -43,9 +42,8 @@ func (c *Collection[T]) Dump() *Collection[T] {
 //
 // This method never returns.
 //
-// Example:
+// Example: strings
 //
-//	// strings
 //	c := collection.New([]string{"a", "b"})
 //	c.Dd()
 //	// #[]string [
@@ -61,9 +59,8 @@ func (c *Collection[T]) Dd() {
 // without printing or exiting.
 // Useful for logging, snapshot testing, and non-interactive debugging.
 //
-// Example:
+// Example: integers
 //
-//	// integers
 //	c := collection.New([]int{10, 20})
 //	s := c.DumpStr()
 //	fmt.Println(s)
@@ -85,9 +82,8 @@ func setDumpWriter(w io.Writer) {
 
 // Dump is a convenience function that calls godump.Dump.
 //
-// Example:
+// Example: integers
 //
-//	// integers
 //	c2 := collection.New([]int{1, 2, 3})
 //	collection.Dump(c2.Items())
 //	// #[]int [

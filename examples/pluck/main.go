@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// integers → extract parity label
+	// Example: integers - extract parity label
 	nums := collection.New([]int{1, 2, 3, 4})
 	parity := collection.Pluck(nums, func(n int) string {
 		if n%2 == 0 {
@@ -22,7 +22,7 @@ func main() {
 	//   3 => "even" #string
 	// ]
 
-	// strings → length of each value
+	// Example: strings - length of each value
 	words := collection.New([]string{"go", "forj", "rocks"})
 	lengths := collection.Pluck(words, func(s string) int {
 		return len(s)
@@ -34,7 +34,7 @@ func main() {
 	//   2 => 5 #int
 	// ]
 
-	// structs → pluck a field
+	// Example: structs - pluck a field
 	type User struct {
 		ID   int
 		Name string

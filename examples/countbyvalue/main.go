@@ -25,7 +25,7 @@ func main() {
 	//	3 => 3 #int
 	// ]
 
-	// structs (comparable)
+	// Example: structs (comparable)
 	type Point struct {
 		X int
 		Y int

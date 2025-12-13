@@ -2,27 +2,24 @@ package collection
 
 // IsEmpty returns true if the collection has no items.
 //
-// Example:
+// Example: integers (non-empty)
 //
-//	// integers (non-empty)
 //	c := collection.New([]int{1, 2, 3})
 //
 //	empty := c.IsEmpty()
 //	collection.Dump(empty)
 //	// false #bool
 //
-// Example:
+// Example: strings (empty)
 //
-//	// strings (empty)
 //	c2 := collection.New([]string{})
 //
 //	empty2 := c2.IsEmpty()
 //	collection.Dump(empty2)
 //	// true #bool
 //
-// Example:
+// Example: structs (non-empty)
 //
-//	// structs (non-empty)
 //	type User struct {
 //		ID   int
 //		Name string
@@ -36,9 +33,8 @@ package collection
 //	collection.Dump(empty3)
 //	// false #bool
 //
-// Example:
+// Example: structs (empty)
 //
-//	// structs (empty)
 //	none := collection.New([]User{})
 //
 //	empty4 := none.IsEmpty()

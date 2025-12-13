@@ -57,12 +57,12 @@ import "github.com/goforj/collection"
 | Name | Parent | Kind | Source |
 |------|--------|-------|--------|
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
-| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L111" target="_blank">Source</a> |
-| [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L98" target="_blank">Source</a> |
+| [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L110" target="_blank">Source</a> |
+| [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L94" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
-| [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L59" target="_blank">Source</a> |
+| [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L58" target="_blank">Source</a> |
 | [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L24" target="_blank">Source</a> |
-| [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L126" target="_blank">Source</a> |
+| [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L122" target="_blank">Source</a> |
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L80" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L63" target="_blank">Source</a> |
 | [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L14" target="_blank">Source</a> |
@@ -71,26 +71,26 @@ import "github.com/goforj/collection"
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L49" target="_blank">Source</a> |
 | [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L19" target="_blank">Source</a> |
-| [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L41" target="_blank">Source</a> |
+| [Contains](<#Collection[T].Contains>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/contains.go#L40" target="_blank">Source</a> |
 | [Count](<#Collection[T].Count>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/count.go#L9" target="_blank">Source</a> |
-| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L56" target="_blank">Source</a> |
-| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L35" target="_blank">Source</a> |
-| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L74" target="_blank">Source</a> |
+| [Dd](<#Collection[T].Dd>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L54" target="_blank">Source</a> |
+| [Dump](<#Collection[T].Dump>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L34" target="_blank">Source</a> |
+| [DumpStr](<#Collection[T].DumpStr>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/dump.go#L71" target="_blank">Source</a> |
 | [Each](<#Collection[T].Each>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/each.go#L58" target="_blank">Source</a> |
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
-| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L62" target="_blank">Source</a> |
-| [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L54" target="_blank">Source</a> |
+| [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L59" target="_blank">Source</a> |
+| [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L26" target="_blank">Source</a> |
-| [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L47" target="_blank">Source</a> |
+| [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L88" target="_blank">Source</a> |
-| [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L56" target="_blank">Source</a> |
-| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L86" target="_blank">Source</a> |
+| [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
+| [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L70" target="_blank">Source</a> |
-| [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L65" target="_blank">Source</a> |
-| [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L62" target="_blank">Source</a> |
-| [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L65" target="_blank">Source</a> |
-| [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L173" target="_blank">Source</a> |
+| [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L62" target="_blank">Source</a> |
+| [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L60" target="_blank">Source</a> |
+| [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L64" target="_blank">Source</a> |
+| [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L167" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L75" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L102" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
@@ -211,10 +211,9 @@ collection.Dump(counts2)
 // ]
 ```
 
-Example:
+Example: structs \(comparable\)
 
 ```go
-// structs (comparable)
 type Point struct {
 	X int
 	Y int
@@ -242,10 +241,9 @@ collection.Dump(counts3)
 
 Dump is a convenience function that calls godump.Dump.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c2 := collection.New([]int{1, 2, 3})
 collection.Dump(c2.Items())
 // #[]int [
@@ -270,10 +268,9 @@ MapTo maps a Collection\[T\] to a Collection\[R\] using fn\(T\) R.
 
 This cannot be a method because methods can't introduce a new type parameter R.
 
-Example:
+Example: integers \- extract parity label
 
 ```go
-// integers → extract parity label
 nums := collection.New([]int{1, 2, 3, 4})
 parity := collection.MapTo(nums, func(n int) string {
 	if n%2 == 0 {
@@ -349,10 +346,9 @@ The underlying slice is stored as\-is \(no copy is made\), allowing New to be bo
 
 Pluck is an alias for MapTo with a more semantic name when projecting fields. It extracts a single field or computed value from every element and returns a new typed collection.
 
-Example:
+Example: integers \- extract parity label
 
 ```go
-// integers → extract parity label
 nums := collection.New([]int{1, 2, 3, 4})
 parity := collection.Pluck(nums, func(n int) string {
 	if n%2 == 0 {
@@ -369,10 +365,9 @@ collection.Dump(parity.Items())
 // ]
 ```
 
-Example:
+Example: strings \- length of each value
 
 ```go
-// strings → length of each value
 words := collection.New([]string{"go", "forj", "rocks"})
 lengths := collection.Pluck(words, func(s string) int {
 	return len(s)
@@ -385,10 +380,9 @@ collection.Dump(lengths.Items())
 // ]
 ```
 
-Example:
+Example: structs \- pluck a field
 
 ```go
-// structs → pluck a field
 type User struct {
 	ID   int
 	Name string
@@ -686,7 +680,7 @@ collection.Dump(out3.Items())
 
 Chunk splits the collection into chunks of the given size. The final chunk may be smaller if len\(items\) is not divisible by size.
 
-If size \<= 0, nil is returned. Example:
+If size \<= 0, nil is returned. Example: integers
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
@@ -803,10 +797,9 @@ collection.Dump(hasBanana)
 // true #bool
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -849,10 +842,9 @@ Dd prints items then terminates execution. Like Laravel's dd\(\), this is intend
 
 This method never returns.
 
-Example:
+Example: strings
 
 ```go
-// strings
 c := collection.New([]string{"a", "b"})
 c.Dd()
 // #[]string [
@@ -882,10 +874,9 @@ c.Dump()
 // ]
 ```
 
-Example:
+Example: integers \- chaining
 
 ```go
-// chaining
 collection.New([]int{1, 2, 3}).
 	Filter(func(v int) bool { return v > 1 }).
 	Dump()
@@ -903,10 +894,9 @@ collection.New([]int{1, 2, 3}).
 
 DumpStr returns the pretty\-printed dump of the items as a string, without printing or exiting. Useful for logging, snapshot testing, and non\-interactive debugging.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c := collection.New([]int{10, 20})
 s := c.DumpStr()
 fmt.Println(s)
@@ -1072,10 +1062,9 @@ collection.Dump(v1, ok1)
 // true #bool
 ```
 
-Example:
+Example: no match
 
 ```go
-// no match
 v2, ok2 := nums.FindWhere(func(n int) bool {
 	return n > 10
 })
@@ -1084,10 +1073,9 @@ collection.Dump(v2, ok2)
 // false #bool
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1110,10 +1098,9 @@ collection.Dump(u, ok3)
 // true #bool
 ```
 
-Example:
+Example: integers \- empty collection
 
 ```go
-// empty collection
 empty := collection.New([]int{})
 
 v4, ok4 := empty.FindWhere(func(n int) bool { return n == 1 })
@@ -1141,10 +1128,9 @@ collection.Dump(v, ok)
 // true #bool
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"alpha", "beta", "gamma"})
 
 v2, ok2 := c2.First()
@@ -1153,10 +1139,9 @@ collection.Dump(v2, ok2)
 // true    #bool
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1176,10 +1161,9 @@ collection.Dump(u, ok3)
 // true #bool
 ```
 
-Example:
+Example: integers \- empty collection
 
 ```go
-// empty collection
 c3 := collection.New([]int{})
 v3, ok4 := c3.First()
 collection.Dump(v3, ok4)
@@ -1224,10 +1208,9 @@ collection.Dump(v, ok)
 
 IsEmpty returns true if the collection has no items.
 
-Example:
+Example: integers \(non\-empty\)
 
 ```go
-// integers (non-empty)
 c := collection.New([]int{1, 2, 3})
 
 empty := c.IsEmpty()
@@ -1235,10 +1218,9 @@ collection.Dump(empty)
 // false #bool
 ```
 
-Example:
+Example: strings \(empty\)
 
 ```go
-// strings (empty)
 c2 := collection.New([]string{})
 
 empty2 := c2.IsEmpty()
@@ -1246,10 +1228,9 @@ collection.Dump(empty2)
 // true #bool
 ```
 
-Example:
+Example: structs \(non\-empty\)
 
 ```go
-// structs (non-empty)
 type User struct {
 	ID   int
 	Name string
@@ -1264,10 +1245,9 @@ collection.Dump(empty3)
 // false #bool
 ```
 
-Example:
+Example: structs \(empty\)
 
 ```go
-// structs (empty)
 none := collection.New([]User{})
 
 empty4 := none.IsEmpty()
@@ -1354,10 +1334,9 @@ collection.Dump(v, ok)
 // true #bool
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c2 := collection.New([]string{"alpha", "beta", "gamma"})
 
 v2, ok2 := c2.Last()
@@ -1366,10 +1345,9 @@ collection.Dump(v2, ok2)
 // true    #bool
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1390,10 +1368,9 @@ collection.Dump(u, ok3)
 // true #bool
 ```
 
-Example:
+Example: empty collection
 
 ```go
-// empty collection
 c3 := collection.New([]int{})
 
 v3, ok4 := c3.Last()
@@ -1423,10 +1400,9 @@ collection.Dump(v, ok)
 // true #bool
 ```
 
-Example:
+Example: integers without predicate \(equivalent to Last\(\)\)
 
 ```go
-// integers without predicate (equivalent to Last())
 c2 := collection.New([]int{10, 20, 30, 40})
 
 v2, ok2 := c2.LastWhere(nil)
@@ -1435,10 +1411,9 @@ collection.Dump(v2, ok2)
 // true #bool
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
 
 v3, ok3 := c3.LastWhere(func(s string, i int) bool {
@@ -1449,10 +1424,9 @@ collection.Dump(v3, ok3)
 // true    #bool
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string
@@ -1476,10 +1450,9 @@ collection.Dump(u, ok4)
 // true #bool
 ```
 
-Example:
+Example: no matching element
 
 ```go
-// no matching element
 c4 := collection.New([]int{5, 6, 7})
 
 v4, ok5 := c4.LastWhere(func(v int, i int) bool {
@@ -1490,10 +1463,9 @@ collection.Dump(v4, ok5)
 // false #bool
 ```
 
-Example:
+Example: empty collection
 
 ```go
-// empty collection
 c5 := collection.New([]int{})
 
 v5, ok6 := c5.LastWhere(nil)
@@ -1681,10 +1653,9 @@ collection.Dump(out.Items())
 // ]
 ```
 
-Example:
+Example: strings
 
 ```go
-// strings
 strs := collection.New([]string{"a", "b"})
 out2 := strs.Multiply(2)
 collection.Dump(out2.Items())
@@ -1696,10 +1667,9 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-Example:
+Example: structs
 
 ```go
-// structs
 type User struct {
 	Name string
 }
@@ -1723,10 +1693,9 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-Example:
+Example: multiplying by zero or negative returns empty
 
 ```go
-// multiplying by zero or negative returns empty
 none := ints.Multiply(0)
 collection.Dump(none.Items())
 // #[]int [
@@ -1758,10 +1727,9 @@ collection.Dump(sum)
 // 6 #int
 ```
 
-Example:
+Example: strings – joining values
 
 ```go
-// strings – joining values
 c2 := collection.New([]string{"a", "b", "c"})
 joined := c2.Pipe(func(col *collection.Collection[string]) any {
 	out := ""
@@ -1774,10 +1742,9 @@ collection.Dump(joined)
 // "abc" #string
 ```
 
-Example:
+Example: structs – extracting just the names
 
 ```go
-// structs – extracting just the names
 type User struct {
 	ID   int
 	Name string
@@ -1866,10 +1833,9 @@ collection.Dump(item3, rest3.Items())
 // ]
 ```
 
-Example:
+Example: empty collection
 
 ```go
-// empty collection
 empty := collection.New([]int{})
 item4, rest4 := empty.Pop()
 collection.Dump(item4, rest4.Items())
@@ -1888,10 +1854,9 @@ PopN removes and returns the last n items as a new collection, and returns a sec
 
 The popped items are returned in reverse order, matching the behavior of repeated Pop\(\) calls.
 
-Example:
+Example: integers – pop 2
 
 ```go
-// integers – pop 2
 c := collection.New([]int{1, 2, 3, 4})
 popped, rest := c.PopN(2)
 collection.Dump(popped.Items(), rest.Items())
@@ -1905,10 +1870,9 @@ collection.Dump(popped.Items(), rest.Items())
 // ]
 ```
 
-Example:
+Example: strings – pop 1
 
 ```go
-// strings – pop 1
 c2 := collection.New([]string{"a", "b", "c"})
 popped2, rest2 := c2.PopN(1)
 collection.Dump(popped2.Items(), rest2.Items())
@@ -1921,10 +1885,9 @@ collection.Dump(popped2.Items(), rest2.Items())
 // ]
 ```
 
-Example:
+Example: structs – pop 2
 
 ```go
-// structs – pop 2
 type User struct {
 	ID   int
 	Name string
@@ -1956,10 +1919,9 @@ collection.Dump(popped3.Items(), rest3.Items())
 // ]
 ```
 
-Example:
+Example: integers \- n \<= 0 → returns empty popped \+ original collection
 
 ```go
-// n <= 0 → returns empty popped + original collection
 c3 := collection.New([]int{1, 2, 3})
 popped4, rest4 := c3.PopN(0)
 collection.Dump(popped4.Items(), rest4.Items())
@@ -1972,10 +1934,9 @@ collection.Dump(popped4.Items(), rest4.Items())
 // ]
 ```
 
-Example:
+Example: strings \- n exceeds length → all items popped, rest empty
 
 ```go
-// n exceeds length → all items popped, rest empty
 c4 := collection.New([]string{"x", "y"})
 popped5, rest5 := c4.PopN(10)
 collection.Dump(popped5.Items(), rest5.Items())

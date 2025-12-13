@@ -18,7 +18,7 @@ func main() {
 	collection.Dump(sum)
 	// 6 #int
 
-	// strings – joining values
+	// Example: strings – joining values
 	c2 := collection.New([]string{"a", "b", "c"})
 	joined := c2.Pipe(func(col *collection.Collection[string]) any {
 		out := ""
@@ -30,7 +30,7 @@ func main() {
 	collection.Dump(joined)
 	// "abc" #string
 
-	// structs – extracting just the names
+	// Example: structs – extracting just the names
 	type User struct {
 		ID   int
 		Name string

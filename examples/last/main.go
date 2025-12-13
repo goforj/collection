@@ -14,7 +14,7 @@ func main() {
 	// 30   #int
 	// true #bool
 
-	// strings
+	// Example: strings
 	c2 := collection.New([]string{"alpha", "beta", "gamma"})
 
 	v2, ok2 := c2.Last()
@@ -22,7 +22,7 @@ func main() {
 	// "gamma" #string
 	// true    #bool
 
-	// structs
+	// Example: structs
 	type User struct {
 		ID   int
 		Name string
@@ -42,7 +42,7 @@ func main() {
 	// }
 	// true #bool
 
-	// empty collection
+	// Example: empty collection
 	c3 := collection.New([]int{})
 
 	v3, ok4 := c3.Last()

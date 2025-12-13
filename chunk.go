@@ -4,7 +4,7 @@ package collection
 // The final chunk may be smaller if len(items) is not divisible by size.
 //
 // If size <= 0, nil is returned.
-// Example:
+// Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 //	collection.Dump(c)

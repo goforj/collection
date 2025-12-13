@@ -15,7 +15,7 @@ func main() {
 	//   2 => 3 #int
 	// ]
 
-	// chaining
+	// Example: integers - chaining
 	collection.New([]int{1, 2, 3}).
 		Filter(func(v int) bool { return v > 1 }).
 		Dump()
@@ -23,7 +23,7 @@ func main() {
 	//   0 => 2 #int
 	//   1 => 3 #int
 	// ]
-	// integers
+	// Example: integers
 	c2 := collection.New([]int{1, 2, 3})
 	collection.Dump(c2.Items())
 	// #[]int [

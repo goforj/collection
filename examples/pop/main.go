@@ -50,7 +50,7 @@ func main() {
 	//   }
 	// ]
 
-	// empty collection
+	// Example: empty collection
 	empty := collection.New([]int{})
 	item4, rest4 := empty.Pop()
 	collection.Dump(item4, rest4.Items())

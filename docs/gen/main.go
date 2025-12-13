@@ -88,11 +88,12 @@ func fileExists(p string) bool { _, err := os.Stat(p); return err == nil }
 type Example struct {
 	FuncName string
 	File     string
+	Label    string
 	Line     int
 	Code     string
 }
 
-var exampleHeader = regexp.MustCompile(`(?i)^Example:`)
+var exampleHeader = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
 
 // docLine keeps a processed doc line plus its position in the source file.
 type docLine struct {
@@ -169,6 +170,7 @@ func docLines(group *ast.CommentGroup) []docLine {
 
 func extractBlocks(fset *token.FileSet, filename, funcName string, fn *ast.FuncDecl) []Example {
 	var out []Example
+	var label string
 
 	lines := docLines(fn.Doc)
 	if len(lines) == 0 {
@@ -205,9 +207,11 @@ func extractBlocks(fset *token.FileSet, filename, funcName string, fn *ast.FuncD
 			FuncName: funcName,
 			File:     filename,
 			Line:     startLine,
+			Label:    label,
 			Code:     strings.Join(combined, "\n"),
 		})
 
+		label = ""
 		code = nil
 		output = nil
 		inExample = false
@@ -218,10 +222,10 @@ func extractBlocks(fset *token.FileSet, filename, funcName string, fn *ast.FuncD
 		trimmed := strings.TrimSpace(rawLine)
 
 		// Start of a new Example: block
-		if exampleHeader.MatchString(trimmed) {
+		if m := exampleHeader.FindStringSubmatch(trimmed); m != nil {
 			flush()
 			inExample = true
-			// Use real file position for the "from X.go:line" annotation
+			label = strings.TrimSpace(m[1])
 			startLine = fset.Position(dl.pos).Line
 			continue
 		}
@@ -322,6 +326,12 @@ func writeMain(base, funcName string, list []Example) error {
 	buf.WriteString("func main() {\n")
 
 	for _, ex := range list {
+
+		if ex.Label != "" {
+			buf.WriteString("\t// " + ex.Label + "\n")
+		}
+
+		ex.Code = strings.TrimLeft(ex.Code, "\n")
 
 		// Header comment for each example
 		//buf.WriteString(fmt.Sprintf("\t// Example %d (from %s:%d)\n",

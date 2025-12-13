@@ -80,7 +80,7 @@ import "github.com/goforj/collection"
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L62" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L54" target="_blank">Source</a> |
-| [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L27" target="_blank">Source</a> |
+| [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L26" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L47" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L88" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L56" target="_blank">Source</a> |
@@ -2097,16 +2097,16 @@ nums.Dump()
 
 // Complex type (structs)
 type User struct {
-    Name string
-    Age  int
+	Name string
+	Age  int
 }
 
 users := collection.New([]User{
-    {Name: "Alice", Age: 30},
-    {Name: "Bob",   Age: 25},
+	{Name: "Alice", Age: 30},
+	{Name: "Bob",   Age: 25},
 }).Push(
-    User{Name: "Carol", Age: 40},
-    User{Name: "Dave",  Age: 20},
+	User{Name: "Carol", Age: 40},
+	User{Name: "Dave",  Age: 20},
 )
 users.Dump()
 // #[]main.User [

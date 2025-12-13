@@ -69,16 +69,16 @@ func (c *Collection[T]) Append(values ...T) *Collection[T] {
 //
 //	// Complex type (structs)
 //	type User struct {
-//	    Name string
-//	    Age  int
+//		Name string
+//		Age  int
 //	}
 //
 //	users := collection.New([]User{
-//	    {Name: "Alice", Age: 30},
-//	    {Name: "Bob",   Age: 25},
+//		{Name: "Alice", Age: 30},
+//		{Name: "Bob",   Age: 25},
 //	}).Push(
-//	    User{Name: "Carol", Age: 40},
-//	    User{Name: "Dave",  Age: 20},
+//		User{Name: "Carol", Age: 40},
+//		User{Name: "Dave",  Age: 20},
 //	)
 //	users.Dump()
 //	// #[]main.User [

@@ -21,5 +21,4 @@ func main() {
 	collection.Dump(v, ok)
 	// 0 #int
 	// false #bool
-
 }

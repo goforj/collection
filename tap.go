@@ -14,7 +14,12 @@ package collection
 //		Tap(func(col *collection.Collection[int]) {
 //			captured1 = append([]int(nil), col.Items()...) // snapshot copy
 //		}).
-//		Filter(func(v int) bool { return v >= 2 })       // → [2, 3]
+//		Filter(func(v int) bool { return v >= 2 }).
+//		Dump()
+//		// #[]int [
+//		//  0 => 2 #int
+//		//  1 => 3 #int
+//		// ]
 //
 //	// Use BOTH variables so nothing is "declared and not used"
 //	collection.Dump(c1.Items())

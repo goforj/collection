@@ -97,7 +97,7 @@ import "github.com/goforj/collection"
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
-| [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L52" target="_blank">Source</a> |
+| [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L57" target="_blank">Source</a> |
 | [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L24" target="_blank">Source</a> |
 | [ToPrettyJSON](<#Collection[T].ToPrettyJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L52" target="_blank">Source</a> |
 | [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L52" target="_blank">Source</a> |
@@ -2103,10 +2103,10 @@ type User struct {
 
 users := collection.New([]User{
 	{Name: "Alice", Age: 30},
-	{Name: "Bob",   Age: 25},
+	{Name: "Bob", Age: 25},
 }).Push(
 	User{Name: "Carol", Age: 40},
-	User{Name: "Dave",  Age: 20},
+	User{Name: "Dave", Age: 20},
 )
 users.Dump()
 // #[]main.User [
@@ -2381,7 +2381,12 @@ c1 := collection.New([]int{3, 1, 2}).
 	Tap(func(col *collection.Collection[int]) {
 		captured1 = append([]int(nil), col.Items()...) // snapshot copy
 	}).
-	Filter(func(v int) bool { return v >= 2 })       // → [2, 3]
+	Filter(func(v int) bool { return v >= 2 }).
+	Dump()
+	// #[]int [
+	//  0 => 2 #int
+	//  1 => 3 #int
+	// ]
 
 // Use BOTH variables so nothing is "declared and not used"
 collection.Dump(c1.Items())

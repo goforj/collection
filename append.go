@@ -75,10 +75,10 @@ func (c *Collection[T]) Append(values ...T) *Collection[T] {
 //
 //	users := collection.New([]User{
 //		{Name: "Alice", Age: 30},
-//		{Name: "Bob",   Age: 25},
+//		{Name: "Bob", Age: 25},
 //	}).Push(
 //		User{Name: "Carol", Age: 40},
-//		User{Name: "Dave",  Age: 20},
+//		User{Name: "Dave", Age: 20},
 //	)
 //	users.Dump()
 //	// #[]main.User [

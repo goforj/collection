@@ -2,142 +2,121 @@ package collection_test
 
 import (
 	"bytes"
+	"encoding/json"
+	"errors"
 	"fmt"
-	"go/parser"
-	"go/token"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"testing"
 )
 
-type ExampleCase struct {
-	Name   string
-	Code   string
-	Output string // optional — for future matching
-}
+func TestExamplesBuild(t *testing.T) {
+	examplesDir := "examples"
 
-func TestDocExamplesCompile(t *testing.T) {
-	fset := token.NewFileSet()
-
-	// Parse THIS module's source directory, not the test directory.
-	pkgs, err := parser.ParseDir(fset, ".", nil, parser.ParseComments)
+	entries, err := os.ReadDir(examplesDir)
 	if err != nil {
-		t.Fatalf("parse error: %v", err)
+		t.Fatalf("cannot read examples directory: %v", err)
 	}
 
-	var cases []ExampleCase
-
-	for filename, file := range pkgs["collection"].Files {
-		for _, cg := range file.Comments {
-			extracted := extractFromComment(filename, cg.Text())
-			cases = append(cases, extracted...)
+	for _, e := range entries {
+		if !e.IsDir() {
+			continue
 		}
-	}
 
-	if len(cases) == 0 {
-		t.Fatalf("no doc examples found to test")
-	}
+		// CAPTURE LOOP VARS
+		name := e.Name()
+		path := filepath.Join(examplesDir, name)
 
-	for _, tc := range cases {
-		t.Run(tc.Name, func(t *testing.T) {
-			ok, stderr := tryCompileExternal(tc.Code)
-			if !ok {
-				t.Fatalf("Compilation failed:\nExample Code:\n%s\n\nCompiler error:\n%s",
-					indent(tc.Code), indent(stderr))
+		t.Run(name, func(t *testing.T) {
+			t.Parallel() // 🔑 enable concurrency
+
+			if err := buildExampleWithoutTags(path); err != nil {
+				t.Fatalf("example %q failed to build:\n%s", name, err)
 			}
 		})
 	}
 }
 
-func extractFromComment(filename, comment string) []ExampleCase {
-	var out []ExampleCase
-
-	lines := strings.Split(comment, "\n")
-	var block []string
-	in := false
-	startLine := 0
-
-	for i, raw := range lines {
-		line := strings.TrimSpace(raw)
-
-		if strings.HasPrefix(line, "Example:") {
-			// close previous block if any
-			if in && len(block) > 0 {
-				out = append(out, makeCase(filename, startLine, block))
-			}
-			in = true
-			block = nil
-			startLine = i + 1
-			continue
-		}
-
-		if !in {
-			continue
-		}
-
-		// Strip `//`
-		trim := strings.TrimSpace(strings.TrimPrefix(raw, "//"))
-
-		if trim == "" || strings.HasPrefix(trim, "//") {
-			if len(block) > 0 {
-				out = append(out, makeCase(filename, startLine, block))
-			}
-			in = false
-			block = nil
-			continue
-		}
-
-		block = append(block, trim)
-	}
-
-	// trailing block
-	if in && len(block) > 0 {
-		out = append(out, makeCase(filename, startLine, block))
-	}
-
-	return out
-}
-
-func makeCase(filename string, line int, block []string) ExampleCase {
-	return ExampleCase{
-		Name: filepath.Base(filename) + ":" + strconv.Itoa(line),
-		Code: strings.Join(block, "\n"),
-	}
-}
-
-// Compile as an EXTERNAL user program.
-func tryCompileExternal(src string) (bool, string) {
-	tmp := fmt.Sprintf(`package main
-import "github.com/goforj/collection"
-func main() {
-%s
-}`, src)
-
-	f, err := os.CreateTemp("", "example_*.go")
+func abs(p string) string {
+	a, err := filepath.Abs(p)
 	if err != nil {
-		return false, "cannot create temp file"
+		panic(err)
 	}
-	defer os.Remove(f.Name())
-	f.WriteString(tmp)
-	f.Close()
+	return a
+}
 
-	// Use go build — safe, normal, resolves modules.
-	cmd := exec.Command("go", "build", "-o", os.DevNull, f.Name())
+func buildExampleWithoutTags(exampleDir string) error {
+	orig := filepath.Join(exampleDir, "main.go")
+
+	src, err := os.ReadFile(orig)
+	if err != nil {
+		return fmt.Errorf("read main.go: %w", err)
+	}
+
+	clean := stripBuildTags(src)
+
+	tmpDir, err := os.MkdirTemp("", "example-overlay-*")
+	if err != nil {
+		return err
+	}
+	defer os.RemoveAll(tmpDir)
+
+	tmpFile := filepath.Join(tmpDir, "main.go")
+	if err := os.WriteFile(tmpFile, clean, 0644); err != nil {
+		return err
+	}
+
+	overlay := map[string]any{
+		"Replace": map[string]string{
+			abs(orig): abs(tmpFile),
+		},
+	}
+
+	overlayJSON, err := json.Marshal(overlay)
+	if err != nil {
+		return err
+	}
+
+	overlayPath := filepath.Join(tmpDir, "overlay.json")
+	if err := os.WriteFile(overlayPath, overlayJSON, 0644); err != nil {
+		return err
+	}
+
+	cmd := exec.Command(
+		"go", "build",
+		"-overlay", overlayPath,
+		"-o", os.DevNull,
+		"./"+exampleDir,
+	)
 
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
-	err = cmd.Run()
 
-	return err == nil, stderr.String()
+	if err := cmd.Run(); err != nil {
+		return errors.New(stderr.String())
+	}
+
+	return nil
 }
 
-func indent(s string) string {
-	lines := strings.Split(s, "\n")
-	for i := range lines {
-		lines[i] = "    " + lines[i]
+func stripBuildTags(src []byte) []byte {
+	lines := strings.Split(string(src), "\n")
+
+	i := 0
+	for i < len(lines) {
+		line := strings.TrimSpace(lines[i])
+
+		if strings.HasPrefix(line, "//go:build") ||
+			strings.HasPrefix(line, "// +build") ||
+			line == "" {
+			i++
+			continue
+		}
+
+		break
 	}
-	return strings.Join(lines, "\n")
+
+	return []byte(strings.Join(lines[i:], "\n"))
 }

@@ -80,7 +80,7 @@ import "github.com/goforj/collection"
 | [Filter](<#Collection[T].Filter>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/filter.go#L59" target="_blank">Source</a> |
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L62" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L54" target="_blank">Source</a> |
-| [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L22" target="_blank">Source</a> |
+| [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L27" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L47" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L88" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L56" target="_blank">Source</a> |
@@ -92,7 +92,7 @@ import "github.com/goforj/collection"
 | [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L65" target="_blank">Source</a> |
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L173" target="_blank">Source</a> |
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L75" target="_blank">Source</a> |
-| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L84" target="_blank">Source</a> |
+| [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L102" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
@@ -1200,16 +1200,20 @@ This method is equivalent to Laravel's collection\-\>first\(fn\) and mirrors the
 Example: integers
 
 ```go
-nums := New([]int{1, 2, 3, 4, 5})
+nums := collection.New([]int{1, 2, 3, 4, 5})
 v, ok := nums.FirstWhere(func(n int) bool {
     return n%2 == 0
 })
-// v = 2, ok = true
+collection.Dump(v, ok)
+// 2 #int
+// true #bool
 
 v, ok = nums.FirstWhere(func(n int) bool {
     return n > 10
 })
-// v = 0, ok = false
+collection.Dump(v, ok)
+// 0 #int
+// false #bool
 ```
 
 
@@ -2083,7 +2087,13 @@ Example: integers
 
 ```go
 nums := collection.New([]int{1, 2}).Push(3, 4)
-// nums = [1, 2, 3, 4]
+nums.Dump()
+// #[]int [
+//  0 => 1 #int
+//  1 => 2 #int
+//  2 => 3 #int
+//  3 => 4 #int
+// ]
 
 // Complex type (structs)
 type User struct {
@@ -2098,12 +2108,24 @@ users := collection.New([]User{
     User{Name: "Carol", Age: 40},
     User{Name: "Dave",  Age: 20},
 )
-
-// users = [
-//   {Alice 30},
-//   {Bob 25},
-//   {Carol 40},
-//   {Dave 20},
+users.Dump()
+// #[]main.User [
+//  0 => #main.User {
+//    +Name => "Alice" #string
+//    +Age  => 30 #int
+//  }
+//  1 => #main.User {
+//    +Name => "Bob" #string
+//    +Age  => 25 #int
+//  }
+//  2 => #main.User {
+//    +Name => "Carol" #string
+//    +Age  => 40 #int
+//  }
+//  3 => #main.User {
+//    +Name => "Dave" #string
+//    +Age  => 20 #int
+//  }
 // ]
 ```
 

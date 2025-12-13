@@ -3,6 +3,7 @@ package collection
 // IsEmpty returns true if the collection has no items.
 //
 // Example:
+//
 //	// integers (non-empty)
 //	c := collection.New([]int{1, 2, 3})
 //
@@ -11,6 +12,7 @@ package collection
 //	// false #bool
 //
 // Example:
+//
 //	// strings (empty)
 //	c2 := collection.New([]string{})
 //
@@ -19,6 +21,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// structs (non-empty)
 //	type User struct {
 //		ID   int
@@ -34,6 +37,7 @@ package collection
 //	// false #bool
 //
 // Example:
+//
 //	// structs (empty)
 //	none := collection.New([]User{})
 //

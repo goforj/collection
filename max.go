@@ -4,6 +4,7 @@ package collection
 // The second return value is false if the collection is empty.
 //
 // Example: integers
+//
 //	c := collection.NewNumeric([]int{3, 1, 2})
 //
 //	max1, ok1 := c.Max()
@@ -12,6 +13,7 @@ package collection
 //	// true #bool
 //
 // Example: floats
+//
 //	c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
 //
 //	max2, ok2 := c2.Max()
@@ -20,6 +22,7 @@ package collection
 //	// true     #bool
 //
 // Example: empty numeric collection
+//
 //	c3 := collection.NewNumeric([]int{})
 //
 //	max3, ok3 := c3.Max()

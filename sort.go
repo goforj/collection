@@ -10,6 +10,7 @@ import "sort"
 // Sorting does NOT mutate the original collection—Sort always returns a new one.
 //
 // Example: integers
+//
 //	c := collection.New([]int{5, 1, 4, 2})
 //	sorted := c.Sort(func(a, b int) bool { return a < b })
 //	collection.Dump(sorted.Items())
@@ -21,6 +22,7 @@ import "sort"
 //	// ]
 //
 // Example: strings (descending)
+//
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
 //	sorted2 := c2.Sort(func(a, b string) bool { return a > b })
 //	collection.Dump(sorted2.Items())
@@ -31,6 +33,7 @@ import "sort"
 //	// ]
 //
 // Example: structs
+//
 //	type User struct {
 //		Name string
 //		Age  int

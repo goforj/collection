@@ -13,6 +13,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 // This is a no-op on the collection itself and never panics.
 //
 // Example: integers
+//
 //	c := collection.New([]int{1, 2, 3})
 //	c.Dump()
 //	// #[]int [
@@ -22,6 +23,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 //	// ]
 //
 // Example:
+//
 //	// chaining
 //	collection.New([]int{1, 2, 3}).
 //		Filter(func(v int) bool { return v > 1 }).
@@ -42,6 +44,7 @@ func (c *Collection[T]) Dump() *Collection[T] {
 // This method never returns.
 //
 // Example:
+//
 //	// strings
 //	c := collection.New([]string{"a", "b"})
 //	c.Dd()
@@ -59,6 +62,7 @@ func (c *Collection[T]) Dd() {
 // Useful for logging, snapshot testing, and non-interactive debugging.
 //
 // Example:
+//
 //	// integers
 //	c := collection.New([]int{10, 20})
 //	s := c.DumpStr()

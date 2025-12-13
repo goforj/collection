@@ -5,6 +5,7 @@ package collection
 //
 // If size <= 0, nil is returned.
 // Example:
+//
 //	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 //	collection.Dump(c)
 //
@@ -23,6 +24,7 @@ package collection
 //	//]
 //
 // Example: structs
+//
 //	type User struct {
 //		ID   int
 //		Name string

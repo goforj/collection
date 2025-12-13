@@ -6,6 +6,7 @@ package collection
 // If count <= 0, an empty collection is returned.
 //
 // Example: integers - double each index
+//
 //	cTimes1 := collection.Times(5, func(i int) int {
 //		return i * 2
 //	})
@@ -19,6 +20,7 @@ package collection
 //	// ]
 //
 // Example: strings
+//
 //	cTimes2 := collection.Times(3, func(i int) string {
 //		return fmt.Sprintf("item-%d", i)
 //	})
@@ -30,6 +32,7 @@ package collection
 //	// ]
 //
 // Example: structs
+//
 //	type Point struct {
 //		X int
 //		Y int

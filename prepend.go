@@ -6,6 +6,7 @@ package collection
 // The original collection is not modified.
 //
 // Example: integers
+//
 //	c := collection.New([]int{3, 4})
 //	newC := c.Prepend(1, 2)
 //	collection.Dump(newC.Items())
@@ -17,6 +18,7 @@ package collection
 //	// ]
 //
 // Example: strings
+//
 //	letters := collection.New([]string{"c", "d"})
 //	out := letters.Prepend("a", "b")
 //	collection.Dump(out.Items())
@@ -28,6 +30,7 @@ package collection
 //	// ]
 //
 // Example: structs
+//
 //	type User struct {
 //		ID   int
 //		Name string
@@ -51,6 +54,7 @@ package collection
 //	// ]
 //
 // Example: integers - Prepending into an empty collection
+//
 //	empty := collection.New([]int{})
 //	out3 := empty.Prepend(9, 8)
 //	collection.Dump(out3.Items())
@@ -60,6 +64,7 @@ package collection
 //	// ]
 //
 // Example: integers - Prepending no values → returns a copy of original
+//
 //	c2 := collection.New([]int{1, 2})
 //	out4 := c2.Prepend()
 //	collection.Dump(out4.Items())

@@ -5,6 +5,7 @@ package collection
 // If the collection is empty or no element matches, ok will be false.
 //
 // Example: integers
+//
 //	c := collection.New([]int{1, 2, 3, 4})
 //
 //	v, ok := c.LastWhere(func(v int, i int) bool {
@@ -15,6 +16,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// integers without predicate (equivalent to Last())
 //	c2 := collection.New([]int{10, 20, 30, 40})
 //
@@ -24,6 +26,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// strings
 //	c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
 //
@@ -35,6 +38,7 @@ package collection
 //	// true    #bool
 //
 // Example:
+//
 //	// structs
 //	type User struct {
 //		ID   int
@@ -59,6 +63,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// no matching element
 //	c4 := collection.New([]int{5, 6, 7})
 //
@@ -70,6 +75,7 @@ package collection
 //	// false #bool
 //
 // Example:
+//
 //	// empty collection
 //	c5 := collection.New([]int{})
 //

@@ -3,6 +3,7 @@ package collection
 // Concat appends the values from the given slice onto the end of the collection,
 //
 // Example: strings
+//
 //	c := collection.New([]string{"John Doe"})
 //	concatenated := c.
 //		Concat([]string{"Jane Doe"}).

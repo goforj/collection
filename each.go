@@ -4,6 +4,7 @@ package collection
 // so it can be used in chains for side effects (logging, debugging, etc.).
 //
 // Example: integers
+//
 //	c := collection.New([]int{1, 2, 3})
 //
 //	sum := 0
@@ -15,6 +16,7 @@ package collection
 //	// 6 #int
 //
 // Example: strings
+//
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
 //
 //	var out []string
@@ -30,6 +32,7 @@ package collection
 //	// ]
 //
 // Example: structs
+//
 //	type User struct {
 //		ID   int
 //		Name string

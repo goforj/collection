@@ -7,6 +7,7 @@ package collection
 // or any fold-style reduction.
 //
 // Example: integers - sum
+//
 //	sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 //		return acc + n
 //	})
@@ -14,6 +15,7 @@ package collection
 //	// 6 #int
 //
 // Example: strings
+//
 //	joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
 //		return acc + s
 //	})
@@ -21,6 +23,7 @@ package collection
 //	// "abc" #string
 //
 // Example: structs
+//
 //	type Stats struct {
 //		Count int
 //		Sum   int

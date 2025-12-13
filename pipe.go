@@ -7,6 +7,7 @@ package collection
 // or "exiting" a chain with a non-collection value.
 //
 // Example: integers – computing a sum
+//
 //	c := collection.New([]int{1, 2, 3})
 //	sum := c.Pipe(func(col *collection.Collection[int]) any {
 //		total := 0
@@ -19,6 +20,7 @@ package collection
 //	// 6 #int
 //
 // Example:
+//
 //	// strings – joining values
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	joined := c2.Pipe(func(col *collection.Collection[string]) any {
@@ -32,6 +34,7 @@ package collection
 //	// "abc" #string
 //
 // Example:
+//
 //	// structs – extracting just the names
 //	type User struct {
 //		ID   int

@@ -4,6 +4,7 @@ package collection
 // K must be comparable.
 //
 // Example: integers
+//
 //	c := collection.New([]int{1, 2, 2, 3, 3, 3})
 //	counts := collection.CountBy(c, func(v int) int {
 //		return v
@@ -16,6 +17,7 @@ package collection
 //	// }
 //
 // Example: strings
+//
 //	c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
 //	counts2 := collection.CountBy(c2, func(v string) string {
 //		return v
@@ -28,6 +30,7 @@ package collection
 //	// }
 //
 // Example: structs
+//
 //	type User struct {
 //		Name string
 //		Role string
@@ -65,6 +68,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 // T must be comparable.
 //
 // Example: strings
+//
 //	c1 := collection.New([]string{"a", "b", "a"})
 //	counts1 := collection.CountByValue(c1)
 //	collection.Dump(counts1)
@@ -74,6 +78,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 //	// ]
 //
 // Example: integers
+//
 //	c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
 //	counts2 := collection.CountByValue(c2)
 //	collection.Dump(counts2)
@@ -84,6 +89,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 //	// ]
 //
 // Example:
+//
 //	// structs (comparable)
 //	type Point struct {
 //		X int

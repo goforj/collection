@@ -4,6 +4,7 @@ package collection
 // and returns a new collection.
 //
 // Example: integers
+//
 //	ints := collection.New([]int{1, 2})
 //	out := ints.Multiply(3)
 //	collection.Dump(out.Items())
@@ -17,6 +18,7 @@ package collection
 //	// ]
 //
 // Example:
+//
 //	// strings
 //	strs := collection.New([]string{"a", "b"})
 //	out2 := strs.Multiply(2)
@@ -29,6 +31,7 @@ package collection
 //	// ]
 //
 // Example:
+//
 //	// structs
 //	type User struct {
 //		Name string
@@ -53,6 +56,7 @@ package collection
 //	// ]
 //
 // Example:
+//
 //	// multiplying by zero or negative returns empty
 //	none := ints.Multiply(0)
 //	collection.Dump(none.Items())

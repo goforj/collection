@@ -108,7 +108,7 @@ func TestFirstWhere_ChainingBehavior(t *testing.T) {
 	// typical Laravel-style chain:
 	// first even number after filtering evens >= 4 → should be 4
 	value, ok := c.
-		Filter(func(v int) bool { return v%2 == 0 }). // [2, 4]
+		Filter(func(v int) bool { return v%2 == 0 }).  // [2, 4]
 		FirstWhere(func(v int) bool { return v >= 4 }) // → 4
 
 	if !ok {

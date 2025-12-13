@@ -7,6 +7,7 @@ package collection
 // an empty collection.
 //
 // Example: integers
+//
 //	c := collection.New([]int{1, 2, 3})
 //	item, rest := c.Pop()
 //	collection.Dump(item, rest.Items())
@@ -17,6 +18,7 @@ package collection
 //	// ]
 //
 // Example: strings
+//
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	item2, rest2 := c2.Pop()
 //	collection.Dump(item2, rest2.Items())
@@ -27,6 +29,7 @@ package collection
 //	// ]
 //
 // Example: structs
+//
 //	type User struct {
 //		ID   int
 //		Name string
@@ -51,6 +54,7 @@ package collection
 //	// ]
 //
 // Example:
+//
 //	// empty collection
 //	empty := collection.New([]int{})
 //	item4, rest4 := empty.Pop()
@@ -79,6 +83,7 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 // of repeated Pop() calls.
 //
 // Example:
+//
 //	// integers – pop 2
 //	c := collection.New([]int{1, 2, 3, 4})
 //	popped, rest := c.PopN(2)
@@ -93,6 +98,7 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	// ]
 //
 // Example:
+//
 //	// strings – pop 1
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	popped2, rest2 := c2.PopN(1)
@@ -106,6 +112,7 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	// ]
 //
 // Example:
+//
 //	// structs – pop 2
 //	type User struct {
 //		ID   int
@@ -138,6 +145,7 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	// ]
 //
 // Example:
+//
 //	// n <= 0 → returns empty popped + original collection
 //	c3 := collection.New([]int{1, 2, 3})
 //	popped4, rest4 := c3.PopN(0)
@@ -151,6 +159,7 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	// ]
 //
 // Example:
+//
 //	// n exceeds length → all items popped, rest empty
 //	c4 := collection.New([]string{"x", "y"})
 //	popped5, rest5 := c4.PopN(10)

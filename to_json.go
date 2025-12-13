@@ -16,6 +16,7 @@ import (
 //   - error : nil on success, or the unwrapped marshalling error
 //
 // Example: strings - pretty JSON
+//
 //	pj1 := collection.New([]string{"a", "b"})
 //	out1, _ := pj1.ToJSON()
 //	fmt.Println(out1)
@@ -36,10 +37,11 @@ func (c *Collection[T]) ToJSON() (string, error) {
 // MarshalJSON failures surface directly.
 //
 // Returns:
-//	- string: the pretty-printed JSON representation
-//	- error : nil on success, or the unwrapped marshalling error
+//   - string: the pretty-printed JSON representation
+//   - error : nil on success, or the unwrapped marshalling error
 //
 // Example: strings - pretty JSON
+//
 //	pj1 := collection.New([]string{"a", "b"})
 //	out1, _ := pj1.ToPrettyJSON()
 //	fmt.Println(out1)

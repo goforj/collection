@@ -2,6 +2,7 @@ package collection
 
 // Append returns a new collection with the given values appended.
 // Example: integers
+//
 //	c := collection.New([]int{1, 2})
 //	c.Append(3, 4).Dump()
 //	// #[]int [
@@ -12,6 +13,7 @@ package collection
 //	// ]
 //
 // Example: structs
+//
 //	type User struct {
 //		ID   int
 //		Name string
@@ -56,30 +58,29 @@ func (c *Collection[T]) Append(values ...T) *Collection[T] {
 //
 // Example: integers
 //
-//  nums := collection.New([]int{1, 2}).Push(3, 4)
-//  // nums = [1, 2, 3, 4]
+//	nums := collection.New([]int{1, 2}).Push(3, 4)
+//	// nums = [1, 2, 3, 4]
 //
-//  // Complex type (structs)
-//  type User struct {
-//      Name string
-//      Age  int
-//  }
+//	// Complex type (structs)
+//	type User struct {
+//	    Name string
+//	    Age  int
+//	}
 //
-//  users := collection.New([]User{
-//      {Name: "Alice", Age: 30},
-//      {Name: "Bob",   Age: 25},
-//  }).Push(
-//      User{Name: "Carol", Age: 40},
-//      User{Name: "Dave",  Age: 20},
-//  )
+//	users := collection.New([]User{
+//	    {Name: "Alice", Age: 30},
+//	    {Name: "Bob",   Age: 25},
+//	}).Push(
+//	    User{Name: "Carol", Age: 40},
+//	    User{Name: "Dave",  Age: 20},
+//	)
 //
-//  // users = [
-//  //   {Alice 30},
-//  //   {Bob 25},
-//  //   {Carol 40},
-//  //   {Dave 20},
-//  // ]
-//
+//	// users = [
+//	//   {Alice 30},
+//	//   {Bob 25},
+//	//   {Carol 40},
+//	//   {Dave 20},
+//	// ]
 func (c *Collection[T]) Push(values ...T) *Collection[T] {
 	return c.Append(values...)
 }

@@ -4,6 +4,7 @@ package collection
 // The second return value is false if the collection is empty.
 //
 // Example: integers
+//
 //	c := collection.NewNumeric([]int{3, 1, 2})
 //	min, ok := c.Min()
 //	collection.Dump(min, ok)
@@ -11,6 +12,7 @@ package collection
 //	// true #bool
 //
 // Example: floats
+//
 //	c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
 //	min2, ok2 := c2.Min()
 //	collection.Dump(min2, ok2)
@@ -18,6 +20,7 @@ package collection
 //	// true #bool
 //
 // Example: integers - empty collection
+//
 //	empty := collection.NewNumeric([]int{})
 //	min3, ok3 := empty.Min()
 //	collection.Dump(min3, ok3)

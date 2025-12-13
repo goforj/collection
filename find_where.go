@@ -6,6 +6,7 @@ package collection
 // C#, Python) where developers expect a “find” helper.
 //
 // Example: integers
+//
 //	nums := collection.New([]int{1, 2, 3, 4, 5})
 //
 //	v1, ok1 := nums.FindWhere(func(n int) bool {
@@ -16,6 +17,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// no match
 //	v2, ok2 := nums.FindWhere(func(n int) bool {
 //		return n > 10
@@ -25,6 +27,7 @@ package collection
 //	// false #bool
 //
 // Example:
+//
 //	// structs
 //	type User struct {
 //		ID   int
@@ -48,6 +51,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// empty collection
 //	empty := collection.New([]int{})
 //

@@ -4,6 +4,7 @@ package collection
 // If the collection is empty, ok will be false.
 //
 // Example: integers
+//
 //	c := collection.New([]int{10, 20, 30})
 //
 //	v, ok := c.Last()
@@ -12,6 +13,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// strings
 //	c2 := collection.New([]string{"alpha", "beta", "gamma"})
 //
@@ -21,6 +23,7 @@ package collection
 //	// true    #bool
 //
 // Example:
+//
 //	// structs
 //	type User struct {
 //		ID   int
@@ -42,6 +45,7 @@ package collection
 //	// true #bool
 //
 // Example:
+//
 //	// empty collection
 //	c3 := collection.New([]int{})
 //

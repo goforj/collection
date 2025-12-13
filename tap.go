@@ -7,6 +7,7 @@ package collection
 // during a fluent chain.
 //
 // Example: integers - capture intermediate state during a chain
+//
 //	captured1 := []int{}
 //	c1 := collection.New([]int{3, 1, 2}).
 //		Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
@@ -22,6 +23,7 @@ package collection
 //	// captured1 → #[]int [1,2,3]
 //
 // Example: integers - tap for debugging without changing flow
+//
 //	c2 := collection.New([]int{10, 20, 30}).
 //		Tap(func(col *collection.Collection[int]) {
 //			collection.Dump(col.Items())
@@ -31,6 +33,7 @@ package collection
 //	collection.Dump(c2.Items()) // ensures c2 is used
 //
 // Example: structs - Tap with struct collection
+//
 //	type User struct {
 //		ID   int
 //		Name string

@@ -5,6 +5,7 @@ package collection
 // This cannot be a method because methods can't introduce a new type parameter R.
 //
 // Example:
+//
 //	// integers → extract parity label
 //	nums := collection.New([]int{1, 2, 3, 4})
 //	parity := collection.MapTo(nums, func(n int) string {
@@ -22,6 +23,7 @@ package collection
 //	// ]
 //
 // Example: strings - length of each value
+//
 //	words := collection.New([]string{"go", "forj", "rocks"})
 //	lengths := collection.MapTo(words, func(s string) int {
 //		return len(s)
@@ -34,6 +36,7 @@ package collection
 //	// ]
 //
 // Example: structs - MapTo a field
+//
 //	type User struct {
 //		ID   int
 //		Name string
@@ -67,6 +70,7 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 // new typed collection.
 //
 // Example:
+//
 //	// integers → extract parity label
 //	nums := collection.New([]int{1, 2, 3, 4})
 //	parity := collection.Pluck(nums, func(n int) string {
@@ -84,6 +88,7 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 //	// ]
 //
 // Example:
+//
 //	// strings → length of each value
 //	words := collection.New([]string{"go", "forj", "rocks"})
 //	lengths := collection.Pluck(words, func(s string) int {
@@ -97,6 +102,7 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 //	// ]
 //
 // Example:
+//
 //	// structs → pluck a field
 //	type User struct {
 //		ID   int

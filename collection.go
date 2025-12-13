@@ -8,8 +8,8 @@ type Collection[T any] struct {
 // Number is a constraint that permits any numeric type.
 type Number interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
-	~float32 | ~float64
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
+		~float32 | ~float64
 }
 
 // New creates a new Collection from the provided slice.
@@ -41,6 +41,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 // Items returns the underlying slice of items.
 //
 // Example: integers
+//
 //	c := collection.New([]int{1, 2, 3})
 //	items := c.Items()
 //	collection.Dump(items)
@@ -51,6 +52,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 //	// ]
 //
 // Example: strings
+//
 //	c2 := collection.New([]string{"apple", "banana"})
 //	items2 := c2.Items()
 //	collection.Dump(items2)
@@ -60,6 +62,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 //	// ]
 //
 // Example: structs
+//
 //	type User struct {
 //		ID   int
 //		Name string

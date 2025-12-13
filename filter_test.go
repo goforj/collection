@@ -81,7 +81,7 @@ func TestFilter_Chaining(t *testing.T) {
 	c := New([]int{1, 2, 3, 4, 5})
 
 	result := c.
-		Filter(func(v int) bool { return v > 1 }). // [2,3,4,5]
+		Filter(func(v int) bool { return v > 1 }).   // [2,3,4,5]
 		Filter(func(v int) bool { return v%2 == 1 }) // [3,5]
 
 	expected := []int{3, 5}

@@ -15,9 +15,9 @@ func main() {
 		}).
 		Filter(func(v int) bool { return v >= 2 })       // → [2, 3]
 
+	// Use BOTH variables so nothing is "declared and not used"
 	collection.Dump(c1.Items())
 	collection.Dump(captured1)
-	// Use BOTH variables so nothing is "declared and not used"
 	// c1 → #[]int [2,3]
 	// captured1 → #[]int [1,2,3]
 

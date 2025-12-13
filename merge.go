@@ -2,11 +2,11 @@ package collection
 
 // Merge merges the given data into the current collection.
 //
-// Example: merging slices
-//	// integers
+// Example: integers - merging slices
+//
 //	ints := collection.New([]int{1, 2})
 //	extra := []int{3, 4}
-//
+//	// Merge the extra slice into the ints collection
 //	merged1 := ints.Merge(extra)
 //	collection.Dump(merged1.Items())
 //	// #[]int [
@@ -16,8 +16,8 @@ package collection
 //	//   3 => 4 #int
 //	// ]
 //
-// Example: merging another collection
-//	// strings
+// Example: strings - merging another collection
+//
 //	strs := collection.New([]string{"a", "b"})
 //	more := collection.New([]string{"c", "d"})
 //
@@ -30,8 +30,8 @@ package collection
 //	//   3 => "d" #string
 //	// ]
 //
-// Example: merging struct slices
-//	// structs
+// Example: structs - merging struct slices
+//
 //	type User struct {
 //		ID   int
 //		Name string
@@ -102,9 +102,9 @@ mergeMap handles Laravel-style associative merges.
 
 Steps:
 
-  1. Convert the current slice into a map[string]T with numeric keys.
-  2. Apply associative merge rules (overwrite or add).
-  3. Convert the map back into a slice.
+ 1. Convert the current slice into a map[string]T with numeric keys.
+ 2. Apply associative merge rules (overwrite or add).
+ 3. Convert the map back into a slice.
 
 Map iteration order is not guaranteed — this mirrors Laravel's
 behavior when working with associative arrays.

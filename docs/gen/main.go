@@ -168,7 +168,11 @@ func docLines(group *ast.CommentGroup) []docLine {
 	return lines
 }
 
-func extractBlocks(fset *token.FileSet, filename, funcName string, fn *ast.FuncDecl) []Example {
+func extractBlocks(
+	fset *token.FileSet,
+	filename, funcName string,
+	fn *ast.FuncDecl,
+) []Example {
 	var out []Example
 	var label string
 
@@ -177,30 +181,13 @@ func extractBlocks(fset *token.FileSet, filename, funcName string, fn *ast.FuncD
 		return out
 	}
 
-	var code []string
-	var output []string
-
+	var collected []string
 	inExample := false
 	startLine := 0
 
 	flush := func() {
-		if len(code) == 0 {
+		if len(collected) == 0 {
 			return
-		}
-
-		var combined []string
-		combined = append(combined, code...)
-
-		// IMPORTANT: do NOT inject an extra blank line between code and output.
-		// We want:
-		//   Dump(...)
-		//   // expected output
-		// not:
-		//   Dump(...)
-		//
-		//   // expected output
-		if len(output) > 0 {
-			combined = append(combined, output...)
 		}
 
 		out = append(out, Example{
@@ -208,12 +195,11 @@ func extractBlocks(fset *token.FileSet, filename, funcName string, fn *ast.FuncD
 			File:     filename,
 			Line:     startLine,
 			Label:    label,
-			Code:     strings.Join(combined, "\n"),
+			Code:     strings.Join(collected, "\n"),
 		})
 
 		label = ""
-		code = nil
-		output = nil
+		collected = nil
 		inExample = false
 	}
 
@@ -234,28 +220,8 @@ func extractBlocks(fset *token.FileSet, filename, funcName string, fn *ast.FuncD
 			continue
 		}
 
-		// Blank line: keep it, but don't switch sections.
-		if trimmed == "" {
-			if len(output) > 0 {
-				output = append(output, "")
-			} else {
-				code = append(code, "")
-			}
-			continue
-		}
-
-		// OUTPUT lines: inside an Example, after we've seen some code,
-		// and the line (ignoring leading spaces/tabs) starts with "//".
-		// In the doc, these are written as:
-		//   //  // 4.000000 #float64
-		// After stripping the outer "//", rawLine begins with "// 4.000..."
-		if len(code) > 0 && strings.HasPrefix(strings.TrimLeft(rawLine, " \t"), "//") {
-			output = append(output, rawLine)
-			continue
-		}
-
-		// Otherwise it's CODE; preserve indentation exactly.
-		code = append(code, rawLine)
+		// Preserve ALL lines verbatim and in order
+		collected = append(collected, rawLine)
 	}
 
 	flush()

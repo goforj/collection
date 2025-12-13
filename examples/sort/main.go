@@ -39,11 +39,11 @@ func main() {
 		{Name: "Carol", Age: 40},
 	})
 
+	// Sort by age ascending
 	sortedUsers := users.Sort(func(a, b User) bool {
 		return a.Age < b.Age
 	})
 	collection.Dump(sortedUsers.Items())
-	// Sort by age ascending
 	// #[]main.User [
 	//   0 => #main.User {
 	//     +Name => "Bob" #string

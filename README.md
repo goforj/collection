@@ -645,10 +645,9 @@ Before returns a new collection containing all items that appear \*before\* the 
 
 If no element matches the predicate, the entire collection is returned.
 
-Example:
+Example: integers
 
 ```go
-// integers
 c1 := collection.New([]int{1, 2, 3, 4, 5})
 out1 := c1.Before(func(v int) bool { return v >= 3 })
 collection.Dump(out1.Items())
@@ -658,10 +657,9 @@ collection.Dump(out1.Items())
 // ]
 ```
 
-Example:
+Example: predicate never matches → whole collection returned
 
 ```go
-// predicate never matches → whole collection returned
 c2 := collection.New([]int{10, 20, 30})
 out2 := c2.Before(func(v int) bool { return v == 99 })
 collection.Dump(out2.Items())
@@ -672,10 +670,9 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-Example:
+Example: structs: get all users before the first admin
 
 ```go
-// structs: get all users before the first admin
 type User struct {
 	Name  string
 	Admin bool
@@ -1620,13 +1617,12 @@ collection.Dump(updated.Items())
 
 Merge merges the given data into the current collection.
 
-Example: merging slices
+Example: integers \- merging slices
 
 ```go
-// integers
 ints := collection.New([]int{1, 2})
 extra := []int{3, 4}
-
+// Merge the extra slice into the ints collection
 merged1 := ints.Merge(extra)
 collection.Dump(merged1.Items())
 // #[]int [
@@ -1637,10 +1633,9 @@ collection.Dump(merged1.Items())
 // ]
 ```
 
-Example: merging another collection
+Example: strings \- merging another collection
 
 ```go
-// strings
 strs := collection.New([]string{"a", "b"})
 more := collection.New([]string{"c", "d"})
 
@@ -1654,10 +1649,9 @@ collection.Dump(merged2.Items())
 // ]
 ```
 
-Example: merging struct slices
+Example: structs \- merging struct slices
 
 ```go
-// structs
 type User struct {
 	ID   int
 	Name string

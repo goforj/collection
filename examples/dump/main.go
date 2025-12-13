@@ -23,10 +23,9 @@ func main() {
 	//   0 => 2 #int
 	//   1 => 3 #int
 	// ]
-
+	// integers
 	c2 := collection.New([]int{1, 2, 3})
 	collection.Dump(c2.Items())
-	// integers
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int

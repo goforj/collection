@@ -245,21 +245,27 @@ func renderAPI(funcs []*FuncDoc) string {
 
 	// ---------------- Index ----------------
 	buf.WriteString("### Index\n\n")
+	buf.WriteString("| Group | Functions |\n")
+	buf.WriteString("|------|-----------|\n")
 
 	for _, group := range groupNames {
-		buf.WriteString("#### " + group + "\n")
 		sort.Slice(byGroup[group], func(i, j int) bool {
 			return byGroup[group][i].Name < byGroup[group][j].Name
 		})
 
+		var links []string
 		for _, fn := range byGroup[group] {
 			anchor := strings.ToLower(fn.Name)
-			buf.WriteString(fmt.Sprintf("- [`%s`](#%s)\n", fn.Name, anchor))
+			links = append(links, fmt.Sprintf("[`%s`](#%s)", fn.Name, anchor))
 		}
-		buf.WriteString("\n")
+
+		buf.WriteString(fmt.Sprintf("| %s | %s |\n",
+			group,
+			strings.Join(links, ", "),
+		))
 	}
 
-	buf.WriteString("---\n\n")
+	buf.WriteString("\n---\n\n")
 
 	// ---------------- Details ----------------
 	for _, group := range groupNames {

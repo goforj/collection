@@ -73,92 +73,19 @@ go get github.com/goforj/collection
 
 ### Index
 
-#### Aggregation
-- [`Avg`](#avg)
-- [`Count`](#count)
-- [`CountBy`](#countby)
-- [`CountByValue`](#countbyvalue)
-- [`Max`](#max)
-- [`Median`](#median)
-- [`Min`](#min)
-- [`Mode`](#mode)
-- [`Reduce`](#reduce)
-- [`Sum`](#sum)
-
-#### Construction
-- [`Items`](#items)
-- [`New`](#new)
-- [`NewNumeric`](#newnumeric)
-
-#### Debugging
-- [`Dd`](#dd)
-- [`Dump`](#dump)
-- [`DumpStr`](#dumpstr)
-- [`ToJSON`](#tojson)
-- [`ToPrettyJSON`](#toprettyjson)
-
-#### Filtering
-- [`Filter`](#filter)
-
-#### Grouping
-- [`GroupBy`](#groupby)
-
-#### Maps
-- [`FromMap`](#frommap)
-- [`ToMap`](#tomap)
-- [`ToMapKV`](#tomapkv)
-
-#### Ordering
-- [`After`](#after)
-- [`Before`](#before)
-- [`Reverse`](#reverse)
-- [`Shuffle`](#shuffle)
-- [`Sort`](#sort)
-
-#### Querying
-- [`All`](#all)
-- [`Any`](#any)
-- [`At`](#at)
-- [`Contains`](#contains)
-- [`FindWhere`](#findwhere)
-- [`First`](#first)
-- [`FirstWhere`](#firstwhere)
-- [`IndexWhere`](#indexwhere)
-- [`IsEmpty`](#isempty)
-- [`Last`](#last)
-- [`LastWhere`](#lastwhere)
-- [`None`](#none)
-
-#### Set Operations
-- [`Unique`](#unique)
-- [`UniqueBy`](#uniqueby)
-
-#### Slicing
-- [`Chunk`](#chunk)
-- [`Pop`](#pop)
-- [`PopN`](#popn)
-- [`Skip`](#skip)
-- [`SkipLast`](#skiplast)
-- [`Take`](#take)
-- [`TakeLast`](#takelast)
-- [`TakeUntil`](#takeuntil)
-- [`TakeUntilFn`](#takeuntilfn)
-
-#### Transformation
-- [`Append`](#append)
-- [`Concat`](#concat)
-- [`Each`](#each)
-- [`Map`](#map)
-- [`MapTo`](#mapto)
-- [`Merge`](#merge)
-- [`Multiply`](#multiply)
-- [`Pipe`](#pipe)
-- [`Pluck`](#pluck)
-- [`Prepend`](#prepend)
-- [`Push`](#push)
-- [`Tap`](#tap)
-- [`Times`](#times)
-- [`Transform`](#transform)
+| Group | Functions |
+|------|-----------|
+| Aggregation | [`Avg`](#avg), [`Count`](#count), [`CountBy`](#countby), [`CountByValue`](#countbyvalue), [`Max`](#max), [`Median`](#median), [`Min`](#min), [`Mode`](#mode), [`Reduce`](#reduce), [`Sum`](#sum) |
+| Construction | [`Items`](#items), [`New`](#new), [`NewNumeric`](#newnumeric) |
+| Debugging | [`Dd`](#dd), [`Dump`](#dump), [`DumpStr`](#dumpstr), [`ToJSON`](#tojson), [`ToPrettyJSON`](#toprettyjson) |
+| Filtering | [`Filter`](#filter) |
+| Grouping | [`GroupBy`](#groupby) |
+| Maps | [`FromMap`](#frommap), [`ToMap`](#tomap), [`ToMapKV`](#tomapkv) |
+| Ordering | [`After`](#after), [`Before`](#before), [`Reverse`](#reverse), [`Shuffle`](#shuffle), [`Sort`](#sort) |
+| Querying | [`All`](#all), [`Any`](#any), [`At`](#at), [`Contains`](#contains), [`FindWhere`](#findwhere), [`First`](#first), [`FirstWhere`](#firstwhere), [`IndexWhere`](#indexwhere), [`IsEmpty`](#isempty), [`Last`](#last), [`LastWhere`](#lastwhere), [`None`](#none) |
+| Set Operations | [`Unique`](#unique), [`UniqueBy`](#uniqueby) |
+| Slicing | [`Chunk`](#chunk), [`Pop`](#pop), [`PopN`](#popn), [`Skip`](#skip), [`SkipLast`](#skiplast), [`Take`](#take), [`TakeLast`](#takelast), [`TakeUntil`](#takeuntil), [`TakeUntilFn`](#takeuntilfn) |
+| Transformation | [`Append`](#append), [`Concat`](#concat), [`Each`](#each), [`Map`](#map), [`MapTo`](#mapto), [`Merge`](#merge), [`Multiply`](#multiply), [`Pipe`](#pipe), [`Pluck`](#pluck), [`Prepend`](#prepend), [`Push`](#push), [`Tap`](#tap), [`Times`](#times), [`Transform`](#transform) |
 
 ---
 

@@ -68,13 +68,14 @@ collection.
     }). // Slicing (stop when predicate becomes true)
     SkipLast(1). // Slicing
     Dump() // Debugging
-// []main.DeviceEvent [
-//  0 => #main.DeviceEvent {
-//    +Device => "router-3" #string
-//    +Region => "us-west" #string
-//    +Errors => 22 #int
-//  }
-// ]
+	
+    // []main.DeviceEvent [
+    //  0 => #main.DeviceEvent {
+    //    +Device => "router-3" #string
+    //    +Region => "us-west" #string
+    //    +Errors => 22 #int
+    //  }
+    // ]
 ```
 
 ## Design Principles

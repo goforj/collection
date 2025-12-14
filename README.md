@@ -79,14 +79,13 @@ go get github.com/goforj/collection
 | **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [Median](#median) [Min](#min) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
 | **Construction** | [New](#new) [NewNumeric](#newnumeric) |
 | **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
-| **Filtering** | [Filter](#filter) |
 | **Grouping** | [GroupBy](#groupby) |
 | **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
 | **Ordering** | [After](#after) [Before](#before) [Reverse](#reverse) [Shuffle](#shuffle) [Sort](#sort) |
 | **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
 | **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
 | **Set Operations** | [Unique](#unique) [UniqueBy](#uniqueby) |
-| **Slicing** | [Chunk](#chunk) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) |
+| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) |
 | **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) |
 
 
@@ -623,72 +622,6 @@ fmt.Println(s)
 // #[]int [
 //   0 => 10 #int
 //   1 => 20 #int
-// ]
-```
-
-## Filtering
-
-### Filter
-Filter keeps only the elements for which fn returns true.
-This method mutates the collection in place and returns the same instance.
-
-_Example: integers_
-
-```go
-c := collection.New([]int{1, 2, 3, 4})
-c.Filter(func(v int) bool {
-	return v%2 == 0
-})
-collection.Dump(c.Items())
-// #[]int [
-//   0 => 2 #int
-//   1 => 4 #int
-// ]
-```
-
-_Example: strings_
-
-```go
-c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
-c2.Filter(func(v string) bool {
-	return strings.HasPrefix(v, "a")
-})
-collection.Dump(c2.Items())
-// #[]string [
-//   0 => "apple" #string
-//   1 => "avocado" #string
-// ]
-```
-
-_Example: structs_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-	{ID: 3, Name: "Andrew"},
-	{ID: 4, Name: "Carol"},
-})
-
-users.Filter(func(u User) bool {
-	return strings.HasPrefix(u.Name, "A")
-})
-
-collection.Dump(users.Items())
-// #[]main.User [
-//   0 => #main.User {
-//     +ID   => 1 #int
-//     +Name => "Alice" #string
-//   }
-//   1 => #main.User {
-//     +ID   => 3 #int
-//     +Name => "Andrew" #string
-//   }
 // ]
 ```
 
@@ -1942,6 +1875,70 @@ collection.Dump(userChunks)
 //    }
 //  ]
 //]
+```
+
+### Filter
+Filter keeps only the elements for which fn returns true.
+This method mutates the collection in place and returns the same instance.
+
+_Example: integers_
+
+```go
+c := collection.New([]int{1, 2, 3, 4})
+c.Filter(func(v int) bool {
+	return v%2 == 0
+})
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
+c2.Filter(func(v string) bool {
+	return strings.HasPrefix(v, "a")
+})
+collection.Dump(c2.Items())
+// #[]string [
+//   0 => "apple" #string
+//   1 => "avocado" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Andrew"},
+	{ID: 4, Name: "Carol"},
+})
+
+users.Filter(func(u User) bool {
+	return strings.HasPrefix(u.Name, "A")
+})
+
+collection.Dump(users.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Andrew" #string
+//   }
+// ]
 ```
 
 ### Pop

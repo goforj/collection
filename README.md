@@ -132,7 +132,7 @@ go get github.com/goforj/collection
 | Group | Functions |
 |------:|-----------|
 | **Access** | [Items](#items) |
-| **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [Median](#median) [Min](#min) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
+| **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [MaxBy](#maxby) [Median](#median) [Min](#min) [MinBy](#minby) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
 | **Construction** | [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
 | **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
 | **Grouping** | [GroupBy](#groupby) |
@@ -390,6 +390,61 @@ collection.Dump(max3, ok3)
 // false #bool
 ```
 
+### <a id="maxby"></a>MaxBy · readonly
+
+MaxBy returns the item whose key (produced by keyFn) is the largest.
+The second return value is false if the collection is empty.
+
+_Example: structs - highest score_
+
+```go
+type Player struct {
+	Name  string
+	Score int
+}
+
+players := collection.New([]Player{
+	{Name: "Alice", Score: 10},
+	{Name: "Bob", Score: 25},
+	{Name: "Carol", Score: 18},
+})
+
+top, ok := collection.MaxBy(players, func(p Player) int {
+	return p.Score
+})
+
+collection.Dump(top, ok)
+// #main.Player {
+//   +Name  => "Bob" #string
+//   +Score => 25 #int
+// }
+// true #bool
+```
+
+_Example: strings - longest length_
+
+```go
+words := collection.New([]string{"go", "collection", "rocks"})
+
+longest, ok := collection.MaxBy(words, func(s string) int {
+	return len(s)
+})
+
+collection.Dump(longest, ok)
+// "collection" #string
+// true #bool
+```
+
+_Example: empty collection_
+
+```go
+empty := collection.New([]int{})
+maxVal, ok := collection.MaxBy(empty, func(v int) int { return v })
+collection.Dump(maxVal, ok)
+// 0 #int
+// false #bool
+```
+
 ### <a id="median"></a>Median · readonly
 
 Median returns the statistical median of the numeric collection as float64.
@@ -470,6 +525,61 @@ _Example: integers - empty collection_
 empty := collection.NewNumeric([]int{})
 min3, ok3 := empty.Min()
 collection.Dump(min3, ok3)
+// 0 #int
+// false #bool
+```
+
+### <a id="minby"></a>MinBy · readonly
+
+MinBy returns the item whose key (produced by keyFn) is the smallest.
+The second return value is false if the collection is empty.
+
+_Example: structs - smallest age_
+
+```go
+type User struct {
+	Name string
+	Age  int
+}
+
+users := collection.New([]User{
+	{Name: "Alice", Age: 30},
+	{Name: "Bob", Age: 25},
+	{Name: "Carol", Age: 40},
+})
+
+minUser, ok := collection.MinBy(users, func(u User) int {
+	return u.Age
+})
+
+collection.Dump(minUser, ok)
+// #main.User {
+//   +Name => "Bob" #string
+//   +Age  => 25 #int
+// }
+// true #bool
+```
+
+_Example: strings - shortest length_
+
+```go
+words := collection.New([]string{"apple", "fig", "banana"})
+
+shortest, ok := collection.MinBy(words, func(s string) int {
+	return len(s)
+})
+
+collection.Dump(shortest, ok)
+// "fig" #string
+// true #bool
+```
+
+_Example: empty collection_
+
+```go
+empty := collection.New([]int{})
+minVal, ok := collection.MinBy(empty, func(v int) int { return v })
+collection.Dump(minVal, ok)
 // 0 #int
 // false #bool
 ```

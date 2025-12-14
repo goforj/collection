@@ -285,12 +285,14 @@ func renderAPI(funcs []*FuncDoc) string {
 		buf.WriteString("## " + group + "\n\n")
 
 		for _, fn := range byGroup[group] {
+			anchor := strings.ToLower(fn.Name)
+
 			header := fn.Name
 			if fn.Behavior != "" {
 				header += " · " + fn.Behavior
 			}
 
-			buf.WriteString(fmt.Sprintf("### %s\n\n", header))
+			buf.WriteString(fmt.Sprintf("### <a id=\"%s\"></a>%s\n\n", anchor, header))
 
 			if fn.Description != "" {
 				buf.WriteString(fn.Description + "\n\n")

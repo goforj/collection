@@ -3,6 +3,7 @@ package collection
 // UniqueBy returns a new collection containing only the first occurrence
 // of each element as determined by keyFn.
 // @group Set Operations
+// @behavior immutable
 //
 // The key returned by keyFn must be comparable.
 // Order is preserved.

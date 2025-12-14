@@ -4,6 +4,7 @@ package collection
 // for which the provided predicate function returns true.
 // If no item matches, it returns (0, false).
 // @group Querying
+// @behavior readonly
 //
 // This operation performs no allocations and short-circuits
 // on the first match.

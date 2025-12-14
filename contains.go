@@ -2,6 +2,7 @@ package collection
 
 // Contains returns true if any item satisfies the predicate.
 // @group Querying
+// @behavior readonly
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})

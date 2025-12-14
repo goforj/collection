@@ -3,6 +3,7 @@ package collection
 // Pipe passes the entire collection into the given function
 // and returns the function's result.
 // @group Transformation
+// @behavior readonly
 //
 // This is useful for inline transformations, aggregations,
 // or "exiting" a chain with a non-collection value.

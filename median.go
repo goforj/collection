@@ -5,6 +5,7 @@ import "sort"
 // Median returns the statistical median of the numeric collection as float64.
 // Returns (0, false) if the collection is empty.
 // @group Aggregation
+// @behavior readonly
 //
 // Odd count  → middle value
 // Even count → average of the two middle values

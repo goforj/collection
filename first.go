@@ -3,6 +3,7 @@ package collection
 // First returns the first element in the collection.
 // If the collection is empty, ok will be false.
 // @group Querying
+// @behavior readonly
 //
 // Example: integers
 //

@@ -3,6 +3,7 @@ package collection
 // Before returns a new collection containing all items that appear
 // *before* the first element for which pred returns true.
 // @group Ordering
+// @behavior immutable
 //
 // If no element matches the predicate, the entire collection is returned.
 //

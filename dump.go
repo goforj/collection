@@ -12,6 +12,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 // Dump prints items with godump and returns the same collection.
 // This is a no-op on the collection itself and never panics.
 // @group Debugging
+// @behavior immutable
 //
 // Example: integers
 //
@@ -61,6 +62,7 @@ func (c *Collection[T]) Dd() {
 // without printing or exiting.
 // Useful for logging, snapshot testing, and non-interactive debugging.
 // @group Debugging
+// @behavior readonly
 //
 // Example: integers
 //

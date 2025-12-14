@@ -5,6 +5,7 @@ package collection
 // exists for ergonomic parity with functional languages (JavaScript, Rust,
 // C#, Python) where developers expect a “find” helper.
 // @group Querying
+// @behavior readonly
 //
 // Example: integers
 //

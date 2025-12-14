@@ -9,6 +9,7 @@ package collection
 // Mirrors Laravel's take() semantics.
 //
 // @group Slicing
+// @behavior immutable
 // Example: integers - take first 3
 //
 //	c1 := collection.New([]int{0, 1, 2, 3, 4, 5})

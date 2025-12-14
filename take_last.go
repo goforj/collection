@@ -8,6 +8,7 @@ package collection
 // This operation performs no element allocations; it re-slices the
 // underlying slice.
 // @group Slicing
+// @behavior immutable
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})

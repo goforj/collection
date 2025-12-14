@@ -4,6 +4,7 @@ package collection
 // equality function `eq`. The first occurrence of each unique value is kept,
 // and order is preserved.
 // @group Set Operations
+// @behavior immutable
 //
 // The `eq` function should return true when two values are considered equal.
 //

@@ -5,6 +5,7 @@ package collection
 // If n is greater than or equal to the collection length, SkipLast returns
 // an empty collection.
 // @group Slicing
+// @behavior immutable
 //
 // This operation performs no element allocations; it re-slices the
 // underlying slice.

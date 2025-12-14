@@ -3,6 +3,7 @@ package collection
 // TakeUntilFn returns items until the predicate function returns true.
 // The matching item is NOT included.
 // @group Slicing
+// @behavior immutable
 // Example: integers - stop when value >= 3
 //
 //	c1 := collection.New([]int{1, 2, 3, 4})
@@ -49,6 +50,7 @@ func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T] {
 //
 // Uses == comparison, so T must be comparable.
 // @group Slicing
+// @behavior immutable
 // Example: integers - stop at value 3
 //
 //	c4 := collection.New([]int{1, 2, 3, 4})

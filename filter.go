@@ -3,6 +3,7 @@ package collection
 // Filter keeps only the elements for which fn returns true.
 // This method mutates the collection in place and returns the same instance.
 // @group Slicing
+// @behavior mutable
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4})

@@ -3,6 +3,7 @@ package collection
 // GroupBy partitions the collection into groups keyed by the value
 // returned from keyFn.
 // @group Grouping
+// @behavior readonly
 //
 // The order of items within each group is preserved.
 // The order of the groups themselves is unspecified.

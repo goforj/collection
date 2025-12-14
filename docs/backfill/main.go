@@ -19,7 +19,7 @@ func main() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("✔ @group annotations added where possible")
+	fmt.Println("✔ @behavior annotations backfilled")
 }
 
 func run() error {
@@ -52,24 +52,21 @@ func run() error {
 
 		for _, decl := range file.Decls {
 			fn, ok := decl.(*ast.FuncDecl)
-			if !ok || fn.Doc == nil {
+			if !ok || fn.Doc == nil || !ast.IsExported(fn.Name.Name) {
 				continue
 			}
 
-			if !ast.IsExported(fn.Name.Name) {
+			// Respect explicit annotation
+			if hasBehavior(fn.Doc) {
 				continue
 			}
 
-			if hasGroup(fn.Doc) {
-				continue
-			}
-
-			group, ok := inferredGroups[fn.Name.Name]
+			behavior, ok := inferBehavior(fn)
 			if !ok {
-				continue // ambiguous, leave for human review
+				continue // ambiguous → leave for human review
 			}
 
-			insertGroup(fn.Doc, group)
+			insertBehavior(fn.Doc, behavior)
 			changed = true
 		}
 
@@ -85,131 +82,174 @@ func run() error {
 
 //
 // ------------------------------------------------------------
-// Group inference
+// Behavior inference
 // ------------------------------------------------------------
 //
 
-var inferredGroups = map[string]string{
-	// Querying
-	"First":      "Querying",
-	"Last":       "Querying",
-	"At":         "Querying",
-	"IndexWhere": "Querying",
-	"FindWhere":  "Querying",
-	"FirstWhere": "Querying",
-	"LastWhere":  "Querying",
-	"Contains":   "Querying",
-	"Any":        "Querying",
-	"All":        "Querying",
-	"None":       "Querying",
-	"IsEmpty":    "Querying",
+func inferBehavior(fn *ast.FuncDecl) (string, bool) {
+	name := fn.Name.Name
 
-	// Slicing
-	"Take":     "Slicing",
-	"TakeLast": "Slicing",
-	"Skip":     "Slicing",
-	"SkipLast": "Slicing",
-	"Chunk":    "Slicing",
-	"Pop":      "Slicing",
-	"PopN":     "Slicing",
+	// 1. Known mutators (authoritative)
+	if knownMutators[name] {
+		return "mutable", true
+	}
 
-	// Ordering
-	"Sort":    "Ordering",
-	"Reverse": "Ordering",
-	"Shuffle": "Ordering",
-	"Before":  "Ordering",
-	"After":   "Ordering",
+	// 2. Methods returning *Collection[T] default to immutable
+	if returnsCollection(fn) {
+		if mutatesReceiverItems(fn) {
+			return "mutable", true
+		}
+		return "immutable", true
+	}
 
-	// Transformation
-	"Map":       "Transformation",
-	"MapTo":     "Transformation",
-	"Each":      "Transformation",
-	"Transform": "Transformation",
-	"Pluck":     "Transformation",
-	"Pipe":      "Transformation",
-	"Tap":       "Transformation",
-	"Times":     "Transformation",
-	"Append":    "Transformation",
-	"Prepend":   "Transformation",
-	"Push":      "Transformation",
-	"Concat":    "Transformation",
-	"Merge":     "Transformation",
-	"Multiply":  "Transformation",
+	// 3. Non-collection return types → readonly
+	if fn.Type.Results != nil {
+		return "readonly", true
+	}
 
-	// Aggregation
-	"Reduce":       "Aggregation",
-	"Count":        "Aggregation",
-	"CountBy":      "Aggregation",
-	"CountByValue": "Aggregation",
-	"Sum":          "Aggregation",
-	"Avg":          "Aggregation",
-	"Min":          "Aggregation",
-	"Max":          "Aggregation",
-	"Median":       "Aggregation",
-	"Mode":         "Aggregation",
+	return "", false
+}
 
-	// Maps
-	"FromMap": "Maps",
-	"ToMap":   "Maps",
-	"ToMapKV": "Maps",
+var knownMutators = map[string]bool{
+	"Push":     true,
+	"Pop":      true,
+	"PopN":     true,
+	"Append":   true,
+	"Prepend":  true,
+	"Merge":    true,
+	"Multiply": true,
+}
 
-	// Construction / Core
-	"New":        "Construction",
-	"NewNumeric": "Construction",
-	"Items":      "Construction",
+func returnsCollection(fn *ast.FuncDecl) bool {
+	if fn.Type.Results == nil || len(fn.Type.Results.List) != 1 {
+		return false
+	}
 
-	// Debugging / Output
-	"Dump":         "Debugging",
-	"DumpStr":      "Debugging",
-	"Dd":           "Debugging",
-	"ToJSON":       "Debugging",
-	"ToPrettyJSON": "Debugging",
+	result := fn.Type.Results.List[0].Type
+	star, ok := result.(*ast.StarExpr)
+	if !ok {
+		return false
+	}
 
-	// Grouping / Sets
-	"GroupBy":  "Grouping",
-	"Unique":   "Set Operations",
-	"UniqueBy": "Set Operations",
+	sel, ok := star.X.(*ast.IndexExpr)
+	if !ok {
+		return false
+	}
+
+	ident, ok := sel.X.(*ast.Ident)
+	return ok && ident.Name == "Collection"
 }
 
 //
 // ------------------------------------------------------------
-// AST helpers
+// AST mutation detection (veto)
 // ------------------------------------------------------------
 //
 
-func hasGroup(doc *ast.CommentGroup) bool {
+func mutatesReceiverItems(fn *ast.FuncDecl) bool {
+	if fn.Recv == nil || len(fn.Recv.List) == 0 {
+		return false
+	}
+
+	if len(fn.Recv.List[0].Names) == 0 {
+		return false
+	}
+
+	receiver := fn.Recv.List[0].Names[0].Name
+
+	mutates := false
+
+	ast.Inspect(fn.Body, func(n ast.Node) bool {
+		switch x := n.(type) {
+
+		// c.items = ...
+		case *ast.AssignStmt:
+			for _, lhs := range x.Lhs {
+				if isReceiverItems(lhs, receiver) {
+					mutates = true
+					return false
+				}
+			}
+
+		// append(c.items, ...)
+		case *ast.CallExpr:
+			if isMutatingCall(x, receiver) {
+				mutates = true
+				return false
+			}
+		}
+		return true
+	})
+
+	return mutates
+}
+
+func isReceiverItems(expr ast.Expr, receiver string) bool {
+	sel, ok := expr.(*ast.SelectorExpr)
+	if !ok {
+		return false
+	}
+
+	x, ok := sel.X.(*ast.Ident)
+	return ok && x.Name == receiver && sel.Sel.Name == "items"
+}
+
+func isMutatingCall(call *ast.CallExpr, receiver string) bool {
+	ident, ok := call.Fun.(*ast.Ident)
+	if !ok {
+		return false
+	}
+
+	if ident.Name != "append" && ident.Name != "copy" {
+		return false
+	}
+
+	if len(call.Args) == 0 {
+		return false
+	}
+
+	return isReceiverItems(call.Args[0], receiver)
+}
+
+//
+// ------------------------------------------------------------
+// Doc helpers
+// ------------------------------------------------------------
+//
+
+func hasBehavior(doc *ast.CommentGroup) bool {
 	for _, c := range doc.List {
-		if strings.Contains(c.Text, "@group") {
+		if strings.Contains(c.Text, "@behavior") {
 			return true
 		}
 	}
 	return false
 }
 
-func insertGroup(doc *ast.CommentGroup, group string) {
+func insertBehavior(doc *ast.CommentGroup, behavior string) {
 	for i, c := range doc.List {
 		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
-
-		// Insert before Example: or blank separator
 		if strings.HasPrefix(text, "Example:") || text == "" {
 			doc.List = append(
 				doc.List[:i],
-				append(
-					[]*ast.Comment{
-						{Text: fmt.Sprintf("// @group %s", group)},
-					},
-					doc.List[i:]...,
-				)...,
+				append([]*ast.Comment{
+					{Text: fmt.Sprintf("// @behavior %s", behavior)},
+				}, doc.List[i:]...)...,
 			)
 			return
 		}
 	}
 
-	// Fallback: append to end of doc block
 	doc.List = append(doc.List, &ast.Comment{
-		Text: fmt.Sprintf("// @group %s", group),
+		Text: fmt.Sprintf("// @behavior %s", behavior),
 	})
 }
+
+//
+// ------------------------------------------------------------
+// File IO
+// ------------------------------------------------------------
+//
 
 func writeFile(fset *token.FileSet, filename string, file *ast.File) error {
 	f, err := os.Create(filename)

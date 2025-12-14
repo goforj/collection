@@ -4,6 +4,7 @@ package collection
 // predicate function returns true. If no items match, ok=false is returned
 // along with the zero value of T.
 // @group Querying
+// @behavior readonly
 //
 // This method is equivalent to Laravel's collection->first(fn) and mirrors
 // the behavior found in functional collections in other languages.

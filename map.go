@@ -2,6 +2,7 @@ package collection
 
 // Map applies a same-type transformation and returns a new collection.
 // @group Transformation
+// @behavior immutable
 //
 // Use this when you're transforming T -> T (e.g., enrichment, normalization).
 //

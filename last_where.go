@@ -4,6 +4,7 @@ package collection
 // If fn is nil, LastWhere returns the final element in the underlying slice.
 // If the collection is empty or no element matches, ok will be false.
 // @group Querying
+// @behavior readonly
 //
 // Example: integers
 //

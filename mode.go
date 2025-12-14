@@ -4,6 +4,7 @@ package collection
 // If multiple values tie for highest frequency, all are returned
 // in first-seen order.
 // @group Aggregation
+// @behavior readonly
 //
 // Example: integers – single mode
 //

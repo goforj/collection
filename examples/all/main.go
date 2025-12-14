@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// All returns true if fn returns true for every item in the collection.
+	// If the collection is empty, All returns true (vacuously true).
+
 	// Example: integers – all even
 	c := collection.New([]int{2, 4, 6})
 	allEven := c.All(func(v int) bool { return v%2 == 0 })

@@ -6,6 +6,10 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
+	// 
+	// This cannot be a method because methods can't introduce a new type parameter R.
+
 	// Example: integers - extract parity label
 	nums := collection.New([]int{1, 2, 3, 4})
 	parity := collection.MapTo(nums, func(n int) string {

@@ -6,6 +6,11 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// FindWhere returns the first item in the collection for which the provided
+	// predicate function returns true. This is an alias for FirstWhere(fn) and
+	// exists for ergonomic parity with functional languages (JavaScript, Rust,
+	// C#, Python) where developers expect a “find” helper.
+
 	// Example: integers
 	nums := collection.New([]int{1, 2, 3, 4, 5})
 

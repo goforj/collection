@@ -9,6 +9,12 @@ import (
 )
 
 func main() {
+	// UniqueBy returns a new collection containing only the first occurrence
+	// of each element as determined by keyFn.
+	// 
+	// The key returned by keyFn must be comparable.
+	// Order is preserved.
+
 	// Example: structs – unique by ID
 	type User struct {
 		ID   int

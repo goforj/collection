@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Avg returns the average of the collection values as a float64.
+	// If the collection is empty, Avg returns 0.
+
 	// Example: integers
 	c := collection.NewNumeric([]int{2, 4, 6})
 	collection.Dump(c.Avg())

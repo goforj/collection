@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Min returns the smallest numeric item in the collection.
+	// The second return value is false if the collection is empty.
+
 	// Example: integers
 	c := collection.NewNumeric([]int{3, 1, 2})
 	min, ok := c.Min()

@@ -6,23 +6,8 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Example: integers
-	c := collection.New([]int{1, 2, 3})
-	c.Dump()
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	// ]
+	// Dump is a convenience function that calls godump.Dump.
 
-	// Example: integers - chaining
-	collection.New([]int{1, 2, 3}).
-		Filter(func(v int) bool { return v > 1 }).
-		Dump()
-	// #[]int [
-	//   0 => 2 #int
-	//   1 => 3 #int
-	// ]
 	// Example: integers
 	c2 := collection.New([]int{1, 2, 3})
 	collection.Dump(c2.Items())

@@ -6,6 +6,8 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// IsEmpty returns true if the collection has no items.
+
 	// Example: integers (non-empty)
 	c := collection.New([]int{1, 2, 3})
 

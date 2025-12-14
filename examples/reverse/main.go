@@ -6,6 +6,11 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Reverse reverses the order of items in the collection in place
+	// and returns the same collection for chaining.
+	// 
+	// This operation performs no allocations.
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4})
 	c.Reverse()

@@ -6,6 +6,8 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Push returns a new collection with the given values appended.
+
 	// Example: integers
 	nums := collection.New([]int{1, 2}).Push(3, 4)
 	nums.Dump()

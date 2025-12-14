@@ -9,6 +9,10 @@ import (
 )
 
 func main() {
+	// Map applies a same-type transformation and returns a new collection.
+	// 
+	// Use this when you're transforming T -> T (e.g., enrichment, normalization).
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 3})
 

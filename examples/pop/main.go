@@ -6,6 +6,12 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Pop returns the last item and a new collection with that item removed.
+	// The original collection remains unchanged.
+	// 
+	// If the collection is empty, the zero value of T is returned along with
+	// an empty collection.
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 3})
 	item, rest := c.Pop()

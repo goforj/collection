@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Sum returns the sum of all numeric items in the NumericCollection.
+	// If the collection is empty, Sum returns the zero value of T.
+
 	// Example: integers
 	c := collection.NewNumeric([]int{1, 2, 3})
 	total := c.Sum()

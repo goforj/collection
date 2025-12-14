@@ -6,6 +6,14 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// GroupBy partitions the collection into groups keyed by the value
+	// returned from keyFn.
+	// 
+	// The order of items within each group is preserved.
+	// The order of the groups themselves is unspecified.
+	// 
+	// This function does not mutate the source collection.
+
 	// Example: grouping integers by parity
 	values := []int{1, 2, 3, 4, 5}
 

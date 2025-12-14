@@ -6,6 +6,14 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Skip returns a new collection with the first n items skipped.
+	// If n is less than or equal to zero, Skip returns the full collection.
+	// If n is greater than or equal to the collection length, Skip returns
+	// an empty collection.
+	// 
+	// This operation performs no element allocations; it re-slices the
+	// underlying slice.
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})
 	out := c.Skip(2)

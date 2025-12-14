@@ -9,6 +9,11 @@ import (
 )
 
 func main() {
+	// Transform applies fn to every item *in place*, mutating the collection.
+	// 
+	// This mirrors Laravel's transform(), which modifies the underlying values
+	// instead of returning a new collection.
+
 	// Example: integers
 	c1 := collection.New([]int{1, 2, 3})
 	c1.Transform(func(v int) int { return v * 2 })

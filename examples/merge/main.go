@@ -6,6 +6,8 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Merge merges the given data into the current collection.
+
 	// Example: integers - merging slices
 	ints := collection.New([]int{1, 2})
 	extra := []int{3, 4}

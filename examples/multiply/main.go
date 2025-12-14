@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Multiply creates `n` copies of all items in the collection
+	// and returns a new collection.
+
 	// Example: integers
 	ints := collection.New([]int{1, 2})
 	out := ints.Multiply(3)

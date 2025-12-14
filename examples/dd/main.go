@@ -6,6 +6,12 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Dd prints items then terminates execution.
+	// Like Laravel's dd(), this is intended for debugging and
+	// should not be used in production control flow.
+	// 
+	// This method never returns.
+
 	// Example: strings
 	c := collection.New([]string{"a", "b"})
 	c.Dd()

@@ -6,6 +6,11 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// TakeUntil returns items until the first element equals `value`.
+	// The matching item is NOT included.
+	// 
+	// Uses == comparison, so T must be comparable.
+
 	// Example: integers - stop at value 3
 	c4 := collection.New([]int{1, 2, 3, 4})
 	out4 := collection.TakeUntil(c4, 3)

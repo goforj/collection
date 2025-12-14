@@ -9,6 +9,9 @@ import (
 )
 
 func main() {
+	// Filter keeps only the elements for which fn returns true.
+	// This method mutates the collection in place and returns the same instance.
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4})
 	c.Filter(func(v int) bool {

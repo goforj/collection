@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// None returns true if fn returns false for every item in the collection.
+	// If the collection is empty, None returns true.
+
 	// Example: integers – none even
 	c := collection.New([]int{1, 3, 5})
 	noneEven := c.None(func(v int) bool { return v%2 == 0 })

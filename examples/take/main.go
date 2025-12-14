@@ -6,6 +6,14 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Take returns a new collection containing the first `n` items when n > 0,
+	// or the last `|n|` items when n < 0.
+	// 
+	// If n exceeds the collection length, the entire collection is returned.
+	// If n == 0, an empty collection is returned.
+	// 
+	// Mirrors Laravel's take() semantics.
+
 	// Example: integers - take first 3
 	c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
 	out1 := c1.Take(3)

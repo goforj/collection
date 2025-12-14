@@ -6,6 +6,13 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// FromMap materializes a map into a collection of key/value pairs.
+	// 
+	// The iteration order of the resulting collection is unspecified,
+	// matching Go's map iteration semantics.
+	// 
+	// This function does not mutate the input map.
+
 	// Example: basic usage
 	m := map[string]int{
 		"a": 1,

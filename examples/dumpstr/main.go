@@ -9,6 +9,10 @@ import (
 )
 
 func main() {
+	// DumpStr returns the pretty-printed dump of the items as a string,
+	// without printing or exiting.
+	// Useful for logging, snapshot testing, and non-interactive debugging.
+
 	// Example: integers
 	c := collection.New([]int{10, 20})
 	s := c.DumpStr()

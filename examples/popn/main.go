@@ -6,6 +6,12 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// PopN removes and returns the last n items as a new collection,
+	// and returns a second collection containing the remaining items.
+	// 
+	// The popped items are returned in reverse order, matching the behavior
+	// of repeated Pop() calls.
+
 	// Example: integers – pop 2
 	c := collection.New([]int{1, 2, 3, 4})
 	popped, rest := c.PopN(2)

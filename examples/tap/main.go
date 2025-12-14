@@ -6,6 +6,12 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Tap invokes fn with the collection pointer for side effects (logging, debugging,
+	// inspection) and returns the same collection to allow chaining.
+	// 
+	// Tap does NOT modify the collection itself; it simply exposes the current state
+	// during a fluent chain.
+
 	// Example: integers - capture intermediate state during a chain
 	captured1 := []int{}
 	c1 := collection.New([]int{3, 1, 2}).

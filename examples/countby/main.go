@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// CountBy returns a map of keys extracted by fn to their occurrence counts.
+	// K must be comparable.
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 2, 3, 3, 3})
 	counts := collection.CountBy(c, func(v int) int {

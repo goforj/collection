@@ -6,6 +6,13 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Sort returns a new collection sorted using the provided comparison function.
+	// 
+	// The comparison function `less(a, b)` should return true if `a` should come
+	// before `b` in the sorted order.
+	// 
+	// Sorting does NOT mutate the original collection—Sort always returns a new one.
+
 	// Example: integers
 	c := collection.New([]int{5, 1, 4, 2})
 	sorted := c.Sort(func(a, b int) bool { return a < b })

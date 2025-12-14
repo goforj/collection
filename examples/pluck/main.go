@@ -6,6 +6,10 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// Pluck is an alias for MapTo with a more semantic name when projecting fields.
+	// It extracts a single field or computed value from every element and returns a
+	// new typed collection.
+
 	// Example: integers - extract parity label
 	nums := collection.New([]int{1, 2, 3, 4})
 	parity := collection.Pluck(nums, func(n int) string {

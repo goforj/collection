@@ -9,6 +9,9 @@ import (
 )
 
 func main() {
+	// Each runs fn for every item in the collection and returns the same collection,
+	// so it can be used in chains for side effects (logging, debugging, etc.).
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 3})
 

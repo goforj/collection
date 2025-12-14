@@ -32,7 +32,7 @@ func run() error {
 	}
 
 	examplesDir := filepath.Join(root, "examples")
-	_ = os.RemoveAll(examplesDir)
+	//_ = os.RemoveAll(examplesDir)
 	if err := os.MkdirAll(examplesDir, 0o755); err != nil {
 		return err
 	}
@@ -48,20 +48,30 @@ func run() error {
 		return fmt.Errorf(`package "collection" not found in %s`, root)
 	}
 
-	groups := map[string][]Example{}
+	funcs := map[string]*FuncDoc{}
 
 	for filename, file := range pkg.Files {
-		exs := extractExamples(fset, filename, file)
-		for _, ex := range exs {
-			groups[ex.FuncName] = append(groups[ex.FuncName], ex)
+		if strings.Contains(filename, "_test.go") {
+			continue
+		}
+		for name, fd := range extractFuncDocs(fset, filename, file) {
+			if existing, ok := funcs[name]; ok {
+				existing.Examples = append(existing.Examples, fd.Examples...)
+			} else {
+				funcs[name] = fd
+			}
 		}
 	}
 
-	for funcName, list := range groups {
-		sort.Slice(list, func(i, j int) bool { return list[i].Line < list[j].Line })
-		if err := writeMain(examplesDir, funcName, list); err != nil {
+	for _, fd := range funcs {
+		sort.Slice(fd.Examples, func(i, j int) bool {
+			return fd.Examples[i].Line < fd.Examples[j].Line
+		})
+		if err := writeMain(examplesDir, fd); err != nil {
 			return err
 		}
+
+		godump.Dump(fd)
 	}
 
 	return nil
@@ -81,9 +91,17 @@ func findRoot() (string, error) {
 
 func fileExists(p string) bool { _, err := os.Stat(p); return err == nil }
 
+//
 // ------------------------------------------------------------
-// Example extraction
+// Data models
 // ------------------------------------------------------------
+//
+
+type FuncDoc struct {
+	Name        string
+	Description string
+	Examples    []Example
+}
 
 type Example struct {
 	FuncName string
@@ -93,16 +111,26 @@ type Example struct {
 	Code     string
 }
 
+//
+// ------------------------------------------------------------
+// Example extraction
+// ------------------------------------------------------------
+//
+
 var exampleHeader = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
 
-// docLine keeps a processed doc line plus its position in the source file.
 type docLine struct {
 	text string
 	pos  token.Pos
 }
 
-func extractExamples(fset *token.FileSet, filename string, file *ast.File) []Example {
-	var out []Example
+func extractFuncDocs(
+	fset *token.FileSet,
+	filename string,
+	file *ast.File,
+) map[string]*FuncDoc {
+
+	out := map[string]*FuncDoc{}
 
 	for _, decl := range file.Decls {
 		fn, ok := decl.(*ast.FuncDecl)
@@ -110,58 +138,58 @@ func extractExamples(fset *token.FileSet, filename string, file *ast.File) []Exa
 			continue
 		}
 
-		funcName := fn.Name.Name
-		blocks := extractBlocks(fset, filename, funcName, fn)
-		out = append(out, blocks...)
+		name := fn.Name.Name
+
+		out[name] = &FuncDoc{
+			Name:        name,
+			Description: extractFuncDescription(fn.Doc),
+			Examples:    extractBlocks(fset, filename, name, fn),
+		}
 	}
 
 	return out
 }
 
-// docLines returns the doc comment lines with the leading '//' removed,
-// preserving indentation after that, and tracking their source positions.
-func docLines(group *ast.CommentGroup) []docLine {
-	if group == nil {
-		return nil
+func extractFuncDescription(group *ast.CommentGroup) string {
+	lines := docLines(group)
+	var desc []string
+
+	for _, dl := range lines {
+		trimmed := strings.TrimSpace(dl.text)
+		if exampleHeader.MatchString(trimmed) {
+			break
+		}
+		if len(desc) == 0 && trimmed == "" {
+			continue
+		}
+		desc = append(desc, dl.text)
 	}
 
+	for len(desc) > 0 && strings.TrimSpace(desc[len(desc)-1]) == "" {
+		desc = desc[:len(desc)-1]
+	}
+
+	return strings.Join(desc, "\n")
+}
+
+func docLines(group *ast.CommentGroup) []docLine {
 	var lines []docLine
+
 	for _, c := range group.List {
 		text := c.Text
 
-		// Line comments: // ...
 		if strings.HasPrefix(text, "//") {
 			line := strings.TrimPrefix(text, "//")
-
-			// Strip *one* leading space (common in prose).
 			if strings.HasPrefix(line, " ") {
 				line = line[1:]
 			}
-
-			// Strip a single leading tab used as a Go doc
-			// "code block" marker. This avoids an extra
-			// indent level when we embed under func main().
 			if strings.HasPrefix(line, "\t") {
 				line = line[1:]
 			}
-
 			lines = append(lines, docLine{
 				text: line,
-				pos:  c.Slash, // position of the leading '//'
+				pos:  c.Slash,
 			})
-			continue
-		}
-
-		// Very simple handling for /* ... */ doc comments (if ever used).
-		if strings.HasPrefix(text, "/*") {
-			body := strings.TrimPrefix(text, "/*")
-			body = strings.TrimSuffix(body, "*/")
-			for _, l := range strings.Split(body, "\n") {
-				lines = append(lines, docLine{
-					text: l,
-					pos:  c.Slash,
-				})
-			}
 		}
 	}
 
@@ -173,41 +201,35 @@ func extractBlocks(
 	filename, funcName string,
 	fn *ast.FuncDecl,
 ) []Example {
+
 	var out []Example
-	var label string
-
 	lines := docLines(fn.Doc)
-	if len(lines) == 0 {
-		return out
-	}
 
+	var label string
 	var collected []string
+	var startLine int
 	inExample := false
-	startLine := 0
 
 	flush := func() {
 		if len(collected) == 0 {
 			return
 		}
-
 		out = append(out, Example{
 			FuncName: funcName,
 			File:     filename,
-			Line:     startLine,
 			Label:    label,
+			Line:     startLine,
 			Code:     strings.Join(collected, "\n"),
 		})
-
-		label = ""
 		collected = nil
+		label = ""
 		inExample = false
 	}
 
 	for _, dl := range lines {
-		rawLine := dl.text
-		trimmed := strings.TrimSpace(rawLine)
+		raw := dl.text
+		trimmed := strings.TrimSpace(raw)
 
-		// Start of a new Example: block
 		if m := exampleHeader.FindStringSubmatch(trimmed); m != nil {
 			flush()
 			inExample = true
@@ -220,104 +242,87 @@ func extractBlocks(
 			continue
 		}
 
-		// Preserve ALL lines verbatim and in order
-		collected = append(collected, rawLine)
+		collected = append(collected, raw)
 	}
 
 	flush()
 	return out
 }
 
+//
 // ------------------------------------------------------------
 // Write ./examples/<func>/main.go
 // ------------------------------------------------------------
+//
 
-func writeMain(base, funcName string, list []Example) error {
-	dir := filepath.Join(base, strings.ToLower(funcName))
+func writeMain(base string, fd *FuncDoc) error {
+	dir := filepath.Join(base, strings.ToLower(fd.Name))
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return err
 	}
 
 	var buf bytes.Buffer
 
-	// detect needed imports
-	imports := map[string]bool{}
-
-	for _, ex := range list {
-		code := ex.Code
-
-		// Simple keyword → import mapping
-		if strings.Contains(code, "fmt.") {
-			imports["fmt"] = true
-		}
-		if strings.Contains(code, "strings.") {
-			imports["strings"] = true
-		}
-		// Add more here easily:
-		// if strings.Contains(code, "errors.") { imports["errors"] = true }
-		// if strings.Contains(code, "time.") { imports["time"] = true }
-	}
-
-	// ignore build tag so examples don't run in tests
+	// Build tag
 	buf.WriteString("//go:build ignore\n")
 	buf.WriteString("// +build ignore\n\n")
 
 	buf.WriteString("package main\n\n")
 
-	// Always need collection
-	imports["github.com/goforj/collection"] = true
+	imports := map[string]bool{
+		"github.com/goforj/collection": true,
+	}
 
-	// Write import block
+	for _, ex := range fd.Examples {
+		if strings.Contains(ex.Code, "fmt.") {
+			imports["fmt"] = true
+		}
+		if strings.Contains(ex.Code, "strings.") {
+			imports["strings"] = true
+		}
+	}
+
 	if len(imports) == 1 {
-		// only collection
 		buf.WriteString("import \"github.com/goforj/collection\"\n\n")
 	} else {
-		// multi import block
 		buf.WriteString("import (\n")
-
-		// stable ordering
 		keys := make([]string, 0, len(imports))
 		for k := range imports {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
-
 		for _, imp := range keys {
 			buf.WriteString("\t\"" + imp + "\"\n")
 		}
-
 		buf.WriteString(")\n\n")
 	}
 
 	buf.WriteString("func main() {\n")
 
-	for _, ex := range list {
+	if fd.Description != "" {
+		for _, line := range strings.Split(fd.Description, "\n") {
+			buf.WriteString("\t// " + line + "\n")
+		}
+		buf.WriteString("\n")
+	}
+
+	if len(fd.Examples) == 0 {
+		return nil
+	}
+
+	for _, ex := range fd.Examples {
 		if ex.Label != "" {
 			buf.WriteString("\t// Example: " + ex.Label + "\n")
 		}
 
 		ex.Code = strings.TrimLeft(ex.Code, "\n")
 
-		// Header comment for each example
-		//buf.WriteString(fmt.Sprintf("\t// Example %d (from %s:%d)\n",
-		//	i+1, filepath.Base(ex.File), ex.Line))
-
-		// Optional cleanup hook you had; keep if useful
-		if strings.Contains(ex.File, "avg") {
-			godump.Dump(ex.Code)
-		}
-
-		ex.Code = strings.ReplaceAll(ex.Code, "\n\n\n\t", "\n\n\t")
-
 		for _, line := range strings.Split(ex.Code, "\n") {
 			if strings.TrimSpace(line) == "" {
-				// Preserve blank lines as blank
 				buf.WriteString("\n")
-				continue
+			} else {
+				buf.WriteString("\t" + line + "\n")
 			}
-
-			// Indent every non-empty line (code or comment) once under func main().
-			buf.WriteString("\t" + line + "\n")
 		}
 	}
 

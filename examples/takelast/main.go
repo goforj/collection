@@ -6,6 +6,14 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// TakeLast returns a new collection containing the last n items.
+	// If n is less than or equal to zero, TakeLast returns an empty collection.
+	// If n is greater than or equal to the collection length, TakeLast returns
+	// the full collection.
+	// 
+	// This operation performs no element allocations; it re-slices the
+	// underlying slice.
+
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})
 	out := c.TakeLast(2)

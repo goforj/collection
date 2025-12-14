@@ -6,6 +6,13 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// ToMap reduces a collection into a map using the provided key and value
+	// selector functions.
+	// 
+	// If multiple items produce the same key, the last value wins.
+	// 
+	// This operation allocates a map sized to the collection length.
+
 	// Example: basic usage
 	users := []string{"alice", "bob", "carol"}
 

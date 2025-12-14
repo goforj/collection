@@ -6,6 +6,9 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
+	// TakeUntilFn returns items until the predicate function returns true.
+	// The matching item is NOT included.
+
 	// Example: integers - stop when value >= 3
 	c1 := collection.New([]int{1, 2, 3, 4})
 	out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })

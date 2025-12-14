@@ -5,43 +5,19 @@ import (
 	"testing"
 )
 
-func TestToMapKV_Basic(t *testing.T) {
-	m := map[string]int{
-		"a": 1,
-		"b": 2,
-		"c": 3,
-	}
+func TestToMap_Basic(t *testing.T) {
+	users := []string{"alice", "bob", "carol"}
 
-	c := FromMap(m)
-	out := ToMapKV(c)
+	out := ToMap(
+		New(users),
+		func(name string) string { return name },
+		func(name string) int { return len(name) },
+	)
 
-	if !reflect.DeepEqual(out, m) {
-		t.Fatalf("expected %v, got %v", m, out)
-	}
-}
-
-func TestToMapKV_AfterFilter(t *testing.T) {
-	type Config struct {
-		Enabled bool
-		Timeout int
-	}
-
-	configs := map[string]Config{
-		"a": {Enabled: true, Timeout: 10},
-		"b": {Enabled: false, Timeout: 20},
-		"c": {Enabled: true, Timeout: 30},
-	}
-
-	c := FromMap(configs).
-		Filter(func(p Pair[string, Config]) bool {
-			return p.Value.Enabled
-		})
-
-	out := ToMapKV(c)
-
-	expect := map[string]Config{
-		"a": {Enabled: true, Timeout: 10},
-		"c": {Enabled: true, Timeout: 30},
+	expect := map[string]int{
+		"alice": 5,
+		"bob":   3,
+		"carol": 5,
 	}
 
 	if !reflect.DeepEqual(out, expect) {
@@ -49,55 +25,88 @@ func TestToMapKV_AfterFilter(t *testing.T) {
 	}
 }
 
-func TestToMapKV_KeyCollision_LastWins(t *testing.T) {
-	c := New([]Pair[string, int]{
-		{Key: "x", Value: 1},
-		{Key: "x", Value: 2},
-		{Key: "x", Value: 3},
-	})
+func TestToMap_RekeyStructs(t *testing.T) {
+	type User struct {
+		ID   int
+		Name string
+	}
 
-	out := ToMapKV(c)
+	users := []User{
+		{ID: 1, Name: "Alice"},
+		{ID: 2, Name: "Bob"},
+	}
 
-	expect := map[string]int{"x": 3}
+	out := ToMap(
+		New(users),
+		func(u User) int { return u.ID },
+		func(u User) User { return u },
+	)
+
+	expect := map[int]User{
+		1: {ID: 1, Name: "Alice"},
+		2: {ID: 2, Name: "Bob"},
+	}
+
 	if !reflect.DeepEqual(out, expect) {
 		t.Fatalf("expected %v, got %v", expect, out)
 	}
 }
 
-func TestToMapKV_EmptyCollection(t *testing.T) {
-	c := New([]Pair[string, int]{})
-	out := ToMapKV(c)
+func TestToMap_KeyCollision_LastWins(t *testing.T) {
+	values := []int{1, 2, 3, 4}
+
+	out := ToMap(
+		New(values),
+		func(v int) string { return "key" },
+		func(v int) int { return v },
+	)
+
+	expect := map[string]int{
+		"key": 4,
+	}
+
+	if !reflect.DeepEqual(out, expect) {
+		t.Fatalf("expected %v, got %v", expect, out)
+	}
+}
+
+func TestToMap_EmptyCollection(t *testing.T) {
+	out := ToMap(
+		New([]int{}),
+		func(v int) int { return v },
+		func(v int) int { return v },
+	)
 
 	if len(out) != 0 {
 		t.Fatalf("expected empty map, got %v", out)
 	}
 }
 
-func TestToMapKV_DoesNotMutateCollection(t *testing.T) {
-	items := []Pair[string, int]{
-		{Key: "a", Value: 1},
-		{Key: "b", Value: 2},
-	}
-
+func TestToMap_DoesNotMutateCollection(t *testing.T) {
+	items := []int{1, 2, 3}
 	c := New(items)
-	_ = ToMapKV(c)
+
+	_ = ToMap(
+		c,
+		func(v int) int { return v },
+		func(v int) int { return v },
+	)
 
 	if !reflect.DeepEqual(c.Items(), items) {
-		t.Fatalf("collection was mutated")
+		t.Fatalf("collection was mutated: expected %v, got %v", items, c.Items())
 	}
 }
 
-func TestToMapKV_MapCapacity(t *testing.T) {
-	items := []Pair[string, int]{
-		{Key: "a", Value: 1},
-		{Key: "b", Value: 2},
-		{Key: "c", Value: 3},
-	}
+func TestToMap_MapLengthMatchesUniqueKeys(t *testing.T) {
+	items := []int{1, 2, 3, 4, 5}
 
-	c := New(items)
-	out := ToMapKV(c)
+	out := ToMap(
+		New(items),
+		func(v int) int { return v % 2 }, // keys: 1,0
+		func(v int) int { return v },
+	)
 
-	if len(out) != len(items) {
-		t.Fatalf("expected map length %d, got %d", len(items), len(out))
+	if len(out) != 2 {
+		t.Fatalf("expected 2 keys, got %d", len(out))
 	}
 }

@@ -97,6 +97,9 @@ go get github.com/goforj/collection
 - [`ToJSON`](#tojson)
 - [`ToPrettyJSON`](#toprettyjson)
 
+#### Filtering
+- [`Filter`](#filter)
+
 #### Grouping
 - [`GroupBy`](#groupby)
 
@@ -111,11 +114,6 @@ go get github.com/goforj/collection
 - [`Reverse`](#reverse)
 - [`Shuffle`](#shuffle)
 - [`Sort`](#sort)
-
-#### Other
-- [`Filter`](#filter)
-- [`TakeUntil`](#takeuntil)
-- [`TakeUntilFn`](#takeuntilfn)
 
 #### Querying
 - [`All`](#all)
@@ -143,6 +141,8 @@ go get github.com/goforj/collection
 - [`SkipLast`](#skiplast)
 - [`Take`](#take)
 - [`TakeLast`](#takelast)
+- [`TakeUntil`](#takeuntil)
+- [`TakeUntilFn`](#takeuntilfn)
 
 #### Transformation
 - [`Append`](#append)
@@ -724,6 +724,72 @@ fmt.Println(out1)
 // ]
 ```
 
+### Filtering
+
+#### Filter
+Filter keeps only the elements for which fn returns true.
+This method mutates the collection in place and returns the same instance.
+
+_Example: integers_
+
+```go
+c := collection.New([]int{1, 2, 3, 4})
+c.Filter(func(v int) bool {
+	return v%2 == 0
+})
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
+c2.Filter(func(v string) bool {
+	return strings.HasPrefix(v, "a")
+})
+collection.Dump(c2.Items())
+// #[]string [
+//   0 => "apple" #string
+//   1 => "avocado" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Andrew"},
+	{ID: 4, Name: "Carol"},
+})
+
+users.Filter(func(u User) bool {
+	return strings.HasPrefix(u.Name, "A")
+})
+
+collection.Dump(users.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Andrew" #string
+//   }
+// ]
+```
+
 ### Grouping
 
 #### GroupBy
@@ -1192,152 +1258,6 @@ collection.Dump(sortedUsers.Items())
 //     +Name => "Carol" #string
 //     +Age  => 40 #int
 //   }
-// ]
-```
-
-### Other
-
-#### Filter
-Filter keeps only the elements for which fn returns true.
-This method mutates the collection in place and returns the same instance.
-
-_Example: integers_
-
-```go
-c := collection.New([]int{1, 2, 3, 4})
-c.Filter(func(v int) bool {
-	return v%2 == 0
-})
-collection.Dump(c.Items())
-// #[]int [
-//   0 => 2 #int
-//   1 => 4 #int
-// ]
-```
-
-_Example: strings_
-
-```go
-c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
-c2.Filter(func(v string) bool {
-	return strings.HasPrefix(v, "a")
-})
-collection.Dump(c2.Items())
-// #[]string [
-//   0 => "apple" #string
-//   1 => "avocado" #string
-// ]
-```
-
-_Example: structs_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-	{ID: 3, Name: "Andrew"},
-	{ID: 4, Name: "Carol"},
-})
-
-users.Filter(func(u User) bool {
-	return strings.HasPrefix(u.Name, "A")
-})
-
-collection.Dump(users.Items())
-// #[]main.User [
-//   0 => #main.User {
-//     +ID   => 1 #int
-//     +Name => "Alice" #string
-//   }
-//   1 => #main.User {
-//     +ID   => 3 #int
-//     +Name => "Andrew" #string
-//   }
-// ]
-```
-
-#### TakeUntil
-TakeUntil returns items until the first element equals `value`.
-The matching item is NOT included.
-
-Uses == comparison, so T must be comparable.
-
-_Example: integers - stop at value 3_
-
-```go
-c4 := collection.New([]int{1, 2, 3, 4})
-out4 := collection.TakeUntil(c4, 3)
-collection.Dump(out4.Items())
-// #[]int [
-//	0 => 1 #int
-//	1 => 2 #int
-// ]
-```
-
-_Example: strings - value never appears → full slice_
-
-```go
-c5 := collection.New([]string{"a", "b", "c"})
-out5 := collection.TakeUntil(c5, "x")
-collection.Dump(out5.Items())
-// #[]string [
-//	0 => "a" #string
-//	1 => "b" #string
-//	2 => "c" #string
-// ]
-```
-
-_Example: integers - match is first item → empty result_
-
-```go
-c6 := collection.New([]int{9, 10, 11})
-out6 := collection.TakeUntil(c6, 9)
-collection.Dump(out6.Items())
-// #[]int [
-// ]
-```
-
-#### TakeUntilFn
-TakeUntilFn returns items until the predicate function returns true.
-The matching item is NOT included.
-
-_Example: integers - stop when value >= 3_
-
-```go
-c1 := collection.New([]int{1, 2, 3, 4})
-out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })
-collection.Dump(out1.Items())
-// #[]int [
-//	0 => 1 #int
-//	1 => 2 #int
-// ]
-```
-
-_Example: integers - predicate immediately true → empty result_
-
-```go
-c2 := collection.New([]int{10, 20, 30})
-out2 := c2.TakeUntilFn(func(v int) bool { return v < 50 })
-collection.Dump(out2.Items())
-// #[]int [
-// ]
-```
-
-_Example: integers - no match → full list returned_
-
-```go
-c3 := collection.New([]int{1, 2, 3})
-out3 := c3.TakeUntilFn(func(v int) bool { return v == 99 })
-collection.Dump(out3.Items())
-// #[]int [
-//	0 => 1 #int
-//	1 => 2 #int
-//	2 => 3 #int
 // ]
 ```
 
@@ -2502,6 +2422,86 @@ out4 := users.TakeLast(1)
 collection.Dump(out4.Items())
 // #[]collection.User [
 //   0 => {ID:3} #collection.User
+// ]
+```
+
+#### TakeUntil
+TakeUntil returns items until the first element equals `value`.
+The matching item is NOT included.
+
+Uses == comparison, so T must be comparable.
+
+_Example: integers - stop at value 3_
+
+```go
+c4 := collection.New([]int{1, 2, 3, 4})
+out4 := collection.TakeUntil(c4, 3)
+collection.Dump(out4.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+// ]
+```
+
+_Example: strings - value never appears → full slice_
+
+```go
+c5 := collection.New([]string{"a", "b", "c"})
+out5 := collection.TakeUntil(c5, "x")
+collection.Dump(out5.Items())
+// #[]string [
+//	0 => "a" #string
+//	1 => "b" #string
+//	2 => "c" #string
+// ]
+```
+
+_Example: integers - match is first item → empty result_
+
+```go
+c6 := collection.New([]int{9, 10, 11})
+out6 := collection.TakeUntil(c6, 9)
+collection.Dump(out6.Items())
+// #[]int [
+// ]
+```
+
+#### TakeUntilFn
+TakeUntilFn returns items until the predicate function returns true.
+The matching item is NOT included.
+
+_Example: integers - stop when value >= 3_
+
+```go
+c1 := collection.New([]int{1, 2, 3, 4})
+out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })
+collection.Dump(out1.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+// ]
+```
+
+_Example: integers - predicate immediately true → empty result_
+
+```go
+c2 := collection.New([]int{10, 20, 30})
+out2 := c2.TakeUntilFn(func(v int) bool { return v < 50 })
+collection.Dump(out2.Items())
+// #[]int [
+// ]
+```
+
+_Example: integers - no match → full list returned_
+
+```go
+c3 := collection.New([]int{1, 2, 3})
+out3 := c3.TakeUntilFn(func(v int) bool { return v == 99 })
+collection.Dump(out3.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+//	2 => 3 #int
 // ]
 ```
 

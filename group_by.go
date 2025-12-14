@@ -4,6 +4,7 @@ package collection
 // returned from keyFn.
 // @group Grouping
 // @behavior readonly
+// @chainable false
 //
 // The order of items within each group is preserved.
 // The order of the groups themselves is unspecified.

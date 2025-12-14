@@ -3,6 +3,7 @@ package collection
 // Concat appends the values from the given slice onto the end of the collection,
 // @group Transformation
 // @behavior mutable
+// @chainable true
 //
 // Example: strings
 //

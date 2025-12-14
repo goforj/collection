@@ -3,6 +3,7 @@ package collection
 // FromMap materializes a map into a collection of key/value pairs.
 // @group Maps
 // @behavior immutable
+// @chainable true
 //
 // The iteration order of the resulting collection is unspecified,
 // matching Go's map iteration semantics.

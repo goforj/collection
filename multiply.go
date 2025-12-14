@@ -4,6 +4,7 @@ package collection
 // and returns a new collection.
 // @group Transformation
 // @behavior mutable
+// @chainable true
 //
 // Example: integers
 //

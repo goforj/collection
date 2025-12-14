@@ -4,6 +4,7 @@ package collection
 // If the collection is empty, None returns true.
 // @group Querying
 // @behavior readonly
+// @chainable false
 //
 // Example: integers – none even
 //

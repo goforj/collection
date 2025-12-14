@@ -4,6 +4,7 @@ package collection
 // selector functions.
 // @group Maps
 // @behavior readonly
+// @chainable false
 //
 // If multiple items produce the same key, the last value wins.
 //

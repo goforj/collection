@@ -4,6 +4,7 @@ package collection
 // so it can be used in chains for side effects (logging, debugging, etc.).
 // @group Transformation
 // @behavior immutable
+// @chainable true
 //
 // Example: integers
 //

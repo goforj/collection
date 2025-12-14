@@ -4,6 +4,7 @@ package collection
 // If no element matches, an empty collection is returned.
 // @group Ordering
 // @behavior immutable
+// @chainable true
 //
 // Example: integers
 //

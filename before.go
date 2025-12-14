@@ -4,6 +4,7 @@ package collection
 // *before* the first element for which pred returns true.
 // @group Ordering
 // @behavior immutable
+// @chainable true
 //
 // If no element matches the predicate, the entire collection is returned.
 //

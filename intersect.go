@@ -4,6 +4,7 @@ package collection
 // Order follows the first collection, and duplicates are removed.
 // @group Set Operations
 // @behavior immutable
+// @chainable true
 //
 // Example: integers
 //

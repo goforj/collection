@@ -5,6 +5,7 @@ package collection
 // along with the zero value of T.
 // @group Querying
 // @behavior readonly
+// @chainable false
 //
 // This method is equivalent to Laravel's collection->first(fn) and mirrors
 // the behavior found in functional collections in other languages.

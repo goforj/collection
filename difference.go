@@ -5,6 +5,7 @@ package collection
 // duplicates are removed.
 // @group Set Operations
 // @behavior immutable
+// @chainable true
 //
 // Example: integers
 //

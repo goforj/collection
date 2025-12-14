@@ -5,6 +5,7 @@ package collection
 // If the collection is empty or no element matches, ok will be false.
 // @group Querying
 // @behavior readonly
+// @chainable false
 //
 // Example: integers
 //

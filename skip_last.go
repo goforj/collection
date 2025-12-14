@@ -6,6 +6,7 @@ package collection
 // an empty collection.
 // @group Slicing
 // @behavior immutable
+// @chainable true
 //
 // This operation performs no element allocations; it re-slices the
 // underlying slice.

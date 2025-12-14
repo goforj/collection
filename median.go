@@ -6,6 +6,7 @@ import "sort"
 // Returns (0, false) if the collection is empty.
 // @group Aggregation
 // @behavior readonly
+// @chainable false
 //
 // Odd count  → middle value
 // Even count → average of the two middle values

@@ -10,6 +10,7 @@ func main() {
 	// If n is less than or equal to zero, TakeLast returns an empty collection.
 	// If n is greater than or equal to the collection length, TakeLast returns
 	// the full collection.
+	// @chainable true
 	// 
 	// This operation performs no element allocations; it re-slices the
 	// underlying slice.

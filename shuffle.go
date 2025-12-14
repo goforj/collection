@@ -19,6 +19,7 @@ func setShuffleRand(r *rand.Rand) {
 // and returns the same collection for chaining.
 // @group Ordering
 // @behavior immutable
+// @chainable true
 //
 // This operation performs no allocations.
 //

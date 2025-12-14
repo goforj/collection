@@ -4,6 +4,7 @@ package collection
 // If the collection is empty, Sum returns the zero value of T.
 // @group Aggregation
 // @behavior readonly
+// @chainable false
 //
 // Example: integers
 //

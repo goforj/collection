@@ -1,6 +1,7 @@
 package collection
 
 // Clone returns a shallow copy of the collection.
+// @chainable true
 //
 // The returned collection has its own backing slice, so subsequent mutations
 // do not affect the original collection.

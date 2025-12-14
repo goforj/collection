@@ -19,7 +19,7 @@ func main() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("✔ @behavior annotations backfilled")
+	fmt.Println("✔ @behavior and @chainable annotations backfilled")
 }
 
 func run() error {
@@ -54,6 +54,12 @@ func run() error {
 			fn, ok := decl.(*ast.FuncDecl)
 			if !ok || fn.Doc == nil || !ast.IsExported(fn.Name.Name) {
 				continue
+			}
+
+			// Chainable backfill (boolean)
+			if !hasChainable(fn.Doc) {
+				insertChainable(fn.Doc, inferChainable(fn))
+				changed = true
 			}
 
 			// Respect explicit annotation
@@ -110,6 +116,13 @@ func inferBehavior(fn *ast.FuncDecl) (string, bool) {
 	return "", false
 }
 
+func inferChainable(fn *ast.FuncDecl) string {
+	if returnsCollectionLike(fn) && len(fn.Type.Results.List) == 1 {
+		return "true"
+	}
+	return "false"
+}
+
 var knownMutators = map[string]bool{
 	"Push":     true,
 	"Pop":      true,
@@ -138,6 +151,37 @@ func returnsCollection(fn *ast.FuncDecl) bool {
 
 	ident, ok := sel.X.(*ast.Ident)
 	return ok && ident.Name == "Collection"
+}
+
+func returnsCollectionLike(fn *ast.FuncDecl) bool {
+	if fn.Type.Results == nil || len(fn.Type.Results.List) == 0 {
+		return false
+	}
+
+	if len(fn.Type.Results.List) != 1 {
+		return returnsCollectionResult(fn.Type.Results.List[len(fn.Type.Results.List)-1].Type)
+	}
+
+	return returnsCollectionResult(fn.Type.Results.List[0].Type)
+}
+
+func returnsCollectionResult(expr ast.Expr) bool {
+	star, ok := expr.(*ast.StarExpr)
+	if !ok {
+		return false
+	}
+
+	sel, ok := star.X.(*ast.IndexExpr)
+	if !ok {
+		return false
+	}
+
+	ident, ok := sel.X.(*ast.Ident)
+	if !ok {
+		return false
+	}
+
+	return ident.Name == "Collection" || ident.Name == "NumericCollection"
 }
 
 //
@@ -226,6 +270,15 @@ func hasBehavior(doc *ast.CommentGroup) bool {
 	return false
 }
 
+func hasChainable(doc *ast.CommentGroup) bool {
+	for _, c := range doc.List {
+		if strings.Contains(c.Text, "@chainable") {
+			return true
+		}
+	}
+	return false
+}
+
 func insertBehavior(doc *ast.CommentGroup, behavior string) {
 	for i, c := range doc.List {
 		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
@@ -242,6 +295,25 @@ func insertBehavior(doc *ast.CommentGroup, behavior string) {
 
 	doc.List = append(doc.List, &ast.Comment{
 		Text: fmt.Sprintf("// @behavior %s", behavior),
+	})
+}
+
+func insertChainable(doc *ast.CommentGroup, val string) {
+	for i, c := range doc.List {
+		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
+		if strings.HasPrefix(text, "Example:") || text == "" {
+			doc.List = append(
+				doc.List[:i],
+				append([]*ast.Comment{
+					{Text: fmt.Sprintf("// @chainable %s", val)},
+				}, doc.List[i:]...)...,
+			)
+			return
+		}
+	}
+
+	doc.List = append(doc.List, &ast.Comment{
+		Text: fmt.Sprintf("// @chainable %s", val),
 	})
 }
 

@@ -147,7 +147,7 @@ go get github.com/goforj/collection
 
 ## Access
 
-### <a id="items"></a>Items · readonly
+### <a id="items"></a>Items · readonly · not chainable
 
 Items returns the underlying slice of items.
 
@@ -205,7 +205,7 @@ collection.Dump(out)
 
 ## Aggregation
 
-### <a id="avg"></a>Avg · readonly
+### <a id="avg"></a>Avg · readonly · not chainable
 
 Avg returns the average of the collection values as a float64.
 If the collection is empty, Avg returns 0.
@@ -226,7 +226,7 @@ collection.Dump(c2.Avg())
 // 2.333333 #float64
 ```
 
-### <a id="count"></a>Count · readonly
+### <a id="count"></a>Count · readonly · not chainable
 
 Count returns the total number of items in the collection.
 
@@ -238,7 +238,7 @@ collection.Dump(count)
 // 4 #int
 ```
 
-### <a id="countby"></a>CountBy · readonly
+### <a id="countby"></a>CountBy · readonly · not chainable
 
 CountBy returns a map of keys extracted by fn to their occurrence counts.
 K must be comparable.
@@ -300,7 +300,7 @@ collection.Dump(roleCounts)
 // }
 ```
 
-### <a id="countbyvalue"></a>CountByValue · readonly
+### <a id="countbyvalue"></a>CountByValue · readonly · not chainable
 
 CountByValue returns a map where each distinct item in the collection
 is mapped to the number of times it appears.
@@ -352,7 +352,7 @@ collection.Dump(counts3)
 // ]
 ```
 
-### <a id="max"></a>Max · readonly
+### <a id="max"></a>Max · readonly · not chainable
 
 Max returns the largest numeric item in the collection.
 The second return value is false if the collection is empty.
@@ -390,7 +390,7 @@ collection.Dump(max3, ok3)
 // false #bool
 ```
 
-### <a id="maxby"></a>MaxBy · readonly
+### <a id="maxby"></a>MaxBy · readonly · not chainable
 
 MaxBy returns the item whose key (produced by keyFn) is the largest.
 The second return value is false if the collection is empty.
@@ -445,7 +445,7 @@ collection.Dump(maxVal, ok)
 // false #bool
 ```
 
-### <a id="median"></a>Median · readonly
+### <a id="median"></a>Median · readonly · not chainable
 
 Median returns the statistical median of the numeric collection as float64.
 Returns (0, false) if the collection is empty.
@@ -494,7 +494,7 @@ collection.Dump(median4, ok4)
 // false    #bool
 ```
 
-### <a id="min"></a>Min · readonly
+### <a id="min"></a>Min · readonly · not chainable
 
 Min returns the smallest numeric item in the collection.
 The second return value is false if the collection is empty.
@@ -529,7 +529,7 @@ collection.Dump(min3, ok3)
 // false #bool
 ```
 
-### <a id="minby"></a>MinBy · readonly
+### <a id="minby"></a>MinBy · readonly · not chainable
 
 MinBy returns the item whose key (produced by keyFn) is the smallest.
 The second return value is false if the collection is empty.
@@ -584,7 +584,7 @@ collection.Dump(minVal, ok)
 // false #bool
 ```
 
-### <a id="mode"></a>Mode · readonly
+### <a id="mode"></a>Mode · readonly · not chainable
 
 Mode returns the most frequent numeric value(s) in the collection.
 If multiple values tie for highest frequency, all are returned
@@ -633,7 +633,7 @@ collection.Dump(mode4)
 // <nil>
 ```
 
-### <a id="reduce"></a>Reduce · readonly
+### <a id="reduce"></a>Reduce · readonly · not chainable
 
 Reduce collapses the collection into a single accumulated value.
 The accumulator has the same type T as the collection's elements.
@@ -685,7 +685,7 @@ collection.Dump(total)
 // ]
 ```
 
-### <a id="sum"></a>Sum · readonly
+### <a id="sum"></a>Sum · readonly · not chainable
 
 Sum returns the sum of all numeric items in the NumericCollection.
 If the collection is empty, Sum returns the zero value of T.
@@ -719,15 +719,9 @@ collection.Dump(total3)
 
 ## Construction
 
-### <a id="clone"></a>Clone · allocates
+### <a id="clone"></a>Clone · allocates · chainable
 
 Clone returns a shallow copy of the collection.
-
-The returned collection has its own backing slice, so subsequent mutations
-do not affect the original collection.
-
-Clone is intended to be used when branching a pipeline while preserving
-the original collection.
 
 _Example: basic cloning_
 
@@ -789,18 +783,18 @@ collection.Dump(odds.Items())
 // ]
 ```
 
-### <a id="new"></a>New · immutable
+### <a id="new"></a>New · immutable · chainable
 
 New creates a new Collection from the provided slice.
 
-### <a id="newnumeric"></a>NewNumeric · immutable
+### <a id="newnumeric"></a>NewNumeric · immutable · chainable
 
 NewNumeric wraps a slice of numeric types in a NumericCollection.
 A shallow copy is made so that further operations don't mutate the original slice.
 
 ## Debugging
 
-### <a id="dd"></a>Dd
+### <a id="dd"></a>Dd · not chainable
 
 Dd prints items then terminates execution.
 Like Laravel's dd(), this is intended for debugging and
@@ -818,7 +812,7 @@ c.Dd()
 // Process finished with the exit code 1
 ```
 
-### <a id="dump"></a>Dump · readonly
+### <a id="dump"></a>Dump · readonly · chainable
 
 Dump prints items with godump and returns the same collection.
 This is a no-op on the collection itself and never panics.
@@ -859,7 +853,7 @@ collection.Dump(c2.Items())
 // ]
 ```
 
-### <a id="dumpstr"></a>DumpStr · readonly
+### <a id="dumpstr"></a>DumpStr · readonly · not chainable
 
 DumpStr returns the pretty-printed dump of the items as a string,
 without printing or exiting.
@@ -879,7 +873,7 @@ fmt.Println(s)
 
 ## Grouping
 
-### <a id="groupby"></a>GroupBy · readonly
+### <a id="groupby"></a>GroupBy · readonly · not chainable
 
 GroupBy partitions the collection into groups keyed by the value
 returned from keyFn.
@@ -953,7 +947,7 @@ collection.Dump(groups2["user"].Items())
 
 ## Maps
 
-### <a id="frommap"></a>FromMap · immutable
+### <a id="frommap"></a>FromMap · immutable · chainable
 
 FromMap materializes a map into a collection of key/value pairs.
 
@@ -1024,7 +1018,7 @@ collection.Dump(out2)
 // ]
 ```
 
-### <a id="tomap"></a>ToMap · readonly
+### <a id="tomap"></a>ToMap · readonly · not chainable
 
 ToMap reduces a collection into a map using the provided key and value
 selector functions.
@@ -1065,7 +1059,7 @@ byID := collection.ToMap(
 collection.Dump(byID)
 ```
 
-### <a id="tomapkv"></a>ToMapKV · readonly
+### <a id="tomapkv"></a>ToMapKV · readonly · not chainable
 
 ToMapKV converts a collection of key/value pairs into a map.
 
@@ -1122,7 +1116,7 @@ collection.Dump(out2)
 
 ## Ordering
 
-### <a id="after"></a>After · immutable
+### <a id="after"></a>After · immutable · chainable
 
 After returns all items after the first element for which pred returns true.
 If no element matches, an empty collection is returned.
@@ -1138,7 +1132,7 @@ c.After(func(v int) bool { return v == 3 }).Dump()
 // ]
 ```
 
-### <a id="before"></a>Before · immutable
+### <a id="before"></a>Before · immutable · chainable
 
 Before returns a new collection containing all items that appear
 *before* the first element for which pred returns true.
@@ -1191,7 +1185,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="reverse"></a>Reverse · mutable
+### <a id="reverse"></a>Reverse · mutable · chainable
 
 Reverse reverses the order of items in the collection in place
 and returns the same collection for chaining.
@@ -1249,7 +1243,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="shuffle"></a>Shuffle · immutable
+### <a id="shuffle"></a>Shuffle · immutable · chainable
 
 Shuffle randomly shuffles the items in the collection in place
 and returns the same collection for chaining.
@@ -1291,7 +1285,7 @@ users.Shuffle()
 collection.Dump(users.Items())
 ```
 
-### <a id="sort"></a>Sort · immutable
+### <a id="sort"></a>Sort · immutable · chainable
 
 Sort returns a new collection sorted using the provided comparison function.
 
@@ -1359,7 +1353,7 @@ collection.Dump(sortedUsers.Items())
 
 ## Querying
 
-### <a id="all"></a>All · readonly
+### <a id="all"></a>All · readonly · not chainable
 
 All returns true if fn returns true for every item in the collection.
 If the collection is empty, All returns true (vacuously true).
@@ -1400,7 +1394,7 @@ collection.Dump(all)
 // true #bool
 ```
 
-### <a id="any"></a>Any · readonly
+### <a id="any"></a>Any · readonly · not chainable
 
 Any returns true if at least one item satisfies fn.
 
@@ -1413,7 +1407,7 @@ collection.Dump(has)
 // true #bool
 ```
 
-### <a id="at"></a>At · readonly
+### <a id="at"></a>At · readonly · not chainable
 
 At returns the item at the given index and a boolean indicating
 whether the index was within bounds.
@@ -1453,7 +1447,7 @@ collection.Dump(u, ok3)
 // {ID:1 Name:"Alice"} true
 ```
 
-### <a id="contains"></a>Contains · readonly
+### <a id="contains"></a>Contains · readonly · not chainable
 
 Contains returns true if any item satisfies the predicate.
 
@@ -1500,7 +1494,7 @@ collection.Dump(hasBob)
 // true #bool
 ```
 
-### <a id="findwhere"></a>FindWhere · readonly
+### <a id="findwhere"></a>FindWhere · readonly · not chainable
 
 FindWhere returns the first item in the collection for which the provided
 predicate function returns true. This is an alias for FirstWhere(fn) and
@@ -1567,7 +1561,7 @@ collection.Dump(v4, ok4)
 // false #bool
 ```
 
-### <a id="first"></a>First · readonly
+### <a id="first"></a>First · readonly · not chainable
 
 First returns the first element in the collection.
 If the collection is empty, ok will be false.
@@ -1626,7 +1620,7 @@ collection.Dump(v3, ok4)
 // false #bool
 ```
 
-### <a id="firstwhere"></a>FirstWhere · readonly
+### <a id="firstwhere"></a>FirstWhere · readonly · not chainable
 
 FirstWhere returns the first item in the collection for which the provided
 predicate function returns true. If no items match, ok=false is returned
@@ -1651,7 +1645,7 @@ collection.Dump(v, ok)
 // false #bool
 ```
 
-### <a id="indexwhere"></a>IndexWhere · readonly
+### <a id="indexwhere"></a>IndexWhere · readonly · not chainable
 
 IndexWhere returns the index of the first item in the collection
 for which the provided predicate function returns true.
@@ -1696,7 +1690,7 @@ collection.Dump(idx3, ok3)
 // 1 true
 ```
 
-### <a id="isempty"></a>IsEmpty · readonly
+### <a id="isempty"></a>IsEmpty · readonly · not chainable
 
 IsEmpty returns true if the collection has no items.
 
@@ -1747,7 +1741,7 @@ collection.Dump(empty4)
 // true #bool
 ```
 
-### <a id="last"></a>Last · readonly
+### <a id="last"></a>Last · readonly · not chainable
 
 Last returns the last element in the collection.
 If the collection is empty, ok will be false.
@@ -1808,7 +1802,7 @@ collection.Dump(v3, ok4)
 // false #bool
 ```
 
-### <a id="lastwhere"></a>LastWhere · readonly
+### <a id="lastwhere"></a>LastWhere · readonly · not chainable
 
 LastWhere returns the last element in the collection that satisfies the predicate fn.
 If fn is nil, LastWhere returns the final element in the underlying slice.
@@ -1901,7 +1895,7 @@ collection.Dump(v5, ok6)
 // false #bool
 ```
 
-### <a id="none"></a>None · readonly
+### <a id="none"></a>None · readonly · not chainable
 
 None returns true if fn returns false for every item in the collection.
 If the collection is empty, None returns true.
@@ -1935,7 +1929,7 @@ collection.Dump(none)
 
 ## Serialization
 
-### <a id="tojson"></a>ToJSON · readonly
+### <a id="tojson"></a>ToJSON · readonly · not chainable
 
 ToJSON converts the collection's items into a compact JSON string.
 
@@ -1948,7 +1942,7 @@ fmt.Println(out1)
 // ["a","b"]
 ```
 
-### <a id="toprettyjson"></a>ToPrettyJSON · readonly
+### <a id="toprettyjson"></a>ToPrettyJSON · readonly · not chainable
 
 ToPrettyJSON converts the collection's items into a human-readable,
 indented JSON string.
@@ -1967,7 +1961,7 @@ fmt.Println(out1)
 
 ## Set Operations
 
-### <a id="difference"></a>Difference · immutable
+### <a id="difference"></a>Difference · immutable · chainable
 
 Difference returns a new collection containing elements from the first collection
 that are not present in the second. Order follows the first collection, and
@@ -2033,7 +2027,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="intersect"></a>Intersect · immutable
+### <a id="intersect"></a>Intersect · immutable · chainable
 
 Intersect returns a new collection containing elements present in both collections.
 Order follows the first collection, and duplicates are removed.
@@ -2100,7 +2094,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="symmetricdifference"></a>SymmetricDifference · immutable
+### <a id="symmetricdifference"></a>SymmetricDifference · immutable · chainable
 
 SymmetricDifference returns a new collection containing elements that appear
 in exactly one of the two collections. Order follows the first collection for
@@ -2168,7 +2162,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="union"></a>Union · immutable
+### <a id="union"></a>Union · immutable · chainable
 
 Union returns a new collection containing the unique elements from both collections.
 Items from the first collection are kept in order, followed by items from the second
@@ -2242,7 +2236,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="unique"></a>Unique · immutable
+### <a id="unique"></a>Unique · immutable · chainable
 
 Unique returns a new collection with duplicate items removed, based on the
 equality function `eq`. The first occurrence of each unique value is kept,
@@ -2302,7 +2296,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="uniqueby"></a>UniqueBy · immutable
+### <a id="uniqueby"></a>UniqueBy · immutable · chainable
 
 UniqueBy returns a new collection containing only the first occurrence
 of each element as determined by keyFn.
@@ -2361,7 +2355,7 @@ collection.Dump(out3.Items())
 
 ## Slicing
 
-### <a id="chunk"></a>Chunk · readonly
+### <a id="chunk"></a>Chunk · readonly · not chainable
 
 Chunk splits the collection into chunks of the given size.
 The final chunk may be smaller if len(items) is not divisible by size.
@@ -2430,7 +2424,7 @@ collection.Dump(userChunks)
 //]
 ```
 
-### <a id="filter"></a>Filter · mutable
+### <a id="filter"></a>Filter · mutable · chainable
 
 Filter keeps only the elements for which fn returns true.
 This method mutates the collection in place and returns the same instance.
@@ -2495,7 +2489,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="partition"></a>Partition · immutable
+### <a id="partition"></a>Partition · immutable · not chainable
 
 Partition splits the collection into two new collections based on predicate fn.
 The first collection contains items where fn returns true; the second contains
@@ -2575,7 +2569,7 @@ collection.Dump(active.Items(), inactive.Items())
 // ]
 ```
 
-### <a id="pop"></a>Pop · mutable
+### <a id="pop"></a>Pop · mutable · not chainable
 
 Pop returns the last item and a new collection with that item removed.
 The original collection remains unchanged.
@@ -2644,7 +2638,7 @@ collection.Dump(item4, rest4.Items())
 // ]
 ```
 
-### <a id="popn"></a>PopN · mutable
+### <a id="popn"></a>PopN · mutable · not chainable
 
 PopN removes and returns the last n items as a new collection,
 and returns a second collection containing the remaining items.
@@ -2743,7 +2737,7 @@ collection.Dump(popped5.Items(), rest5.Items())
 // ]
 ```
 
-### <a id="skip"></a>Skip · immutable
+### <a id="skip"></a>Skip · immutable · chainable
 
 Skip returns a new collection with the first n items skipped.
 If n is less than or equal to zero, Skip returns the full collection.
@@ -2810,7 +2804,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="skiplast"></a>SkipLast · immutable
+### <a id="skiplast"></a>SkipLast · immutable · chainable
 
 SkipLast returns a new collection with the last n items skipped.
 If n is less than or equal to zero, SkipLast returns the full collection.
@@ -2873,15 +2867,10 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="take"></a>Take · immutable
+### <a id="take"></a>Take · immutable · chainable
 
 Take returns a new collection containing the first `n` items when n > 0,
 or the last `|n|` items when n < 0.
-
-If n exceeds the collection length, the entire collection is returned.
-If n == 0, an empty collection is returned.
-
-Mirrors Laravel's take() semantics.
 
 _Example: integers - take first 3_
 
@@ -2930,15 +2919,12 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="takelast"></a>TakeLast · immutable
+### <a id="takelast"></a>TakeLast · immutable · chainable
 
 TakeLast returns a new collection containing the last n items.
 If n is less than or equal to zero, TakeLast returns an empty collection.
 If n is greater than or equal to the collection length, TakeLast returns
 the full collection.
-
-This operation performs no element allocations; it re-slices the
-underlying slice.
 
 _Example: integers_
 
@@ -2994,12 +2980,10 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="takeuntil"></a>TakeUntil · immutable
+### <a id="takeuntil"></a>TakeUntil · immutable · chainable
 
 TakeUntil returns items until the first element equals `value`.
 The matching item is NOT included.
-
-Uses == comparison, so T must be comparable.
 
 _Example: integers - stop at value 3_
 
@@ -3036,7 +3020,7 @@ collection.Dump(out6.Items())
 // ]
 ```
 
-### <a id="takeuntilfn"></a>TakeUntilFn · immutable
+### <a id="takeuntilfn"></a>TakeUntilFn · immutable · chainable
 
 TakeUntilFn returns items until the predicate function returns true.
 The matching item is NOT included.
@@ -3076,7 +3060,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="window"></a>Window · allocates
+### <a id="window"></a>Window · allocates · chainable
 
 Window returns overlapping (or stepped) windows of the collection.
 Each window is a slice of length size; iteration advances by step (default 1 if step <= 0).
@@ -3178,7 +3162,7 @@ collection.Dump(win3.Items())
 
 ## Transformation
 
-### <a id="append"></a>Append · immutable
+### <a id="append"></a>Append · immutable · chainable
 
 Append returns a new collection with the given values appended.
 
@@ -3233,7 +3217,7 @@ users.Append(
 // ]
 ```
 
-### <a id="concat"></a>Concat · mutable
+### <a id="concat"></a>Concat · mutable · chainable
 
 Concat appends the values from the given slice onto the end of the collection,
 
@@ -3254,7 +3238,7 @@ collection.Dump(concatenated)
 // ]
 ```
 
-### <a id="each"></a>Each · immutable
+### <a id="each"></a>Each · immutable · chainable
 
 Each runs fn for every item in the collection and returns the same collection,
 so it can be used in chains for side effects (logging, debugging, etc.).
@@ -3318,7 +3302,7 @@ collection.Dump(names)
 // ]
 ```
 
-### <a id="map"></a>Map · immutable
+### <a id="map"></a>Map · immutable · chainable
 
 Map applies a same-type transformation and returns a new collection.
 
@@ -3387,7 +3371,7 @@ collection.Dump(updated.Items())
 // ]
 ```
 
-### <a id="mapto"></a>MapTo · immutable
+### <a id="mapto"></a>MapTo · immutable · chainable
 
 MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
 
@@ -3449,7 +3433,7 @@ collection.Dump(names.Items())
 // ]
 ```
 
-### <a id="merge"></a>Merge · mutable
+### <a id="merge"></a>Merge · mutable · chainable
 
 Merge merges the given data into the current collection.
 
@@ -3525,7 +3509,7 @@ collection.Dump(merged3.Items())
 // ]
 ```
 
-### <a id="multiply"></a>Multiply · mutable
+### <a id="multiply"></a>Multiply · mutable · chainable
 
 Multiply creates `n` copies of all items in the collection
 and returns a new collection.
@@ -3595,7 +3579,7 @@ collection.Dump(none.Items())
 // ]
 ```
 
-### <a id="pipe"></a>Pipe · readonly
+### <a id="pipe"></a>Pipe · readonly · not chainable
 
 Pipe passes the entire collection into the given function
 and returns the function's result.
@@ -3658,7 +3642,7 @@ collection.Dump(names)
 // ]
 ```
 
-### <a id="pluck"></a>Pluck · immutable
+### <a id="pluck"></a>Pluck · immutable · chainable
 
 Pluck is an alias for MapTo with a more semantic name when projecting fields.
 It extracts a single field or computed value from every element and returns a
@@ -3722,7 +3706,7 @@ collection.Dump(names.Items())
 // ]
 ```
 
-### <a id="prepend"></a>Prepend · mutable
+### <a id="prepend"></a>Prepend · mutable · chainable
 
 Prepend returns a new collection with the given values added
 to the *beginning* of the collection.
@@ -3805,7 +3789,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="push"></a>Push · immutable
+### <a id="push"></a>Push · immutable · chainable
 
 Push returns a new collection with the given values appended.
 
@@ -3855,7 +3839,7 @@ users.Dump()
 // ]
 ```
 
-### <a id="tap"></a>Tap · immutable
+### <a id="tap"></a>Tap · immutable · chainable
 
 Tap invokes fn with the collection pointer for side effects (logging, debugging,
 inspection) and returns the same collection to allow chaining.
@@ -3915,7 +3899,7 @@ users2 := users.Tap(func(col *collection.Collection[User]) {
 collection.Dump(users2.Items()) // ensures users2 is used
 ```
 
-### <a id="times"></a>Times · immutable
+### <a id="times"></a>Times · immutable · chainable
 
 Times creates a new collection by calling fn(i) for i = 1..count.
 This mirrors Laravel's Collection::times(), which is 1-indexed.
@@ -3982,7 +3966,7 @@ collection.Dump(cTimes3.Items())
 // ]
 ```
 
-### <a id="transform"></a>Transform
+### <a id="transform"></a>Transform · not chainable
 
 Transform applies fn to every item *in place*, mutating the collection.
 
@@ -4037,7 +4021,7 @@ collection.Dump(c3.Items())
 // ]
 ```
 
-### <a id="zip"></a>Zip · immutable
+### <a id="zip"></a>Zip · immutable · chainable
 
 Zip combines two collections element-wise into a collection of tuples.
 The resulting length is the smaller of the two inputs.
@@ -4097,7 +4081,7 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-### <a id="zipwith"></a>ZipWith · immutable
+### <a id="zipwith"></a>ZipWith · immutable · chainable
 
 ZipWith combines two collections element-wise using combiner fn.
 The resulting length is the smaller of the two inputs.

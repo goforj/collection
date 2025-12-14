@@ -4,6 +4,7 @@ package collection
 // and returns the same collection for chaining.
 // @group Ordering
 // @behavior mutable
+// @chainable true
 //
 // This operation performs no allocations.
 //

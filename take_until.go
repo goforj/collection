@@ -4,6 +4,7 @@ package collection
 // The matching item is NOT included.
 // @group Slicing
 // @behavior immutable
+// @chainable true
 // Example: integers - stop when value >= 3
 //
 //	c1 := collection.New([]int{1, 2, 3, 4})
@@ -47,6 +48,7 @@ func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T] {
 
 // TakeUntil returns items until the first element equals `value`.
 // The matching item is NOT included.
+// @chainable true
 //
 // Uses == comparison, so T must be comparable.
 // @group Slicing

@@ -246,7 +246,7 @@ func renderAPI(funcs []*FuncDoc) string {
 	// ---------------- Index ----------------
 	buf.WriteString("### Index\n\n")
 	buf.WriteString("| Group | Functions |\n")
-	buf.WriteString("|------|-----------|\n")
+	buf.WriteString("|------:|-----------|\n")
 
 	for _, group := range groupNames {
 		sort.Slice(byGroup[group], func(i, j int) bool {
@@ -259,7 +259,7 @@ func renderAPI(funcs []*FuncDoc) string {
 			links = append(links, fmt.Sprintf("[%s](#%s)", fn.Name, anchor))
 		}
 
-		buf.WriteString(fmt.Sprintf("| *%s* | %s |\n",
+		buf.WriteString(fmt.Sprintf("| **%s** | %s |\n",
 			group,
 			strings.Join(links, " "),
 		))

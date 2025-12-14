@@ -142,7 +142,7 @@ go get github.com/goforj/collection
 | **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
 | **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) |
 | **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) |
-| **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) |
+| **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) [Zip](#zip) [ZipWith](#zipwith) |
 
 
 ## Access
@@ -3934,6 +3934,129 @@ collection.Dump(c3.Items())
 // #[]collection.User [
 //	0 => {ID:1 Name:"ALICE"} #collection.User
 //	1 => {ID:2 Name:"BOB"}   #collection.User
+// ]
+```
+
+### <a id="zip"></a>Zip · immutable
+
+Zip combines two collections element-wise into a collection of tuples.
+The resulting length is the smaller of the two inputs.
+
+_Example: integers and strings_
+
+```go
+nums := collection.New([]int{1, 2, 3})
+words := collection.New([]string{"one", "two"})
+
+out := collection.Zip(nums, words)
+collection.Dump(out.Items())
+// #[]collection.Tuple[int,string] [
+//   0 => #collection.Tuple[int,string] {
+//     +First  => 1 #int
+//     +Second => "one" #string
+//   }
+//   1 => #collection.Tuple[int,string] {
+//     +First  => 2 #int
+//     +Second => "two" #string
+//   }
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+roles := collection.New([]string{"admin", "user", "extra"})
+
+out2 := collection.Zip(users, roles)
+collection.Dump(out2.Items())
+// #[]collection.Tuple[main.User,string] [
+//   0 => #collection.Tuple[main.User,string] {
+//     +First  => #main.User {
+//       +ID   => 1 #int
+//       +Name => "Alice" #string
+//     }
+//     +Second => "admin" #string
+//   }
+//   1 => #collection.Tuple[main.User,string] {
+//     +First  => #main.User {
+//       +ID   => 2 #int
+//       +Name => "Bob" #string
+//     }
+//     +Second => "user" #string
+//   }
+// ]
+```
+
+### <a id="zipwith"></a>ZipWith · immutable
+
+ZipWith combines two collections element-wise using combiner fn.
+The resulting length is the smaller of the two inputs.
+
+_Example: sum ints_
+
+```go
+a := collection.New([]int{1, 2, 3})
+b := collection.New([]int{10, 20})
+
+out := collection.ZipWith(a, b, func(x, y int) int {
+	return x + y
+})
+
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 11 #int
+//   1 => 22 #int
+// ]
+```
+
+_Example: format strings_
+
+```go
+names := collection.New([]string{"alice", "bob"})
+roles := collection.New([]string{"admin", "user", "extra"})
+
+out2 := collection.ZipWith(names, roles, func(name, role string) string {
+	return name + ":" + role
+})
+
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "alice:admin" #string
+//   1 => "bob:user" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	Name string
+}
+
+type Role struct {
+	Title string
+}
+
+users := collection.New([]User{{Name: "Alice"}, {Name: "Bob"}})
+roles2 := collection.New([]Role{{Title: "admin"}})
+
+out3 := collection.ZipWith(users, roles2, func(u User, r Role) string {
+	return u.Name + " -> " + r.Title
+})
+
+collection.Dump(out3.Items())
+// #[]string [
+//   0 => "Alice -> admin" #string
 // ]
 ```
 <!-- api:embed:end -->

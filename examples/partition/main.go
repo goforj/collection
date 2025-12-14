@@ -4,9 +4,8 @@
 package main
 
 import (
-	"strings"
-
 	"github.com/goforj/collection"
+	"strings"
 )
 
 func main() {

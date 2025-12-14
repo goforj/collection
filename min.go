@@ -4,7 +4,7 @@ package collection
 // The second return value is false if the collection is empty.
 // @group Aggregation
 // @behavior readonly
-// @chainable false
+// @fluent false
 //
 // Example: integers
 //

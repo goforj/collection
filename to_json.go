@@ -8,7 +8,7 @@ import (
 // ToJSON converts the collection's items into a compact JSON string.
 // @group Serialization
 // @behavior readonly
-// @chainable false
+// @fluent true
 //
 // If marshalling succeeds, a JSON-encoded string and a nil error are returned.
 // If marshalling fails, the method unwraps any json.Marshal wrapping so that
@@ -36,7 +36,7 @@ func (c *Collection[T]) ToJSON() (string, error) {
 // indented JSON string.
 // @group Serialization
 // @behavior readonly
-// @chainable false
+// @fluent true
 //
 // If marshalling succeeds, a formatted JSON string and nil error are returned.
 // If marshalling fails, the underlying error is unwrapped so user-defined

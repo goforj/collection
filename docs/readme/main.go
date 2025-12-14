@@ -66,7 +66,7 @@ type FuncDoc struct {
 	Name        string
 	Group       string
 	Behavior    string
-	Chainable   string
+	Fluent      string
 	Description string
 	Examples    []Example
 }
@@ -84,10 +84,10 @@ type Example struct {
 //
 
 var (
-	groupHeader     = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
-	behaviorHeader  = regexp.MustCompile(`(?i)^\s*@behavior\s+(.+)$`)
-	chainableHeader = regexp.MustCompile(`(?i)^\s*@chainable\s+(.+)$`)
-	exampleHeader   = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
+	groupHeader    = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
+	behaviorHeader = regexp.MustCompile(`(?i)^\s*@behavior\s+(.+)$`)
+	fluentHeader   = regexp.MustCompile(`(?i)^\s*@fluent\s+(.+)$`)
+	exampleHeader  = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
 )
 
 func parseFuncs(root string) ([]*FuncDoc, error) {
@@ -127,7 +127,7 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 				Name:        fn.Name.Name,
 				Group:       extractGroup(fn.Doc),
 				Behavior:    extractBehavior(fn.Doc),
-				Chainable:   extractChainable(fn.Doc),
+				Fluent:      extractFluent(fn.Doc),
 				Description: extractDescription(fn.Doc),
 				Examples:    extractExamples(fset, fn),
 			}
@@ -171,10 +171,10 @@ func extractBehavior(group *ast.CommentGroup) string {
 	return ""
 }
 
-func extractChainable(group *ast.CommentGroup) string {
+func extractFluent(group *ast.CommentGroup) string {
 	for _, c := range group.List {
 		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
-		if m := chainableHeader.FindStringSubmatch(line); m != nil {
+		if m := fluentHeader.FindStringSubmatch(line); m != nil {
 			return strings.ToLower(strings.TrimSpace(m[1]))
 		}
 	}
@@ -190,7 +190,7 @@ func extractDescription(group *ast.CommentGroup) string {
 		if exampleHeader.MatchString(line) ||
 			groupHeader.MatchString(line) ||
 			behaviorHeader.MatchString(line) ||
-			chainableHeader.MatchString(line) {
+			fluentHeader.MatchString(line) {
 			break
 		}
 
@@ -305,14 +305,8 @@ func renderAPI(funcs []*FuncDoc) string {
 			if fn.Behavior != "" {
 				header += " · " + fn.Behavior
 			}
-			if fn.Chainable != "" {
-				label := fn.Chainable
-				if label == "true" {
-					label = "chainable"
-				} else if label == "false" {
-					label = "not chainable"
-				}
-				header += " · " + label
+			if fn.Fluent == "true" {
+				header += " · fluent"
 			}
 
 			buf.WriteString(fmt.Sprintf("### <a id=\"%s\"></a>%s\n\n", anchor, header))

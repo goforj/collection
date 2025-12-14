@@ -3,7 +3,7 @@ package collection
 // Merge merges the given data into the current collection.
 // @group Transformation
 // @behavior mutable
-// @chainable true
+// @fluent true
 //
 // Example: integers - merging slices
 //

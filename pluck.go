@@ -3,7 +3,7 @@ package collection
 // MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
 // @group Transformation
 // @behavior immutable
-// @chainable true
+// @fluent true
 //
 // This cannot be a method because methods can't introduce a new type parameter R.
 //
@@ -72,7 +72,7 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 // new typed collection.
 // @group Transformation
 // @behavior immutable
-// @chainable true
+// @fluent true
 //
 // Example: integers - extract parity label
 //

@@ -4,7 +4,7 @@ package collection
 // and returns the function's result.
 // @group Transformation
 // @behavior readonly
-// @chainable false
+// @fluent true
 //
 // This is useful for inline transformations, aggregations,
 // or "exiting" a chain with a non-collection value.

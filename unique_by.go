@@ -4,7 +4,7 @@ package collection
 // of each element as determined by keyFn.
 // @group Set Operations
 // @behavior immutable
-// @chainable true
+// @fluent true
 //
 // The key returned by keyFn must be comparable.
 // Order is preserved.

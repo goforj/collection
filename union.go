@@ -5,7 +5,7 @@ package collection
 // that were not already present.
 // @group Set Operations
 // @behavior immutable
-// @chainable true
+// @fluent true
 //
 // Example: integers
 //

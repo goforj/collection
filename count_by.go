@@ -4,7 +4,7 @@ package collection
 // K must be comparable.
 // @group Aggregation
 // @behavior readonly
-// @chainable false
+// @fluent false
 //
 // Example: integers
 //
@@ -69,7 +69,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 // is mapped to the number of times it appears.
 // @group Aggregation
 // @behavior readonly
-// @chainable false
+// @fluent false
 //
 // T must be comparable.
 //

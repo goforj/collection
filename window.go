@@ -5,7 +5,7 @@ package collection
 // Windows that are shorter than size are omitted.
 // @group Slicing
 // @behavior allocates
-// @chainable true
+// @fluent true
 //
 // Example: integers - step 1
 //

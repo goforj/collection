@@ -19,7 +19,7 @@ func main() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("✔ @behavior and @chainable annotations backfilled")
+	fmt.Println("✔ @behavior and @fluent annotations backfilled")
 }
 
 func run() error {
@@ -56,11 +56,11 @@ func run() error {
 				continue
 			}
 
-			// Chainable backfill (boolean)
-			if !hasChainable(fn.Doc) {
-				insertChainable(fn.Doc, inferChainable(fn))
-				changed = true
-			}
+			// Fluent backfill (boolean) – always refresh to keep canonical.
+			stripChainable(fn.Doc) // legacy cleanup
+			stripFluent(fn.Doc)
+			insertFluent(fn.Doc, inferFluent(fn))
+			changed = true
 
 			// Respect explicit annotation
 			if hasBehavior(fn.Doc) {
@@ -116,7 +116,15 @@ func inferBehavior(fn *ast.FuncDecl) (string, bool) {
 	return "", false
 }
 
-func inferChainable(fn *ast.FuncDecl) string {
+func inferFluent(fn *ast.FuncDecl) string {
+	if knownFluentTrue[fn.Name.Name] {
+		return "true"
+	}
+
+	if isCollectionMethod(fn) {
+		return "true"
+	}
+
 	if returnsCollectionLike(fn) && len(fn.Type.Results.List) == 1 {
 		return "true"
 	}
@@ -131,6 +139,33 @@ var knownMutators = map[string]bool{
 	"Prepend":  true,
 	"Merge":    true,
 	"Multiply": true,
+}
+
+var knownFluentTrue = map[string]bool{
+	"Dd": true,
+}
+
+func isCollectionMethod(fn *ast.FuncDecl) bool {
+	if fn.Recv == nil || len(fn.Recv.List) == 0 {
+		return false
+	}
+
+	typ := fn.Recv.List[0].Type
+	star, ok := typ.(*ast.StarExpr)
+	if !ok {
+		return false
+	}
+
+	switch t := star.X.(type) {
+	case *ast.IndexExpr:
+		if ident, ok := t.X.(*ast.Ident); ok {
+			return ident.Name == "Collection"
+		}
+	case *ast.Ident:
+		return t.Name == "NumericCollection"
+	}
+
+	return false
 }
 
 func returnsCollection(fn *ast.FuncDecl) bool {
@@ -270,9 +305,9 @@ func hasBehavior(doc *ast.CommentGroup) bool {
 	return false
 }
 
-func hasChainable(doc *ast.CommentGroup) bool {
+func hasFluent(doc *ast.CommentGroup) bool {
 	for _, c := range doc.List {
-		if strings.Contains(c.Text, "@chainable") {
+		if strings.Contains(c.Text, "@fluent") {
 			return true
 		}
 	}
@@ -298,14 +333,14 @@ func insertBehavior(doc *ast.CommentGroup, behavior string) {
 	})
 }
 
-func insertChainable(doc *ast.CommentGroup, val string) {
+func insertFluent(doc *ast.CommentGroup, val string) {
 	for i, c := range doc.List {
 		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
 		if strings.HasPrefix(text, "Example:") || text == "" {
 			doc.List = append(
 				doc.List[:i],
 				append([]*ast.Comment{
-					{Text: fmt.Sprintf("// @chainable %s", val)},
+					{Text: fmt.Sprintf("// @fluent %s", val)},
 				}, doc.List[i:]...)...,
 			)
 			return
@@ -313,8 +348,30 @@ func insertChainable(doc *ast.CommentGroup, val string) {
 	}
 
 	doc.List = append(doc.List, &ast.Comment{
-		Text: fmt.Sprintf("// @chainable %s", val),
+		Text: fmt.Sprintf("// @fluent %s", val),
 	})
+}
+
+func stripChainable(doc *ast.CommentGroup) {
+	out := doc.List[:0]
+	for _, c := range doc.List {
+		if strings.Contains(c.Text, "@chainable") {
+			continue
+		}
+		out = append(out, c)
+	}
+	doc.List = out
+}
+
+func stripFluent(doc *ast.CommentGroup) {
+	out := doc.List[:0]
+	for _, c := range doc.List {
+		if strings.Contains(c.Text, "@fluent") {
+			continue
+		}
+		out = append(out, c)
+	}
+	doc.List = out
 }
 
 //

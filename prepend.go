@@ -4,7 +4,7 @@ package collection
 // to the *beginning* of the collection.
 // @group Transformation
 // @behavior mutable
-// @chainable true
+// @fluent true
 //
 // The original collection is not modified.
 //

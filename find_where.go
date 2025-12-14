@@ -6,7 +6,7 @@ package collection
 // C#, Python) where developers expect a “find” helper.
 // @group Querying
 // @behavior readonly
-// @chainable false
+// @fluent true
 //
 // Example: integers
 //

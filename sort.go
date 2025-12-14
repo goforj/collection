@@ -5,7 +5,7 @@ import "sort"
 // Sort returns a new collection sorted using the provided comparison function.
 // @group Ordering
 // @behavior immutable
-// @chainable true
+// @fluent true
 //
 // The comparison function `less(a, b)` should return true if `a` should come
 // before `b` in the sorted order.

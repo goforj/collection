@@ -4,7 +4,7 @@ package collection
 // inspection) and returns the same collection to allow chaining.
 // @group Transformation
 // @behavior immutable
-// @chainable true
+// @fluent true
 //
 // Tap does NOT modify the collection itself; it simply exposes the current state
 // during a fluent chain.

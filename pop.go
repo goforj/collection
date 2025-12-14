@@ -4,7 +4,7 @@ package collection
 // The original collection remains unchanged.
 // @group Slicing
 // @behavior mutable
-// @chainable false
+// @fluent true
 //
 // If the collection is empty, the zero value of T is returned along with
 // an empty collection.
@@ -82,7 +82,7 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 // and returns a second collection containing the remaining items.
 // @group Slicing
 // @behavior mutable
-// @chainable false
+// @fluent true
 //
 // The popped items are returned in reverse order, matching the behavior
 // of repeated Pop() calls.

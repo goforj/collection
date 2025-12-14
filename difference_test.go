@@ -37,3 +37,26 @@ func TestDifference_EmptySecond(t *testing.T) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
+
+func TestDifference_EmptyFirst(t *testing.T) {
+	left := New([]int{})
+	right := New([]int{1, 2})
+
+	out := Difference(left, right)
+
+	if len(out.Items()) != 0 {
+		t.Fatalf("expected empty result, got %v", out.Items())
+	}
+}
+
+func TestDifference_DedupFromFirst(t *testing.T) {
+	left := New([]int{1, 1, 2})
+	right := New([]int{})
+
+	out := Difference(left, right)
+
+	exp := []int{1, 2}
+	if got := out.Items(); !slicesEqual(got, exp) {
+		t.Fatalf("expected %v, got %v", exp, got)
+	}
+}

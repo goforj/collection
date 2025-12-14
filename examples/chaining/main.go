@@ -43,8 +43,22 @@ func main() {
 		}).
 		SkipLast(1)
 
-	collection.Dump(result.Items())
+	// Iteration
+	result.Each(func(e DeviceEvent) {
+		// Process each event
+		collection.Dump(e)
+		// #main.DeviceEvent {
+		//  +Device => "router-6" #string
+		//  +Region => "us-west" #string
+		//  +Errors => 30 #int
+		// }
+		// ... etc
+	})
 
+	// debugging dump
+	result.Dump()
+	// equivalent to:
+	collection.Dump(result.Items())
 	// []main.DeviceEvent [
 	//  0 => #main.DeviceEvent {
 	//    +Device => "router-6" #string

@@ -274,9 +274,16 @@ func renderAPI(funcs []*FuncDoc) string {
 					buf.WriteString(fmt.Sprintf("_Example: %s_\n\n", ex.Label))
 				}
 
-				buf.WriteString("```go\n")
-				buf.WriteString(strings.TrimSpace(ex.Code))
-				buf.WriteString("\n```\n\n")
+				buf.WriteString("<details>\n")
+				buf.WriteString("<summary>Examples</summary>\n\n")
+
+				for _, ex := range fn.Examples {
+					buf.WriteString("```go\n")
+					buf.WriteString(strings.TrimSpace(ex.Code))
+					buf.WriteString("\n```\n\n")
+				}
+
+				buf.WriteString("</details>\n\n")
 			}
 		}
 	}

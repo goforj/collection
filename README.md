@@ -103,6 +103,7 @@ import "github.com/goforj/collection"
 | [SkipLast](<#Collection[T].SkipLast>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/skip_last.go#L58" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
+| [TakeLast](<#Collection[T].TakeLast>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_last.go#L56" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
 | [Tap](<#Collection[T].Tap>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/tap.go#L57" target="_blank">Source</a> |
 | [ToJSON](<#Collection[T].ToJSON>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/to_json.go#L24" target="_blank">Source</a> |
@@ -2673,6 +2674,70 @@ c4 := collection.New([]int{1, 2, 3})
 out4 := c4.Take(0)
 collection.Dump(out4.Items())
 // #[]int [
+// ]
+```
+
+
+
+<a name="Collection[T].TakeLast"></a>
+### TakeLast
+
+
+TakeLast returns a new collection containing the last n items. If n is less than or equal to zero, TakeLast returns an empty collection. If n is greater than or equal to the collection length, TakeLast returns the full collection.
+
+This operation performs no element allocations; it re\-slices the underlying slice.
+
+Example: integers
+
+```go
+c := collection.New([]int{1, 2, 3, 4, 5})
+out := c.TakeLast(2)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 4 #int
+//   1 => 5 #int
+// ]
+```
+
+Example: take none
+
+```go
+out2 := c.TakeLast(0)
+collection.Dump(out2.Items())
+// #[]int []
+```
+
+Example: take all
+
+```go
+out3 := c.TakeLast(10)
+collection.Dump(out3.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
+```
+
+Example: structs
+
+```go
+type User struct {
+	ID int
+}
+
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+})
+
+out4 := users.TakeLast(1)
+collection.Dump(out4.Items())
+// #[]collection.User [
+//   0 => {ID:3} #collection.User
 // ]
 ```
 

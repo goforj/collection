@@ -1,0 +1,52 @@
+//go:build ignore
+// +build ignore
+
+package main
+
+import "github.com/goforj/collection"
+
+func main() {
+	// Example: integers
+	c := collection.New([]int{1, 2, 3, 4, 5})
+	out := c.Skip(2)
+	collection.Dump(out.Items())
+	// #[]int [
+	//   0 => 3 #int
+	//   1 => 4 #int
+	//   2 => 5 #int
+	// ]
+
+	// Example: skip none
+	out2 := c.Skip(0)
+	collection.Dump(out2.Items())
+	// #[]int [
+	//   0 => 1 #int
+	//   1 => 2 #int
+	//   2 => 3 #int
+	//   3 => 4 #int
+	//   4 => 5 #int
+	// ]
+
+	// Example: skip all
+	out3 := c.Skip(10)
+	collection.Dump(out3.Items())
+	// #[]int []
+
+	// Example: structs
+	type User struct {
+		ID int
+	}
+
+	users := collection.New([]User{
+		{ID: 1},
+		{ID: 2},
+		{ID: 3},
+	})
+
+	out4 := users.Skip(1)
+	collection.Dump(out4.Items())
+	// #[]collection.User [
+	//   0 => {ID:2} #collection.User
+	//   1 => {ID:3} #collection.User
+	// ]
+}

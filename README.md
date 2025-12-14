@@ -89,6 +89,7 @@ import "github.com/goforj/collection"
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
 | [Merge](<#Collection[T].Merge>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/merge.go#L70" target="_blank">Source</a> |
 | [Multiply](<#Collection[T].Multiply>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/multiply.go#L62" target="_blank">Source</a> |
+| [None](<#Collection[T].None>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/none.go#L26" target="_blank">Source</a> |
 | [Pipe](<#Collection[T].Pipe>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pipe.go#L60" target="_blank">Source</a> |
 | [Pop](<#Collection[T].Pop>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L64" target="_blank">Source</a> |
 | [PopN](<#Collection[T].PopN>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/pop.go#L167" target="_blank">Source</a> |
@@ -1745,6 +1746,41 @@ none := ints.Multiply(0)
 collection.Dump(none.Items())
 // #[]int [
 // ]
+```
+
+
+
+<a name="Collection[T].None"></a>
+### None
+
+
+None returns true if fn returns false for every item in the collection. If the collection is empty, None returns true.
+
+Example: integers – none even
+
+```go
+c := collection.New([]int{1, 3, 5})
+noneEven := c.None(func(v int) bool { return v%2 == 0 })
+collection.Dump(noneEven)
+// true #bool
+```
+
+Example: integers – some even
+
+```go
+c2 := collection.New([]int{1, 2, 3})
+noneEven2 := c2.None(func(v int) bool { return v%2 == 0 })
+collection.Dump(noneEven2)
+// false #bool
+```
+
+Example: empty collection
+
+```go
+empty := collection.New([]int{})
+none := empty.None(func(v int) bool { return v > 0 })
+collection.Dump(none)
+// true #bool
 ```
 
 

@@ -170,21 +170,13 @@ If the collection is empty, Avg returns 0.
 
 _Example: integers_
 
-<details>
-<summary>Examples</summary>
-
 ```go
 c := collection.NewNumeric([]int{2, 4, 6})
 	collection.Dump(c.Avg())
 	// 4.000000 #float64
 ```
 
-</details>
-
 _Example: float_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
@@ -192,15 +184,10 @@ c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
 	// 2.333333 #float64
 ```
 
-</details>
-
 #### `Count`
 Count returns the total number of items in the collection.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 count := collection.New([]int{1, 2, 3, 4}).Count()
@@ -208,16 +195,11 @@ count := collection.New([]int{1, 2, 3, 4}).Count()
 	// 4 #int
 ```
 
-</details>
-
 #### `CountBy`
 CountBy returns a map of keys extracted by fn to their occurrence counts.
 K must be comparable.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 2, 3, 3, 3})
@@ -232,12 +214,7 @@ c := collection.New([]int{1, 2, 2, 3, 3, 3})
 	// }
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
@@ -252,12 +229,7 @@ c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
 	// }
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -284,16 +256,11 @@ type User struct {
 	// }
 ```
 
-</details>
-
 #### `CountByValue`
 CountByValue returns a map where each distinct item in the collection
 is mapped to the number of times it appears.
 
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c1 := collection.New([]string{"a", "b", "a"})
@@ -305,12 +272,7 @@ c1 := collection.New([]string{"a", "b", "a"})
 	// ]
 ```
 
-</details>
-
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
@@ -323,12 +285,7 @@ c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
 	// ]
 ```
 
-</details>
-
 _Example: structs (comparable)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type Point struct {
@@ -350,16 +307,11 @@ type Point struct {
 	// ]
 ```
 
-</details>
-
 #### `Max`
 Max returns the largest numeric item in the collection.
 The second return value is false if the collection is empty.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
@@ -370,12 +322,7 @@ c := collection.NewNumeric([]int{3, 1, 2})
 	// true #bool
 ```
 
-</details>
-
 _Example: floats_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
@@ -386,12 +333,7 @@ c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
 	// true     #bool
 ```
 
-</details>
-
 _Example: empty numeric collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.NewNumeric([]int{})
@@ -402,16 +344,11 @@ c3 := collection.NewNumeric([]int{})
 	// false #bool
 ```
 
-</details>
-
 #### `Median`
 Median returns the statistical median of the numeric collection as float64.
 Returns (0, false) if the collection is empty.
 
 _Example: integers - odd number of items_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
@@ -422,12 +359,7 @@ c := collection.NewNumeric([]int{3, 1, 2})
 	// true     #bool
 ```
 
-</details>
-
 _Example: integers - even number of items_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.NewNumeric([]int{10, 2, 4, 6})
@@ -438,12 +370,7 @@ c2 := collection.NewNumeric([]int{10, 2, 4, 6})
 	// true     #bool
 ```
 
-</details>
-
 _Example: floats_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
@@ -454,12 +381,7 @@ c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
 	// true     #bool
 ```
 
-</details>
-
 _Example: integers - empty numeric collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c4 := collection.NewNumeric([]int{})
@@ -470,16 +392,11 @@ c4 := collection.NewNumeric([]int{})
 	// false    #bool
 ```
 
-</details>
-
 #### `Min`
 Min returns the smallest numeric item in the collection.
 The second return value is false if the collection is empty.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
@@ -489,12 +406,7 @@ c := collection.NewNumeric([]int{3, 1, 2})
 	// true #bool
 ```
 
-</details>
-
 _Example: floats_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
@@ -504,12 +416,7 @@ c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
 	// true #bool
 ```
 
-</details>
-
 _Example: integers - empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 empty := collection.NewNumeric([]int{})
@@ -519,17 +426,12 @@ empty := collection.NewNumeric([]int{})
 	// false #bool
 ```
 
-</details>
-
 #### `Mode`
 Mode returns the most frequent numeric value(s) in the collection.
 If multiple values tie for highest frequency, all are returned
 in first-seen order.
 
 _Example: integers – single mode_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.NewNumeric([]int{1, 2, 2, 3})
@@ -540,12 +442,7 @@ c := collection.NewNumeric([]int{1, 2, 2, 3})
 	// ]
 ```
 
-</details>
-
 _Example: integers – tie for mode_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.NewNumeric([]int{1, 2, 1, 2})
@@ -557,12 +454,7 @@ c2 := collection.NewNumeric([]int{1, 2, 1, 2})
 	// ]
 ```
 
-</details>
-
 _Example: floats_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
@@ -573,12 +465,7 @@ c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
 	// ]
 ```
 
-</details>
-
 _Example: integers - empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 empty := collection.NewNumeric([]int{})
@@ -587,16 +474,11 @@ empty := collection.NewNumeric([]int{})
 	// <nil>
 ```
 
-</details>
-
 #### `Reduce`
 Reduce collapses the collection into a single accumulated value.
 The accumulator has the same type T as the collection's elements.
 
 _Example: integers - sum_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
@@ -606,12 +488,7 @@ sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
 	// 6 #int
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
@@ -621,12 +498,7 @@ joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string)
 	// "abc" #string
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type Stats struct {
@@ -653,16 +525,11 @@ type Stats struct {
 	// ]
 ```
 
-</details>
-
 #### `Sum`
 Sum returns the sum of all numeric items in the NumericCollection.
 If the collection is empty, Sum returns the zero value of T.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.NewNumeric([]int{1, 2, 3})
@@ -671,12 +538,7 @@ c := collection.NewNumeric([]int{1, 2, 3})
 	// 6 #int
 ```
 
-</details>
-
 _Example: floats_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.NewNumeric([]float64{1.5, 2.5})
@@ -685,12 +547,7 @@ c2 := collection.NewNumeric([]float64{1.5, 2.5})
 	// 4.000000 #float64
 ```
 
-</details>
-
 _Example: integers - empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.NewNumeric([]int{})
@@ -699,17 +556,12 @@ c3 := collection.NewNumeric([]int{})
 	// 0 #int
 ```
 
-</details>
-
 ### Construction
 
 #### `Items`
 Items returns the underlying slice of items.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3})
@@ -722,12 +574,7 @@ c := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"apple", "banana"})
@@ -739,12 +586,7 @@ c2 := collection.New([]string{"apple", "banana"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -771,8 +613,6 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `New`
 New creates a new Collection from the provided slice.
 
@@ -789,9 +629,6 @@ should not be used in production control flow.
 
 _Example: strings_
 
-<details>
-<summary>Examples</summary>
-
 ```go
 c := collection.New([]string{"a", "b"})
 	c.Dd()
@@ -802,16 +639,11 @@ c := collection.New([]string{"a", "b"})
 	// Process finished with the exit code 1
 ```
 
-</details>
-
 #### `Dump`
 Dump prints items with godump and returns the same collection.
 This is a no-op on the collection itself and never panics.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3})
@@ -823,12 +655,7 @@ c := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 _Example: integers - chaining_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 collection.New([]int{1, 2, 3}).
@@ -840,12 +667,7 @@ collection.New([]int{1, 2, 3}).
 	// ]
 ```
 
-</details>
-
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{1, 2, 3})
@@ -857,17 +679,12 @@ c2 := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 #### `DumpStr`
 DumpStr returns the pretty-printed dump of the items as a string,
 without printing or exiting.
 Useful for logging, snapshot testing, and non-interactive debugging.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{10, 20})
@@ -879,15 +696,10 @@ c := collection.New([]int{10, 20})
 	// ]
 ```
 
-</details>
-
 #### `ToJSON`
 ToJSON converts the collection's items into a compact JSON string.
 
 _Example: strings - pretty JSON_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 pj1 := collection.New([]string{"a", "b"})
@@ -896,16 +708,11 @@ pj1 := collection.New([]string{"a", "b"})
 	// ["a","b"]
 ```
 
-</details>
-
 #### `ToPrettyJSON`
 ToPrettyJSON converts the collection's items into a human-readable,
 indented JSON string.
 
 _Example: strings - pretty JSON_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 pj1 := collection.New([]string{"a", "b"})
@@ -917,8 +724,6 @@ pj1 := collection.New([]string{"a", "b"})
 	// ]
 ```
 
-</details>
-
 ### Grouping
 
 #### `GroupBy`
@@ -926,9 +731,6 @@ GroupBy partitions the collection into groups keyed by the value
 returned from keyFn.
 
 _Example: grouping integers by parity_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 values := []int{1, 2, 3, 4, 5}
@@ -956,12 +758,7 @@ values := []int{1, 2, 3, 4, 5}
 	// ]
 ```
 
-</details>
-
 _Example: grouping structs by field_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1000,17 +797,12 @@ type User struct {
 		// ]
 ```
 
-</details>
-
 ### Maps
 
 #### `FromMap`
 FromMap materializes a map into a collection of key/value pairs.
 
 _Example: basic usage_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 m := map[string]int{
@@ -1029,12 +821,7 @@ m := map[string]int{
 	// ]
 ```
 
-</details>
-
 _Example: filtering map entries_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type Config struct {
@@ -1063,12 +850,7 @@ type Config struct {
 	// ]
 ```
 
-</details>
-
 _Example: map → collection → map_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 users := map[string]int{
@@ -1087,16 +869,11 @@ users := map[string]int{
 	// ]
 ```
 
-</details>
-
 #### `ToMap`
 ToMap reduces a collection into a map using the provided key and value
 selector functions.
 
 _Example: basic usage_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 users := []string{"alice", "bob", "carol"}
@@ -1110,12 +887,7 @@ users := []string{"alice", "bob", "carol"}
 	collection.Dump(out)
 ```
 
-</details>
-
 _Example: re-keying structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1137,15 +909,10 @@ type User struct {
 	collection.Dump(byID)
 ```
 
-</details>
-
 #### `ToMapKV`
 ToMapKV converts a collection of key/value pairs into a map.
 
 _Example: basic usage_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 m := map[string]int{
@@ -1166,12 +933,7 @@ m := map[string]int{
 	// ]
 ```
 
-</details>
-
 _Example: filtering before conversion_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type Config struct {
@@ -1201,8 +963,6 @@ type Config struct {
 	// ]
 ```
 
-</details>
-
 ### Ordering
 
 #### `After`
@@ -1210,9 +970,6 @@ After returns all items after the first element for which pred returns true.
 If no element matches, an empty collection is returned.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
@@ -1223,16 +980,11 @@ c := collection.New([]int{1, 2, 3, 4, 5})
 	// ]
 ```
 
-</details>
-
 #### `Before`
 Before returns a new collection containing all items that appear
 *before* the first element for which pred returns true.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c1 := collection.New([]int{1, 2, 3, 4, 5})
@@ -1244,12 +996,7 @@ c1 := collection.New([]int{1, 2, 3, 4, 5})
 	// ]
 ```
 
-</details>
-
 _Example: predicate never matches → whole collection returned_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{10, 20, 30})
@@ -1262,12 +1009,7 @@ c2 := collection.New([]int{10, 20, 30})
 	// ]
 ```
 
-</details>
-
 _Example: structs: get all users before the first admin_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1290,16 +1032,11 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Reverse`
 Reverse reverses the order of items in the collection in place
 and returns the same collection for chaining.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
@@ -1313,12 +1050,7 @@ c := collection.New([]int{1, 2, 3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: strings – chaining_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out := collection.New([]string{"a", "b", "c"}).
@@ -1335,12 +1067,7 @@ out := collection.New([]string{"a", "b", "c"}).
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1362,16 +1089,11 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Shuffle`
 Shuffle randomly shuffles the items in the collection in place
 and returns the same collection for chaining.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
@@ -1379,12 +1101,7 @@ c := collection.New([]int{1, 2, 3, 4, 5})
 	collection.Dump(c.Items())
 ```
 
-</details>
-
 _Example: strings – chaining_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out := collection.New([]string{"a", "b", "c"}).
@@ -1395,12 +1112,7 @@ out := collection.New([]string{"a", "b", "c"}).
 	collection.Dump(out)
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1418,15 +1130,10 @@ type User struct {
 	collection.Dump(users.Items())
 ```
 
-</details>
-
 #### `Sort`
 Sort returns a new collection sorted using the provided comparison function.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{5, 1, 4, 2})
@@ -1440,12 +1147,7 @@ c := collection.New([]int{5, 1, 4, 2})
 	// ]
 ```
 
-</details>
-
 _Example: strings (descending)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
@@ -1458,12 +1160,7 @@ c2 := collection.New([]string{"apple", "banana", "cherry"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1498,8 +1195,6 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 ### Other
 
 #### `Filter`
@@ -1507,9 +1202,6 @@ Filter keeps only the elements for which fn returns true.
 This method mutates the collection in place and returns the same instance.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
@@ -1523,12 +1215,7 @@ c := collection.New([]int{1, 2, 3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
@@ -1542,12 +1229,7 @@ c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1579,8 +1261,6 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `TakeUntil`
 TakeUntil returns items until the first element equals `value`.
 The matching item is NOT included.
@@ -1588,9 +1268,6 @@ The matching item is NOT included.
 Uses == comparison, so T must be comparable.
 
 _Example: integers - stop at value 3_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c4 := collection.New([]int{1, 2, 3, 4})
@@ -1602,12 +1279,7 @@ c4 := collection.New([]int{1, 2, 3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: strings - value never appears → full slice_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c5 := collection.New([]string{"a", "b", "c"})
@@ -1620,12 +1292,7 @@ c5 := collection.New([]string{"a", "b", "c"})
 	// ]
 ```
 
-</details>
-
 _Example: integers - match is first item → empty result_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c6 := collection.New([]int{9, 10, 11})
@@ -1635,16 +1302,11 @@ c6 := collection.New([]int{9, 10, 11})
 	// ]
 ```
 
-</details>
-
 #### `TakeUntilFn`
 TakeUntilFn returns items until the predicate function returns true.
 The matching item is NOT included.
 
 _Example: integers - stop when value >= 3_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c1 := collection.New([]int{1, 2, 3, 4})
@@ -1656,12 +1318,7 @@ c1 := collection.New([]int{1, 2, 3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: integers - predicate immediately true → empty result_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{10, 20, 30})
@@ -1671,12 +1328,7 @@ c2 := collection.New([]int{10, 20, 30})
 	// ]
 ```
 
-</details>
-
 _Example: integers - no match → full list returned_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.New([]int{1, 2, 3})
@@ -1689,8 +1341,6 @@ c3 := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 ### Querying
 
 #### `All`
@@ -1699,9 +1349,6 @@ If the collection is empty, All returns true (vacuously true).
 
 _Example: integers – all even_
 
-<details>
-<summary>Examples</summary>
-
 ```go
 c := collection.New([]int{2, 4, 6})
 	allEven := c.All(func(v int) bool { return v%2 == 0 })
@@ -1709,12 +1356,7 @@ c := collection.New([]int{2, 4, 6})
 	// true #bool
 ```
 
-</details>
-
 _Example: integers – not all even_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{2, 3, 4})
@@ -1723,12 +1365,7 @@ c2 := collection.New([]int{2, 3, 4})
 	// false #bool
 ```
 
-</details>
-
 _Example: strings – all non-empty_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.New([]string{"a", "b", "c"})
@@ -1737,12 +1374,7 @@ c3 := collection.New([]string{"a", "b", "c"})
 	// true #bool
 ```
 
-</details>
-
 _Example: empty collection (vacuously true)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 empty := collection.New([]int{})
@@ -1751,15 +1383,10 @@ empty := collection.New([]int{})
 	// true #bool
 ```
 
-</details>
-
 #### `Any`
 Any returns true if at least one item satisfies fn.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
@@ -1768,16 +1395,11 @@ c := collection.New([]int{1, 2, 3, 4})
 	// true #bool
 ```
 
-</details>
-
 #### `At`
 At returns the item at the given index and a boolean indicating
 whether the index was within bounds.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{10, 20, 30})
@@ -1786,12 +1408,7 @@ c := collection.New([]int{10, 20, 30})
 	// 20 true
 ```
 
-</details>
-
 _Example: out of bounds_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 v2, ok2 := c.At(10)
@@ -1799,12 +1416,7 @@ v2, ok2 := c.At(10)
 	// 0 false
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1822,15 +1434,10 @@ type User struct {
 	// {ID:1 Name:"Alice"} true
 ```
 
-</details>
-
 #### `Contains`
 Contains returns true if any item satisfies the predicate.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
@@ -1841,12 +1448,7 @@ c := collection.New([]int{1, 2, 3, 4, 5})
 	// true #bool
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
@@ -1857,12 +1459,7 @@ c2 := collection.New([]string{"apple", "banana", "cherry"})
 	// true #bool
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1883,8 +1480,6 @@ type User struct {
 	// true #bool
 ```
 
-</details>
-
 #### `FindWhere`
 FindWhere returns the first item in the collection for which the provided
 predicate function returns true. This is an alias for FirstWhere(fn) and
@@ -1892,9 +1487,6 @@ exists for ergonomic parity with functional languages (JavaScript, Rust,
 C#, Python) where developers expect a “find” helper.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
@@ -1907,12 +1499,7 @@ nums := collection.New([]int{1, 2, 3, 4, 5})
 	// true #bool
 ```
 
-</details>
-
 _Example: no match_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 v2, ok2 := nums.FindWhere(func(n int) bool {
@@ -1923,12 +1510,7 @@ v2, ok2 := nums.FindWhere(func(n int) bool {
 	// false #bool
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -1953,12 +1535,7 @@ type User struct {
 	// true #bool
 ```
 
-</details>
-
 _Example: integers - empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 empty := collection.New([]int{})
@@ -1969,16 +1546,11 @@ empty := collection.New([]int{})
 	// false #bool
 ```
 
-</details>
-
 #### `First`
 First returns the first element in the collection.
 If the collection is empty, ok will be false.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{10, 20, 30})
@@ -1989,12 +1561,7 @@ c := collection.New([]int{10, 20, 30})
 	// true #bool
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"alpha", "beta", "gamma"})
@@ -2005,12 +1572,7 @@ c2 := collection.New([]string{"alpha", "beta", "gamma"})
 	// true    #bool
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2032,12 +1594,7 @@ type User struct {
 	// true #bool
 ```
 
-</details>
-
 _Example: integers - empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.New([]int{})
@@ -2047,17 +1604,12 @@ c3 := collection.New([]int{})
 	// false #bool
 ```
 
-</details>
-
 #### `FirstWhere`
 FirstWhere returns the first item in the collection for which the provided
 predicate function returns true. If no items match, ok=false is returned
 along with the zero value of T.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
@@ -2076,17 +1628,12 @@ nums := collection.New([]int{1, 2, 3, 4, 5})
 	// false #bool
 ```
 
-</details>
-
 #### `IndexWhere`
 IndexWhere returns the index of the first item in the collection
 for which the provided predicate function returns true.
 If no item matches, it returns (0, false).
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{10, 20, 30, 40})
@@ -2095,12 +1642,7 @@ c := collection.New([]int{10, 20, 30, 40})
 	// 2 true
 ```
 
-</details>
-
 _Example: not found_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 idx2, ok2 := c.IndexWhere(func(v int) bool { return v == 99 })
@@ -2108,12 +1650,7 @@ idx2, ok2 := c.IndexWhere(func(v int) bool { return v == 99 })
 	// 0 false
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2135,15 +1672,10 @@ type User struct {
 	// 1 true
 ```
 
-</details>
-
 #### `IsEmpty`
 IsEmpty returns true if the collection has no items.
 
 _Example: integers (non-empty)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3})
@@ -2153,12 +1685,7 @@ c := collection.New([]int{1, 2, 3})
 	// false #bool
 ```
 
-</details>
-
 _Example: strings (empty)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{})
@@ -2168,12 +1695,7 @@ c2 := collection.New([]string{})
 	// true #bool
 ```
 
-</details>
-
 _Example: structs (non-empty)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2190,12 +1712,7 @@ type User struct {
 	// false #bool
 ```
 
-</details>
-
 _Example: structs (empty)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 none := collection.New([]User{})
@@ -2205,16 +1722,11 @@ none := collection.New([]User{})
 	// true #bool
 ```
 
-</details>
-
 #### `Last`
 Last returns the last element in the collection.
 If the collection is empty, ok will be false.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{10, 20, 30})
@@ -2225,12 +1737,7 @@ c := collection.New([]int{10, 20, 30})
 	// true #bool
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"alpha", "beta", "gamma"})
@@ -2241,12 +1748,7 @@ c2 := collection.New([]string{"alpha", "beta", "gamma"})
 	// true    #bool
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2269,12 +1771,7 @@ type User struct {
 	// true #bool
 ```
 
-</details>
-
 _Example: empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.New([]int{})
@@ -2285,17 +1782,12 @@ c3 := collection.New([]int{})
 	// false #bool
 ```
 
-</details>
-
 #### `LastWhere`
 LastWhere returns the last element in the collection that satisfies the predicate fn.
 If fn is nil, LastWhere returns the final element in the underlying slice.
 If the collection is empty or no element matches, ok will be false.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
@@ -2308,12 +1800,7 @@ c := collection.New([]int{1, 2, 3, 4})
 	// true #bool
 ```
 
-</details>
-
 _Example: integers without predicate (equivalent to Last())_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{10, 20, 30, 40})
@@ -2324,12 +1811,7 @@ c2 := collection.New([]int{10, 20, 30, 40})
 	// true #bool
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
@@ -2342,12 +1824,7 @@ c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
 	// true    #bool
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2373,12 +1850,7 @@ type User struct {
 	// true #bool
 ```
 
-</details>
-
 _Example: no matching element_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c4 := collection.New([]int{5, 6, 7})
@@ -2391,12 +1863,7 @@ c4 := collection.New([]int{5, 6, 7})
 	// false #bool
 ```
 
-</details>
-
 _Example: empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c5 := collection.New([]int{})
@@ -2407,16 +1874,11 @@ c5 := collection.New([]int{})
 	// false #bool
 ```
 
-</details>
-
 #### `None`
 None returns true if fn returns false for every item in the collection.
 If the collection is empty, None returns true.
 
 _Example: integers – none even_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 3, 5})
@@ -2425,12 +1887,7 @@ c := collection.New([]int{1, 3, 5})
 	// true #bool
 ```
 
-</details>
-
 _Example: integers – some even_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{1, 2, 3})
@@ -2439,12 +1896,7 @@ c2 := collection.New([]int{1, 2, 3})
 	// false #bool
 ```
 
-</details>
-
 _Example: empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 empty := collection.New([]int{})
@@ -2452,8 +1904,6 @@ empty := collection.New([]int{})
 	collection.Dump(none)
 	// true #bool
 ```
-
-</details>
 
 ### Set Operations
 
@@ -2463,9 +1913,6 @@ equality function `eq`. The first occurrence of each unique value is kept,
 and order is preserved.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
@@ -2480,12 +1927,7 @@ c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
 	// ]
 ```
 
-</details>
-
 _Example: strings (case-insensitive uniqueness)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"A", "a", "B", "b", "A"})
@@ -2499,12 +1941,7 @@ c2 := collection.New([]string{"A", "a", "B", "b", "A"})
 	// ]
 ```
 
-</details>
-
 _Example: structs (unique by ID)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2529,16 +1966,11 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `UniqueBy`
 UniqueBy returns a new collection containing only the first occurrence
 of each element as determined by keyFn.
 
 _Example: structs – unique by ID_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2560,12 +1992,7 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 _Example: strings – case-insensitive uniqueness_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 values := collection.New([]string{"A", "a", "B", "b", "A"})
@@ -2581,12 +2008,7 @@ values := collection.New([]string{"A", "a", "B", "b", "A"})
 	// ]
 ```
 
-</details>
-
 _Example: integers – identity key_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 nums := collection.New([]int{3, 1, 2, 1, 3})
@@ -2600,8 +2022,6 @@ nums := collection.New([]int{3, 1, 2, 1, 3})
 	// ]
 ```
 
-</details>
-
 ### Slicing
 
 #### `Chunk`
@@ -2609,9 +2029,6 @@ Chunk splits the collection into chunks of the given size.
 The final chunk may be smaller if len(items) is not divisible by size.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
@@ -2632,12 +2049,7 @@ c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 	//]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2680,16 +2092,11 @@ type User struct {
 	//]
 ```
 
-</details>
-
 #### `Pop`
 Pop returns the last item and a new collection with that item removed.
 The original collection remains unchanged.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3})
@@ -2702,12 +2109,7 @@ c := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
@@ -2720,12 +2122,7 @@ c2 := collection.New([]string{"a", "b", "c"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2752,12 +2149,7 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 _Example: empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 empty := collection.New([]int{})
@@ -2768,16 +2160,11 @@ empty := collection.New([]int{})
 	// ]
 ```
 
-</details>
-
 #### `PopN`
 PopN removes and returns the last n items as a new collection,
 and returns a second collection containing the remaining items.
 
 _Example: integers – pop 2_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
@@ -2793,12 +2180,7 @@ c := collection.New([]int{1, 2, 3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: strings – pop 1_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
@@ -2813,12 +2195,7 @@ c2 := collection.New([]string{"a", "b", "c"})
 	// ]
 ```
 
-</details>
-
 _Example: structs – pop 2_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2852,12 +2229,7 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 _Example: integers - n <= 0 → returns empty popped + original collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.New([]int{1, 2, 3})
@@ -2872,12 +2244,7 @@ c3 := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 _Example: strings - n exceeds length → all items popped, rest empty_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c4 := collection.New([]string{"x", "y"})
@@ -2891,8 +2258,6 @@ c4 := collection.New([]string{"x", "y"})
 	// ]
 ```
 
-</details>
-
 #### `Skip`
 Skip returns a new collection with the first n items skipped.
 If n is less than or equal to zero, Skip returns the full collection.
@@ -2900,9 +2265,6 @@ If n is greater than or equal to the collection length, Skip returns
 an empty collection.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
@@ -2915,12 +2277,7 @@ c := collection.New([]int{1, 2, 3, 4, 5})
 	// ]
 ```
 
-</details>
-
 _Example: skip none_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out2 := c.Skip(0)
@@ -2934,12 +2291,7 @@ out2 := c.Skip(0)
 	// ]
 ```
 
-</details>
-
 _Example: skip all_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out3 := c.Skip(10)
@@ -2947,12 +2299,7 @@ out3 := c.Skip(10)
 	// #[]int []
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -2977,8 +2324,6 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `SkipLast`
 SkipLast returns a new collection with the last n items skipped.
 If n is less than or equal to zero, SkipLast returns the full collection.
@@ -2986,9 +2331,6 @@ If n is greater than or equal to the collection length, SkipLast returns
 an empty collection.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
@@ -3001,12 +2343,7 @@ c := collection.New([]int{1, 2, 3, 4, 5})
 	// ]
 ```
 
-</details>
-
 _Example: skip none_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out2 := c.SkipLast(0)
@@ -3020,12 +2357,7 @@ out2 := c.SkipLast(0)
 	// ]
 ```
 
-</details>
-
 _Example: skip all_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out3 := c.SkipLast(10)
@@ -3033,12 +2365,7 @@ out3 := c.SkipLast(10)
 	// #[]int []
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3059,8 +2386,6 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Take`
 Take returns a new collection containing the first `n` items when n > 0,
 or the last `|n|` items when n < 0.
@@ -3071,9 +2396,6 @@ If n == 0, an empty collection is returned.
 Mirrors Laravel's take() semantics.
 
 _Example: integers - take first 3_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
@@ -3086,12 +2408,7 @@ c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
 	// ]
 ```
 
-</details>
-
 _Example: integers - take last 2 (negative n)_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
@@ -3103,12 +2420,7 @@ c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
 	// ]
 ```
 
-</details>
-
 _Example: integers - n exceeds length → whole collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c3 := collection.New([]int{10, 20})
@@ -3120,12 +2432,7 @@ c3 := collection.New([]int{10, 20})
 	// ]
 ```
 
-</details>
-
 _Example: integers - zero → empty_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c4 := collection.New([]int{1, 2, 3})
@@ -3134,8 +2441,6 @@ c4 := collection.New([]int{1, 2, 3})
 	// #[]int [
 	// ]
 ```
-
-</details>
 
 #### `TakeLast`
 TakeLast returns a new collection containing the last n items.
@@ -3148,9 +2453,6 @@ underlying slice.
 
 _Example: integers_
 
-<details>
-<summary>Examples</summary>
-
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
 	out := c.TakeLast(2)
@@ -3161,12 +2463,7 @@ c := collection.New([]int{1, 2, 3, 4, 5})
 	// ]
 ```
 
-</details>
-
 _Example: take none_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out2 := c.TakeLast(0)
@@ -3174,12 +2471,7 @@ out2 := c.TakeLast(0)
 	// #[]int []
 ```
 
-</details>
-
 _Example: take all_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 out3 := c.TakeLast(10)
@@ -3193,12 +2485,7 @@ out3 := c.TakeLast(10)
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3218,17 +2505,12 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 ### Transformation
 
 #### `Append`
 Append returns a new collection with the given values appended.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2})
@@ -3241,12 +2523,7 @@ c := collection.New([]int{1, 2})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3284,15 +2561,10 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Concat`
 Concat appends the values from the given slice onto the end of the collection,
 
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]string{"John Doe"})
@@ -3309,16 +2581,11 @@ c := collection.New([]string{"John Doe"})
 	// ]
 ```
 
-</details>
-
 #### `Each`
 Each runs fn for every item in the collection and returns the same collection,
 so it can be used in chains for side effects (logging, debugging, etc.).
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3})
@@ -3332,12 +2599,7 @@ c := collection.New([]int{1, 2, 3})
 	// 6 #int
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
@@ -3355,12 +2617,7 @@ c2 := collection.New([]string{"apple", "banana", "cherry"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3387,15 +2644,10 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Map`
 Map applies a same-type transformation and returns a new collection.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3})
@@ -3412,12 +2664,7 @@ c := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
@@ -3434,12 +2681,7 @@ c2 := collection.New([]string{"apple", "banana", "cherry"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3470,15 +2712,10 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `MapTo`
 MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
 
 _Example: integers - extract parity label_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4})
@@ -3497,12 +2734,7 @@ nums := collection.New([]int{1, 2, 3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: strings - length of each value_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 words := collection.New([]string{"go", "forj", "rocks"})
@@ -3517,12 +2749,7 @@ words := collection.New([]string{"go", "forj", "rocks"})
 	// ]
 ```
 
-</details>
-
 _Example: structs - MapTo a field_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3546,15 +2773,10 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Merge`
 Merge merges the given data into the current collection.
 
 _Example: integers - merging slices_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 ints := collection.New([]int{1, 2})
@@ -3570,12 +2792,7 @@ ints := collection.New([]int{1, 2})
 	// ]
 ```
 
-</details>
-
 _Example: strings - merging another collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 strs := collection.New([]string{"a", "b"})
@@ -3591,12 +2808,7 @@ strs := collection.New([]string{"a", "b"})
 	// ]
 ```
 
-</details>
-
 _Example: structs - merging struct slices_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3636,16 +2848,11 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Multiply`
 Multiply creates `n` copies of all items in the collection
 and returns a new collection.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 ints := collection.New([]int{1, 2})
@@ -3661,12 +2868,7 @@ ints := collection.New([]int{1, 2})
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 strs := collection.New([]string{"a", "b"})
@@ -3680,12 +2882,7 @@ strs := collection.New([]string{"a", "b"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3711,12 +2908,7 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 _Example: multiplying by zero or negative returns empty_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 none := ints.Multiply(0)
@@ -3725,16 +2917,11 @@ none := ints.Multiply(0)
 	// ]
 ```
 
-</details>
-
 #### `Pipe`
 Pipe passes the entire collection into the given function
 and returns the function's result.
 
 _Example: integers – computing a sum_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{1, 2, 3})
@@ -3749,12 +2936,7 @@ c := collection.New([]int{1, 2, 3})
 	// 6 #int
 ```
 
-</details>
-
 _Example: strings – joining values_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
@@ -3769,12 +2951,7 @@ c2 := collection.New([]string{"a", "b", "c"})
 	// "abc" #string
 ```
 
-</details>
-
 _Example: structs – extracting just the names_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3802,17 +2979,12 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Pluck`
 Pluck is an alias for MapTo with a more semantic name when projecting fields.
 It extracts a single field or computed value from every element and returns a
 new typed collection.
 
 _Example: integers - extract parity label_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4})
@@ -3831,12 +3003,7 @@ nums := collection.New([]int{1, 2, 3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: strings - length of each value_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 words := collection.New([]string{"go", "forj", "rocks"})
@@ -3851,12 +3018,7 @@ words := collection.New([]string{"go", "forj", "rocks"})
 	// ]
 ```
 
-</details>
-
 _Example: structs - pluck a field_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3880,16 +3042,11 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 #### `Prepend`
 Prepend returns a new collection with the given values added
 to the *beginning* of the collection.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c := collection.New([]int{3, 4})
@@ -3903,12 +3060,7 @@ c := collection.New([]int{3, 4})
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 letters := collection.New([]string{"c", "d"})
@@ -3922,12 +3074,7 @@ letters := collection.New([]string{"c", "d"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -3953,12 +3100,7 @@ type User struct {
 	// ]
 ```
 
-</details>
-
 _Example: integers - Prepending into an empty collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 empty := collection.New([]int{})
@@ -3970,12 +3112,7 @@ empty := collection.New([]int{})
 	// ]
 ```
 
-</details>
-
 _Example: integers - Prepending no values → returns a copy of original_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{1, 2})
@@ -3987,15 +3124,10 @@ c2 := collection.New([]int{1, 2})
 	// ]
 ```
 
-</details>
-
 #### `Push`
 Push returns a new collection with the given values appended.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 nums := collection.New([]int{1, 2}).Push(3, 4)
@@ -4041,16 +3173,11 @@ nums := collection.New([]int{1, 2}).Push(3, 4)
 	// ]
 ```
 
-</details>
-
 #### `Tap`
 Tap invokes fn with the collection pointer for side effects (logging, debugging,
 inspection) and returns the same collection to allow chaining.
 
 _Example: integers - capture intermediate state during a chain_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 captured1 := []int{}
@@ -4073,12 +3200,7 @@ captured1 := []int{}
 	// captured1 → #[]int [1,2,3]
 ```
 
-</details>
-
 _Example: integers - tap for debugging without changing flow_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]int{10, 20, 30}).
@@ -4090,12 +3212,7 @@ c2 := collection.New([]int{10, 20, 30}).
 	collection.Dump(c2.Items()) // ensures c2 is used
 ```
 
-</details>
-
 _Example: structs - Tap with struct collection_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -4115,16 +3232,11 @@ type User struct {
 	collection.Dump(users2.Items()) // ensures users2 is used
 ```
 
-</details>
-
 #### `Times`
 Times creates a new collection by calling fn(i) for i = 1..count.
 This mirrors Laravel's Collection::times(), which is 1-indexed.
 
 _Example: integers - double each index_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 cTimes1 := collection.Times(5, func(i int) int {
@@ -4140,12 +3252,7 @@ cTimes1 := collection.Times(5, func(i int) int {
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 cTimes2 := collection.Times(3, func(i int) string {
@@ -4159,12 +3266,7 @@ cTimes2 := collection.Times(3, func(i int) string {
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type Point struct {
@@ -4196,15 +3298,10 @@ type Point struct {
 	// ]
 ```
 
-</details>
-
 #### `Transform`
 Transform applies fn to every item *in place*, mutating the collection.
 
 _Example: integers_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c1 := collection.New([]int{1, 2, 3})
@@ -4217,12 +3314,7 @@ c1 := collection.New([]int{1, 2, 3})
 	// ]
 ```
 
-</details>
-
 _Example: strings_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
@@ -4235,12 +3327,7 @@ c2 := collection.New([]string{"a", "b", "c"})
 	// ]
 ```
 
-</details>
-
 _Example: structs_
-
-<details>
-<summary>Examples</summary>
 
 ```go
 type User struct {
@@ -4264,6 +3351,4 @@ type User struct {
 	//	1 => {ID:2 Name:"BOB"}   #collection.User
 	// ]
 ```
-
-</details>
 <!-- api:embed:end -->

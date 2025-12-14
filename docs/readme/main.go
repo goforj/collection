@@ -58,18 +58,35 @@ func run() error {
 
 //
 // ------------------------------------------------------------
-// Parsing
+// Data model
 // ------------------------------------------------------------
 //
 
 type FuncDoc struct {
-	Name  string
-	Group string
+	Name        string
+	Group       string
+	Description string
+	Examples    []Example
 }
 
-var groupHeader = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
+type Example struct {
+	Label string
+	Code  string
+	Line  int
+}
 
-func parseFuncs(root string) ([]FuncDoc, error) {
+//
+// ------------------------------------------------------------
+// Parsing
+// ------------------------------------------------------------
+//
+
+var (
+	groupHeader   = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
+	exampleHeader = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
+)
+
+func parseFuncs(root string) ([]*FuncDoc, error) {
 	fset := token.NewFileSet()
 
 	pkgs, err := parser.ParseDir(
@@ -89,7 +106,7 @@ func parseFuncs(root string) ([]FuncDoc, error) {
 		return nil, fmt.Errorf(`package "collection" not found`)
 	}
 
-	seen := map[string]FuncDoc{}
+	funcs := map[string]*FuncDoc{}
 
 	for _, file := range pkg.Files {
 		for _, decl := range file.Decls {
@@ -98,24 +115,30 @@ func parseFuncs(root string) ([]FuncDoc, error) {
 				continue
 			}
 
-			name := fn.Name.Name
-			if !ast.IsExported(name) {
+			if !ast.IsExported(fn.Name.Name) {
 				continue
 			}
 
-			if _, exists := seen[name]; exists {
-				continue
+			fd := &FuncDoc{
+				Name:        fn.Name.Name,
+				Group:       extractGroup(fn.Doc),
+				Description: extractDescription(fn.Doc),
+				Examples:    extractExamples(fset, fn),
 			}
 
-			seen[name] = FuncDoc{
-				Name:  name,
-				Group: extractGroup(fn.Doc),
+			if existing, ok := funcs[fd.Name]; ok {
+				existing.Examples = append(existing.Examples, fd.Examples...)
+			} else {
+				funcs[fd.Name] = fd
 			}
 		}
 	}
 
-	out := make([]FuncDoc, 0, len(seen))
-	for _, fd := range seen {
+	out := make([]*FuncDoc, 0, len(funcs))
+	for _, fd := range funcs {
+		sort.Slice(fd.Examples, func(i, j int) bool {
+			return fd.Examples[i].Line < fd.Examples[j].Line
+		})
 		out = append(out, fd)
 	}
 
@@ -124,12 +147,76 @@ func parseFuncs(root string) ([]FuncDoc, error) {
 
 func extractGroup(group *ast.CommentGroup) string {
 	for _, c := range group.List {
-		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
-		if m := groupHeader.FindStringSubmatch(text); m != nil {
+		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
+		if m := groupHeader.FindStringSubmatch(line); m != nil {
 			return strings.TrimSpace(m[1])
 		}
 	}
 	return "Other"
+}
+
+func extractDescription(group *ast.CommentGroup) string {
+	var lines []string
+
+	for _, c := range group.List {
+		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
+
+		if exampleHeader.MatchString(line) || groupHeader.MatchString(line) {
+			break
+		}
+
+		if len(lines) == 0 && line == "" {
+			continue
+		}
+
+		lines = append(lines, line)
+	}
+
+	return strings.TrimSpace(strings.Join(lines, "\n"))
+}
+
+func extractExamples(fset *token.FileSet, fn *ast.FuncDecl) []Example {
+	var out []Example
+	var current []string
+	var label string
+	var start int
+	inExample := false
+
+	flush := func() {
+		if len(current) == 0 {
+			return
+		}
+		out = append(out, Example{
+			Label: label,
+			Code:  strings.Join(current, "\n"),
+			Line:  start,
+		})
+		current = nil
+		label = ""
+		inExample = false
+	}
+
+	for _, c := range fn.Doc.List {
+		raw := strings.TrimPrefix(c.Text, "//")
+		line := strings.TrimSpace(raw)
+
+		if m := exampleHeader.FindStringSubmatch(line); m != nil {
+			flush()
+			inExample = true
+			label = strings.TrimSpace(m[1])
+			start = fset.Position(c.Slash).Line
+			continue
+		}
+
+		if !inExample {
+			continue
+		}
+
+		current = append(current, raw)
+	}
+
+	flush()
+	return out
 }
 
 //
@@ -138,30 +225,60 @@ func extractGroup(group *ast.CommentGroup) string {
 // ------------------------------------------------------------
 //
 
-func renderAPI(funcs []FuncDoc) string {
-	groups := map[string][]string{}
+func renderAPI(funcs []*FuncDoc) string {
+	byGroup := map[string][]*FuncDoc{}
 
-	for _, fn := range funcs {
-		groups[fn.Group] = append(groups[fn.Group], fn.Name)
+	for _, fd := range funcs {
+		byGroup[fd.Group] = append(byGroup[fd.Group], fd)
 	}
 
-	groupNames := make([]string, 0, len(groups))
-	for g := range groups {
+	groupNames := make([]string, 0, len(byGroup))
+	for g := range byGroup {
 		groupNames = append(groupNames, g)
 	}
 	sort.Strings(groupNames)
 
 	var buf bytes.Buffer
 
-	for _, group := range groupNames {
-		names := groups[group]
-		sort.Strings(names)
+	// ---------------- Index ----------------
+	buf.WriteString("### Index\n\n")
 
-		buf.WriteString("### " + group + "\n")
-		for _, name := range names {
-			buf.WriteString("- `" + name + "`\n")
+	for _, group := range groupNames {
+		buf.WriteString("#### " + group + "\n")
+		sort.Slice(byGroup[group], func(i, j int) bool {
+			return byGroup[group][i].Name < byGroup[group][j].Name
+		})
+
+		for _, fn := range byGroup[group] {
+			anchor := strings.ToLower(fn.Name)
+			buf.WriteString(fmt.Sprintf("- [`%s`](#%s)\n", fn.Name, anchor))
 		}
 		buf.WriteString("\n")
+	}
+
+	buf.WriteString("---\n\n")
+
+	// ---------------- Details ----------------
+	for _, group := range groupNames {
+		buf.WriteString("### " + group + "\n\n")
+
+		for _, fn := range byGroup[group] {
+			buf.WriteString(fmt.Sprintf("#### `%s`\n", fn.Name))
+
+			if fn.Description != "" {
+				buf.WriteString(fn.Description + "\n\n")
+			}
+
+			for _, ex := range fn.Examples {
+				if ex.Label != "" {
+					buf.WriteString(fmt.Sprintf("_Example: %s_\n\n", ex.Label))
+				}
+
+				buf.WriteString("```go\n")
+				buf.WriteString(strings.TrimSpace(ex.Code))
+				buf.WriteString("\n```\n\n")
+			}
+		}
 	}
 
 	return strings.TrimRight(buf.String(), "\n")

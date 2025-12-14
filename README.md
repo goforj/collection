@@ -59,6 +59,7 @@ import "github.com/goforj/collection"
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
 | [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L110" target="_blank">Source</a> |
 | [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L94" target="_blank">Source</a> |
+| [GroupBy](<#GroupBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/group_by.go#L73-L76" target="_blank">Source</a> |
 | [ToMap](<#ToMap>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/to_map.go#L41-L45" target="_blank">Source</a> |
 | [ToMapKV](<#ToMapKV>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/to_map_kv.go#L55" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
@@ -265,6 +266,85 @@ collection.Dump(c2.Items())
 //   1 => 2 #int
 //   2 => 3 #int
 // ]
+```
+
+
+
+<a name="GroupBy"></a>
+## GroupBy
+
+
+GroupBy partitions the collection into groups keyed by the value returned from keyFn.
+
+The order of items within each group is preserved. The order of the groups themselves is unspecified.
+
+This function does not mutate the source collection.
+
+Example: grouping integers by parity
+
+```go
+values := []int{1, 2, 3, 4, 5}
+
+groups := collection.GroupBy(
+	collection.New(values),
+	func(v int) string {
+		if v%2 == 0 {
+			return "even"
+		}
+		return "odd"
+	},
+)
+
+collection.Dump(groups["even"].Items())
+// []int [
+//  0 => 2 #int
+//  1 => 4 #int
+// ]
+collection.Dump(groups["odd"].Items())
+// []int [
+//  0 => 1 #int
+//  1 => 3 #int
+//  2 => 5 #int
+// ]
+```
+
+Example: grouping structs by field
+
+```go
+type User struct {
+		ID   int
+		Role string
+	}
+
+	users := []User{
+		{ID: 1, Role: "admin"},
+		{ID: 2, Role: "user"},
+		{ID: 3, Role: "admin"},
+	}
+
+	groups2 := collection.GroupBy(
+		collection.New(users),
+		func(u User) string { return u.Role },
+	)
+
+	collection.Dump(groups2["admin"].Items())
+	// []main.User [
+	//  0 => #main.User {
+	//    +ID   => 1 #int
+	//    +Role => "admin" #string
+	//  }
+	//  1 => #main.User {
+	//    +ID   => 3 #int
+	//    +Role => "admin" #string
+	//  }
+	// ]
+	collection.Dump(groups2["user"].Items())
+ // []main.User [
+	//  0 => #main.User {
+	//    +ID   => 2 #int
+	//    +Role => "user" #string
+	//  }
+	// ]
 ```
 
 

@@ -1,6 +1,7 @@
 package collection
 
 // MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
+// @group Transformation
 //
 // This cannot be a method because methods can't introduce a new type parameter R.
 //
@@ -67,6 +68,7 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 // Pluck is an alias for MapTo with a more semantic name when projecting fields.
 // It extracts a single field or computed value from every element and returns a
 // new typed collection.
+// @group Transformation
 //
 // Example: integers - extract parity label
 //

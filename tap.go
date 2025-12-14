@@ -2,6 +2,7 @@ package collection
 
 // Tap invokes fn with the collection pointer for side effects (logging, debugging,
 // inspection) and returns the same collection to allow chaining.
+// @group Transformation
 //
 // Tap does NOT modify the collection itself; it simply exposes the current state
 // during a fluent chain.

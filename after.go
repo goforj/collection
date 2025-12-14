@@ -2,6 +2,7 @@ package collection
 
 // After returns all items after the first element for which pred returns true.
 // If no element matches, an empty collection is returned.
+// @group Ordering
 //
 // Example: integers
 //

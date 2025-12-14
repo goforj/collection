@@ -2,6 +2,7 @@ package collection
 
 // Chunk splits the collection into chunks of the given size.
 // The final chunk may be smaller if len(items) is not divisible by size.
+// @group Slicing
 //
 // If size <= 0, nil is returned.
 // Example: integers

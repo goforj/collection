@@ -1,6 +1,7 @@
 package collection
 
 // Merge merges the given data into the current collection.
+// @group Transformation
 //
 // Example: integers - merging slices
 //

@@ -8,11 +8,6 @@ import "github.com/goforj/collection"
 func main() {
 	// Shuffle randomly shuffles the items in the collection in place
 	// and returns the same collection for chaining.
-	// 
-	// This operation performs no allocations.
-	// 
-	// The shuffle uses an internal random source. Tests may override
-	// this source to achieve deterministic behavior.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})

@@ -8,9 +8,6 @@ import "github.com/goforj/collection"
 func main() {
 	// Median returns the statistical median of the numeric collection as float64.
 	// Returns (0, false) if the collection is empty.
-	// 
-	// Odd count  → middle value
-	// Even count → average of the two middle values
 
 	// Example: integers - odd number of items
 	c := collection.NewNumeric([]int{3, 1, 2})

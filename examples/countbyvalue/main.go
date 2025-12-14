@@ -8,8 +8,6 @@ import "github.com/goforj/collection"
 func main() {
 	// CountByValue returns a map where each distinct item in the collection
 	// is mapped to the number of times it appears.
-	// 
-	// T must be comparable.
 
 	// Example: strings
 	c1 := collection.New([]string{"a", "b", "a"})

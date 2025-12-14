@@ -2,6 +2,7 @@ package collection
 
 // Reduce collapses the collection into a single accumulated value.
 // The accumulator has the same type T as the collection's elements.
+// @group Aggregation
 //
 // This is useful for computing sums, concatenations, aggregates,
 // or any fold-style reduction.

@@ -8,8 +8,8 @@ type Collection[T any] struct {
 // Number is a constraint that permits any numeric type.
 type Number interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
-	~float32 | ~float64
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
+		~float32 | ~float64
 }
 
 // Pair represents a key/value pair, typically originating from a map.
@@ -22,6 +22,7 @@ type Pair[K comparable, V any] struct {
 }
 
 // New creates a new Collection from the provided slice.
+// @group Construction
 //
 // The returned Collection is a lightweight, strongly-typed wrapper
 // around the slice, enabling fluent, chainable operations such as
@@ -41,6 +42,7 @@ type NumericCollection[T Number] struct {
 
 // NewNumeric wraps a slice of numeric types in a NumericCollection.
 // A shallow copy is made so that further operations don't mutate the original slice.
+// @group Construction
 func NewNumeric[T Number](items []T) *NumericCollection[T] {
 	return &NumericCollection[T]{
 		Collection: &Collection[T]{items: items},
@@ -48,6 +50,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 }
 
 // Items returns the underlying slice of items.
+// @group Construction
 //
 // Example: integers
 //

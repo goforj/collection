@@ -2,6 +2,7 @@ package collection
 
 // All returns true if fn returns true for every item in the collection.
 // If the collection is empty, All returns true (vacuously true).
+// @group Querying
 //
 // Example: integers – all even
 //

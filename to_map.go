@@ -2,6 +2,7 @@ package collection
 
 // ToMap reduces a collection into a map using the provided key and value
 // selector functions.
+// @group Maps
 //
 // If multiple items produce the same key, the last value wins.
 //

@@ -3,6 +3,7 @@ package collection
 // Mode returns the most frequent numeric value(s) in the collection.
 // If multiple values tie for highest frequency, all are returned
 // in first-seen order.
+// @group Aggregation
 //
 // Example: integers – single mode
 //

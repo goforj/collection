@@ -2,6 +2,7 @@ package collection
 
 // Each runs fn for every item in the collection and returns the same collection,
 // so it can be used in chains for side effects (logging, debugging, etc.).
+// @group Transformation
 //
 // Example: integers
 //

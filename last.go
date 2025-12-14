@@ -2,6 +2,7 @@ package collection
 
 // Last returns the last element in the collection.
 // If the collection is empty, ok will be false.
+// @group Querying
 //
 // Example: integers
 //

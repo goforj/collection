@@ -4,6 +4,7 @@ package collection
 // If n is less than or equal to zero, Skip returns the full collection.
 // If n is greater than or equal to the collection length, Skip returns
 // an empty collection.
+// @group Slicing
 //
 // This operation performs no element allocations; it re-slices the
 // underlying slice.

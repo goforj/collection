@@ -11,6 +11,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 
 // Dump prints items with godump and returns the same collection.
 // This is a no-op on the collection itself and never panics.
+// @group Debugging
 //
 // Example: integers
 //
@@ -39,6 +40,7 @@ func (c *Collection[T]) Dump() *Collection[T] {
 // Dd prints items then terminates execution.
 // Like Laravel's dd(), this is intended for debugging and
 // should not be used in production control flow.
+// @group Debugging
 //
 // This method never returns.
 //
@@ -58,6 +60,7 @@ func (c *Collection[T]) Dd() {
 // DumpStr returns the pretty-printed dump of the items as a string,
 // without printing or exiting.
 // Useful for logging, snapshot testing, and non-interactive debugging.
+// @group Debugging
 //
 // Example: integers
 //
@@ -81,6 +84,7 @@ func setDumpWriter(w io.Writer) {
 }
 
 // Dump is a convenience function that calls godump.Dump.
+// @group Debugging
 //
 // Example: integers
 //

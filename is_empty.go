@@ -1,6 +1,7 @@
 package collection
 
 // IsEmpty returns true if the collection has no items.
+// @group Querying
 //
 // Example: integers (non-empty)
 //

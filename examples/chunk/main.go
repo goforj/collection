@@ -8,8 +8,6 @@ import "github.com/goforj/collection"
 func main() {
 	// Chunk splits the collection into chunks of the given size.
 	// The final chunk may be smaller if len(items) is not divisible by size.
-	// 
-	// If size <= 0, nil is returned.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)

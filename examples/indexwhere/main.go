@@ -9,9 +9,6 @@ func main() {
 	// IndexWhere returns the index of the first item in the collection
 	// for which the provided predicate function returns true.
 	// If no item matches, it returns (0, false).
-	// 
-	// This operation performs no allocations and short-circuits
-	// on the first match.
 
 	// Example: integers
 	c := collection.New([]int{10, 20, 30, 40})

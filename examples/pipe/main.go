@@ -8,9 +8,6 @@ import "github.com/goforj/collection"
 func main() {
 	// Pipe passes the entire collection into the given function
 	// and returns the function's result.
-	// 
-	// This is useful for inline transformations, aggregations,
-	// or "exiting" a chain with a non-collection value.
 
 	// Example: integers – computing a sum
 	c := collection.New([]int{1, 2, 3})

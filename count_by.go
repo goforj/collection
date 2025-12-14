@@ -2,6 +2,7 @@ package collection
 
 // CountBy returns a map of keys extracted by fn to their occurrence counts.
 // K must be comparable.
+// @group Aggregation
 //
 // Example: integers
 //
@@ -64,6 +65,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 
 // CountByValue returns a map where each distinct item in the collection
 // is mapped to the number of times it appears.
+// @group Aggregation
 //
 // T must be comparable.
 //

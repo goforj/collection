@@ -7,10 +7,6 @@ import "github.com/goforj/collection"
 
 func main() {
 	// ToMapKV converts a collection of key/value pairs into a map.
-	// 
-	// If multiple pairs contain the same key, the last value wins.
-	// 
-	// This operation allocates a map sized to the collection length.
 
 	// Example: basic usage
 	m := map[string]int{

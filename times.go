@@ -2,6 +2,7 @@ package collection
 
 // Times creates a new collection by calling fn(i) for i = 1..count.
 // This mirrors Laravel's Collection::times(), which is 1-indexed.
+// @group Transformation
 //
 // If count <= 0, an empty collection is returned.
 //

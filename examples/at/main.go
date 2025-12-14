@@ -8,8 +8,6 @@ import "github.com/goforj/collection"
 func main() {
 	// At returns the item at the given index and a boolean indicating
 	// whether the index was within bounds.
-	// 
-	// This method is safe and does not panic for out-of-range indices.
 
 	// Example: integers
 	c := collection.New([]int{10, 20, 30})

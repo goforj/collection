@@ -4,6 +4,7 @@ package collection
 // predicate function returns true. This is an alias for FirstWhere(fn) and
 // exists for ergonomic parity with functional languages (JavaScript, Rust,
 // C#, Python) where developers expect a “find” helper.
+// @group Querying
 //
 // Example: integers
 //

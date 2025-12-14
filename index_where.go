@@ -3,6 +3,7 @@ package collection
 // IndexWhere returns the index of the first item in the collection
 // for which the provided predicate function returns true.
 // If no item matches, it returns (0, false).
+// @group Querying
 //
 // This operation performs no allocations and short-circuits
 // on the first match.

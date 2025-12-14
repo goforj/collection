@@ -12,8 +12,6 @@ func main() {
 	// Unique returns a new collection with duplicate items removed, based on the
 	// equality function `eq`. The first occurrence of each unique value is kept,
 	// and order is preserved.
-	// 
-	// The `eq` function should return true when two values are considered equal.
 
 	// Example: integers
 	c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})

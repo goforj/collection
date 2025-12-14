@@ -1,6 +1,7 @@
 package collection
 
 // ToMapKV converts a collection of key/value pairs into a map.
+// @group Maps
 //
 // If multiple pairs contain the same key, the last value wins.
 //

@@ -2,6 +2,7 @@ package collection
 
 // None returns true if fn returns false for every item in the collection.
 // If the collection is empty, None returns true.
+// @group Querying
 //
 // Example: integers – none even
 //

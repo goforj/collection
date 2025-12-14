@@ -10,9 +10,6 @@ func main() {
 	// If n is less than or equal to zero, Skip returns the full collection.
 	// If n is greater than or equal to the collection length, Skip returns
 	// an empty collection.
-	// 
-	// This operation performs no element allocations; it re-slices the
-	// underlying slice.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})

@@ -2,6 +2,7 @@ package collection
 
 // GroupBy partitions the collection into groups keyed by the value
 // returned from keyFn.
+// @group Grouping
 //
 // The order of items within each group is preserved.
 // The order of the groups themselves is unspecified.
@@ -36,40 +37,40 @@ package collection
 //
 // Example: grouping structs by field
 //
-//	type User struct {
-//		ID   int
-//		Role string
-//	}
+//		type User struct {
+//			ID   int
+//			Role string
+//		}
 //
-//	users := []User{
-//		{ID: 1, Role: "admin"},
-//		{ID: 2, Role: "user"},
-//		{ID: 3, Role: "admin"},
-//	}
+//		users := []User{
+//			{ID: 1, Role: "admin"},
+//			{ID: 2, Role: "user"},
+//			{ID: 3, Role: "admin"},
+//		}
 //
-//	groups2 := collection.GroupBy(
-//		collection.New(users),
-//		func(u User) string { return u.Role },
-//	)
+//		groups2 := collection.GroupBy(
+//			collection.New(users),
+//			func(u User) string { return u.Role },
+//		)
 //
-//	collection.Dump(groups2["admin"].Items())
-//	// []main.User [
-//	//  0 => #main.User {
-//	//    +ID   => 1 #int
-//	//    +Role => "admin" #string
-//	//  }
-//	//  1 => #main.User {
-//	//    +ID   => 3 #int
-//	//    +Role => "admin" #string
-//	//  }
-//	// ]
-//	collection.Dump(groups2["user"].Items())
-//  // []main.User [
-//	//  0 => #main.User {
-//	//    +ID   => 2 #int
-//	//    +Role => "user" #string
-//	//  }
-//	// ]
+//		collection.Dump(groups2["admin"].Items())
+//		// []main.User [
+//		//  0 => #main.User {
+//		//    +ID   => 1 #int
+//		//    +Role => "admin" #string
+//		//  }
+//		//  1 => #main.User {
+//		//    +ID   => 3 #int
+//		//    +Role => "admin" #string
+//		//  }
+//		// ]
+//		collection.Dump(groups2["user"].Items())
+//	 // []main.User [
+//		//  0 => #main.User {
+//		//    +ID   => 2 #int
+//		//    +Role => "user" #string
+//		//  }
+//		// ]
 func GroupBy[T any, K comparable](
 	c *Collection[T],
 	keyFn func(T) K,

@@ -2,6 +2,7 @@ package collection
 
 // Reverse reverses the order of items in the collection in place
 // and returns the same collection for chaining.
+// @group Ordering
 //
 // This operation performs no allocations.
 //

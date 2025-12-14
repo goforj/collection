@@ -2,6 +2,7 @@ package collection
 
 // Prepend returns a new collection with the given values added
 // to the *beginning* of the collection.
+// @group Transformation
 //
 // The original collection is not modified.
 //

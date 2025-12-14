@@ -2,6 +2,7 @@ package collection
 
 // Min returns the smallest numeric item in the collection.
 // The second return value is false if the collection is empty.
+// @group Aggregation
 //
 // Example: integers
 //

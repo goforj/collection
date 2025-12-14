@@ -11,8 +11,6 @@ import (
 func main() {
 	// Times creates a new collection by calling fn(i) for i = 1..count.
 	// This mirrors Laravel's Collection::times(), which is 1-indexed.
-	// 
-	// If count <= 0, an empty collection is returned.
 
 	// Example: integers - double each index
 	cTimes1 := collection.Times(5, func(i int) int {

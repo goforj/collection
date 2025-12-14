@@ -1,6 +1,7 @@
 package collection
 
 // Any returns true if at least one item satisfies fn.
+// @group Querying
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4})

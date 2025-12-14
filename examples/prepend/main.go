@@ -8,8 +8,6 @@ import "github.com/goforj/collection"
 func main() {
 	// Prepend returns a new collection with the given values added
 	// to the *beginning* of the collection.
-	// 
-	// The original collection is not modified.
 
 	// Example: integers
 	c := collection.New([]int{3, 4})

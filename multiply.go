@@ -2,6 +2,7 @@ package collection
 
 // Multiply creates `n` copies of all items in the collection
 // and returns a new collection.
+// @group Transformation
 //
 // Example: integers
 //

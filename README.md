@@ -70,6 +70,7 @@ import "github.com/goforj/collection"
 | [All](<#Collection[T].All>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/all.go#L33" target="_blank">Source</a> |
 | [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L10" target="_blank">Source</a> |
 | [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L50" target="_blank">Source</a> |
+| [At](<#Collection[T].At>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/at.go#L36" target="_blank">Source</a> |
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L49" target="_blank">Source</a> |
 | [Chunk](<#Collection[T].Chunk>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/chunk.go#L66" target="_blank">Source</a> |
 | [Concat](<#Collection[T].Concat>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/concat.go#L19" target="_blank">Source</a> |
@@ -83,6 +84,7 @@ import "github.com/goforj/collection"
 | [FindWhere](<#Collection[T].FindWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/find_where.go#L59" target="_blank">Source</a> |
 | [First](<#Collection[T].First>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first.go#L51" target="_blank">Source</a> |
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L26" target="_blank">Source</a> |
+| [IndexWhere](<#Collection[T].IndexWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/index_where.go#L42" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
 | [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L88" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
@@ -730,6 +732,51 @@ users.Append(
 
 
 
+<a name="Collection[T].At"></a>
+### At
+
+
+At returns the item at the given index and a boolean indicating whether the index was within bounds.
+
+This method is safe and does not panic for out\-of\-range indices.
+
+Example: integers
+
+```go
+c := collection.New([]int{10, 20, 30})
+v, ok := c.At(1)
+collection.Dump(v, ok)
+// 20 true
+```
+
+Example: out of bounds
+
+```go
+v2, ok2 := c.At(10)
+collection.Dump(v2, ok2)
+// 0 false
+```
+
+Example: structs
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+u, ok3 := users.At(0)
+collection.Dump(u, ok3)
+// {ID:1 Name:"Alice"} true
+```
+
+
+
 <a name="Collection[T].Before"></a>
 ### Before
 
@@ -1312,6 +1359,55 @@ v, ok = nums.FirstWhere(func(n int) bool {
 collection.Dump(v, ok)
 // 0 #int
 // false #bool
+```
+
+
+
+<a name="Collection[T].IndexWhere"></a>
+### IndexWhere
+
+
+IndexWhere returns the index of the first item in the collection for which the provided predicate function returns true. If no item matches, it returns \(0, false\).
+
+This operation performs no allocations and short\-circuits on the first match.
+
+Example: integers
+
+```go
+c := collection.New([]int{10, 20, 30, 40})
+idx, ok := c.IndexWhere(func(v int) bool { return v == 30 })
+collection.Dump(idx, ok)
+// 2 true
+```
+
+Example: not found
+
+```go
+idx2, ok2 := c.IndexWhere(func(v int) bool { return v == 99 })
+collection.Dump(idx2, ok2)
+// 0 false
+```
+
+Example: structs
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
+
+idx3, ok3 := users.IndexWhere(func(u User) bool {
+	return u.Name == "Bob"
+})
+
+collection.Dump(idx3, ok3)
+// 1 true
 ```
 
 

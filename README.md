@@ -75,18 +75,77 @@ go get github.com/goforj/collection
 
 | Group | Functions |
 |------:|-----------|
+| **Access** | [Items](#items) |
 | **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [Median](#median) [Min](#min) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
-| **Construction** | [Items](#items) [New](#new) [NewNumeric](#newnumeric) |
-| **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
+| **Construction** | [New](#new) [NewNumeric](#newnumeric) |
+| **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
 | **Filtering** | [Filter](#filter) |
 | **Grouping** | [GroupBy](#groupby) |
 | **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
 | **Ordering** | [After](#after) [Before](#before) [Reverse](#reverse) [Shuffle](#shuffle) [Sort](#sort) |
 | **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
+| **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
 | **Set Operations** | [Unique](#unique) [UniqueBy](#uniqueby) |
 | **Slicing** | [Chunk](#chunk) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) |
 | **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) |
 
+
+## Access
+
+### Items
+Items returns the underlying slice of items.
+
+_Example: integers_
+
+```go
+c := collection.New([]int{1, 2, 3})
+items := c.Items()
+collection.Dump(items)
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+c2 := collection.New([]string{"apple", "banana"})
+items2 := c2.Items()
+collection.Dump(items2)
+// #[]string [
+//   0 => "apple" #string
+//   1 => "banana" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+out := users.Items()
+collection.Dump(out)
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+// ]
+```
 
 ## Aggregation
 
@@ -484,61 +543,6 @@ collection.Dump(total3)
 
 ## Construction
 
-### Items
-Items returns the underlying slice of items.
-
-_Example: integers_
-
-```go
-c := collection.New([]int{1, 2, 3})
-items := c.Items()
-collection.Dump(items)
-// #[]int [
-//   0 => 1 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
-```
-
-_Example: strings_
-
-```go
-c2 := collection.New([]string{"apple", "banana"})
-items2 := c2.Items()
-collection.Dump(items2)
-// #[]string [
-//   0 => "apple" #string
-//   1 => "banana" #string
-// ]
-```
-
-_Example: structs_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-})
-
-out := users.Items()
-collection.Dump(out)
-// #[]main.User [
-//   0 => #main.User {
-//     +ID   => 1 #int
-//     +Name => "Alice" #string
-//   }
-//   1 => #main.User {
-//     +ID   => 2 #int
-//     +Name => "Bob" #string
-//   }
-// ]
-```
-
 ### New
 New creates a new Collection from the provided slice.
 
@@ -619,34 +623,6 @@ fmt.Println(s)
 // #[]int [
 //   0 => 10 #int
 //   1 => 20 #int
-// ]
-```
-
-### ToJSON
-ToJSON converts the collection's items into a compact JSON string.
-
-_Example: strings - pretty JSON_
-
-```go
-pj1 := collection.New([]string{"a", "b"})
-out1, _ := pj1.ToJSON()
-fmt.Println(out1)
-// ["a","b"]
-```
-
-### ToPrettyJSON
-ToPrettyJSON converts the collection's items into a human-readable,
-indented JSON string.
-
-_Example: strings - pretty JSON_
-
-```go
-pj1 := collection.New([]string{"a", "b"})
-out1, _ := pj1.ToPrettyJSON()
-fmt.Println(out1)
-// [
-//  "a",
-//  "b"
 // ]
 ```
 
@@ -1749,6 +1725,36 @@ empty := collection.New([]int{})
 none := empty.None(func(v int) bool { return v > 0 })
 collection.Dump(none)
 // true #bool
+```
+
+## Serialization
+
+### ToJSON
+ToJSON converts the collection's items into a compact JSON string.
+
+_Example: strings - pretty JSON_
+
+```go
+pj1 := collection.New([]string{"a", "b"})
+out1, _ := pj1.ToJSON()
+fmt.Println(out1)
+// ["a","b"]
+```
+
+### ToPrettyJSON
+ToPrettyJSON converts the collection's items into a human-readable,
+indented JSON string.
+
+_Example: strings - pretty JSON_
+
+```go
+pj1 := collection.New([]string{"a", "b"})
+out1, _ := pj1.ToPrettyJSON()
+fmt.Println(out1)
+// [
+//  "a",
+//  "b"
+// ]
 ```
 
 ## Set Operations

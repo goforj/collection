@@ -115,6 +115,16 @@ Each method declares how it interacts with the collection:
 
 Annotations describe **observable behavior**, not implementation details.
 
+### Runnable examples
+
+Every function has a corresponding runnable example under `./examples`.
+
+These examples are **generated directly from the documentation blocks** of each function, ensuring the docs and code never drift. These are the same examples you see here in the README and GoDoc.
+
+An automated test executes **every example** to verify it builds and runs successfully.  
+
+This guarantees all examples are valid, up-to-date, and remain functional as the API evolves.
+
 # 📦 Installation
 
 ```bash

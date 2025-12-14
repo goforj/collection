@@ -31,6 +31,7 @@ func main() {
 		}). // Slicing (stop when predicate becomes true)
 		SkipLast(1). // Slicing
 		Dump() // Debugging
+
 	// []main.DeviceEvent [
 	//  0 => #main.DeviceEvent {
 	//    +Device => "router-3" #string

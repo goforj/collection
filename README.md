@@ -98,6 +98,7 @@ import "github.com/goforj/collection"
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L102" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
 | [Reverse](<#Collection[T].Reverse>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reverse.go#L54" target="_blank">Source</a> |
+| [Shuffle](<#Collection[T].Shuffle>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/shuffle.go#L56" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
@@ -2353,6 +2354,55 @@ collection.Dump(users.Items())
 //   1 => {ID:2} #collection.User
 //   2 => {ID:1} #collection.User
 // ]
+```
+
+
+
+<a name="Collection[T].Shuffle"></a>
+### Shuffle
+
+
+Shuffle randomly shuffles the items in the collection in place and returns the same collection for chaining.
+
+This operation performs no allocations.
+
+The shuffle uses an internal random source. Tests may override this source to achieve deterministic behavior.
+
+Example: integers
+
+```go
+c := collection.New([]int{1, 2, 3, 4, 5})
+c.Shuffle()
+collection.Dump(c.Items())
+```
+
+Example: strings – chaining
+
+```go
+out := collection.New([]string{"a", "b", "c"}).
+	Shuffle().
+	Append("d").
+	Items()
+
+collection.Dump(out)
+```
+
+Example: structs
+
+```go
+type User struct {
+	ID int
+}
+
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+	{ID: 4},
+})
+
+users.Shuffle()
+collection.Dump(users.Items())
 ```
 
 

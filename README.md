@@ -140,7 +140,7 @@ go get github.com/goforj/collection
 | **Ordering** | [After](#after) [Before](#before) [Reverse](#reverse) [Shuffle](#shuffle) [Sort](#sort) |
 | **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
 | **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
-| **Set Operations** | [Unique](#unique) [UniqueBy](#uniqueby) |
+| **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) |
 | **Slicing** | [Chunk](#chunk) [Filter](#filter) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) |
 | **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) |
 
@@ -1966,6 +1966,281 @@ fmt.Println(out1)
 ```
 
 ## Set Operations
+
+### <a id="difference"></a>Difference · immutable
+
+Difference returns a new collection containing elements from the first collection
+that are not present in the second. Order follows the first collection, and
+duplicates are removed.
+
+_Example: integers_
+
+```go
+a := collection.New([]int{1, 2, 2, 3, 4})
+b := collection.New([]int{2, 4})
+
+out := collection.Difference(a, b)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+left := collection.New([]string{"apple", "banana", "cherry"})
+right := collection.New([]string{"banana"})
+
+out2 := collection.Difference(left, right)
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "apple" #string
+//   1 => "cherry" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+groupA := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
+
+groupB := collection.New([]User{
+	{ID: 2, Name: "Bob"},
+})
+
+out3 := collection.Difference(groupA, groupB)
+collection.Dump(out3.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
+//   }
+// ]
+```
+
+### <a id="intersect"></a>Intersect · immutable
+
+Intersect returns a new collection containing elements present in both collections.
+Order follows the first collection, and duplicates are removed.
+
+_Example: integers_
+
+```go
+a := collection.New([]int{1, 2, 2, 3, 4})
+b := collection.New([]int{2, 4, 4, 5})
+
+out := collection.Intersect(a, b)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+left := collection.New([]string{"apple", "banana", "cherry"})
+right := collection.New([]string{"banana", "date", "cherry", "banana"})
+
+out2 := collection.Intersect(left, right)
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "banana" #string
+//   1 => "cherry" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+groupA := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
+
+groupB := collection.New([]User{
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+	{ID: 4, Name: "Dave"},
+})
+
+out3 := collection.Intersect(groupA, groupB)
+collection.Dump(out3.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
+//   }
+// ]
+```
+
+### <a id="symmetricdifference"></a>SymmetricDifference · immutable
+
+SymmetricDifference returns a new collection containing elements that appear
+in exactly one of the two collections. Order follows the first collection for
+its unique items, then the second for its unique items. Duplicates are removed.
+
+_Example: integers_
+
+```go
+a := collection.New([]int{1, 2, 3, 3})
+b := collection.New([]int{3, 4, 4, 5})
+
+out := collection.SymmetricDifference(a, b)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 4 #int
+//   3 => 5 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+left := collection.New([]string{"apple", "banana"})
+right := collection.New([]string{"banana", "date"})
+
+out2 := collection.SymmetricDifference(left, right)
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "apple" #string
+//   1 => "date" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+groupA := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+groupB := collection.New([]User{
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
+
+out3 := collection.SymmetricDifference(groupA, groupB)
+collection.Dump(out3.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
+//   }
+// ]
+```
+
+### <a id="union"></a>Union · immutable
+
+Union returns a new collection containing the unique elements from both collections.
+Items from the first collection are kept in order, followed by items from the second
+that were not already present.
+
+_Example: integers_
+
+```go
+a := collection.New([]int{1, 2, 2, 3})
+b := collection.New([]int{3, 4, 4, 5})
+
+out := collection.Union(a, b)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+left := collection.New([]string{"apple", "banana"})
+right := collection.New([]string{"banana", "date"})
+
+out2 := collection.Union(left, right)
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "apple" #string
+//   1 => "banana" #string
+//   2 => "date" #string
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+groupA := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+groupB := collection.New([]User{
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
+
+out3 := collection.Union(groupA, groupB)
+collection.Dump(out3.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+//   2 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
+//   }
+// ]
+```
 
 ### <a id="unique"></a>Unique · immutable
 

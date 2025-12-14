@@ -66,6 +66,7 @@ import "github.com/goforj/collection"
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L80" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L63" target="_blank">Source</a> |
 | [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L14" target="_blank">Source</a> |
+| [All](<#Collection[T].All>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/all.go#L33" target="_blank">Source</a> |
 | [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L10" target="_blank">Source</a> |
 | [Append](<#Collection[T].Append>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L50" target="_blank">Source</a> |
 | [Before](<#Collection[T].Before>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/before.go#L49" target="_blank">Source</a> |
@@ -540,6 +541,50 @@ c.After(func(v int) bool { return v == 3 }).Dump()
 //  0 => 4 #int
 //  1 => 5 #int
 // ]
+```
+
+
+
+<a name="Collection[T].All"></a>
+### All
+
+
+All returns true if fn returns true for every item in the collection. If the collection is empty, All returns true \(vacuously true\).
+
+Example: integers – all even
+
+```go
+c := collection.New([]int{2, 4, 6})
+allEven := c.All(func(v int) bool { return v%2 == 0 })
+collection.Dump(allEven)
+// true #bool
+```
+
+Example: integers – not all even
+
+```go
+c2 := collection.New([]int{2, 3, 4})
+allEven2 := c2.All(func(v int) bool { return v%2 == 0 })
+collection.Dump(allEven2)
+// false #bool
+```
+
+Example: strings – all non\-empty
+
+```go
+c3 := collection.New([]string{"a", "b", "c"})
+allNonEmpty := c3.All(func(s string) bool { return s != "" })
+collection.Dump(allNonEmpty)
+// true #bool
+```
+
+Example: empty collection \(vacuously true\)
+
+```go
+empty := collection.New([]int{})
+all := empty.All(func(v int) bool { return v > 0 })
+collection.Dump(all)
+// true #bool
 ```
 
 

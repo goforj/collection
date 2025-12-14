@@ -1,0 +1,53 @@
+//go:build ignore
+// +build ignore
+
+package main
+
+import "github.com/goforj/collection"
+
+func main() {
+	// Example: basic usage
+	m := map[string]int{
+		"a": 1,
+		"b": 2,
+		"c": 3,
+	}
+
+	c := collection.FromMap(m)
+	out := collection.ToMapKV(c)
+
+	collection.Dump(out)
+
+	// #map[string]int [
+	//   "a" => 1
+	//   "b" => 2
+	//   "c" => 3
+	// ]
+
+	// Example: filtering before conversion
+	type Config struct {
+		Enabled bool
+		Timeout int
+	}
+
+	configs := map[string]Config{
+		"router-1": {Enabled: true,  Timeout: 30},
+		"router-2": {Enabled: false, Timeout: 10},
+		"router-3": {Enabled: true,  Timeout: 45},
+	}
+
+	c2 := collection.
+		FromMap(configs).
+		Filter(func(p collection.Pair[string, Config]) bool {
+			return p.Value.Enabled
+		})
+
+	out2 := collection.ToMapKV(c2)
+
+	collection.Dump(out2)
+
+	// #map[string]collection.Config [
+	//   "router-1" => {Enabled:true Timeout:30}
+	//   "router-3" => {Enabled:true Timeout:45}
+	// ]
+}

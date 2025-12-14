@@ -8,8 +8,17 @@ type Collection[T any] struct {
 // Number is a constraint that permits any numeric type.
 type Number interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
-		~float32 | ~float64
+	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
+	~float32 | ~float64
+}
+
+// Pair represents a key/value pair, typically originating from a map.
+//
+// Pair is used to explicitly materialize unordered map data into an
+// ordered collection workflow.
+type Pair[K comparable, V any] struct {
+	Key   K
+	Value V
 }
 
 // New creates a new Collection from the provided slice.

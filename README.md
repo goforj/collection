@@ -59,9 +59,12 @@ import "github.com/goforj/collection"
 | [CountBy](<#CountBy>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L56" target="_blank">Source</a> |
 | [CountByValue](<#CountByValue>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/count_by.go#L110" target="_blank">Source</a> |
 | [Dump](<#Dump>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/dump.go#L94" target="_blank">Source</a> |
+| [ToMap](<#ToMap>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/to_map.go#L41-L45" target="_blank">Source</a> |
+| [ToMapKV](<#ToMapKV>) |  | Function | <a href="https://github.com/goforj/collection/blob/main/to_map_kv.go#L55" target="_blank">Source</a> |
 | [type Collection](<#Collection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L4-L6" target="_blank">Source</a> |
+| [FromMap](<#FromMap>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/from_map.go#L70" target="_blank">Source</a> |
 | [MapTo](<#MapTo>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L58" target="_blank">Source</a> |
-| [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L24" target="_blank">Source</a> |
+| [New](<#New>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L33" target="_blank">Source</a> |
 | [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L122" target="_blank">Source</a> |
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L80" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L63" target="_blank">Source</a> |
@@ -86,7 +89,7 @@ import "github.com/goforj/collection"
 | [FirstWhere](<#Collection[T].FirstWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/first_where.go#L26" target="_blank">Source</a> |
 | [IndexWhere](<#Collection[T].IndexWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/index_where.go#L42" target="_blank">Source</a> |
 | [IsEmpty](<#Collection[T].IsEmpty>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/is_empty.go#L43" target="_blank">Source</a> |
-| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L88" target="_blank">Source</a> |
+| [Items](<#Collection[T].Items>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/collection.go#L97" target="_blank">Source</a> |
 | [Last](<#Collection[T].Last>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last.go#L53" target="_blank">Source</a> |
 | [LastWhere](<#Collection[T].LastWhere>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/last_where.go#L81" target="_blank">Source</a> |
 | [Map](<#Collection[T].Map>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/map.go#L65" target="_blank">Source</a> |
@@ -113,14 +116,15 @@ import "github.com/goforj/collection"
 | [Transform](<#Collection[T].Transform>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/transform.go#L52" target="_blank">Source</a> |
 | [Unique](<#Collection[T].Unique>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/unique.go#L56" target="_blank">Source</a> |
 | [type Number](<#Number>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L9-L13" target="_blank">Source</a> |
-| [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L29-L31" target="_blank">Source</a> |
-| [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L35" target="_blank">Source</a> |
+| [type NumericCollection](<#NumericCollection>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L38-L40" target="_blank">Source</a> |
+| [NewNumeric](<#NewNumeric>) | type NumericCollection | Type Function | <a href="https://github.com/goforj/collection/blob/main/collection.go#L44" target="_blank">Source</a> |
 | [Avg](<#NumericCollection[T].Avg>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/avg.go#L17" target="_blank">Source</a> |
 | [Max](<#NumericCollection[T].Max>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/max.go#L32" target="_blank">Source</a> |
 | [Median](<#NumericCollection[T].Median>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/median.go#L46" target="_blank">Source</a> |
 | [Min](<#NumericCollection[T].Min>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/min.go#L29" target="_blank">Source</a> |
 | [Mode](<#NumericCollection[T].Mode>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/mode.go#L41" target="_blank">Source</a> |
 | [Sum](<#NumericCollection[T].Sum>) | type NumericCollection | Method | <a href="https://github.com/goforj/collection/blob/main/sum.go#L26" target="_blank">Source</a> |
+| [type Pair](<#Pair>) |  | Type | <a href="https://github.com/goforj/collection/blob/main/collection.go#L19-L22" target="_blank">Source</a> |
 
 
 <a name="CountBy"></a>
@@ -265,8 +269,198 @@ collection.Dump(c2.Items())
 
 
 
+<a name="ToMap"></a>
+## ToMap
 
 
+ToMap reduces a collection into a map using the provided key and value selector functions.
+
+If multiple items produce the same key, the last value wins.
+
+This operation allocates a map sized to the collection length.
+
+Example: basic usage
+
+```go
+users := []string{"alice", "bob", "carol"}
+
+out := collection.ToMap(
+	collection.New(users),
+	func(name string) string { return name },
+	func(name string) int { return len(name) },
+)
+
+collection.Dump(out)
+```
+
+Example: re\-keying structs
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users2 := []User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+}
+
+byID := collection.ToMap(
+	collection.New(users2),
+	func(u User) int { return u.ID },
+	func(u User) User { return u },
+)
+
+collection.Dump(byID)
+```
+
+
+
+<a name="ToMapKV"></a>
+## ToMapKV
+
+
+ToMapKV converts a collection of key/value pairs into a map.
+
+If multiple pairs contain the same key, the last value wins.
+
+This operation allocates a map sized to the collection length.
+
+Example: basic usage
+
+```go
+m := map[string]int{
+	"a": 1,
+	"b": 2,
+	"c": 3,
+}
+
+c := collection.FromMap(m)
+out := collection.ToMapKV(c)
+
+collection.Dump(out)
+
+// #map[string]int [
+//   "a" => 1
+//   "b" => 2
+//   "c" => 3
+// ]
+```
+
+Example: filtering before conversion
+
+```go
+type Config struct {
+	Enabled bool
+	Timeout int
+}
+
+configs := map[string]Config{
+	"router-1": {Enabled: true,  Timeout: 30},
+	"router-2": {Enabled: false, Timeout: 10},
+	"router-3": {Enabled: true,  Timeout: 45},
+}
+
+c2 := collection.
+	FromMap(configs).
+	Filter(func(p collection.Pair[string, Config]) bool {
+		return p.Value.Enabled
+	})
+
+out2 := collection.ToMapKV(c2)
+
+collection.Dump(out2)
+
+// #map[string]collection.Config [
+//   "router-1" => {Enabled:true Timeout:30}
+//   "router-3" => {Enabled:true Timeout:45}
+// ]
+```
+
+
+
+
+
+
+
+
+<a name="FromMap"></a>
+### FromMap
+
+
+FromMap materializes a map into a collection of key/value pairs.
+
+The iteration order of the resulting collection is unspecified, matching Go's map iteration semantics.
+
+This function does not mutate the input map.
+
+Example: basic usage
+
+```go
+m := map[string]int{
+	"a": 1,
+	"b": 2,
+	"c": 3,
+}
+
+c := collection.FromMap(m)
+collection.Dump(c.Items())
+
+// #[]collection.Pair[string,int] [
+//   0 => {Key:"a" Value:1}
+//   1 => {Key:"b" Value:2}
+//   2 => {Key:"c" Value:3}
+// ]
+```
+
+Example: filtering map entries
+
+```go
+type Config struct {
+	Enabled bool
+	Timeout int
+}
+
+configs := map[string]Config{
+	"router-1": {Enabled: true,  Timeout: 30},
+	"router-2": {Enabled: false, Timeout: 10},
+	"router-3": {Enabled: true,  Timeout: 45},
+}
+
+out := collection.
+	FromMap(configs).
+	Filter(func(p collection.Pair[string, Config]) bool {
+		return p.Value.Enabled
+	}).
+	Items()
+
+collection.Dump(out)
+
+// #[]collection.Pair[string,collection.Config] [
+//   0 => {Key:"router-1" Value:{Enabled:true Timeout:30}}
+//   1 => {Key:"router-3" Value:{Enabled:true Timeout:45}}
+// ]
+```
+
+Example: map → collection → map
+
+```go
+users := map[string]int{
+	"alice": 1,
+	"bob":   2,
+}
+
+c2 := collection.FromMap(users)
+out2 := collection.ToMapKV(c2)
+
+collection.Dump(out2)
+
+// #map[string]int [
+//   "alice" => 1
+//   "bob"   => 2
+// ]
+```
 
 
 
@@ -3387,6 +3581,14 @@ total3 := c3.Sum()
 collection.Dump(total3)
 // 0 #int
 ```
+
+
+
+
+
+
+
+
 
 
 

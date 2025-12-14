@@ -6,7 +6,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/goforj/godump"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -32,7 +31,6 @@ func run() error {
 	}
 
 	examplesDir := filepath.Join(root, "examples")
-	//_ = os.RemoveAll(examplesDir)
 	if err := os.MkdirAll(examplesDir, 0o755); err != nil {
 		return err
 	}
@@ -54,6 +52,7 @@ func run() error {
 		if strings.Contains(filename, "_test.go") {
 			continue
 		}
+
 		for name, fd := range extractFuncDocs(fset, filename, file) {
 			if existing, ok := funcs[name]; ok {
 				existing.Examples = append(existing.Examples, fd.Examples...)
@@ -67,11 +66,13 @@ func run() error {
 		sort.Slice(fd.Examples, func(i, j int) bool {
 			return fd.Examples[i].Line < fd.Examples[j].Line
 		})
+
 		if err := writeMain(examplesDir, fd); err != nil {
 			return err
 		}
 
-		godump.Dump(fd)
+		// Debug / inspection hook (optional)
+		//godump.Dump(fd)
 	}
 
 	return nil
@@ -99,6 +100,7 @@ func fileExists(p string) bool { _, err := os.Stat(p); return err == nil }
 
 type FuncDoc struct {
 	Name        string
+	Group       string
 	Description string
 	Examples    []Example
 }
@@ -118,6 +120,7 @@ type Example struct {
 //
 
 var exampleHeader = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
+var groupHeader = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
 
 type docLine struct {
 	text string
@@ -142,6 +145,7 @@ func extractFuncDocs(
 
 		out[name] = &FuncDoc{
 			Name:        name,
+			Group:       extractGroup(fn.Doc),
 			Description: extractFuncDescription(fn.Doc),
 			Examples:    extractBlocks(fset, filename, name, fn),
 		}
@@ -150,18 +154,35 @@ func extractFuncDocs(
 	return out
 }
 
+func extractGroup(group *ast.CommentGroup) string {
+	lines := docLines(group)
+
+	for _, dl := range lines {
+		trimmed := strings.TrimSpace(dl.text)
+		if m := groupHeader.FindStringSubmatch(trimmed); m != nil {
+			return strings.TrimSpace(m[1])
+		}
+	}
+
+	return "Other"
+}
+
 func extractFuncDescription(group *ast.CommentGroup) string {
 	lines := docLines(group)
 	var desc []string
 
 	for _, dl := range lines {
 		trimmed := strings.TrimSpace(dl.text)
-		if exampleHeader.MatchString(trimmed) {
+
+		// Stop before Example or @group
+		if exampleHeader.MatchString(trimmed) || groupHeader.MatchString(trimmed) {
 			break
 		}
+
 		if len(desc) == 0 && trimmed == "" {
 			continue
 		}
+
 		desc = append(desc, dl.text)
 	}
 
@@ -214,6 +235,7 @@ func extractBlocks(
 		if len(collected) == 0 {
 			return
 		}
+
 		out = append(out, Example{
 			FuncName: funcName,
 			File:     filename,
@@ -221,6 +243,7 @@ func extractBlocks(
 			Line:     startLine,
 			Code:     strings.Join(collected, "\n"),
 		})
+
 		collected = nil
 		label = ""
 		inExample = false
@@ -256,6 +279,10 @@ func extractBlocks(
 //
 
 func writeMain(base string, fd *FuncDoc) error {
+	if len(fd.Examples) == 0 {
+		return nil
+	}
+
 	dir := filepath.Join(base, strings.ToLower(fd.Name))
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return err
@@ -299,6 +326,7 @@ func writeMain(base string, fd *FuncDoc) error {
 
 	buf.WriteString("func main() {\n")
 
+	// Description
 	if fd.Description != "" {
 		for _, line := range strings.Split(fd.Description, "\n") {
 			buf.WriteString("\t// " + line + "\n")
@@ -306,10 +334,7 @@ func writeMain(base string, fd *FuncDoc) error {
 		buf.WriteString("\n")
 	}
 
-	if len(fd.Examples) == 0 {
-		return nil
-	}
-
+	// Examples
 	for _, ex := range fd.Examples {
 		if ex.Label != "" {
 			buf.WriteString("\t// Example: " + ex.Label + "\n")

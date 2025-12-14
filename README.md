@@ -139,7 +139,7 @@ go get github.com/goforj/collection
 |------:|-----------|
 | **Access** | [Items](#items) |
 | **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [Median](#median) [Min](#min) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
-| **Construction** | [New](#new) [NewNumeric](#newnumeric) |
+| **Construction** | [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
 | **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
 | **Grouping** | [GroupBy](#groupby) |
 | **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
@@ -615,11 +615,81 @@ collection.Dump(total3)
 
 ## Construction
 
+### <a id="clone"></a>Clone · allocates
+
+Clone returns a shallow copy of the collection.
+
+The returned collection has its own backing slice, so subsequent mutations
+do not affect the original collection.
+
+Clone is intended to be used when branching a pipeline while preserving
+the original collection.
+
+_Example: basic cloning_
+
+```go
+c := collection.New([]int{1, 2, 3})
+clone := c.Clone()
+
+clone.Push(4)
+
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+
+collection.Dump(clone.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+// ]
+```
+
+_Example: branching pipelines_
+
+```go
+base := collection.New([]int{1, 2, 3, 4, 5})
+
+evens := base.Clone().Filter(func(v int) bool {
+	return v%2 == 0
+})
+
+odds := base.Clone().Filter(func(v int) bool {
+	return v%2 != 0
+})
+
+collection.Dump(base.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
+
+collection.Dump(evens.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+
+collection.Dump(odds.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+//   2 => 5 #int
+// ]
+```
+
 ### <a id="new"></a>New · immutable
 
 New creates a new Collection from the provided slice.
 
-### <a id="newnumeric"></a>NewNumeric · readonly
+### <a id="newnumeric"></a>NewNumeric · immutable
 
 NewNumeric wraps a slice of numeric types in a NumericCollection.
 A shallow copy is made so that further operations don't mutate the original slice.
@@ -644,7 +714,7 @@ c.Dd()
 // Process finished with the exit code 1
 ```
 
-### <a id="dump"></a>Dump · immutable
+### <a id="dump"></a>Dump · readonly
 
 Dump prints items with godump and returns the same collection.
 This is a no-op on the collection itself and never panics.
@@ -2549,7 +2619,7 @@ collection.Dump(out3.Items())
 
 ## Transformation
 
-### <a id="append"></a>Append · mutable
+### <a id="append"></a>Append · immutable
 
 Append returns a new collection with the given values appended.
 
@@ -3176,7 +3246,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="push"></a>Push · mutable
+### <a id="push"></a>Push · immutable
 
 Push returns a new collection with the given values appended.
 

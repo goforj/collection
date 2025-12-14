@@ -65,6 +65,7 @@ import "github.com/goforj/collection"
 | [Pluck](<#Pluck>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/pluck.go#L122" target="_blank">Source</a> |
 | [TakeUntil](<#TakeUntil>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L80" target="_blank">Source</a> |
 | [Times](<#Times>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/times.go#L63" target="_blank">Source</a> |
+| [UniqueBy](<#UniqueBy>) | type Collection | Type Function | <a href="https://github.com/goforj/collection/blob/main/unique_by.go#L54" target="_blank">Source</a> |
 | [After](<#Collection[T].After>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/after.go#L14" target="_blank">Source</a> |
 | [All](<#Collection[T].All>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/all.go#L33" target="_blank">Source</a> |
 | [Any](<#Collection[T].Any>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/any.go#L10" target="_blank">Source</a> |
@@ -520,6 +521,68 @@ collection.Dump(cTimes3.Items())
 //		+X => 4 #int
 //		+Y => 16 #int
 //	}
+// ]
+```
+
+
+
+<a name="UniqueBy"></a>
+### UniqueBy
+
+
+UniqueBy returns a new collection containing only the first occurrence of each element as determined by keyFn.
+
+The key returned by keyFn must be comparable. Order is preserved.
+
+Example: structs – unique by ID
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 1, Name: "Alice Duplicate"},
+})
+
+out := collection.UniqueBy(users, func(u User) int { return u.ID })
+collection.Dump(out.Items())
+// #[]collection.User [
+//   0 => {ID:1 Name:"Alice"} #collection.User
+//   1 => {ID:2 Name:"Bob"}   #collection.User
+// ]
+```
+
+Example: strings – case\-insensitive uniqueness
+
+```go
+values := collection.New([]string{"A", "a", "B", "b", "A"})
+
+out2 := collection.UniqueBy(values, func(s string) string {
+	return strings.ToLower(s)
+})
+
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "A" #string
+//   1 => "B" #string
+// ]
+```
+
+Example: integers – identity key
+
+```go
+nums := collection.New([]int{3, 1, 2, 1, 3})
+
+out3 := collection.UniqueBy(nums, func(v int) int { return v })
+collection.Dump(out3.Items())
+// #[]int [
+//   0 => 3 #int
+//   1 => 1 #int
+//   2 => 2 #int
 // ]
 ```
 

@@ -65,6 +65,7 @@ func run() error {
 type FuncDoc struct {
 	Name        string
 	Group       string
+	Behavior    string
 	Description string
 	Examples    []Example
 }
@@ -82,8 +83,9 @@ type Example struct {
 //
 
 var (
-	groupHeader   = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
-	exampleHeader = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
+	groupHeader    = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
+	behaviorHeader = regexp.MustCompile(`(?i)^\s*@behavior\s+(.+)$`)
+	exampleHeader  = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
 )
 
 func parseFuncs(root string) ([]*FuncDoc, error) {
@@ -122,6 +124,7 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 			fd := &FuncDoc{
 				Name:        fn.Name.Name,
 				Group:       extractGroup(fn.Doc),
+				Behavior:    extractBehavior(fn.Doc),
 				Description: extractDescription(fn.Doc),
 				Examples:    extractExamples(fset, fn),
 			}
@@ -155,13 +158,25 @@ func extractGroup(group *ast.CommentGroup) string {
 	return "Other"
 }
 
+func extractBehavior(group *ast.CommentGroup) string {
+	for _, c := range group.List {
+		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
+		if m := behaviorHeader.FindStringSubmatch(line); m != nil {
+			return strings.ToLower(strings.TrimSpace(m[1]))
+		}
+	}
+	return ""
+}
+
 func extractDescription(group *ast.CommentGroup) string {
 	var lines []string
 
 	for _, c := range group.List {
 		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
 
-		if exampleHeader.MatchString(line) || groupHeader.MatchString(line) {
+		if exampleHeader.MatchString(line) ||
+			groupHeader.MatchString(line) ||
+			behaviorHeader.MatchString(line) {
 			break
 		}
 
@@ -187,13 +202,12 @@ func extractExamples(fset *token.FileSet, fn *ast.FuncDecl) []Example {
 			return
 		}
 
-		normalized := normalizeIndent(current)
-
 		out = append(out, Example{
 			Label: label,
-			Code:  strings.Join(normalized, "\n"),
+			Code:  strings.Join(normalizeIndent(current), "\n"),
 			Line:  start,
 		})
+
 		current = nil
 		label = ""
 		inExample = false
@@ -255,8 +269,7 @@ func renderAPI(funcs []*FuncDoc) string {
 
 		var links []string
 		for _, fn := range byGroup[group] {
-			anchor := strings.ToLower(fn.Name)
-			links = append(links, fmt.Sprintf("[%s](#%s)", fn.Name, anchor))
+			links = append(links, fmt.Sprintf("[%s](#%s)", fn.Name, strings.ToLower(fn.Name)))
 		}
 
 		buf.WriteString(fmt.Sprintf("| **%s** | %s |\n",
@@ -272,7 +285,12 @@ func renderAPI(funcs []*FuncDoc) string {
 		buf.WriteString("## " + group + "\n\n")
 
 		for _, fn := range byGroup[group] {
-			buf.WriteString(fmt.Sprintf("### %s\n", fn.Name))
+			header := fn.Name
+			if fn.Behavior != "" {
+				header += " · " + fn.Behavior
+			}
+
+			buf.WriteString(fmt.Sprintf("### %s\n\n", header))
 
 			if fn.Description != "" {
 				buf.WriteString(fn.Description + "\n\n")
@@ -341,29 +359,28 @@ func fileExists(p string) bool {
 }
 
 func normalizeIndent(lines []string) []string {
-	minIndent := -1
+	min := -1
 
-	for _, line := range lines {
-		if strings.TrimSpace(line) == "" {
+	for _, l := range lines {
+		if strings.TrimSpace(l) == "" {
 			continue
 		}
-
-		indent := len(line) - len(strings.TrimLeft(line, " \t"))
-		if minIndent == -1 || indent < minIndent {
-			minIndent = indent
+		n := len(l) - len(strings.TrimLeft(l, " \t"))
+		if min == -1 || n < min {
+			min = n
 		}
 	}
 
-	if minIndent <= 0 {
+	if min <= 0 {
 		return lines
 	}
 
 	out := make([]string, len(lines))
-	for i, line := range lines {
-		if len(line) >= minIndent {
-			out[i] = line[minIndent:]
+	for i, l := range lines {
+		if len(l) >= min {
+			out[i] = l[min:]
 		} else {
-			out[i] = strings.TrimLeft(line, " \t")
+			out[i] = strings.TrimLeft(l, " \t")
 		}
 	}
 

@@ -256,16 +256,16 @@ func renderAPI(funcs []*FuncDoc) string {
 		var links []string
 		for _, fn := range byGroup[group] {
 			anchor := strings.ToLower(fn.Name)
-			links = append(links, fmt.Sprintf("[`%s`](#%s)", fn.Name, anchor))
+			links = append(links, fmt.Sprintf("[%s](#%s)", fn.Name, anchor))
 		}
 
-		buf.WriteString(fmt.Sprintf("| %s | %s |\n",
+		buf.WriteString(fmt.Sprintf("| *%s* | %s |\n",
 			group,
-			strings.Join(links, ", "),
+			strings.Join(links, " "),
 		))
 	}
 
-	buf.WriteString("\n---\n\n")
+	buf.WriteString("\n\n")
 
 	// ---------------- Details ----------------
 	for _, group := range groupNames {

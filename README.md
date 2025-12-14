@@ -1017,7 +1017,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="reverse"></a>Reverse · immutable
+### <a id="reverse"></a>Reverse · mutable
 
 Reverse reverses the order of items in the collection in place
 and returns the same collection for chaining.

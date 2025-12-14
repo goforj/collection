@@ -36,6 +36,33 @@
 - 🧰 **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`, `DdStr()`)
 - 🧱 **Works with any Go type**, including structs, pointers, and deeply nested composites
 
+## Design Principles
+
+- **Type-safe**: no reflection, no `any` leaks
+- **Explicit semantics**: order, mutation, and allocation are documented
+- **Go-native**: respects generics and stdlib patterns
+- **Eager evaluation**: no lazy pipelines or hidden concurrency
+- **Maps are boundaries**: unordered data is handled explicitly
+
+## What this library is not
+
+- Not a lazy or streaming library
+- Not concurrency-aware
+- Not immutable-by-default
+- Not a replacement for idiomatic loops in simple cases
+
+## Working with maps
+
+Maps are unordered in Go. This library does not pretend otherwise.
+
+Instead, map interaction is explicit and intentional:
+
+- `FromMap` materializes key/value pairs into an ordered workflow
+- `ToMap` reduces collections back into maps explicitly
+- `ToMapKV` provides a convenience for `Pair[K,V]`
+
+This makes transitions between unordered and ordered data visible and honest.
+
 # 📦 Installation
 
 ```bash

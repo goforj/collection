@@ -1,6 +1,0 @@
-{{- anchor .Anchor -}}
-{{- template "doc" .Doc -}}
-{{- spacer -}}
-
-{{- codeBlock "go" .Decl -}}
-

@@ -186,9 +186,12 @@ func extractExamples(fset *token.FileSet, fn *ast.FuncDecl) []Example {
 		if len(current) == 0 {
 			return
 		}
+
+		normalized := normalizeIndent(current)
+
 		out = append(out, Example{
 			Label: label,
-			Code:  strings.Join(current, "\n"),
+			Code:  strings.Join(normalized, "\n"),
 			Line:  start,
 		})
 		current = nil
@@ -329,4 +332,34 @@ func findRoot() (string, error) {
 func fileExists(p string) bool {
 	_, err := os.Stat(p)
 	return err == nil
+}
+
+func normalizeIndent(lines []string) []string {
+	minIndent := -1
+
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+
+		indent := len(line) - len(strings.TrimLeft(line, " \t"))
+		if minIndent == -1 || indent < minIndent {
+			minIndent = indent
+		}
+	}
+
+	if minIndent <= 0 {
+		return lines
+	}
+
+	out := make([]string, len(lines))
+	for i, line := range lines {
+		if len(line) >= minIndent {
+			out[i] = line[minIndent:]
+		} else {
+			out[i] = strings.TrimLeft(line, " \t")
+		}
+	}
+
+	return out
 }

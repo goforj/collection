@@ -172,16 +172,16 @@ _Example: integers_
 
 ```go
 c := collection.NewNumeric([]int{2, 4, 6})
-	collection.Dump(c.Avg())
-	// 4.000000 #float64
+collection.Dump(c.Avg())
+// 4.000000 #float64
 ```
 
 _Example: float_
 
 ```go
 c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
-	collection.Dump(c2.Avg())
-	// 2.333333 #float64
+collection.Dump(c2.Avg())
+// 2.333333 #float64
 ```
 
 #### `Count`
@@ -191,8 +191,8 @@ _Example: integers_
 
 ```go
 count := collection.New([]int{1, 2, 3, 4}).Count()
-	collection.Dump(count)
-	// 4 #int
+collection.Dump(count)
+// 4 #int
 ```
 
 #### `CountBy`
@@ -203,57 +203,57 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 2, 3, 3, 3})
-	counts := collection.CountBy(c, func(v int) int {
-		return v
-	})
-	collection.Dump(counts)
-	// map[int]int {
-	//   1: 1 #int
-	//   2: 2 #int
-	//   3: 3 #int
-	// }
+counts := collection.CountBy(c, func(v int) int {
+	return v
+})
+collection.Dump(counts)
+// map[int]int {
+//   1: 1 #int
+//   2: 2 #int
+//   3: 3 #int
+// }
 ```
 
 _Example: strings_
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "apple", "cherry", "banana"})
-	counts2 := collection.CountBy(c2, func(v string) string {
-		return v
-	})
-	collection.Dump(counts2)
-	// map[string]int {
-	//   "apple":  2 #int
-	//   "banana": 2 #int
-	//   "cherry": 1 #int
-	// }
+counts2 := collection.CountBy(c2, func(v string) string {
+	return v
+})
+collection.Dump(counts2)
+// map[string]int {
+//   "apple":  2 #int
+//   "banana": 2 #int
+//   "cherry": 1 #int
+// }
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		Name string
-		Role string
-	}
+	Name string
+	Role string
+}
 
-	users := collection.New([]User{
-		{Name: "Alice", Role: "admin"},
-		{Name: "Bob", Role: "user"},
-		{Name: "Carol", Role: "admin"},
-		{Name: "Dave", Role: "user"},
-		{Name: "Eve", Role: "admin"},
-	})
+users := collection.New([]User{
+	{Name: "Alice", Role: "admin"},
+	{Name: "Bob", Role: "user"},
+	{Name: "Carol", Role: "admin"},
+	{Name: "Dave", Role: "user"},
+	{Name: "Eve", Role: "admin"},
+})
 
-	roleCounts := collection.CountBy(users, func(u User) string {
-		return u.Role
-	})
+roleCounts := collection.CountBy(users, func(u User) string {
+	return u.Role
+})
 
-	collection.Dump(roleCounts)
-	// map[string]int {
-	//   "admin": 3 #int
-	//   "user":  2 #int
-	// }
+collection.Dump(roleCounts)
+// map[string]int {
+//   "admin": 3 #int
+//   "user":  2 #int
+// }
 ```
 
 #### `CountByValue`
@@ -264,47 +264,47 @@ _Example: strings_
 
 ```go
 c1 := collection.New([]string{"a", "b", "a"})
-	counts1 := collection.CountByValue(c1)
-	collection.Dump(counts1)
-	// #map[string]int [
-	//	"a" => 2 #int
-	//	"b" => 1 #int
-	// ]
+counts1 := collection.CountByValue(c1)
+collection.Dump(counts1)
+// #map[string]int [
+//	"a" => 2 #int
+//	"b" => 1 #int
+// ]
 ```
 
 _Example: integers_
 
 ```go
 c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
-	counts2 := collection.CountByValue(c2)
-	collection.Dump(counts2)
-	// #map[int]int [
-	//	1 => 1 #int
-	//	2 => 2 #int
-	//	3 => 3 #int
-	// ]
+counts2 := collection.CountByValue(c2)
+collection.Dump(counts2)
+// #map[int]int [
+//	1 => 1 #int
+//	2 => 2 #int
+//	3 => 3 #int
+// ]
 ```
 
 _Example: structs (comparable)_
 
 ```go
 type Point struct {
-		X int
-		Y int
-	}
+	X int
+	Y int
+}
 
-	c3 := collection.New([]Point{
-		{X: 1, Y: 1},
-		{X: 2, Y: 2},
-		{X: 1, Y: 1},
-	})
+c3 := collection.New([]Point{
+	{X: 1, Y: 1},
+	{X: 2, Y: 2},
+	{X: 1, Y: 1},
+})
 
-	counts3 := collection.CountByValue(c3)
-	collection.Dump(counts3)
-	// #map[collection.Point]int [
-	//	{X:1 Y:1} => 2 #int
-	//	{X:2 Y:2} => 1 #int
-	// ]
+counts3 := collection.CountByValue(c3)
+collection.Dump(counts3)
+// #map[collection.Point]int [
+//	{X:1 Y:1} => 2 #int
+//	{X:2 Y:2} => 1 #int
+// ]
 ```
 
 #### `Max`
@@ -316,10 +316,10 @@ _Example: integers_
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
 
-	max1, ok1 := c.Max()
-	collection.Dump(max1, ok1)
-	// 3    #int
-	// true #bool
+max1, ok1 := c.Max()
+collection.Dump(max1, ok1)
+// 3    #int
+// true #bool
 ```
 
 _Example: floats_
@@ -327,10 +327,10 @@ _Example: floats_
 ```go
 c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
 
-	max2, ok2 := c2.Max()
-	collection.Dump(max2, ok2)
-	// 9.200000 #float64
-	// true     #bool
+max2, ok2 := c2.Max()
+collection.Dump(max2, ok2)
+// 9.200000 #float64
+// true     #bool
 ```
 
 _Example: empty numeric collection_
@@ -338,10 +338,10 @@ _Example: empty numeric collection_
 ```go
 c3 := collection.NewNumeric([]int{})
 
-	max3, ok3 := c3.Max()
-	collection.Dump(max3, ok3)
-	// 0     #int
-	// false #bool
+max3, ok3 := c3.Max()
+collection.Dump(max3, ok3)
+// 0     #int
+// false #bool
 ```
 
 #### `Median`
@@ -353,10 +353,10 @@ _Example: integers - odd number of items_
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
 
-	median1, ok1 := c.Median()
-	collection.Dump(median1, ok1)
-	// 2.000000 #float64
-	// true     #bool
+median1, ok1 := c.Median()
+collection.Dump(median1, ok1)
+// 2.000000 #float64
+// true     #bool
 ```
 
 _Example: integers - even number of items_
@@ -364,10 +364,10 @@ _Example: integers - even number of items_
 ```go
 c2 := collection.NewNumeric([]int{10, 2, 4, 6})
 
-	median2, ok2 := c2.Median()
-	collection.Dump(median2, ok2)
-	// 5.000000 #float64
-	// true     #bool
+median2, ok2 := c2.Median()
+collection.Dump(median2, ok2)
+// 5.000000 #float64
+// true     #bool
 ```
 
 _Example: floats_
@@ -375,10 +375,10 @@ _Example: floats_
 ```go
 c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
 
-	median3, ok3 := c3.Median()
-	collection.Dump(median3, ok3)
-	// 3.300000 #float64
-	// true     #bool
+median3, ok3 := c3.Median()
+collection.Dump(median3, ok3)
+// 3.300000 #float64
+// true     #bool
 ```
 
 _Example: integers - empty numeric collection_
@@ -386,10 +386,10 @@ _Example: integers - empty numeric collection_
 ```go
 c4 := collection.NewNumeric([]int{})
 
-	median4, ok4 := c4.Median()
-	collection.Dump(median4, ok4)
-	// 0.000000 #float64
-	// false    #bool
+median4, ok4 := c4.Median()
+collection.Dump(median4, ok4)
+// 0.000000 #float64
+// false    #bool
 ```
 
 #### `Min`
@@ -400,30 +400,30 @@ _Example: integers_
 
 ```go
 c := collection.NewNumeric([]int{3, 1, 2})
-	min, ok := c.Min()
-	collection.Dump(min, ok)
-	// 1 #int
-	// true #bool
+min, ok := c.Min()
+collection.Dump(min, ok)
+// 1 #int
+// true #bool
 ```
 
 _Example: floats_
 
 ```go
 c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
-	min2, ok2 := c2.Min()
-	collection.Dump(min2, ok2)
-	// 1.200000 #float64
-	// true #bool
+min2, ok2 := c2.Min()
+collection.Dump(min2, ok2)
+// 1.200000 #float64
+// true #bool
 ```
 
 _Example: integers - empty collection_
 
 ```go
 empty := collection.NewNumeric([]int{})
-	min3, ok3 := empty.Min()
-	collection.Dump(min3, ok3)
-	// 0 #int
-	// false #bool
+min3, ok3 := empty.Min()
+collection.Dump(min3, ok3)
+// 0 #int
+// false #bool
 ```
 
 #### `Mode`
@@ -435,43 +435,43 @@ _Example: integers – single mode_
 
 ```go
 c := collection.NewNumeric([]int{1, 2, 2, 3})
-	mode := c.Mode()
-	collection.Dump(mode)
-	// #[]int [
-	//   0 => 2 #int
-	// ]
+mode := c.Mode()
+collection.Dump(mode)
+// #[]int [
+//   0 => 2 #int
+// ]
 ```
 
 _Example: integers – tie for mode_
 
 ```go
 c2 := collection.NewNumeric([]int{1, 2, 1, 2})
-	mode2 := c2.Mode()
-	collection.Dump(mode2)
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	// ]
+mode2 := c2.Mode()
+collection.Dump(mode2)
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+// ]
 ```
 
 _Example: floats_
 
 ```go
 c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
-	mode3 := c3.Mode()
-	collection.Dump(mode3)
-	// #[]float64 [
-	//   0 => 1.100000 #float64
-	// ]
+mode3 := c3.Mode()
+collection.Dump(mode3)
+// #[]float64 [
+//   0 => 1.100000 #float64
+// ]
 ```
 
 _Example: integers - empty collection_
 
 ```go
 empty := collection.NewNumeric([]int{})
-	mode4 := empty.Mode()
-	collection.Dump(mode4)
-	// <nil>
+mode4 := empty.Mode()
+collection.Dump(mode4)
+// <nil>
 ```
 
 #### `Reduce`
@@ -482,47 +482,47 @@ _Example: integers - sum_
 
 ```go
 sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {
-		return acc + n
-	})
-	collection.Dump(sum)
-	// 6 #int
+	return acc + n
+})
+collection.Dump(sum)
+// 6 #int
 ```
 
 _Example: strings_
 
 ```go
 joined := collection.New([]string{"a", "b", "c"}).Reduce("", func(acc, s string) string {
-		return acc + s
-	})
-	collection.Dump(joined)
-	// "abc" #string
+	return acc + s
+})
+collection.Dump(joined)
+// "abc" #string
 ```
 
 _Example: structs_
 
 ```go
 type Stats struct {
-		Count int
-		Sum   int
-	}
+	Count int
+	Sum   int
+}
 
-	stats := collection.New([]Stats{
-		{Count: 1, Sum: 10},
-		{Count: 1, Sum: 20},
-		{Count: 1, Sum: 30},
-	})
+stats := collection.New([]Stats{
+	{Count: 1, Sum: 10},
+	{Count: 1, Sum: 20},
+	{Count: 1, Sum: 30},
+})
 
-	total := stats.Reduce(Stats{}, func(acc, s Stats) Stats {
-		acc.Count += s.Count
-		acc.Sum += s.Sum
-		return acc
-	})
+total := stats.Reduce(Stats{}, func(acc, s Stats) Stats {
+	acc.Count += s.Count
+	acc.Sum += s.Sum
+	return acc
+})
 
-	collection.Dump(total)
-	// #main.Stats [
-	//   +Count => 3 #int
-	//   +Sum   => 60 #int
-	// ]
+collection.Dump(total)
+// #main.Stats [
+//   +Count => 3 #int
+//   +Sum   => 60 #int
+// ]
 ```
 
 #### `Sum`
@@ -533,27 +533,27 @@ _Example: integers_
 
 ```go
 c := collection.NewNumeric([]int{1, 2, 3})
-	total := c.Sum()
-	collection.Dump(total)
-	// 6 #int
+total := c.Sum()
+collection.Dump(total)
+// 6 #int
 ```
 
 _Example: floats_
 
 ```go
 c2 := collection.NewNumeric([]float64{1.5, 2.5})
-	total2 := c2.Sum()
-	collection.Dump(total2)
-	// 4.000000 #float64
+total2 := c2.Sum()
+collection.Dump(total2)
+// 4.000000 #float64
 ```
 
 _Example: integers - empty collection_
 
 ```go
 c3 := collection.NewNumeric([]int{})
-	total3 := c3.Sum()
-	collection.Dump(total3)
-	// 0 #int
+total3 := c3.Sum()
+collection.Dump(total3)
+// 0 #int
 ```
 
 ### Construction
@@ -565,52 +565,52 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3})
-	items := c.Items()
-	collection.Dump(items)
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	// ]
+items := c.Items()
+collection.Dump(items)
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
 ```
 
 _Example: strings_
 
 ```go
 c2 := collection.New([]string{"apple", "banana"})
-	items2 := c2.Items()
-	collection.Dump(items2)
-	// #[]string [
-	//   0 => "apple" #string
-	//   1 => "banana" #string
-	// ]
+items2 := c2.Items()
+collection.Dump(items2)
+// #[]string [
+//   0 => "apple" #string
+//   1 => "banana" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	out := users.Items()
-	collection.Dump(out)
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 1 #int
-	//     +Name => "Alice" #string
-	//   }
-	//   1 => #main.User {
-	//     +ID   => 2 #int
-	//     +Name => "Bob" #string
-	//   }
-	// ]
+out := users.Items()
+collection.Dump(out)
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+// ]
 ```
 
 #### `New`
@@ -631,12 +631,12 @@ _Example: strings_
 
 ```go
 c := collection.New([]string{"a", "b"})
-	c.Dd()
-	// #[]string [
-	//   0 => "a" #string
-	//   1 => "b" #string
-	// ]
-	// Process finished with the exit code 1
+c.Dd()
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+// ]
+// Process finished with the exit code 1
 ```
 
 #### `Dump`
@@ -647,36 +647,36 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3})
-	c.Dump()
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	// ]
+c.Dump()
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
 ```
 
 _Example: integers - chaining_
 
 ```go
 collection.New([]int{1, 2, 3}).
-		Filter(func(v int) bool { return v > 1 }).
-		Dump()
-	// #[]int [
-	//   0 => 2 #int
-	//   1 => 3 #int
-	// ]
+	Filter(func(v int) bool { return v > 1 }).
+	Dump()
+// #[]int [
+//   0 => 2 #int
+//   1 => 3 #int
+// ]
 ```
 
 _Example: integers_
 
 ```go
 c2 := collection.New([]int{1, 2, 3})
-	collection.Dump(c2.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	// ]
+collection.Dump(c2.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
 ```
 
 #### `DumpStr`
@@ -688,12 +688,12 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{10, 20})
-	s := c.DumpStr()
-	fmt.Println(s)
-	// #[]int [
-	//   0 => 10 #int
-	//   1 => 20 #int
-	// ]
+s := c.DumpStr()
+fmt.Println(s)
+// #[]int [
+//   0 => 10 #int
+//   1 => 20 #int
+// ]
 ```
 
 #### `ToJSON`
@@ -703,9 +703,9 @@ _Example: strings - pretty JSON_
 
 ```go
 pj1 := collection.New([]string{"a", "b"})
-	out1, _ := pj1.ToJSON()
-	fmt.Println(out1)
-	// ["a","b"]
+out1, _ := pj1.ToJSON()
+fmt.Println(out1)
+// ["a","b"]
 ```
 
 #### `ToPrettyJSON`
@@ -716,12 +716,12 @@ _Example: strings - pretty JSON_
 
 ```go
 pj1 := collection.New([]string{"a", "b"})
-	out1, _ := pj1.ToPrettyJSON()
-	fmt.Println(out1)
-	// [
-	//  "a",
-	//  "b"
-	// ]
+out1, _ := pj1.ToPrettyJSON()
+fmt.Println(out1)
+// [
+//  "a",
+//  "b"
+// ]
 ```
 
 ### Grouping
@@ -735,66 +735,66 @@ _Example: grouping integers by parity_
 ```go
 values := []int{1, 2, 3, 4, 5}
 
-	groups := collection.GroupBy(
-		collection.New(values),
-		func(v int) string {
-			if v%2 == 0 {
-				return "even"
-			}
-			return "odd"
-		},
-	)
+groups := collection.GroupBy(
+	collection.New(values),
+	func(v int) string {
+		if v%2 == 0 {
+			return "even"
+		}
+		return "odd"
+	},
+)
 
-	collection.Dump(groups["even"].Items())
-	// []int [
-	//  0 => 2 #int
-	//  1 => 4 #int
-	// ]
-	collection.Dump(groups["odd"].Items())
-	// []int [
-	//  0 => 1 #int
-	//  1 => 3 #int
-	//  2 => 5 #int
-	// ]
+collection.Dump(groups["even"].Items())
+// []int [
+//  0 => 2 #int
+//  1 => 4 #int
+// ]
+collection.Dump(groups["odd"].Items())
+// []int [
+//  0 => 1 #int
+//  1 => 3 #int
+//  2 => 5 #int
+// ]
 ```
 
 _Example: grouping structs by field_
 
 ```go
 type User struct {
-			ID   int
-			Role string
-		}
+	ID   int
+	Role string
+}
 
-		users := []User{
-			{ID: 1, Role: "admin"},
-			{ID: 2, Role: "user"},
-			{ID: 3, Role: "admin"},
-		}
+users := []User{
+	{ID: 1, Role: "admin"},
+	{ID: 2, Role: "user"},
+	{ID: 3, Role: "admin"},
+}
 
-		groups2 := collection.GroupBy(
-			collection.New(users),
-			func(u User) string { return u.Role },
-		)
+groups2 := collection.GroupBy(
+	collection.New(users),
+	func(u User) string { return u.Role },
+)
 
-		collection.Dump(groups2["admin"].Items())
-		// []main.User [
-		//  0 => #main.User {
-		//    +ID   => 1 #int
-		//    +Role => "admin" #string
-		//  }
-		//  1 => #main.User {
-		//    +ID   => 3 #int
-		//    +Role => "admin" #string
-		//  }
-		// ]
-		collection.Dump(groups2["user"].Items())
-	 // []main.User [
-		//  0 => #main.User {
-		//    +ID   => 2 #int
-		//    +Role => "user" #string
-		//  }
-		// ]
+collection.Dump(groups2["admin"].Items())
+// []main.User [
+//  0 => #main.User {
+//    +ID   => 1 #int
+//    +Role => "admin" #string
+//  }
+//  1 => #main.User {
+//    +ID   => 3 #int
+//    +Role => "admin" #string
+//  }
+// ]
+collection.Dump(groups2["user"].Items())
+// []main.User [
+//  0 => #main.User {
+//    +ID   => 2 #int
+//    +Role => "user" #string
+//  }
+// ]
 ```
 
 ### Maps
@@ -806,67 +806,67 @@ _Example: basic usage_
 
 ```go
 m := map[string]int{
-		"a": 1,
-		"b": 2,
-		"c": 3,
-	}
+	"a": 1,
+	"b": 2,
+	"c": 3,
+}
 
-	c := collection.FromMap(m)
-	collection.Dump(c.Items())
+c := collection.FromMap(m)
+collection.Dump(c.Items())
 
-	// #[]collection.Pair[string,int] [
-	//   0 => {Key:"a" Value:1}
-	//   1 => {Key:"b" Value:2}
-	//   2 => {Key:"c" Value:3}
-	// ]
+// #[]collection.Pair[string,int] [
+//   0 => {Key:"a" Value:1}
+//   1 => {Key:"b" Value:2}
+//   2 => {Key:"c" Value:3}
+// ]
 ```
 
 _Example: filtering map entries_
 
 ```go
 type Config struct {
-		Enabled bool
-		Timeout int
-	}
+	Enabled bool
+	Timeout int
+}
 
-	configs := map[string]Config{
-		"router-1": {Enabled: true,  Timeout: 30},
-		"router-2": {Enabled: false, Timeout: 10},
-		"router-3": {Enabled: true,  Timeout: 45},
-	}
+configs := map[string]Config{
+	"router-1": {Enabled: true,  Timeout: 30},
+	"router-2": {Enabled: false, Timeout: 10},
+	"router-3": {Enabled: true,  Timeout: 45},
+}
 
-	out := collection.
-		FromMap(configs).
-		Filter(func(p collection.Pair[string, Config]) bool {
-			return p.Value.Enabled
-		}).
-		Items()
+out := collection.
+	FromMap(configs).
+	Filter(func(p collection.Pair[string, Config]) bool {
+		return p.Value.Enabled
+	}).
+	Items()
 
-	collection.Dump(out)
+collection.Dump(out)
 
-	// #[]collection.Pair[string,collection.Config] [
-	//   0 => {Key:"router-1" Value:{Enabled:true Timeout:30}}
-	//   1 => {Key:"router-3" Value:{Enabled:true Timeout:45}}
-	// ]
+// #[]collection.Pair[string,collection.Config] [
+//   0 => {Key:"router-1" Value:{Enabled:true Timeout:30}}
+//   1 => {Key:"router-3" Value:{Enabled:true Timeout:45}}
+// ]
 ```
 
 _Example: map → collection → map_
 
 ```go
 users := map[string]int{
-		"alice": 1,
-		"bob":   2,
-	}
+	"alice": 1,
+	"bob":   2,
+}
 
-	c2 := collection.FromMap(users)
-	out2 := collection.ToMapKV(c2)
+c2 := collection.FromMap(users)
+out2 := collection.ToMapKV(c2)
 
-	collection.Dump(out2)
+collection.Dump(out2)
 
-	// #map[string]int [
-	//   "alice" => 1
-	//   "bob"   => 2
-	// ]
+// #map[string]int [
+//   "alice" => 1
+//   "bob"   => 2
+// ]
 ```
 
 #### `ToMap`
@@ -878,35 +878,35 @@ _Example: basic usage_
 ```go
 users := []string{"alice", "bob", "carol"}
 
-	out := collection.ToMap(
-		collection.New(users),
-		func(name string) string { return name },
-		func(name string) int { return len(name) },
-	)
+out := collection.ToMap(
+	collection.New(users),
+	func(name string) string { return name },
+	func(name string) int { return len(name) },
+)
 
-	collection.Dump(out)
+collection.Dump(out)
 ```
 
 _Example: re-keying structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users2 := []User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	}
+users2 := []User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+}
 
-	byID := collection.ToMap(
-		collection.New(users2),
-		func(u User) int { return u.ID },
-		func(u User) User { return u },
-	)
+byID := collection.ToMap(
+	collection.New(users2),
+	func(u User) int { return u.ID },
+	func(u User) User { return u },
+)
 
-	collection.Dump(byID)
+collection.Dump(byID)
 ```
 
 #### `ToMapKV`
@@ -916,51 +916,51 @@ _Example: basic usage_
 
 ```go
 m := map[string]int{
-		"a": 1,
-		"b": 2,
-		"c": 3,
-	}
+	"a": 1,
+	"b": 2,
+	"c": 3,
+}
 
-	c := collection.FromMap(m)
-	out := collection.ToMapKV(c)
+c := collection.FromMap(m)
+out := collection.ToMapKV(c)
 
-	collection.Dump(out)
+collection.Dump(out)
 
-	// #map[string]int [
-	//   "a" => 1
-	//   "b" => 2
-	//   "c" => 3
-	// ]
+// #map[string]int [
+//   "a" => 1
+//   "b" => 2
+//   "c" => 3
+// ]
 ```
 
 _Example: filtering before conversion_
 
 ```go
 type Config struct {
-		Enabled bool
-		Timeout int
-	}
+	Enabled bool
+	Timeout int
+}
 
-	configs := map[string]Config{
-		"router-1": {Enabled: true,  Timeout: 30},
-		"router-2": {Enabled: false, Timeout: 10},
-		"router-3": {Enabled: true,  Timeout: 45},
-	}
+configs := map[string]Config{
+	"router-1": {Enabled: true,  Timeout: 30},
+	"router-2": {Enabled: false, Timeout: 10},
+	"router-3": {Enabled: true,  Timeout: 45},
+}
 
-	c2 := collection.
-		FromMap(configs).
-		Filter(func(p collection.Pair[string, Config]) bool {
-			return p.Value.Enabled
-		})
+c2 := collection.
+	FromMap(configs).
+	Filter(func(p collection.Pair[string, Config]) bool {
+		return p.Value.Enabled
+	})
 
-	out2 := collection.ToMapKV(c2)
+out2 := collection.ToMapKV(c2)
 
-	collection.Dump(out2)
+collection.Dump(out2)
 
-	// #map[string]collection.Config [
-	//   "router-1" => {Enabled:true Timeout:30}
-	//   "router-3" => {Enabled:true Timeout:45}
-	// ]
+// #map[string]collection.Config [
+//   "router-1" => {Enabled:true Timeout:30}
+//   "router-3" => {Enabled:true Timeout:45}
+// ]
 ```
 
 ### Ordering
@@ -973,11 +973,11 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-	c.After(func(v int) bool { return v == 3 }).Dump()
-	// #[]int [
-	//  0 => 4 #int
-	//  1 => 5 #int
-	// ]
+c.After(func(v int) bool { return v == 3 }).Dump()
+// #[]int [
+//  0 => 4 #int
+//  1 => 5 #int
+// ]
 ```
 
 #### `Before`
@@ -988,48 +988,48 @@ _Example: integers_
 
 ```go
 c1 := collection.New([]int{1, 2, 3, 4, 5})
-	out1 := c1.Before(func(v int) bool { return v >= 3 })
-	collection.Dump(out1.Items())
-	// #[]int [
-	//	0 => 1 #int
-	//	1 => 2 #int
-	// ]
+out1 := c1.Before(func(v int) bool { return v >= 3 })
+collection.Dump(out1.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+// ]
 ```
 
 _Example: predicate never matches → whole collection returned_
 
 ```go
 c2 := collection.New([]int{10, 20, 30})
-	out2 := c2.Before(func(v int) bool { return v == 99 })
-	collection.Dump(out2.Items())
-	// #[]int [
-	//	0 => 10 #int
-	//	1 => 20 #int
-	//	2 => 30 #int
-	// ]
+out2 := c2.Before(func(v int) bool { return v == 99 })
+collection.Dump(out2.Items())
+// #[]int [
+//	0 => 10 #int
+//	1 => 20 #int
+//	2 => 30 #int
+// ]
 ```
 
 _Example: structs: get all users before the first admin_
 
 ```go
 type User struct {
-		Name  string
-		Admin bool
-	}
+	Name  string
+	Admin bool
+}
 
-	c3 := collection.New([]User{
-		{Name: "Alice", Admin: false},
-		{Name: "Bob", Admin: false},
-		{Name: "Eve", Admin: true},
-		{Name: "Mallory", Admin: false},
-	})
+c3 := collection.New([]User{
+	{Name: "Alice", Admin: false},
+	{Name: "Bob", Admin: false},
+	{Name: "Eve", Admin: true},
+	{Name: "Mallory", Admin: false},
+})
 
-	out3 := c3.Before(func(u User) bool { return u.Admin })
-	collection.Dump(out3.Items())
-	// #[]collection.User [
-	//	0 => {Name:"Alice" Admin:false}  #collection.User
-	//	1 => {Name:"Bob"   Admin:false}  #collection.User
-	// ]
+out3 := c3.Before(func(u User) bool { return u.Admin })
+collection.Dump(out3.Items())
+// #[]collection.User [
+//	0 => {Name:"Alice" Admin:false}  #collection.User
+//	1 => {Name:"Bob"   Admin:false}  #collection.User
+// ]
 ```
 
 #### `Reverse`
@@ -1040,53 +1040,53 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
-	c.Reverse()
-	collection.Dump(c.Items())
-	// #[]int [
-	//   0 => 4 #int
-	//   1 => 3 #int
-	//   2 => 2 #int
-	//   3 => 1 #int
-	// ]
+c.Reverse()
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 4 #int
+//   1 => 3 #int
+//   2 => 2 #int
+//   3 => 1 #int
+// ]
 ```
 
 _Example: strings – chaining_
 
 ```go
 out := collection.New([]string{"a", "b", "c"}).
-		Reverse().
-		Append("d").
-		Items()
+	Reverse().
+	Append("d").
+	Items()
 
-	collection.Dump(out)
-	// #[]string [
-	//   0 => "c" #string
-	//   1 => "b" #string
-	//   2 => "a" #string
-	//   3 => "d" #string
-	// ]
+collection.Dump(out)
+// #[]string [
+//   0 => "c" #string
+//   1 => "b" #string
+//   2 => "a" #string
+//   3 => "d" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID int
-	}
+	ID int
+}
 
-	users := collection.New([]User{
-		{ID: 1},
-		{ID: 2},
-		{ID: 3},
-	})
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+})
 
-	users.Reverse()
-	collection.Dump(users.Items())
-	// #[]collection.User [
-	//   0 => {ID:3} #collection.User
-	//   1 => {ID:2} #collection.User
-	//   2 => {ID:1} #collection.User
-	// ]
+users.Reverse()
+collection.Dump(users.Items())
+// #[]collection.User [
+//   0 => {ID:3} #collection.User
+//   1 => {ID:2} #collection.User
+//   2 => {ID:1} #collection.User
+// ]
 ```
 
 #### `Shuffle`
@@ -1097,37 +1097,37 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-	c.Shuffle()
-	collection.Dump(c.Items())
+c.Shuffle()
+collection.Dump(c.Items())
 ```
 
 _Example: strings – chaining_
 
 ```go
 out := collection.New([]string{"a", "b", "c"}).
-		Shuffle().
-		Append("d").
-		Items()
+	Shuffle().
+	Append("d").
+	Items()
 
-	collection.Dump(out)
+collection.Dump(out)
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID int
-	}
+	ID int
+}
 
-	users := collection.New([]User{
-		{ID: 1},
-		{ID: 2},
-		{ID: 3},
-		{ID: 4},
-	})
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+	{ID: 4},
+})
 
-	users.Shuffle()
-	collection.Dump(users.Items())
+users.Shuffle()
+collection.Dump(users.Items())
 ```
 
 #### `Sort`
@@ -1137,62 +1137,62 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{5, 1, 4, 2})
-	sorted := c.Sort(func(a, b int) bool { return a < b })
-	collection.Dump(sorted.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 4 #int
-	//   3 => 5 #int
-	// ]
+sorted := c.Sort(func(a, b int) bool { return a < b })
+collection.Dump(sorted.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 4 #int
+//   3 => 5 #int
+// ]
 ```
 
 _Example: strings (descending)_
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
-	sorted2 := c2.Sort(func(a, b string) bool { return a > b })
-	collection.Dump(sorted2.Items())
-	// #[]string [
-	//   0 => "cherry" #string
-	//   1 => "banana" #string
-	//   2 => "apple" #string
-	// ]
+sorted2 := c2.Sort(func(a, b string) bool { return a > b })
+collection.Dump(sorted2.Items())
+// #[]string [
+//   0 => "cherry" #string
+//   1 => "banana" #string
+//   2 => "apple" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		Name string
-		Age  int
-	}
+	Name string
+	Age  int
+}
 
-	users := collection.New([]User{
-		{Name: "Alice", Age: 30},
-		{Name: "Bob", Age: 25},
-		{Name: "Carol", Age: 40},
-	})
+users := collection.New([]User{
+	{Name: "Alice", Age: 30},
+	{Name: "Bob", Age: 25},
+	{Name: "Carol", Age: 40},
+})
 
-	// Sort by age ascending
-	sortedUsers := users.Sort(func(a, b User) bool {
-		return a.Age < b.Age
-	})
-	collection.Dump(sortedUsers.Items())
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +Name => "Bob" #string
-	//     +Age  => 25 #int
-	//   }
-	//   1 => #main.User {
-	//     +Name => "Alice" #string
-	//     +Age  => 30 #int
-	//   }
-	//   2 => #main.User {
-	//     +Name => "Carol" #string
-	//     +Age  => 40 #int
-	//   }
-	// ]
+// Sort by age ascending
+sortedUsers := users.Sort(func(a, b User) bool {
+	return a.Age < b.Age
+})
+collection.Dump(sortedUsers.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +Name => "Bob" #string
+//     +Age  => 25 #int
+//   }
+//   1 => #main.User {
+//     +Name => "Alice" #string
+//     +Age  => 30 #int
+//   }
+//   2 => #main.User {
+//     +Name => "Carol" #string
+//     +Age  => 40 #int
+//   }
+// ]
 ```
 
 ### Other
@@ -1205,60 +1205,60 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
-	c.Filter(func(v int) bool {
-		return v%2 == 0
-	})
-	collection.Dump(c.Items())
-	// #[]int [
-	//   0 => 2 #int
-	//   1 => 4 #int
-	// ]
+c.Filter(func(v int) bool {
+	return v%2 == 0
+})
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
 ```
 
 _Example: strings_
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
-	c2.Filter(func(v string) bool {
-		return strings.HasPrefix(v, "a")
-	})
-	collection.Dump(c2.Items())
-	// #[]string [
-	//   0 => "apple" #string
-	//   1 => "avocado" #string
-	// ]
+c2.Filter(func(v string) bool {
+	return strings.HasPrefix(v, "a")
+})
+collection.Dump(c2.Items())
+// #[]string [
+//   0 => "apple" #string
+//   1 => "avocado" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Andrew"},
-		{ID: 4, Name: "Carol"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Andrew"},
+	{ID: 4, Name: "Carol"},
+})
 
-	users.Filter(func(u User) bool {
-		return strings.HasPrefix(u.Name, "A")
-	})
+users.Filter(func(u User) bool {
+	return strings.HasPrefix(u.Name, "A")
+})
 
-	collection.Dump(users.Items())
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 1 #int
-	//     +Name => "Alice" #string
-	//   }
-	//   1 => #main.User {
-	//     +ID   => 3 #int
-	//     +Name => "Andrew" #string
-	//   }
-	// ]
+collection.Dump(users.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Andrew" #string
+//   }
+// ]
 ```
 
 #### `TakeUntil`
@@ -1271,35 +1271,35 @@ _Example: integers - stop at value 3_
 
 ```go
 c4 := collection.New([]int{1, 2, 3, 4})
-	out4 := collection.TakeUntil(c4, 3)
-	collection.Dump(out4.Items())
-	// #[]int [
-	//	0 => 1 #int
-	//	1 => 2 #int
-	// ]
+out4 := collection.TakeUntil(c4, 3)
+collection.Dump(out4.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+// ]
 ```
 
 _Example: strings - value never appears → full slice_
 
 ```go
 c5 := collection.New([]string{"a", "b", "c"})
-	out5 := collection.TakeUntil(c5, "x")
-	collection.Dump(out5.Items())
-	// #[]string [
-	//	0 => "a" #string
-	//	1 => "b" #string
-	//	2 => "c" #string
-	// ]
+out5 := collection.TakeUntil(c5, "x")
+collection.Dump(out5.Items())
+// #[]string [
+//	0 => "a" #string
+//	1 => "b" #string
+//	2 => "c" #string
+// ]
 ```
 
 _Example: integers - match is first item → empty result_
 
 ```go
 c6 := collection.New([]int{9, 10, 11})
-	out6 := collection.TakeUntil(c6, 9)
-	collection.Dump(out6.Items())
-	// #[]int [
-	// ]
+out6 := collection.TakeUntil(c6, 9)
+collection.Dump(out6.Items())
+// #[]int [
+// ]
 ```
 
 #### `TakeUntilFn`
@@ -1310,35 +1310,35 @@ _Example: integers - stop when value >= 3_
 
 ```go
 c1 := collection.New([]int{1, 2, 3, 4})
-	out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })
-	collection.Dump(out1.Items())
-	// #[]int [
-	//	0 => 1 #int
-	//	1 => 2 #int
-	// ]
+out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })
+collection.Dump(out1.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+// ]
 ```
 
 _Example: integers - predicate immediately true → empty result_
 
 ```go
 c2 := collection.New([]int{10, 20, 30})
-	out2 := c2.TakeUntilFn(func(v int) bool { return v < 50 })
-	collection.Dump(out2.Items())
-	// #[]int [
-	// ]
+out2 := c2.TakeUntilFn(func(v int) bool { return v < 50 })
+collection.Dump(out2.Items())
+// #[]int [
+// ]
 ```
 
 _Example: integers - no match → full list returned_
 
 ```go
 c3 := collection.New([]int{1, 2, 3})
-	out3 := c3.TakeUntilFn(func(v int) bool { return v == 99 })
-	collection.Dump(out3.Items())
-	// #[]int [
-	//	0 => 1 #int
-	//	1 => 2 #int
-	//	2 => 3 #int
-	// ]
+out3 := c3.TakeUntilFn(func(v int) bool { return v == 99 })
+collection.Dump(out3.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+//	2 => 3 #int
+// ]
 ```
 
 ### Querying
@@ -1351,36 +1351,36 @@ _Example: integers – all even_
 
 ```go
 c := collection.New([]int{2, 4, 6})
-	allEven := c.All(func(v int) bool { return v%2 == 0 })
-	collection.Dump(allEven)
-	// true #bool
+allEven := c.All(func(v int) bool { return v%2 == 0 })
+collection.Dump(allEven)
+// true #bool
 ```
 
 _Example: integers – not all even_
 
 ```go
 c2 := collection.New([]int{2, 3, 4})
-	allEven2 := c2.All(func(v int) bool { return v%2 == 0 })
-	collection.Dump(allEven2)
-	// false #bool
+allEven2 := c2.All(func(v int) bool { return v%2 == 0 })
+collection.Dump(allEven2)
+// false #bool
 ```
 
 _Example: strings – all non-empty_
 
 ```go
 c3 := collection.New([]string{"a", "b", "c"})
-	allNonEmpty := c3.All(func(s string) bool { return s != "" })
-	collection.Dump(allNonEmpty)
-	// true #bool
+allNonEmpty := c3.All(func(s string) bool { return s != "" })
+collection.Dump(allNonEmpty)
+// true #bool
 ```
 
 _Example: empty collection (vacuously true)_
 
 ```go
 empty := collection.New([]int{})
-	all := empty.All(func(v int) bool { return v > 0 })
-	collection.Dump(all)
-	// true #bool
+all := empty.All(func(v int) bool { return v > 0 })
+collection.Dump(all)
+// true #bool
 ```
 
 #### `Any`
@@ -1390,9 +1390,9 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
-	has := c.Any(func(v int) bool { return v%2 == 0 }) // true
-	collection.Dump(has)
-	// true #bool
+has := c.Any(func(v int) bool { return v%2 == 0 }) // true
+collection.Dump(has)
+// true #bool
 ```
 
 #### `At`
@@ -1403,35 +1403,35 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{10, 20, 30})
-	v, ok := c.At(1)
-	collection.Dump(v, ok)
-	// 20 true
+v, ok := c.At(1)
+collection.Dump(v, ok)
+// 20 true
 ```
 
 _Example: out of bounds_
 
 ```go
 v2, ok2 := c.At(10)
-	collection.Dump(v2, ok2)
-	// 0 false
+collection.Dump(v2, ok2)
+// 0 false
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	u, ok3 := users.At(0)
-	collection.Dump(u, ok3)
-	// {ID:1 Name:"Alice"} true
+u, ok3 := users.At(0)
+collection.Dump(u, ok3)
+// {ID:1 Name:"Alice"} true
 ```
 
 #### `Contains`
@@ -1441,43 +1441,43 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-	hasEven := c.Contains(func(v int) bool {
-		return v%2 == 0
-	})
-	collection.Dump(hasEven)
-	// true #bool
+hasEven := c.Contains(func(v int) bool {
+	return v%2 == 0
+})
+collection.Dump(hasEven)
+// true #bool
 ```
 
 _Example: strings_
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
-	hasBanana := c2.Contains(func(v string) bool {
-		return v == "banana"
-	})
-	collection.Dump(hasBanana)
-	// true #bool
+hasBanana := c2.Contains(func(v string) bool {
+	return v == "banana"
+})
+collection.Dump(hasBanana)
+// true #bool
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Carol"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
 
-	hasBob := users.Contains(func(u User) bool {
-		return u.Name == "Bob"
-	})
-	collection.Dump(hasBob)
-	// true #bool
+hasBob := users.Contains(func(u User) bool {
+	return u.Name == "Bob"
+})
+collection.Dump(hasBob)
+// true #bool
 ```
 
 #### `FindWhere`
@@ -1491,48 +1491,48 @@ _Example: integers_
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
 
-	v1, ok1 := nums.FindWhere(func(n int) bool {
-		return n == 3
-	})
-	collection.Dump(v1, ok1)
-	// 3    #int
-	// true #bool
+v1, ok1 := nums.FindWhere(func(n int) bool {
+	return n == 3
+})
+collection.Dump(v1, ok1)
+// 3    #int
+// true #bool
 ```
 
 _Example: no match_
 
 ```go
 v2, ok2 := nums.FindWhere(func(n int) bool {
-		return n > 10
-	})
-	collection.Dump(v2, ok2)
-	// 0     #int
-	// false #bool
+	return n > 10
+})
+collection.Dump(v2, ok2)
+// 0     #int
+// false #bool
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Charlie"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Charlie"},
+})
 
-	u, ok3 := users.FindWhere(func(u User) bool {
-		return u.ID == 2
-	})
-	collection.Dump(u, ok3)
-	// #collection.User {
-	//   +ID    => 2   #int
-	//   +Name  => "Bob" #string
-	// }
-	// true #bool
+u, ok3 := users.FindWhere(func(u User) bool {
+	return u.ID == 2
+})
+collection.Dump(u, ok3)
+// #collection.User {
+//   +ID    => 2   #int
+//   +Name  => "Bob" #string
+// }
+// true #bool
 ```
 
 _Example: integers - empty collection_
@@ -1540,10 +1540,10 @@ _Example: integers - empty collection_
 ```go
 empty := collection.New([]int{})
 
-	v4, ok4 := empty.FindWhere(func(n int) bool { return n == 1 })
-	collection.Dump(v4, ok4)
-	// 0     #int
-	// false #bool
+v4, ok4 := empty.FindWhere(func(n int) bool { return n == 1 })
+collection.Dump(v4, ok4)
+// 0     #int
+// false #bool
 ```
 
 #### `First`
@@ -1555,10 +1555,10 @@ _Example: integers_
 ```go
 c := collection.New([]int{10, 20, 30})
 
-	v, ok := c.First()
-	collection.Dump(v, ok)
-	// 10   #int
-	// true #bool
+v, ok := c.First()
+collection.Dump(v, ok)
+// 10   #int
+// true #bool
 ```
 
 _Example: strings_
@@ -1566,42 +1566,42 @@ _Example: strings_
 ```go
 c2 := collection.New([]string{"alpha", "beta", "gamma"})
 
-	v2, ok2 := c2.First()
-	collection.Dump(v2, ok2)
-	// "alpha" #string
-	// true    #bool
+v2, ok2 := c2.First()
+collection.Dump(v2, ok2)
+// "alpha" #string
+// true    #bool
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	u, ok3 := users.First()
-	collection.Dump(u, ok3)
-	// #main.User {
-	//   +ID   => 1      #int
-	//   +Name => "Alice" #string
-	// }
-	// true #bool
+u, ok3 := users.First()
+collection.Dump(u, ok3)
+// #main.User {
+//   +ID   => 1      #int
+//   +Name => "Alice" #string
+// }
+// true #bool
 ```
 
 _Example: integers - empty collection_
 
 ```go
 c3 := collection.New([]int{})
-	v3, ok4 := c3.First()
-	collection.Dump(v3, ok4)
-	// 0    #int
-	// false #bool
+v3, ok4 := c3.First()
+collection.Dump(v3, ok4)
+// 0    #int
+// false #bool
 ```
 
 #### `FirstWhere`
@@ -1613,19 +1613,19 @@ _Example: integers_
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
-	v, ok := nums.FirstWhere(func(n int) bool {
-		return n%2 == 0
-	})
-	collection.Dump(v, ok)
-	// 2 #int
-	// true #bool
+v, ok := nums.FirstWhere(func(n int) bool {
+	return n%2 == 0
+})
+collection.Dump(v, ok)
+// 2 #int
+// true #bool
 
-	v, ok = nums.FirstWhere(func(n int) bool {
-		return n > 10
-	})
-	collection.Dump(v, ok)
-	// 0 #int
-	// false #bool
+v, ok = nums.FirstWhere(func(n int) bool {
+	return n > 10
+})
+collection.Dump(v, ok)
+// 0 #int
+// false #bool
 ```
 
 #### `IndexWhere`
@@ -1637,39 +1637,39 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{10, 20, 30, 40})
-	idx, ok := c.IndexWhere(func(v int) bool { return v == 30 })
-	collection.Dump(idx, ok)
-	// 2 true
+idx, ok := c.IndexWhere(func(v int) bool { return v == 30 })
+collection.Dump(idx, ok)
+// 2 true
 ```
 
 _Example: not found_
 
 ```go
 idx2, ok2 := c.IndexWhere(func(v int) bool { return v == 99 })
-	collection.Dump(idx2, ok2)
-	// 0 false
+collection.Dump(idx2, ok2)
+// 0 false
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Carol"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
 
-	idx3, ok3 := users.IndexWhere(func(u User) bool {
-		return u.Name == "Bob"
-	})
+idx3, ok3 := users.IndexWhere(func(u User) bool {
+	return u.Name == "Bob"
+})
 
-	collection.Dump(idx3, ok3)
-	// 1 true
+collection.Dump(idx3, ok3)
+// 1 true
 ```
 
 #### `IsEmpty`
@@ -1680,9 +1680,9 @@ _Example: integers (non-empty)_
 ```go
 c := collection.New([]int{1, 2, 3})
 
-	empty := c.IsEmpty()
-	collection.Dump(empty)
-	// false #bool
+empty := c.IsEmpty()
+collection.Dump(empty)
+// false #bool
 ```
 
 _Example: strings (empty)_
@@ -1690,26 +1690,26 @@ _Example: strings (empty)_
 ```go
 c2 := collection.New([]string{})
 
-	empty2 := c2.IsEmpty()
-	collection.Dump(empty2)
-	// true #bool
+empty2 := c2.IsEmpty()
+collection.Dump(empty2)
+// true #bool
 ```
 
 _Example: structs (non-empty)_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+})
 
-	empty3 := users.IsEmpty()
-	collection.Dump(empty3)
-	// false #bool
+empty3 := users.IsEmpty()
+collection.Dump(empty3)
+// false #bool
 ```
 
 _Example: structs (empty)_
@@ -1717,9 +1717,9 @@ _Example: structs (empty)_
 ```go
 none := collection.New([]User{})
 
-	empty4 := none.IsEmpty()
-	collection.Dump(empty4)
-	// true #bool
+empty4 := none.IsEmpty()
+collection.Dump(empty4)
+// true #bool
 ```
 
 #### `Last`
@@ -1731,10 +1731,10 @@ _Example: integers_
 ```go
 c := collection.New([]int{10, 20, 30})
 
-	v, ok := c.Last()
-	collection.Dump(v, ok)
-	// 30   #int
-	// true #bool
+v, ok := c.Last()
+collection.Dump(v, ok)
+// 30   #int
+// true #bool
 ```
 
 _Example: strings_
@@ -1742,33 +1742,33 @@ _Example: strings_
 ```go
 c2 := collection.New([]string{"alpha", "beta", "gamma"})
 
-	v2, ok2 := c2.Last()
-	collection.Dump(v2, ok2)
-	// "gamma" #string
-	// true    #bool
+v2, ok2 := c2.Last()
+collection.Dump(v2, ok2)
+// "gamma" #string
+// true    #bool
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Charlie"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Charlie"},
+})
 
-	u, ok3 := users.Last()
-	collection.Dump(u, ok3)
-	// #main.User {
-	//   +ID   => 3         #int
-	//   +Name => "Charlie" #string
-	// }
-	// true #bool
+u, ok3 := users.Last()
+collection.Dump(u, ok3)
+// #main.User {
+//   +ID   => 3         #int
+//   +Name => "Charlie" #string
+// }
+// true #bool
 ```
 
 _Example: empty collection_
@@ -1776,10 +1776,10 @@ _Example: empty collection_
 ```go
 c3 := collection.New([]int{})
 
-	v3, ok4 := c3.Last()
-	collection.Dump(v3, ok4)
-	// 0     #int
-	// false #bool
+v3, ok4 := c3.Last()
+collection.Dump(v3, ok4)
+// 0     #int
+// false #bool
 ```
 
 #### `LastWhere`
@@ -1792,12 +1792,12 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3, 4})
 
-	v, ok := c.LastWhere(func(v int, i int) bool {
-		return v < 3
-	})
-	collection.Dump(v, ok)
-	// 2    #int
-	// true #bool
+v, ok := c.LastWhere(func(v int, i int) bool {
+	return v < 3
+})
+collection.Dump(v, ok)
+// 2    #int
+// true #bool
 ```
 
 _Example: integers without predicate (equivalent to Last())_
@@ -1805,10 +1805,10 @@ _Example: integers without predicate (equivalent to Last())_
 ```go
 c2 := collection.New([]int{10, 20, 30, 40})
 
-	v2, ok2 := c2.LastWhere(nil)
-	collection.Dump(v2, ok2)
-	// 40   #int
-	// true #bool
+v2, ok2 := c2.LastWhere(nil)
+collection.Dump(v2, ok2)
+// 40   #int
+// true #bool
 ```
 
 _Example: strings_
@@ -1816,38 +1816,38 @@ _Example: strings_
 ```go
 c3 := collection.New([]string{"alpha", "beta", "gamma", "delta"})
 
-	v3, ok3 := c3.LastWhere(func(s string, i int) bool {
-		return strings.HasPrefix(s, "g")
-	})
-	collection.Dump(v3, ok3)
-	// "gamma" #string
-	// true    #bool
+v3, ok3 := c3.LastWhere(func(s string, i int) bool {
+	return strings.HasPrefix(s, "g")
+})
+collection.Dump(v3, ok3)
+// "gamma" #string
+// true    #bool
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Alex"},
-		{ID: 4, Name: "Brian"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Alex"},
+	{ID: 4, Name: "Brian"},
+})
 
-	u, ok4 := users.LastWhere(func(u User, i int) bool {
-		return strings.HasPrefix(u.Name, "A")
-	})
-	collection.Dump(u, ok4)
-	// #main.User {
-	//   +ID   => 3        #int
-	//   +Name => "Alex"  #string
-	// }
-	// true #bool
+u, ok4 := users.LastWhere(func(u User, i int) bool {
+	return strings.HasPrefix(u.Name, "A")
+})
+collection.Dump(u, ok4)
+// #main.User {
+//   +ID   => 3        #int
+//   +Name => "Alex"  #string
+// }
+// true #bool
 ```
 
 _Example: no matching element_
@@ -1855,12 +1855,12 @@ _Example: no matching element_
 ```go
 c4 := collection.New([]int{5, 6, 7})
 
-	v4, ok5 := c4.LastWhere(func(v int, i int) bool {
-		return v > 10
-	})
-	collection.Dump(v4, ok5)
-	// 0     #int
-	// false #bool
+v4, ok5 := c4.LastWhere(func(v int, i int) bool {
+	return v > 10
+})
+collection.Dump(v4, ok5)
+// 0     #int
+// false #bool
 ```
 
 _Example: empty collection_
@@ -1868,10 +1868,10 @@ _Example: empty collection_
 ```go
 c5 := collection.New([]int{})
 
-	v5, ok6 := c5.LastWhere(nil)
-	collection.Dump(v5, ok6)
-	// 0     #int
-	// false #bool
+v5, ok6 := c5.LastWhere(nil)
+collection.Dump(v5, ok6)
+// 0     #int
+// false #bool
 ```
 
 #### `None`
@@ -1882,27 +1882,27 @@ _Example: integers – none even_
 
 ```go
 c := collection.New([]int{1, 3, 5})
-	noneEven := c.None(func(v int) bool { return v%2 == 0 })
-	collection.Dump(noneEven)
-	// true #bool
+noneEven := c.None(func(v int) bool { return v%2 == 0 })
+collection.Dump(noneEven)
+// true #bool
 ```
 
 _Example: integers – some even_
 
 ```go
 c2 := collection.New([]int{1, 2, 3})
-	noneEven2 := c2.None(func(v int) bool { return v%2 == 0 })
-	collection.Dump(noneEven2)
-	// false #bool
+noneEven2 := c2.None(func(v int) bool { return v%2 == 0 })
+collection.Dump(noneEven2)
+// false #bool
 ```
 
 _Example: empty collection_
 
 ```go
 empty := collection.New([]int{})
-	none := empty.None(func(v int) bool { return v > 0 })
-	collection.Dump(none)
-	// true #bool
+none := empty.None(func(v int) bool { return v > 0 })
+collection.Dump(none)
+// true #bool
 ```
 
 ### Set Operations
@@ -1916,54 +1916,54 @@ _Example: integers_
 
 ```go
 c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
-	out1 := c1.Unique(func(a, b int) bool { return a == b })
-	collection.Dump(out1.Items())
-	// #[]int [
-	//	0 => 1 #int
-	//	1 => 2 #int
-	//	2 => 3 #int
-	//	3 => 4 #int
-	//	4 => 5 #int
-	// ]
+out1 := c1.Unique(func(a, b int) bool { return a == b })
+collection.Dump(out1.Items())
+// #[]int [
+//	0 => 1 #int
+//	1 => 2 #int
+//	2 => 3 #int
+//	3 => 4 #int
+//	4 => 5 #int
+// ]
 ```
 
 _Example: strings (case-insensitive uniqueness)_
 
 ```go
 c2 := collection.New([]string{"A", "a", "B", "b", "A"})
-	out2 := c2.Unique(func(a, b string) bool {
-		return strings.EqualFold(a, b)
-	})
-	collection.Dump(out2.Items())
-	// #[]string [
-	//	0 => "A" #string
-	//	1 => "B" #string
-	// ]
+out2 := c2.Unique(func(a, b string) bool {
+	return strings.EqualFold(a, b)
+})
+collection.Dump(out2.Items())
+// #[]string [
+//	0 => "A" #string
+//	1 => "B" #string
+// ]
 ```
 
 _Example: structs (unique by ID)_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	c3 := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 1, Name: "Alice Duplicate"},
-	})
+c3 := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 1, Name: "Alice Duplicate"},
+})
 
-	out3 := c3.Unique(func(a, b User) bool {
-		return a.ID == b.ID
-	})
+out3 := c3.Unique(func(a, b User) bool {
+	return a.ID == b.ID
+})
 
-	collection.Dump(out3.Items())
-	// #[]collection.User [
-	//	0 => {ID:1 Name:"Alice"} #collection.User
-	//	1 => {ID:2 Name:"Bob"}   #collection.User
-	// ]
+collection.Dump(out3.Items())
+// #[]collection.User [
+//	0 => {ID:1 Name:"Alice"} #collection.User
+//	1 => {ID:2 Name:"Bob"}   #collection.User
+// ]
 ```
 
 #### `UniqueBy`
@@ -1974,22 +1974,22 @@ _Example: structs – unique by ID_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 1, Name: "Alice Duplicate"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 1, Name: "Alice Duplicate"},
+})
 
-	out := collection.UniqueBy(users, func(u User) int { return u.ID })
-	collection.Dump(out.Items())
-	// #[]collection.User [
-	//   0 => {ID:1 Name:"Alice"} #collection.User
-	//   1 => {ID:2 Name:"Bob"}   #collection.User
-	// ]
+out := collection.UniqueBy(users, func(u User) int { return u.ID })
+collection.Dump(out.Items())
+// #[]collection.User [
+//   0 => {ID:1 Name:"Alice"} #collection.User
+//   1 => {ID:2 Name:"Bob"}   #collection.User
+// ]
 ```
 
 _Example: strings – case-insensitive uniqueness_
@@ -1997,15 +1997,15 @@ _Example: strings – case-insensitive uniqueness_
 ```go
 values := collection.New([]string{"A", "a", "B", "b", "A"})
 
-	out2 := collection.UniqueBy(values, func(s string) string {
-		return strings.ToLower(s)
-	})
+out2 := collection.UniqueBy(values, func(s string) string {
+	return strings.ToLower(s)
+})
 
-	collection.Dump(out2.Items())
-	// #[]string [
-	//   0 => "A" #string
-	//   1 => "B" #string
-	// ]
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "A" #string
+//   1 => "B" #string
+// ]
 ```
 
 _Example: integers – identity key_
@@ -2013,13 +2013,13 @@ _Example: integers – identity key_
 ```go
 nums := collection.New([]int{3, 1, 2, 1, 3})
 
-	out3 := collection.UniqueBy(nums, func(v int) int { return v })
-	collection.Dump(out3.Items())
-	// #[]int [
-	//   0 => 3 #int
-	//   1 => 1 #int
-	//   2 => 2 #int
-	// ]
+out3 := collection.UniqueBy(nums, func(v int) int { return v })
+collection.Dump(out3.Items())
+// #[]int [
+//   0 => 3 #int
+//   1 => 1 #int
+//   2 => 2 #int
+// ]
 ```
 
 ### Slicing
@@ -2032,64 +2032,64 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
-	collection.Dump(c)
+collection.Dump(c)
 
-	// #[][]int [
-	//  0 => #[]int [
-	//    0 => 1 #int
-	//    1 => 2 #int
-	//  ]
-	//  1 => #[]int [
-	//    0 => 3 #int
-	//    1 => 4 #int
-	//  ]
-	//  2 => #[]int [
-	//    0 => 5 #int
-	//  ]
-	//]
+// #[][]int [
+//  0 => #[]int [
+//    0 => 1 #int
+//    1 => 2 #int
+//  ]
+//  1 => #[]int [
+//    0 => 3 #int
+//    1 => 4 #int
+//  ]
+//  2 => #[]int [
+//    0 => 5 #int
+//  ]
+//]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := []User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Carol"},
-		{ID: 4, Name: "Dave"},
-	}
+users := []User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+	{ID: 4, Name: "Dave"},
+}
 
-	userChunks := collection.New(users).Chunk(2)
-	collection.Dump(userChunks)
+userChunks := collection.New(users).Chunk(2)
+collection.Dump(userChunks)
 
-	// Dump output will show [][]User grouped in size-2 chunks, e.g.:
-	// #[][]main.User [
-	//  0 => #[]main.User [
-	//    0 => #main.User {
-	//      +ID   => 1 #int
-	//      +Name => "Alice" #string
-	//    }
-	//    1 => #main.User {
-	//      +ID   => 2 #int
-	//      +Name => "Bob" #string
-	//    }
-	//  ]
-	//  1 => #[]main.User [
-	//    0 => #main.User {
-	//      +ID   => 3 #int
-	//      +Name => "Carol" #string
-	//    }
-	//    1 => #main.User {
-	//      +ID   => 4 #int
-	//      +Name => "Dave" #string
-	//    }
-	//  ]
-	//]
+// Dump output will show [][]User grouped in size-2 chunks, e.g.:
+// #[][]main.User [
+//  0 => #[]main.User [
+//    0 => #main.User {
+//      +ID   => 1 #int
+//      +Name => "Alice" #string
+//    }
+//    1 => #main.User {
+//      +ID   => 2 #int
+//      +Name => "Bob" #string
+//    }
+//  ]
+//  1 => #[]main.User [
+//    0 => #main.User {
+//      +ID   => 3 #int
+//      +Name => "Carol" #string
+//    }
+//    1 => #main.User {
+//      +ID   => 4 #int
+//      +Name => "Dave" #string
+//    }
+//  ]
+//]
 ```
 
 #### `Pop`
@@ -2100,64 +2100,64 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3})
-	item, rest := c.Pop()
-	collection.Dump(item, rest.Items())
-	// 3 #int
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	// ]
+item, rest := c.Pop()
+collection.Dump(item, rest.Items())
+// 3 #int
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+// ]
 ```
 
 _Example: strings_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-	item2, rest2 := c2.Pop()
-	collection.Dump(item2, rest2.Items())
-	// "c" #string
-	// #[]string [
-	//   0 => "a" #string
-	//   1 => "b" #string
-	// ]
+item2, rest2 := c2.Pop()
+collection.Dump(item2, rest2.Items())
+// "c" #string
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	item3, rest3 := users.Pop()
-	collection.Dump(item3, rest3.Items())
-	// #main.User {
-	//   +ID   => 2 #int
-	//   +Name => "Bob" #string
-	// }
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 1 #int
-	//     +Name => "Alice" #string
-	//   }
-	// ]
+item3, rest3 := users.Pop()
+collection.Dump(item3, rest3.Items())
+// #main.User {
+//   +ID   => 2 #int
+//   +Name => "Bob" #string
+// }
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+// ]
 ```
 
 _Example: empty collection_
 
 ```go
 empty := collection.New([]int{})
-	item4, rest4 := empty.Pop()
-	collection.Dump(item4, rest4.Items())
-	// 0 #int
-	// #[]int [
-	// ]
+item4, rest4 := empty.Pop()
+collection.Dump(item4, rest4.Items())
+// 0 #int
+// #[]int [
+// ]
 ```
 
 #### `PopN`
@@ -2168,94 +2168,94 @@ _Example: integers – pop 2_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
-	popped, rest := c.PopN(2)
-	collection.Dump(popped.Items(), rest.Items())
-	// #[]int [
-	//   0 => 4 #int
-	//   1 => 3 #int
-	// ]
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	// ]
+popped, rest := c.PopN(2)
+collection.Dump(popped.Items(), rest.Items())
+// #[]int [
+//   0 => 4 #int
+//   1 => 3 #int
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+// ]
 ```
 
 _Example: strings – pop 1_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-	popped2, rest2 := c2.PopN(1)
-	collection.Dump(popped2.Items(), rest2.Items())
-	// #[]string [
-	//   0 => "c" #string
-	// ]
-	// #[]string [
-	//   0 => "a" #string
-	//   1 => "b" #string
-	// ]
+popped2, rest2 := c2.PopN(1)
+collection.Dump(popped2.Items(), rest2.Items())
+// #[]string [
+//   0 => "c" #string
+// ]
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+// ]
 ```
 
 _Example: structs – pop 2_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Carol"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
 
-	popped3, rest3 := users.PopN(2)
-	collection.Dump(popped3.Items(), rest3.Items())
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 3 #int
-	//     +Name => "Carol" #string
-	//   }
-	//   1 => #main.User {
-	//     +ID   => 2 #int
-	//     +Name => "Bob" #string
-	//   }
-	// ]
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 1 #int
-	//     +Name => "Alice" #string
-	//   }
-	// ]
+popped3, rest3 := users.PopN(2)
+collection.Dump(popped3.Items(), rest3.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+// ]
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+// ]
 ```
 
 _Example: integers - n <= 0 → returns empty popped + original collection_
 
 ```go
 c3 := collection.New([]int{1, 2, 3})
-	popped4, rest4 := c3.PopN(0)
-	collection.Dump(popped4.Items(), rest4.Items())
-	// #[]int [
-	// ]
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	// ]
+popped4, rest4 := c3.PopN(0)
+collection.Dump(popped4.Items(), rest4.Items())
+// #[]int [
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
 ```
 
 _Example: strings - n exceeds length → all items popped, rest empty_
 
 ```go
 c4 := collection.New([]string{"x", "y"})
-	popped5, rest5 := c4.PopN(10)
-	collection.Dump(popped5.Items(), rest5.Items())
-	// #[]string [
-	//   0 => "y" #string
-	//   1 => "x" #string
-	// ]
-	// #[]string [
-	// ]
+popped5, rest5 := c4.PopN(10)
+collection.Dump(popped5.Items(), rest5.Items())
+// #[]string [
+//   0 => "y" #string
+//   1 => "x" #string
+// ]
+// #[]string [
+// ]
 ```
 
 #### `Skip`
@@ -2268,60 +2268,60 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-	out := c.Skip(2)
-	collection.Dump(out.Items())
-	// #[]int [
-	//   0 => 3 #int
-	//   1 => 4 #int
-	//   2 => 5 #int
-	// ]
+out := c.Skip(2)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 3 #int
+//   1 => 4 #int
+//   2 => 5 #int
+// ]
 ```
 
 _Example: skip none_
 
 ```go
 out2 := c.Skip(0)
-	collection.Dump(out2.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	//   3 => 4 #int
-	//   4 => 5 #int
-	// ]
+collection.Dump(out2.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
 ```
 
 _Example: skip all_
 
 ```go
 out3 := c.Skip(10)
-	collection.Dump(out3.Items())
-	// #[]int []
+collection.Dump(out3.Items())
+// #[]int []
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID int
-	}
+	ID int
+}
 
-	users := collection.New([]User{
-		{ID: 1},
-		{ID: 2},
-		{ID: 3},
-	})
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+})
 
-	out4 := users.Skip(1)
-	collection.Dump(out4.Items())
-	// []main.User [
-	//  0 => #main.User {
-	//    +ID => 2 #int
-	//  }
-	//  1 => #main.User {
-	//    +ID => 3 #int
-	//  }
-	// ]
+out4 := users.Skip(1)
+collection.Dump(out4.Items())
+// []main.User [
+//  0 => #main.User {
+//    +ID => 2 #int
+//  }
+//  1 => #main.User {
+//    +ID => 3 #int
+//  }
+// ]
 ```
 
 #### `SkipLast`
@@ -2334,56 +2334,56 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-	out := c.SkipLast(2)
-	collection.Dump(out.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	// ]
+out := c.SkipLast(2)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
 ```
 
 _Example: skip none_
 
 ```go
 out2 := c.SkipLast(0)
-	collection.Dump(out2.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	//   3 => 4 #int
-	//   4 => 5 #int
-	// ]
+collection.Dump(out2.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
 ```
 
 _Example: skip all_
 
 ```go
 out3 := c.SkipLast(10)
-	collection.Dump(out3.Items())
-	// #[]int []
+collection.Dump(out3.Items())
+// #[]int []
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID int
-	}
+	ID int
+}
 
-	users := collection.New([]User{
-		{ID: 1},
-		{ID: 2},
-		{ID: 3},
-	})
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+})
 
-	out4 := users.SkipLast(1)
-	collection.Dump(out4.Items())
-	// #[]collection.User [
-	//   0 => {ID:1} #collection.User
-	//   1 => {ID:2} #collection.User
-	// ]
+out4 := users.SkipLast(1)
+collection.Dump(out4.Items())
+// #[]collection.User [
+//   0 => {ID:1} #collection.User
+//   1 => {ID:2} #collection.User
+// ]
 ```
 
 #### `Take`
@@ -2399,47 +2399,47 @@ _Example: integers - take first 3_
 
 ```go
 c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
-	out1 := c1.Take(3)
-	collection.Dump(out1.Items())
-	// #[]int [
-	//	0 => 0 #int
-	//	1 => 1 #int
-	//	2 => 2 #int
-	// ]
+out1 := c1.Take(3)
+collection.Dump(out1.Items())
+// #[]int [
+//	0 => 0 #int
+//	1 => 1 #int
+//	2 => 2 #int
+// ]
 ```
 
 _Example: integers - take last 2 (negative n)_
 
 ```go
 c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
-	out2 := c2.Take(-2)
-	collection.Dump(out2.Items())
-	// #[]int [
-	//	0 => 4 #int
-	//	1 => 5 #int
-	// ]
+out2 := c2.Take(-2)
+collection.Dump(out2.Items())
+// #[]int [
+//	0 => 4 #int
+//	1 => 5 #int
+// ]
 ```
 
 _Example: integers - n exceeds length → whole collection_
 
 ```go
 c3 := collection.New([]int{10, 20})
-	out3 := c3.Take(10)
-	collection.Dump(out3.Items())
-	// #[]int [
-	//	0 => 10 #int
-	//	1 => 20 #int
-	// ]
+out3 := c3.Take(10)
+collection.Dump(out3.Items())
+// #[]int [
+//	0 => 10 #int
+//	1 => 20 #int
+// ]
 ```
 
 _Example: integers - zero → empty_
 
 ```go
 c4 := collection.New([]int{1, 2, 3})
-	out4 := c4.Take(0)
-	collection.Dump(out4.Items())
-	// #[]int [
-	// ]
+out4 := c4.Take(0)
+collection.Dump(out4.Items())
+// #[]int [
+// ]
 ```
 
 #### `TakeLast`
@@ -2455,54 +2455,54 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-	out := c.TakeLast(2)
-	collection.Dump(out.Items())
-	// #[]int [
-	//   0 => 4 #int
-	//   1 => 5 #int
-	// ]
+out := c.TakeLast(2)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 4 #int
+//   1 => 5 #int
+// ]
 ```
 
 _Example: take none_
 
 ```go
 out2 := c.TakeLast(0)
-	collection.Dump(out2.Items())
-	// #[]int []
+collection.Dump(out2.Items())
+// #[]int []
 ```
 
 _Example: take all_
 
 ```go
 out3 := c.TakeLast(10)
-	collection.Dump(out3.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	//   3 => 4 #int
-	//   4 => 5 #int
-	// ]
+collection.Dump(out3.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID int
-	}
+	ID int
+}
 
-	users := collection.New([]User{
-		{ID: 1},
-		{ID: 2},
-		{ID: 3},
-	})
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+})
 
-	out4 := users.TakeLast(1)
-	collection.Dump(out4.Items())
-	// #[]collection.User [
-	//   0 => {ID:3} #collection.User
-	// ]
+out4 := users.TakeLast(1)
+collection.Dump(out4.Items())
+// #[]collection.User [
+//   0 => {ID:3} #collection.User
+// ]
 ```
 
 ### Transformation
@@ -2514,51 +2514,51 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2})
-	c.Append(3, 4).Dump()
-	// #[]int [
-	//  0 => 1 #int
-	//  1 => 2 #int
-	//  2 => 3 #int
-	//  3 => 4 #int
-	// ]
+c.Append(3, 4).Dump()
+// #[]int [
+//  0 => 1 #int
+//  1 => 2 #int
+//  2 => 3 #int
+//  3 => 4 #int
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	users.Append(
-		User{ID: 3, Name: "Carol"},
-		User{ID: 4, Name: "Dave"},
-	).Dump()
+users.Append(
+	User{ID: 3, Name: "Carol"},
+	User{ID: 4, Name: "Dave"},
+).Dump()
 
-	// #[]main.User [
-	//  0 => #main.User {
-	//    +ID   => 1 #int
-	//    +Name => "Alice" #string
-	//  }
-	//  1 => #main.User {
-	//    +ID   => 2 #int
-	//    +Name => "Bob" #string
-	//  }
-	//  2 => #main.User {
-	//    +ID   => 3 #int
-	//    +Name => "Carol" #string
-	//  }
-	//  3 => #main.User {
-	//    +ID   => 4 #int
-	//    +Name => "Dave" #string
-	//  }
-	// ]
+// #[]main.User [
+//  0 => #main.User {
+//    +ID   => 1 #int
+//    +Name => "Alice" #string
+//  }
+//  1 => #main.User {
+//    +ID   => 2 #int
+//    +Name => "Bob" #string
+//  }
+//  2 => #main.User {
+//    +ID   => 3 #int
+//    +Name => "Carol" #string
+//  }
+//  3 => #main.User {
+//    +ID   => 4 #int
+//    +Name => "Dave" #string
+//  }
+// ]
 ```
 
 #### `Concat`
@@ -2568,17 +2568,17 @@ _Example: strings_
 
 ```go
 c := collection.New([]string{"John Doe"})
-	concatenated := c.
-		Concat([]string{"Jane Doe"}).
-		Concat([]string{"Johnny Doe"}).
-		Items()
-	collection.Dump(concatenated)
+concatenated := c.
+	Concat([]string{"Jane Doe"}).
+	Concat([]string{"Johnny Doe"}).
+	Items()
+collection.Dump(concatenated)
 
-	// #[]string [
-	//  0 => "John Doe" #string
-	//  1 => "Jane Doe" #string
-	//  2 => "Johnny Doe" #string
-	// ]
+// #[]string [
+//  0 => "John Doe" #string
+//  1 => "Jane Doe" #string
+//  2 => "Johnny Doe" #string
+// ]
 ```
 
 #### `Each`
@@ -2590,13 +2590,13 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3})
 
-	sum := 0
-	c.Each(func(v int) {
-		sum += v
-	})
+sum := 0
+c.Each(func(v int) {
+	sum += v
+})
 
-	collection.Dump(sum)
-	// 6 #int
+collection.Dump(sum)
+// 6 #int
 ```
 
 _Example: strings_
@@ -2604,44 +2604,44 @@ _Example: strings_
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
 
-	var out []string
-	c2.Each(func(s string) {
-		out = append(out, strings.ToUpper(s))
-	})
+var out []string
+c2.Each(func(s string) {
+	out = append(out, strings.ToUpper(s))
+})
 
-	collection.Dump(out)
-	// #[]string [
-	//   0 => "APPLE"  #string
-	//   1 => "BANANA" #string
-	//   2 => "CHERRY" #string
-	// ]
+collection.Dump(out)
+// #[]string [
+//   0 => "APPLE"  #string
+//   1 => "BANANA" #string
+//   2 => "CHERRY" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-		{ID: 3, Name: "Charlie"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Charlie"},
+})
 
-	var names []string
-	users.Each(func(u User) {
-		names = append(names, u.Name)
-	})
+var names []string
+users.Each(func(u User) {
+	names = append(names, u.Name)
+})
 
-	collection.Dump(names)
-	// #[]string [
-	//   0 => "Alice"   #string
-	//   1 => "Bob"     #string
-	//   2 => "Charlie" #string
-	// ]
+collection.Dump(names)
+// #[]string [
+//   0 => "Alice"   #string
+//   1 => "Bob"     #string
+//   2 => "Charlie" #string
+// ]
 ```
 
 #### `Map`
@@ -2652,16 +2652,16 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3})
 
-	mapped := c.Map(func(v int) int {
-		return v * 10
-	})
+mapped := c.Map(func(v int) int {
+	return v * 10
+})
 
-	collection.Dump(mapped.Items())
-	// #[]int [
-	//   0 => 10 #int
-	//   1 => 20 #int
-	//   2 => 30 #int
-	// ]
+collection.Dump(mapped.Items())
+// #[]int [
+//   0 => 10 #int
+//   1 => 20 #int
+//   2 => 30 #int
+// ]
 ```
 
 _Example: strings_
@@ -2669,47 +2669,47 @@ _Example: strings_
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
 
-	upper := c2.Map(func(s string) string {
-		return strings.ToUpper(s)
-	})
+upper := c2.Map(func(s string) string {
+	return strings.ToUpper(s)
+})
 
-	collection.Dump(upper.Items())
-	// #[]string [
-	//   0 => "APPLE"  #string
-	//   1 => "BANANA" #string
-	//   2 => "CHERRY" #string
-	// ]
+collection.Dump(upper.Items())
+// #[]string [
+//   0 => "APPLE"  #string
+//   1 => "BANANA" #string
+//   2 => "CHERRY" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	updated := users.Map(func(u User) User {
-		u.Name = strings.ToUpper(u.Name)
-		return u
-	})
+updated := users.Map(func(u User) User {
+	u.Name = strings.ToUpper(u.Name)
+	return u
+})
 
-	collection.Dump(updated.Items())
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 1        #int
-	//     +Name => "ALICE"  #string
-	//   }
-	//   1 => #main.User {
-	//     +ID   => 2        #int
-	//     +Name => "BOB"    #string
-	//   }
-	// ]
+collection.Dump(updated.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1        #int
+//     +Name => "ALICE"  #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2        #int
+//     +Name => "BOB"    #string
+//   }
+// ]
 ```
 
 #### `MapTo`
@@ -2719,58 +2719,58 @@ _Example: integers - extract parity label_
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4})
-	parity := collection.MapTo(nums, func(n int) string {
-		if n%2 == 0 {
-			return "even"
-		}
-		return "odd"
-	})
-	collection.Dump(parity.Items())
-	// #[]string [
-	//   0 => "odd" #string
-	//   1 => "even" #string
-	//   2 => "odd" #string
-	//   3 => "even" #string
-	// ]
+parity := collection.MapTo(nums, func(n int) string {
+	if n%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(parity.Items())
+// #[]string [
+//   0 => "odd" #string
+//   1 => "even" #string
+//   2 => "odd" #string
+//   3 => "even" #string
+// ]
 ```
 
 _Example: strings - length of each value_
 
 ```go
 words := collection.New([]string{"go", "forj", "rocks"})
-	lengths := collection.MapTo(words, func(s string) int {
-		return len(s)
-	})
-	collection.Dump(lengths.Items())
-	// #[]int [
-	//   0 => 2 #int
-	//   1 => 4 #int
-	//   2 => 5 #int
-	// ]
+lengths := collection.MapTo(words, func(s string) int {
+	return len(s)
+})
+collection.Dump(lengths.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+//   2 => 5 #int
+// ]
 ```
 
 _Example: structs - MapTo a field_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	names := collection.MapTo(users, func(u User) string {
-		return u.Name
-	})
+names := collection.MapTo(users, func(u User) string {
+	return u.Name
+})
 
-	collection.Dump(names.Items())
-	// #[]string [
-	//   0 => "Alice" #string
-	//   1 => "Bob" #string
-	// ]
+collection.Dump(names.Items())
+// #[]string [
+//   0 => "Alice" #string
+//   1 => "Bob" #string
+// ]
 ```
 
 #### `Merge`
@@ -2780,72 +2780,72 @@ _Example: integers - merging slices_
 
 ```go
 ints := collection.New([]int{1, 2})
-	extra := []int{3, 4}
-	// Merge the extra slice into the ints collection
-	merged1 := ints.Merge(extra)
-	collection.Dump(merged1.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	//   3 => 4 #int
-	// ]
+extra := []int{3, 4}
+// Merge the extra slice into the ints collection
+merged1 := ints.Merge(extra)
+collection.Dump(merged1.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+// ]
 ```
 
 _Example: strings - merging another collection_
 
 ```go
 strs := collection.New([]string{"a", "b"})
-	more := collection.New([]string{"c", "d"})
+more := collection.New([]string{"c", "d"})
 
-	merged2 := strs.Merge(more)
-	collection.Dump(merged2.Items())
-	// #[]string [
-	//   0 => "a" #string
-	//   1 => "b" #string
-	//   2 => "c" #string
-	//   3 => "d" #string
-	// ]
+merged2 := strs.Merge(more)
+collection.Dump(merged2.Items())
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+//   2 => "c" #string
+//   3 => "d" #string
+// ]
 ```
 
 _Example: structs - merging struct slices_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	moreUsers := []User{
-		{ID: 3, Name: "Carol"},
-		{ID: 4, Name: "Dave"},
-	}
+moreUsers := []User{
+	{ID: 3, Name: "Carol"},
+	{ID: 4, Name: "Dave"},
+}
 
-	merged3 := users.Merge(moreUsers)
-	collection.Dump(merged3.Items())
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 1 #int
-	//     +Name => "Alice" #string
-	//   }
-	//   1 => #main.User {
-	//     +ID   => 2 #int
-	//     +Name => "Bob" #string
-	//   }
-	//   2 => #main.User {
-	//     +ID   => 3 #int
-	//     +Name => "Carol" #string
-	//   }
-	//   3 => #main.User {
-	//     +ID   => 4 #int
-	//     +Name => "Dave" #string
-	//   }
-	// ]
+merged3 := users.Merge(moreUsers)
+collection.Dump(merged3.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+//   2 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
+//   }
+//   3 => #main.User {
+//     +ID   => 4 #int
+//     +Name => "Dave" #string
+//   }
+// ]
 ```
 
 #### `Multiply`
@@ -2856,65 +2856,65 @@ _Example: integers_
 
 ```go
 ints := collection.New([]int{1, 2})
-	out := ints.Multiply(3)
-	collection.Dump(out.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 1 #int
-	//   3 => 2 #int
-	//   4 => 1 #int
-	//   5 => 2 #int
-	// ]
+out := ints.Multiply(3)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 1 #int
+//   3 => 2 #int
+//   4 => 1 #int
+//   5 => 2 #int
+// ]
 ```
 
 _Example: strings_
 
 ```go
 strs := collection.New([]string{"a", "b"})
-	out2 := strs.Multiply(2)
-	collection.Dump(out2.Items())
-	// #[]string [
-	//   0 => "a" #string
-	//   1 => "b" #string
-	//   2 => "a" #string
-	//   3 => "b" #string
-	// ]
+out2 := strs.Multiply(2)
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+//   2 => "a" #string
+//   3 => "b" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		Name string
-	}
+	Name string
+}
 
-	users := collection.New([]User{{Name: "Alice"}, {Name: "Bob"}})
-	out3 := users.Multiply(2)
-	collection.Dump(out3.Items())
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +Name => "Alice" #string
-	//   }
-	//   1 => #main.User {
-	//     +Name => "Bob" #string
-	//   }
-	//   2 => #main.User {
-	//     +Name => "Alice" #string
-	//   }
-	//   3 => #main.User {
-	//     +Name => "Bob" #string
-	//   }
-	// ]
+users := collection.New([]User{{Name: "Alice"}, {Name: "Bob"}})
+out3 := users.Multiply(2)
+collection.Dump(out3.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +Name => "Bob" #string
+//   }
+//   2 => #main.User {
+//     +Name => "Alice" #string
+//   }
+//   3 => #main.User {
+//     +Name => "Bob" #string
+//   }
+// ]
 ```
 
 _Example: multiplying by zero or negative returns empty_
 
 ```go
 none := ints.Multiply(0)
-	collection.Dump(none.Items())
-	// #[]int [
-	// ]
+collection.Dump(none.Items())
+// #[]int [
+// ]
 ```
 
 #### `Pipe`
@@ -2925,58 +2925,58 @@ _Example: integers – computing a sum_
 
 ```go
 c := collection.New([]int{1, 2, 3})
-	sum := c.Pipe(func(col *collection.Collection[int]) any {
-		total := 0
-		for _, v := range col.Items() {
-			total += v
-		}
-		return total
-	})
-	collection.Dump(sum)
-	// 6 #int
+sum := c.Pipe(func(col *collection.Collection[int]) any {
+	total := 0
+	for _, v := range col.Items() {
+		total += v
+	}
+	return total
+})
+collection.Dump(sum)
+// 6 #int
 ```
 
 _Example: strings – joining values_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-	joined := c2.Pipe(func(col *collection.Collection[string]) any {
-		out := ""
-		for _, v := range col.Items() {
-			out += v
-		}
-		return out
-	})
-	collection.Dump(joined)
-	// "abc" #string
+joined := c2.Pipe(func(col *collection.Collection[string]) any {
+	out := ""
+	for _, v := range col.Items() {
+		out += v
+	}
+	return out
+})
+collection.Dump(joined)
+// "abc" #string
 ```
 
 _Example: structs – extracting just the names_
 
 ```go
 type User struct {
-		ID   int
-		Name string
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
+
+names := users.Pipe(func(col *collection.Collection[User]) any {
+	result := make([]string, 0, len(col.Items()))
+	for _, u := range col.Items() {
+		result = append(result, u.Name)
 	}
+	return result
+})
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
-
-	names := users.Pipe(func(col *collection.Collection[User]) any {
-		result := make([]string, 0, len(col.Items()))
-		for _, u := range col.Items() {
-			result = append(result, u.Name)
-		}
-		return result
-	})
-
-	collection.Dump(names)
-	// #[]string [
-	//   0 => "Alice" #string
-	//   1 => "Bob" #string
-	// ]
+collection.Dump(names)
+// #[]string [
+//   0 => "Alice" #string
+//   1 => "Bob" #string
+// ]
 ```
 
 #### `Pluck`
@@ -2988,58 +2988,58 @@ _Example: integers - extract parity label_
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4})
-	parity := collection.Pluck(nums, func(n int) string {
-		if n%2 == 0 {
-			return "even"
-		}
-		return "odd"
-	})
-	collection.Dump(parity.Items())
-	// #[]string [
-	//   0 => "odd" #string
-	//   1 => "even" #string
-	//   2 => "odd" #string
-	//   3 => "even" #string
-	// ]
+parity := collection.Pluck(nums, func(n int) string {
+	if n%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(parity.Items())
+// #[]string [
+//   0 => "odd" #string
+//   1 => "even" #string
+//   2 => "odd" #string
+//   3 => "even" #string
+// ]
 ```
 
 _Example: strings - length of each value_
 
 ```go
 words := collection.New([]string{"go", "forj", "rocks"})
-	lengths := collection.Pluck(words, func(s string) int {
-		return len(s)
-	})
-	collection.Dump(lengths.Items())
-	// #[]int [
-	//   0 => 2 #int
-	//   1 => 4 #int
-	//   2 => 5 #int
-	// ]
+lengths := collection.Pluck(words, func(s string) int {
+	return len(s)
+})
+collection.Dump(lengths.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+//   2 => 5 #int
+// ]
 ```
 
 _Example: structs - pluck a field_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	names := collection.Pluck(users, func(u User) string {
-		return u.Name
-	})
+names := collection.Pluck(users, func(u User) string {
+	return u.Name
+})
 
-	collection.Dump(names.Items())
-	// #[]string [
-	//   0 => "Alice" #string
-	//   1 => "Bob" #string
-	// ]
+collection.Dump(names.Items())
+// #[]string [
+//   0 => "Alice" #string
+//   1 => "Bob" #string
+// ]
 ```
 
 #### `Prepend`
@@ -3050,78 +3050,78 @@ _Example: integers_
 
 ```go
 c := collection.New([]int{3, 4})
-	newC := c.Prepend(1, 2)
-	collection.Dump(newC.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	//   3 => 4 #int
-	// ]
+newC := c.Prepend(1, 2)
+collection.Dump(newC.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+// ]
 ```
 
 _Example: strings_
 
 ```go
 letters := collection.New([]string{"c", "d"})
-	out := letters.Prepend("a", "b")
-	collection.Dump(out.Items())
-	// #[]string [
-	//   0 => "a" #string
-	//   1 => "b" #string
-	//   2 => "c" #string
-	//   3 => "d" #string
-	// ]
+out := letters.Prepend("a", "b")
+collection.Dump(out.Items())
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+//   2 => "c" #string
+//   3 => "d" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 2, Name: "Bob"},
+})
 
-	out2 := users.Prepend(User{ID: 1, Name: "Alice"})
-	collection.Dump(out2.Items())
-	// #[]main.User [
-	//   0 => #main.User {
-	//     +ID   => 1 #int
-	//     +Name => "Alice" #string
-	//   }
-	//   1 => #main.User {
-	//     +ID   => 2 #int
-	//     +Name => "Bob" #string
-	//   }
-	// ]
+out2 := users.Prepend(User{ID: 1, Name: "Alice"})
+collection.Dump(out2.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 1 #int
+//     +Name => "Alice" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+// ]
 ```
 
 _Example: integers - Prepending into an empty collection_
 
 ```go
 empty := collection.New([]int{})
-	out3 := empty.Prepend(9, 8)
-	collection.Dump(out3.Items())
-	// #[]int [
-	//   0 => 9 #int
-	//   1 => 8 #int
-	// ]
+out3 := empty.Prepend(9, 8)
+collection.Dump(out3.Items())
+// #[]int [
+//   0 => 9 #int
+//   1 => 8 #int
+// ]
 ```
 
 _Example: integers - Prepending no values → returns a copy of original_
 
 ```go
 c2 := collection.New([]int{1, 2})
-	out4 := c2.Prepend()
-	collection.Dump(out4.Items())
-	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	// ]
+out4 := c2.Prepend()
+collection.Dump(out4.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+// ]
 ```
 
 #### `Push`
@@ -3131,46 +3131,46 @@ _Example: integers_
 
 ```go
 nums := collection.New([]int{1, 2}).Push(3, 4)
-	nums.Dump()
-	// #[]int [
-	//  0 => 1 #int
-	//  1 => 2 #int
-	//  2 => 3 #int
-	//  3 => 4 #int
-	// ]
+nums.Dump()
+// #[]int [
+//  0 => 1 #int
+//  1 => 2 #int
+//  2 => 3 #int
+//  3 => 4 #int
+// ]
 
-	// Complex type (structs)
-	type User struct {
-		Name string
-		Age  int
-	}
+// Complex type (structs)
+type User struct {
+	Name string
+	Age  int
+}
 
-	users := collection.New([]User{
-		{Name: "Alice", Age: 30},
-		{Name: "Bob", Age: 25},
-	}).Push(
-		User{Name: "Carol", Age: 40},
-		User{Name: "Dave", Age: 20},
-	)
-	users.Dump()
-	// #[]main.User [
-	//  0 => #main.User {
-	//    +Name => "Alice" #string
-	//    +Age  => 30 #int
-	//  }
-	//  1 => #main.User {
-	//    +Name => "Bob" #string
-	//    +Age  => 25 #int
-	//  }
-	//  2 => #main.User {
-	//    +Name => "Carol" #string
-	//    +Age  => 40 #int
-	//  }
-	//  3 => #main.User {
-	//    +Name => "Dave" #string
-	//    +Age  => 20 #int
-	//  }
-	// ]
+users := collection.New([]User{
+	{Name: "Alice", Age: 30},
+	{Name: "Bob", Age: 25},
+}).Push(
+	User{Name: "Carol", Age: 40},
+	User{Name: "Dave", Age: 20},
+)
+users.Dump()
+// #[]main.User [
+//  0 => #main.User {
+//    +Name => "Alice" #string
+//    +Age  => 30 #int
+//  }
+//  1 => #main.User {
+//    +Name => "Bob" #string
+//    +Age  => 25 #int
+//  }
+//  2 => #main.User {
+//    +Name => "Carol" #string
+//    +Age  => 40 #int
+//  }
+//  3 => #main.User {
+//    +Name => "Dave" #string
+//    +Age  => 20 #int
+//  }
+// ]
 ```
 
 #### `Tap`
@@ -3181,55 +3181,55 @@ _Example: integers - capture intermediate state during a chain_
 
 ```go
 captured1 := []int{}
-	c1 := collection.New([]int{3, 1, 2}).
-		Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
-		Tap(func(col *collection.Collection[int]) {
-			captured1 = append([]int(nil), col.Items()...) // snapshot copy
-		}).
-		Filter(func(v int) bool { return v >= 2 }).
-		Dump()
-		// #[]int [
-		//  0 => 2 #int
-		//  1 => 3 #int
-		// ]
+c1 := collection.New([]int{3, 1, 2}).
+	Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
+	Tap(func(col *collection.Collection[int]) {
+		captured1 = append([]int(nil), col.Items()...) // snapshot copy
+	}).
+	Filter(func(v int) bool { return v >= 2 }).
+	Dump()
+	// #[]int [
+	//  0 => 2 #int
+	//  1 => 3 #int
+	// ]
 
-	// Use BOTH variables so nothing is "declared and not used"
-	collection.Dump(c1.Items())
-	collection.Dump(captured1)
-	// c1 → #[]int [2,3]
-	// captured1 → #[]int [1,2,3]
+// Use BOTH variables so nothing is "declared and not used"
+collection.Dump(c1.Items())
+collection.Dump(captured1)
+// c1 → #[]int [2,3]
+// captured1 → #[]int [1,2,3]
 ```
 
 _Example: integers - tap for debugging without changing flow_
 
 ```go
 c2 := collection.New([]int{10, 20, 30}).
-		Tap(func(col *collection.Collection[int]) {
-			collection.Dump(col.Items())
-		}).
-		Filter(func(v int) bool { return v > 10 })
+	Tap(func(col *collection.Collection[int]) {
+		collection.Dump(col.Items())
+	}).
+	Filter(func(v int) bool { return v > 10 })
 
-	collection.Dump(c2.Items()) // ensures c2 is used
+collection.Dump(c2.Items()) // ensures c2 is used
 ```
 
 _Example: structs - Tap with struct collection_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+})
 
-	users2 := users.Tap(func(col *collection.Collection[User]) {
-		collection.Dump(col.Items())
-	})
+users2 := users.Tap(func(col *collection.Collection[User]) {
+	collection.Dump(col.Items())
+})
 
-	collection.Dump(users2.Items()) // ensures users2 is used
+collection.Dump(users2.Items()) // ensures users2 is used
 ```
 
 #### `Times`
@@ -3240,62 +3240,62 @@ _Example: integers - double each index_
 
 ```go
 cTimes1 := collection.Times(5, func(i int) int {
-		return i * 2
-	})
-	collection.Dump(cTimes1.Items())
-	// #[]int [
-	//	0 => 2  #int
-	//	1 => 4  #int
-	//	2 => 6  #int
-	//	3 => 8  #int
-	//	4 => 10 #int
-	// ]
+	return i * 2
+})
+collection.Dump(cTimes1.Items())
+// #[]int [
+//	0 => 2  #int
+//	1 => 4  #int
+//	2 => 6  #int
+//	3 => 8  #int
+//	4 => 10 #int
+// ]
 ```
 
 _Example: strings_
 
 ```go
 cTimes2 := collection.Times(3, func(i int) string {
-		return fmt.Sprintf("item-%d", i)
-	})
-	collection.Dump(cTimes2.Items())
-	// #[]string [
-	//	0 => "item-1" #string
-	//	1 => "item-2" #string
-	//	2 => "item-3" #string
-	// ]
+	return fmt.Sprintf("item-%d", i)
+})
+collection.Dump(cTimes2.Items())
+// #[]string [
+//	0 => "item-1" #string
+//	1 => "item-2" #string
+//	2 => "item-3" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type Point struct {
-		X int
-		Y int
-	}
+	X int
+	Y int
+}
 
-	cTimes3 := collection.Times(4, func(i int) Point {
-		return Point{X: i, Y: i * i}
-	})
-	collection.Dump(cTimes3.Items())
-	// #[]main.Point [
-	//	0 => #main.Point {
-	//		+X => 1 #int
-	//		+Y => 1 #int
-	//	}
-	//	1 => #main.Point {
-	//		+X => 2 #int
-	//		+Y => 4 #int
-	//	}
-	//	2 => #main.Point {
-	//		+X => 3 #int
-	//		+Y => 9 #int
-	//	}
-	//	3 => #main.Point {
-	//		+X => 4 #int
-	//		+Y => 16 #int
-	//	}
-	// ]
+cTimes3 := collection.Times(4, func(i int) Point {
+	return Point{X: i, Y: i * i}
+})
+collection.Dump(cTimes3.Items())
+// #[]main.Point [
+//	0 => #main.Point {
+//		+X => 1 #int
+//		+Y => 1 #int
+//	}
+//	1 => #main.Point {
+//		+X => 2 #int
+//		+Y => 4 #int
+//	}
+//	2 => #main.Point {
+//		+X => 3 #int
+//		+Y => 9 #int
+//	}
+//	3 => #main.Point {
+//		+X => 4 #int
+//		+Y => 16 #int
+//	}
+// ]
 ```
 
 #### `Transform`
@@ -3305,50 +3305,50 @@ _Example: integers_
 
 ```go
 c1 := collection.New([]int{1, 2, 3})
-	c1.Transform(func(v int) int { return v * 2 })
-	collection.Dump(c1.Items())
-	// #[]int [
-	//	0 => 2 #int
-	//	1 => 4 #int
-	//	2 => 6 #int
-	// ]
+c1.Transform(func(v int) int { return v * 2 })
+collection.Dump(c1.Items())
+// #[]int [
+//	0 => 2 #int
+//	1 => 4 #int
+//	2 => 6 #int
+// ]
 ```
 
 _Example: strings_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-	c2.Transform(func(s string) string { return strings.ToUpper(s) })
-	collection.Dump(c2.Items())
-	// #[]string [
-	//	0 => "A" #string
-	//	1 => "B" #string
-	//	2 => "C" #string
-	// ]
+c2.Transform(func(s string) string { return strings.ToUpper(s) })
+collection.Dump(c2.Items())
+// #[]string [
+//	0 => "A" #string
+//	1 => "B" #string
+//	2 => "C" #string
+// ]
 ```
 
 _Example: structs_
 
 ```go
 type User struct {
-		ID   int
-		Name string
-	}
+	ID   int
+	Name string
+}
 
-	c3 := collection.New([]User{
-		{ID: 1, Name: "alice"},
-		{ID: 2, Name: "bob"},
-	})
+c3 := collection.New([]User{
+	{ID: 1, Name: "alice"},
+	{ID: 2, Name: "bob"},
+})
 
-	c3.Transform(func(u User) User {
-		u.Name = strings.ToUpper(u.Name)
-		return u
-	})
+c3.Transform(func(u User) User {
+	u.Name = strings.ToUpper(u.Name)
+	return u
+})
 
-	collection.Dump(c3.Items())
-	// #[]collection.User [
-	//	0 => {ID:1 Name:"ALICE"} #collection.User
-	//	1 => {ID:2 Name:"BOB"}   #collection.User
-	// ]
+collection.Dump(c3.Items())
+// #[]collection.User [
+//	0 => {ID:1 Name:"ALICE"} #collection.User
+//	1 => {ID:2 Name:"BOB"}   #collection.User
+// ]
 ```
 <!-- api:embed:end -->

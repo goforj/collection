@@ -33,7 +33,7 @@
 - 📏 **Sort, GroupBy, Chunk**, and more
 - 🧪 **Safe-by-default** - defensive copies where appropriate
 - 📜 **Built-in JSON helpers** (`ToJSON()`, `ToPrettyJSON()`)
-- 🧰 **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`, `DdStr()`)
+- 🧰 **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`)
 - 🧱 **Works with any Go type**, including structs, pointers, and deeply nested composites
 
 ## Design Principles

@@ -97,6 +97,7 @@ import "github.com/goforj/collection"
 | [Prepend](<#Collection[T].Prepend>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/prepend.go#L75" target="_blank">Source</a> |
 | [Push](<#Collection[T].Push>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/append.go#L102" target="_blank">Source</a> |
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
+| [Reverse](<#Collection[T].Reverse>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reverse.go#L54" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
@@ -2288,6 +2289,69 @@ collection.Dump(total)
 // #main.Stats [
 //   +Count => 3 #int
 //   +Sum   => 60 #int
+// ]
+```
+
+
+
+<a name="Collection[T].Reverse"></a>
+### Reverse
+
+
+Reverse reverses the order of items in the collection in place and returns the same collection for chaining.
+
+This operation performs no allocations.
+
+Example: integers
+
+```go
+c := collection.New([]int{1, 2, 3, 4})
+c.Reverse()
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 4 #int
+//   1 => 3 #int
+//   2 => 2 #int
+//   3 => 1 #int
+// ]
+```
+
+Example: strings – chaining
+
+```go
+out := collection.New([]string{"a", "b", "c"}).
+	Reverse().
+	Append("d").
+	Items()
+
+collection.Dump(out)
+// #[]string [
+//   0 => "c" #string
+//   1 => "b" #string
+//   2 => "a" #string
+//   3 => "d" #string
+// ]
+```
+
+Example: structs
+
+```go
+type User struct {
+	ID int
+}
+
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+})
+
+users.Reverse()
+collection.Dump(users.Items())
+// #[]collection.User [
+//   0 => {ID:3} #collection.User
+//   1 => {ID:2} #collection.User
+//   2 => {ID:1} #collection.User
 // ]
 ```
 

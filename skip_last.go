@@ -1,8 +1,8 @@
 package collection
 
-// Skip returns a new collection with the first n items skipped.
-// If n is less than or equal to zero, Skip returns the full collection.
-// If n is greater than or equal to the collection length, Skip returns
+// SkipLast returns a new collection with the last n items skipped.
+// If n is less than or equal to zero, SkipLast returns the full collection.
+// If n is greater than or equal to the collection length, SkipLast returns
 // an empty collection.
 //
 // This operation performs no element allocations; it re-slices the
@@ -11,17 +11,17 @@ package collection
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
-//	out := c.Skip(2)
+//	out := c.SkipLast(2)
 //	collection.Dump(out.Items())
 //	// #[]int [
-//	//   0 => 3 #int
-//	//   1 => 4 #int
-//	//   2 => 5 #int
+//	//   0 => 1 #int
+//	//   1 => 2 #int
+//	//   2 => 3 #int
 //	// ]
 //
 // Example: skip none
 //
-//	out2 := c.Skip(0)
+//	out2 := c.SkipLast(0)
 //	collection.Dump(out2.Items())
 //	// #[]int [
 //	//   0 => 1 #int
@@ -33,7 +33,7 @@ package collection
 //
 // Example: skip all
 //
-//	out3 := c.Skip(10)
+//	out3 := c.SkipLast(10)
 //	collection.Dump(out3.Items())
 //	// #[]int []
 //
@@ -49,17 +49,13 @@ package collection
 //		{ID: 3},
 //	})
 //
-//	out4 := users.Skip(1)
+//	out4 := users.SkipLast(1)
 //	collection.Dump(out4.Items())
-//	// []main.User [
-//	//  0 => #main.User {
-//	//    +ID => 2 #int
-//	//  }
-//	//  1 => #main.User {
-//	//    +ID => 3 #int
-//	//  }
+//	// #[]collection.User [
+//	//   0 => {ID:1} #collection.User
+//	//   1 => {ID:2} #collection.User
 //	// ]
-func (c *Collection[T]) Skip(n int) *Collection[T] {
+func (c *Collection[T]) SkipLast(n int) *Collection[T] {
 	items := c.items
 	l := len(items)
 
@@ -71,5 +67,5 @@ func (c *Collection[T]) Skip(n int) *Collection[T] {
 		return &Collection[T]{items: items[:0]}
 	}
 
-	return &Collection[T]{items: items[n:]}
+	return &Collection[T]{items: items[:l-n]}
 }

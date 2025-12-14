@@ -99,7 +99,8 @@ import "github.com/goforj/collection"
 | [Reduce](<#Collection[T].Reduce>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reduce.go#L49" target="_blank">Source</a> |
 | [Reverse](<#Collection[T].Reverse>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/reverse.go#L54" target="_blank">Source</a> |
 | [Shuffle](<#Collection[T].Shuffle>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/shuffle.go#L56" target="_blank">Source</a> |
-| [Skip](<#Collection[T].Skip>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/skip.go#L58" target="_blank">Source</a> |
+| [Skip](<#Collection[T].Skip>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/skip.go#L62" target="_blank">Source</a> |
+| [SkipLast](<#Collection[T].SkipLast>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/skip_last.go#L58" target="_blank">Source</a> |
 | [Sort](<#Collection[T].Sort>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/sort.go#L67" target="_blank">Source</a> |
 | [Take](<#Collection[T].Take>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take.go#L49" target="_blank">Source</a> |
 | [TakeUntilFn](<#Collection[T].TakeUntilFn>) | type Collection | Method | <a href="https://github.com/goforj/collection/blob/main/take_until.go#L34" target="_blank">Source</a> |
@@ -2466,9 +2467,79 @@ users := collection.New([]User{
 
 out4 := users.Skip(1)
 collection.Dump(out4.Items())
+// []main.User [
+//  0 => #main.User {
+//    +ID => 2 #int
+//  }
+//  1 => #main.User {
+//    +ID => 3 #int
+//  }
+// ]
+```
+
+
+
+<a name="Collection[T].SkipLast"></a>
+### SkipLast
+
+
+SkipLast returns a new collection with the last n items skipped. If n is less than or equal to zero, SkipLast returns the full collection. If n is greater than or equal to the collection length, SkipLast returns an empty collection.
+
+This operation performs no element allocations; it re\-slices the underlying slice.
+
+Example: integers
+
+```go
+c := collection.New([]int{1, 2, 3, 4, 5})
+out := c.SkipLast(2)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
+Example: skip none
+
+```go
+out2 := c.SkipLast(0)
+collection.Dump(out2.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
+```
+
+Example: skip all
+
+```go
+out3 := c.SkipLast(10)
+collection.Dump(out3.Items())
+// #[]int []
+```
+
+Example: structs
+
+```go
+type User struct {
+	ID int
+}
+
+users := collection.New([]User{
+	{ID: 1},
+	{ID: 2},
+	{ID: 3},
+})
+
+out4 := users.SkipLast(1)
+collection.Dump(out4.Items())
 // #[]collection.User [
-//   0 => {ID:2} #collection.User
-//   1 => {ID:3} #collection.User
+//   0 => {ID:1} #collection.User
+//   1 => {ID:2} #collection.User
 // ]
 ```
 

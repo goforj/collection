@@ -117,7 +117,7 @@ Annotations describe **observable behavior**, not implementation details.
 
 ### Runnable examples
 
-Every function has a corresponding runnable example under `./examples`.
+Every function has a corresponding runnable example under [`./examples`](./examples).
 
 These examples are **generated directly from the documentation blocks** of each function, ensuring the docs and code never drift. These are the same examples you see here in the README and GoDoc.
 

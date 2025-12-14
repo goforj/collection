@@ -141,7 +141,7 @@ go get github.com/goforj/collection
 | **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
 | **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
 | **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) |
-| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) |
+| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) |
 | **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) |
 
 
@@ -2491,6 +2491,86 @@ collection.Dump(users.Items())
 //   1 => #main.User {
 //     +ID   => 3 #int
 //     +Name => "Andrew" #string
+//   }
+// ]
+```
+
+### <a id="partition"></a>Partition · immutable
+
+Partition splits the collection into two new collections based on predicate fn.
+The first collection contains items where fn returns true; the second contains
+items where fn returns false. Order is preserved within each partition.
+
+_Example: integers - even/odd_
+
+```go
+nums := collection.New([]int{1, 2, 3, 4, 5})
+evens, odds := nums.Partition(func(n int) bool {
+	return n%2 == 0
+})
+collection.Dump(evens.Items(), odds.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+//   2 => 5 #int
+// ]
+```
+
+_Example: strings - prefix match_
+
+```go
+words := collection.New([]string{"go", "gopher", "rust", "ruby"})
+goWords, other := words.Partition(func(s string) bool {
+	return strings.HasPrefix(s, "go")
+})
+collection.Dump(goWords.Items(), other.Items())
+// #[]string [
+//   0 => "go" #string
+//   1 => "gopher" #string
+// ]
+// #[]string [
+//   0 => "rust" #string
+//   1 => "ruby" #string
+// ]
+```
+
+_Example: structs - active vs inactive_
+
+```go
+type User struct {
+	Name   string
+	Active bool
+}
+
+users := collection.New([]User{
+	{Name: "Alice", Active: true},
+	{Name: "Bob", Active: false},
+	{Name: "Carol", Active: true},
+})
+
+active, inactive := users.Partition(func(u User) bool {
+	return u.Active
+})
+
+collection.Dump(active.Items(), inactive.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +Name   => "Alice" #string
+//     +Active => true #bool
+//   }
+//   1 => #main.User {
+//     +Name   => "Carol" #string
+//     +Active => true #bool
+//   }
+// ]
+// #[]main.User [
+//   0 => #main.User {
+//     +Name   => "Bob" #string
+//     +Active => false #bool
 //   }
 // ]
 ```

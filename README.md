@@ -36,6 +36,47 @@
 - 🧰 **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`)
 - 🧱 **Works with any Go type**, including structs, pointers, and deeply nested composites
 
+## Fluent Chaining
+
+Many methods return the collection itself, allowing for fluent method chaining.
+
+Some methods maybe limited to due to go's generic constraints. 
+
+> **Fluent example:**  
+> [`examples/chaining/main.go`](./examples/chaining/main.go)
+
+```go
+events := []DeviceEvent{
+    {Device: "router-1", Region: "us-east", Errors: 3},
+    {Device: "router-2", Region: "us-east", Errors: 15},
+    {Device: "router-3", Region: "us-west", Errors: 22},
+}
+
+// Fluent slice pipeline
+collection.
+    New(events). // Construction
+    Shuffle(). // Ordering
+    Filter(func(e DeviceEvent) bool {
+        return e.Errors > 5
+    }). // Slicing
+    Sort(func(a, b DeviceEvent) bool {
+        return a.Errors > b.Errors
+    }). // Ordering
+    Take(5). // Slicing
+    TakeUntilFn(func(e DeviceEvent) bool {
+        return e.Errors < 10
+    }). // Slicing (stop when predicate becomes true)
+    SkipLast(1). // Slicing
+    Dump() // Debugging
+// []main.DeviceEvent [
+//  0 => #main.DeviceEvent {
+//    +Device => "router-3" #string
+//    +Region => "us-west" #string
+//    +Errors => 22 #int
+//  }
+// ]
+```
+
 ## Design Principles
 
 - **Type-safe**: no reflection, no `any` leaks
@@ -62,6 +103,16 @@ Instead, map interaction is explicit and intentional:
 - `ToMapKV` provides a convenience for `Pair[K,V]`
 
 This makes transitions between unordered and ordered data visible and honest.
+
+### Behavior semantics
+
+Each method declares how it interacts with the collection:
+
+- **readonly** – reads data only, returns a derived value
+- **immutable** – returns a new collection, original unchanged
+- **mutable** – modifies the collection in place
+
+Annotations describe **observable behavior**, not implementation details.
 
 # 📦 Installation
 

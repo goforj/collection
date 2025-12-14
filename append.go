@@ -2,7 +2,7 @@ package collection
 
 // Append returns a new collection with the given values appended.
 // @group Transformation
-// @behavior mutable
+// @behavior immutable
 // Example: integers
 //
 //	c := collection.New([]int{1, 2})
@@ -58,7 +58,7 @@ func (c *Collection[T]) Append(values ...T) *Collection[T] {
 
 // Push returns a new collection with the given values appended.
 // @group Transformation
-// @behavior mutable
+// @behavior immutable
 //
 // Example: integers
 //

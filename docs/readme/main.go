@@ -266,7 +266,7 @@ func renderAPI(funcs []*FuncDoc) string {
 		buf.WriteString("### " + group + "\n\n")
 
 		for _, fn := range byGroup[group] {
-			buf.WriteString(fmt.Sprintf("#### `%s`\n", fn.Name))
+			buf.WriteString(fmt.Sprintf("#### %s\n", fn.Name))
 
 			if fn.Description != "" {
 				buf.WriteString(fn.Description + "\n\n")

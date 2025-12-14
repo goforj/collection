@@ -164,7 +164,7 @@ go get github.com/goforj/collection
 
 ### Aggregation
 
-#### `Avg`
+#### Avg
 Avg returns the average of the collection values as a float64.
 If the collection is empty, Avg returns 0.
 
@@ -184,7 +184,7 @@ collection.Dump(c2.Avg())
 // 2.333333 #float64
 ```
 
-#### `Count`
+#### Count
 Count returns the total number of items in the collection.
 
 _Example: integers_
@@ -195,7 +195,7 @@ collection.Dump(count)
 // 4 #int
 ```
 
-#### `CountBy`
+#### CountBy
 CountBy returns a map of keys extracted by fn to their occurrence counts.
 K must be comparable.
 
@@ -256,7 +256,7 @@ collection.Dump(roleCounts)
 // }
 ```
 
-#### `CountByValue`
+#### CountByValue
 CountByValue returns a map where each distinct item in the collection
 is mapped to the number of times it appears.
 
@@ -307,7 +307,7 @@ collection.Dump(counts3)
 // ]
 ```
 
-#### `Max`
+#### Max
 Max returns the largest numeric item in the collection.
 The second return value is false if the collection is empty.
 
@@ -344,7 +344,7 @@ collection.Dump(max3, ok3)
 // false #bool
 ```
 
-#### `Median`
+#### Median
 Median returns the statistical median of the numeric collection as float64.
 Returns (0, false) if the collection is empty.
 
@@ -392,7 +392,7 @@ collection.Dump(median4, ok4)
 // false    #bool
 ```
 
-#### `Min`
+#### Min
 Min returns the smallest numeric item in the collection.
 The second return value is false if the collection is empty.
 
@@ -426,7 +426,7 @@ collection.Dump(min3, ok3)
 // false #bool
 ```
 
-#### `Mode`
+#### Mode
 Mode returns the most frequent numeric value(s) in the collection.
 If multiple values tie for highest frequency, all are returned
 in first-seen order.
@@ -474,7 +474,7 @@ collection.Dump(mode4)
 // <nil>
 ```
 
-#### `Reduce`
+#### Reduce
 Reduce collapses the collection into a single accumulated value.
 The accumulator has the same type T as the collection's elements.
 
@@ -525,7 +525,7 @@ collection.Dump(total)
 // ]
 ```
 
-#### `Sum`
+#### Sum
 Sum returns the sum of all numeric items in the NumericCollection.
 If the collection is empty, Sum returns the zero value of T.
 
@@ -558,7 +558,7 @@ collection.Dump(total3)
 
 ### Construction
 
-#### `Items`
+#### Items
 Items returns the underlying slice of items.
 
 _Example: integers_
@@ -613,16 +613,16 @@ collection.Dump(out)
 // ]
 ```
 
-#### `New`
+#### New
 New creates a new Collection from the provided slice.
 
-#### `NewNumeric`
+#### NewNumeric
 NewNumeric wraps a slice of numeric types in a NumericCollection.
 A shallow copy is made so that further operations don't mutate the original slice.
 
 ### Debugging
 
-#### `Dd`
+#### Dd
 Dd prints items then terminates execution.
 Like Laravel's dd(), this is intended for debugging and
 should not be used in production control flow.
@@ -639,7 +639,7 @@ c.Dd()
 // Process finished with the exit code 1
 ```
 
-#### `Dump`
+#### Dump
 Dump prints items with godump and returns the same collection.
 This is a no-op on the collection itself and never panics.
 
@@ -679,7 +679,7 @@ collection.Dump(c2.Items())
 // ]
 ```
 
-#### `DumpStr`
+#### DumpStr
 DumpStr returns the pretty-printed dump of the items as a string,
 without printing or exiting.
 Useful for logging, snapshot testing, and non-interactive debugging.
@@ -696,7 +696,7 @@ fmt.Println(s)
 // ]
 ```
 
-#### `ToJSON`
+#### ToJSON
 ToJSON converts the collection's items into a compact JSON string.
 
 _Example: strings - pretty JSON_
@@ -708,7 +708,7 @@ fmt.Println(out1)
 // ["a","b"]
 ```
 
-#### `ToPrettyJSON`
+#### ToPrettyJSON
 ToPrettyJSON converts the collection's items into a human-readable,
 indented JSON string.
 
@@ -726,7 +726,7 @@ fmt.Println(out1)
 
 ### Grouping
 
-#### `GroupBy`
+#### GroupBy
 GroupBy partitions the collection into groups keyed by the value
 returned from keyFn.
 
@@ -799,7 +799,7 @@ collection.Dump(groups2["user"].Items())
 
 ### Maps
 
-#### `FromMap`
+#### FromMap
 FromMap materializes a map into a collection of key/value pairs.
 
 _Example: basic usage_
@@ -869,7 +869,7 @@ collection.Dump(out2)
 // ]
 ```
 
-#### `ToMap`
+#### ToMap
 ToMap reduces a collection into a map using the provided key and value
 selector functions.
 
@@ -909,7 +909,7 @@ byID := collection.ToMap(
 collection.Dump(byID)
 ```
 
-#### `ToMapKV`
+#### ToMapKV
 ToMapKV converts a collection of key/value pairs into a map.
 
 _Example: basic usage_
@@ -965,7 +965,7 @@ collection.Dump(out2)
 
 ### Ordering
 
-#### `After`
+#### After
 After returns all items after the first element for which pred returns true.
 If no element matches, an empty collection is returned.
 
@@ -980,7 +980,7 @@ c.After(func(v int) bool { return v == 3 }).Dump()
 // ]
 ```
 
-#### `Before`
+#### Before
 Before returns a new collection containing all items that appear
 *before* the first element for which pred returns true.
 
@@ -1032,7 +1032,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-#### `Reverse`
+#### Reverse
 Reverse reverses the order of items in the collection in place
 and returns the same collection for chaining.
 
@@ -1089,7 +1089,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-#### `Shuffle`
+#### Shuffle
 Shuffle randomly shuffles the items in the collection in place
 and returns the same collection for chaining.
 
@@ -1130,7 +1130,7 @@ users.Shuffle()
 collection.Dump(users.Items())
 ```
 
-#### `Sort`
+#### Sort
 Sort returns a new collection sorted using the provided comparison function.
 
 _Example: integers_
@@ -1197,7 +1197,7 @@ collection.Dump(sortedUsers.Items())
 
 ### Other
 
-#### `Filter`
+#### Filter
 Filter keeps only the elements for which fn returns true.
 This method mutates the collection in place and returns the same instance.
 
@@ -1261,7 +1261,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-#### `TakeUntil`
+#### TakeUntil
 TakeUntil returns items until the first element equals `value`.
 The matching item is NOT included.
 
@@ -1302,7 +1302,7 @@ collection.Dump(out6.Items())
 // ]
 ```
 
-#### `TakeUntilFn`
+#### TakeUntilFn
 TakeUntilFn returns items until the predicate function returns true.
 The matching item is NOT included.
 
@@ -1343,7 +1343,7 @@ collection.Dump(out3.Items())
 
 ### Querying
 
-#### `All`
+#### All
 All returns true if fn returns true for every item in the collection.
 If the collection is empty, All returns true (vacuously true).
 
@@ -1383,7 +1383,7 @@ collection.Dump(all)
 // true #bool
 ```
 
-#### `Any`
+#### Any
 Any returns true if at least one item satisfies fn.
 
 _Example: integers_
@@ -1395,7 +1395,7 @@ collection.Dump(has)
 // true #bool
 ```
 
-#### `At`
+#### At
 At returns the item at the given index and a boolean indicating
 whether the index was within bounds.
 
@@ -1434,7 +1434,7 @@ collection.Dump(u, ok3)
 // {ID:1 Name:"Alice"} true
 ```
 
-#### `Contains`
+#### Contains
 Contains returns true if any item satisfies the predicate.
 
 _Example: integers_
@@ -1480,7 +1480,7 @@ collection.Dump(hasBob)
 // true #bool
 ```
 
-#### `FindWhere`
+#### FindWhere
 FindWhere returns the first item in the collection for which the provided
 predicate function returns true. This is an alias for FirstWhere(fn) and
 exists for ergonomic parity with functional languages (JavaScript, Rust,
@@ -1546,7 +1546,7 @@ collection.Dump(v4, ok4)
 // false #bool
 ```
 
-#### `First`
+#### First
 First returns the first element in the collection.
 If the collection is empty, ok will be false.
 
@@ -1604,7 +1604,7 @@ collection.Dump(v3, ok4)
 // false #bool
 ```
 
-#### `FirstWhere`
+#### FirstWhere
 FirstWhere returns the first item in the collection for which the provided
 predicate function returns true. If no items match, ok=false is returned
 along with the zero value of T.
@@ -1628,7 +1628,7 @@ collection.Dump(v, ok)
 // false #bool
 ```
 
-#### `IndexWhere`
+#### IndexWhere
 IndexWhere returns the index of the first item in the collection
 for which the provided predicate function returns true.
 If no item matches, it returns (0, false).
@@ -1672,7 +1672,7 @@ collection.Dump(idx3, ok3)
 // 1 true
 ```
 
-#### `IsEmpty`
+#### IsEmpty
 IsEmpty returns true if the collection has no items.
 
 _Example: integers (non-empty)_
@@ -1722,7 +1722,7 @@ collection.Dump(empty4)
 // true #bool
 ```
 
-#### `Last`
+#### Last
 Last returns the last element in the collection.
 If the collection is empty, ok will be false.
 
@@ -1782,7 +1782,7 @@ collection.Dump(v3, ok4)
 // false #bool
 ```
 
-#### `LastWhere`
+#### LastWhere
 LastWhere returns the last element in the collection that satisfies the predicate fn.
 If fn is nil, LastWhere returns the final element in the underlying slice.
 If the collection is empty or no element matches, ok will be false.
@@ -1874,7 +1874,7 @@ collection.Dump(v5, ok6)
 // false #bool
 ```
 
-#### `None`
+#### None
 None returns true if fn returns false for every item in the collection.
 If the collection is empty, None returns true.
 
@@ -1907,7 +1907,7 @@ collection.Dump(none)
 
 ### Set Operations
 
-#### `Unique`
+#### Unique
 Unique returns a new collection with duplicate items removed, based on the
 equality function `eq`. The first occurrence of each unique value is kept,
 and order is preserved.
@@ -1966,7 +1966,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-#### `UniqueBy`
+#### UniqueBy
 UniqueBy returns a new collection containing only the first occurrence
 of each element as determined by keyFn.
 
@@ -2024,7 +2024,7 @@ collection.Dump(out3.Items())
 
 ### Slicing
 
-#### `Chunk`
+#### Chunk
 Chunk splits the collection into chunks of the given size.
 The final chunk may be smaller if len(items) is not divisible by size.
 
@@ -2092,7 +2092,7 @@ collection.Dump(userChunks)
 //]
 ```
 
-#### `Pop`
+#### Pop
 Pop returns the last item and a new collection with that item removed.
 The original collection remains unchanged.
 
@@ -2160,7 +2160,7 @@ collection.Dump(item4, rest4.Items())
 // ]
 ```
 
-#### `PopN`
+#### PopN
 PopN removes and returns the last n items as a new collection,
 and returns a second collection containing the remaining items.
 
@@ -2258,7 +2258,7 @@ collection.Dump(popped5.Items(), rest5.Items())
 // ]
 ```
 
-#### `Skip`
+#### Skip
 Skip returns a new collection with the first n items skipped.
 If n is less than or equal to zero, Skip returns the full collection.
 If n is greater than or equal to the collection length, Skip returns
@@ -2324,7 +2324,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-#### `SkipLast`
+#### SkipLast
 SkipLast returns a new collection with the last n items skipped.
 If n is less than or equal to zero, SkipLast returns the full collection.
 If n is greater than or equal to the collection length, SkipLast returns
@@ -2386,7 +2386,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-#### `Take`
+#### Take
 Take returns a new collection containing the first `n` items when n > 0,
 or the last `|n|` items when n < 0.
 
@@ -2442,7 +2442,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-#### `TakeLast`
+#### TakeLast
 TakeLast returns a new collection containing the last n items.
 If n is less than or equal to zero, TakeLast returns an empty collection.
 If n is greater than or equal to the collection length, TakeLast returns
@@ -2507,7 +2507,7 @@ collection.Dump(out4.Items())
 
 ### Transformation
 
-#### `Append`
+#### Append
 Append returns a new collection with the given values appended.
 
 _Example: integers_
@@ -2561,7 +2561,7 @@ users.Append(
 // ]
 ```
 
-#### `Concat`
+#### Concat
 Concat appends the values from the given slice onto the end of the collection,
 
 _Example: strings_
@@ -2581,7 +2581,7 @@ collection.Dump(concatenated)
 // ]
 ```
 
-#### `Each`
+#### Each
 Each runs fn for every item in the collection and returns the same collection,
 so it can be used in chains for side effects (logging, debugging, etc.).
 
@@ -2644,7 +2644,7 @@ collection.Dump(names)
 // ]
 ```
 
-#### `Map`
+#### Map
 Map applies a same-type transformation and returns a new collection.
 
 _Example: integers_
@@ -2712,7 +2712,7 @@ collection.Dump(updated.Items())
 // ]
 ```
 
-#### `MapTo`
+#### MapTo
 MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
 
 _Example: integers - extract parity label_
@@ -2773,7 +2773,7 @@ collection.Dump(names.Items())
 // ]
 ```
 
-#### `Merge`
+#### Merge
 Merge merges the given data into the current collection.
 
 _Example: integers - merging slices_
@@ -2848,7 +2848,7 @@ collection.Dump(merged3.Items())
 // ]
 ```
 
-#### `Multiply`
+#### Multiply
 Multiply creates `n` copies of all items in the collection
 and returns a new collection.
 
@@ -2917,7 +2917,7 @@ collection.Dump(none.Items())
 // ]
 ```
 
-#### `Pipe`
+#### Pipe
 Pipe passes the entire collection into the given function
 and returns the function's result.
 
@@ -2979,7 +2979,7 @@ collection.Dump(names)
 // ]
 ```
 
-#### `Pluck`
+#### Pluck
 Pluck is an alias for MapTo with a more semantic name when projecting fields.
 It extracts a single field or computed value from every element and returns a
 new typed collection.
@@ -3042,7 +3042,7 @@ collection.Dump(names.Items())
 // ]
 ```
 
-#### `Prepend`
+#### Prepend
 Prepend returns a new collection with the given values added
 to the *beginning* of the collection.
 
@@ -3124,7 +3124,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-#### `Push`
+#### Push
 Push returns a new collection with the given values appended.
 
 _Example: integers_
@@ -3173,7 +3173,7 @@ users.Dump()
 // ]
 ```
 
-#### `Tap`
+#### Tap
 Tap invokes fn with the collection pointer for side effects (logging, debugging,
 inspection) and returns the same collection to allow chaining.
 
@@ -3232,7 +3232,7 @@ users2 := users.Tap(func(col *collection.Collection[User]) {
 collection.Dump(users2.Items()) // ensures users2 is used
 ```
 
-#### `Times`
+#### Times
 Times creates a new collection by calling fn(i) for i = 1..count.
 This mirrors Laravel's Collection::times(), which is 1-indexed.
 
@@ -3298,7 +3298,7 @@ collection.Dump(cTimes3.Items())
 // ]
 ```
 
-#### `Transform`
+#### Transform
 Transform applies fn to every item *in place*, mutating the collection.
 
 _Example: integers_

@@ -37,6 +37,7 @@ func UniqueComparable[T comparable](c *Collection[T]) *Collection[T] {
 	}
 
 	seen := make(map[T]struct{}, n)
+
 	out := make([]T, 0, n)
 
 	for _, v := range c.items {

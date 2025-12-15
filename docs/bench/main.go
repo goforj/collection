@@ -60,11 +60,6 @@ func runBenches() []benchResult {
 			lo:   benchFilterLo,
 		},
 		{
-			name: "Unique",
-			col:  benchUniqueCollection,
-			lo:   benchUniqueLo,
-		},
-		{
 			name: "Chunk",
 			col:  benchChunkCollection,
 			lo:   benchChunkLo,
@@ -179,15 +174,11 @@ func benchFilterLo(b *testing.B) {
 }
 
 func benchUniqueCollection(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = collection.UniqueBy(collection.New(benchIntsDup), func(v int) int { return v })
-	}
+	// not used
 }
 
 func benchUniqueLo(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = lo.Uniq(benchIntsDup)
-	}
+	// not used
 }
 
 func benchChunkCollection(b *testing.B) {

@@ -17,6 +17,8 @@ import (
 const (
 	benchStart = "<!-- bench:embed:start -->"
 	benchEnd   = "<!-- bench:embed:end -->"
+
+	hotPathIters = 10_000
 )
 
 type benchResult struct {
@@ -37,8 +39,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("✔ Benchmarks updated in README.md (elapsed %s)\n", time.Since(start).Truncate(time.Millisecond))
+	fmt.Printf(
+		"✔ Benchmarks updated in README.md (elapsed %s)\n",
+		time.Since(start).Truncate(time.Millisecond),
+	)
 }
+
+// ----------------------------------------------------------------------------
+// Benchmark runner
+// ----------------------------------------------------------------------------
 
 func runBenches() []benchResult {
 	cases := []struct {
@@ -46,36 +55,20 @@ func runBenches() []benchResult {
 		col  func(*testing.B)
 		lo   func(*testing.B)
 	}{
-		{
-			name: "Pipeline F→M→T→R",
-			col:  benchPipelineCollection,
-			lo:   benchPipelineLo,
-		},
-		{
-			name: "Map",
-			col:  benchMapCollection,
-			lo:   benchMapLo,
-		},
-		{
-			name: "Filter",
-			col:  benchFilterCollection,
-			lo:   benchFilterLo,
-		},
-		{
-			name: "Chunk",
-			col:  benchChunkCollection,
-			lo:   benchChunkLo,
-		},
+		{"Pipeline F→M→T→R", benchPipelineCollection, benchPipelineLo},
+		{"Map", benchMapCollection, benchMapLo},
+		{"Filter", benchFilterCollection, benchFilterLo},
+		{"Chunk", benchChunkCollection, benchChunkLo},
 	}
 
 	var results []benchResult
-
 	for _, c := range cases {
-		colRes := measure(c.name, "collection", c.col)
-		loRes := measure(c.name, "lo", c.lo)
-		results = append(results, colRes, loRes)
+		results = append(
+			results,
+			measure(c.name, "collection", c.col),
+			measure(c.name, "lo", c.lo),
+		)
 	}
-
 	return results
 }
 
@@ -105,10 +98,9 @@ const (
 )
 
 var (
-	benchInts    []int
-	benchIntsDup []int
-	workA        []int
-	workB        []int
+	benchInts []int
+	workA     []int
+	workB     []int
 )
 
 func init() {
@@ -116,12 +108,6 @@ func init() {
 	for i := 0; i < benchSize; i++ {
 		benchInts[i] = i
 	}
-
-	benchIntsDup = make([]int, benchSize)
-	for i := 0; i < benchSize; i++ {
-		benchIntsDup[i] = i % 128
-	}
-
 	workA = make([]int, benchSize)
 	workB = make([]int, benchSize)
 }
@@ -175,14 +161,6 @@ func benchFilterLo(b *testing.B) {
 	}
 }
 
-func benchUniqueCollection(b *testing.B) {
-	// not used
-}
-
-func benchUniqueLo(b *testing.B) {
-	// not used
-}
-
 func benchChunkCollection(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = collection.New(benchInts).Chunk(benchChunkSize)
@@ -210,8 +188,8 @@ func renderTable(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Op | ns/op (col/lo, ×) | B/op (col/lo, ×) | allocs/op (col/lo, ×) |\n")
-	buf.WriteString("|---|-------------------|------------------|-----------------------|\n")
+	buf.WriteString("| Op | ns/op (col/lo ×) | allocs/op (col/lo) | 10k iters Δ (time / allocs) |\n")
+	buf.WriteString("|----|------------------|--------------------|-----------------------------|\n")
 
 	names := make([]string, 0, len(byName))
 	for name := range byName {
@@ -220,50 +198,85 @@ func renderTable(results []benchResult) string {
 	sort.Strings(names)
 
 	for _, name := range names {
-		col, okCol := byName[name]["collection"]
-		loRes, okLo := byName[name]["lo"]
-		if !okCol || !okLo {
-			continue
-		}
+		col := byName[name]["collection"]
+		loRes := byName[name]["lo"]
 
-		nsCell := fmt.Sprintf("%s / %s (%s)", formatNs(col.nsPerOp), formatNs(loRes.nsPerOp), formatRatio(loRes.nsPerOp, col.nsPerOp))
-		bCell := fmt.Sprintf("%d / %d (%s)", col.bytesPerOp, loRes.bytesPerOp, formatRatioInt(loRes.bytesPerOp, col.bytesPerOp))
-		allocCell := fmt.Sprintf("%d / %d (%s)", col.allocsPerOp, loRes.allocsPerOp, formatRatioInt(loRes.allocsPerOp, col.allocsPerOp))
+		nsCell := fmt.Sprintf(
+			"%s / %s (%s)",
+			formatNs(col.nsPerOp),
+			formatNs(loRes.nsPerOp),
+			formatRatio(loRes.nsPerOp, col.nsPerOp),
+		)
 
-		buf.WriteString(fmt.Sprintf("| %s | %s | %s | %s |\n", name, nsCell, bCell, allocCell))
+		allocCell := fmt.Sprintf("%d / %d", col.allocsPerOp, loRes.allocsPerOp)
+
+		timeDelta := (loRes.nsPerOp - col.nsPerOp) * hotPathIters
+		allocDelta := (loRes.allocsPerOp - col.allocsPerOp) * hotPathIters
+
+		deltaCell := fmt.Sprintf(
+			"%s / %s",
+			formatDurationNs(timeDelta),
+			formatInt(allocDelta),
+		)
+
+		buf.WriteString(fmt.Sprintf(
+			"| %s | %s | %s | %s |\n",
+			name,
+			nsCell,
+			allocCell,
+			deltaCell,
+		))
 	}
+
+	buf.WriteString("\n> **Hot-path context**  \n")
+	buf.WriteString("> `10k iters Δ` is a derived estimate showing total time and allocation savings over sustained workloads (e.g. worker pools).")
 
 	return strings.TrimSpace(buf.String())
 }
 
 func formatNs(ns float64) string {
-	if ns >= 1e6 {
+	switch {
+	case ns >= 1e6:
 		return fmt.Sprintf("%.1fms", ns/1e6)
-	}
-	if ns >= 1e3 {
+	case ns >= 1e3:
 		return fmt.Sprintf("%.1fµs", ns/1e3)
+	default:
+		return fmt.Sprintf("%.0fns", ns)
 	}
-	return fmt.Sprintf("%.0fns", ns)
+}
+
+func formatDurationNs(ns float64) string {
+	switch {
+	case ns >= 1e9:
+		return fmt.Sprintf("%.2fs", ns/1e9)
+	case ns >= 1e6:
+		return fmt.Sprintf("%.0fms", ns/1e6)
+	case ns >= 1e3:
+		return fmt.Sprintf("%.0fµs", ns/1e3)
+	default:
+		return fmt.Sprintf("%.0fns", ns)
+	}
 }
 
 func formatRatio(lo, col float64) string {
 	if col == 0 {
-		if lo == 0 {
-			return "1.0x"
-		}
 		return "∞"
 	}
 	return fmt.Sprintf("%.2fx", lo/col)
 }
 
-func formatRatioInt(lo, col int64) string {
-	if col == 0 {
-		if lo == 0 {
-			return "1.0x"
-		}
-		return "∞"
+func formatInt(v int64) string {
+	if v < 0 {
+		v = -v
 	}
-	return fmt.Sprintf("%.2fx", float64(lo)/float64(col))
+	switch {
+	case v >= 1_000_000:
+		return fmt.Sprintf("%.1fM", float64(v)/1_000_000)
+	case v >= 1_000:
+		return fmt.Sprintf("%dk", v/1_000)
+	default:
+		return fmt.Sprintf("%d", v)
+	}
 }
 
 // ----------------------------------------------------------------------------
@@ -293,7 +306,6 @@ func updateReadme(table string) error {
 func replaceSection(readme, content string) (string, error) {
 	start := strings.Index(readme, benchStart)
 	end := strings.Index(readme, benchEnd)
-
 	if start == -1 || end == -1 || end < start {
 		return "", fmt.Errorf("benchmark anchors not found or malformed")
 	}
@@ -304,7 +316,6 @@ func replaceSection(readme, content string) (string, error) {
 	buf.WriteString(content)
 	buf.WriteString("\n")
 	buf.WriteString(readme[end:])
-
 	return buf.String(), nil
 }
 
@@ -316,20 +327,17 @@ const projectModule = "module github.com/goforj/collection"
 
 func findRoot() (string, error) {
 	dir, _ := os.Getwd()
-
 	for {
 		gm := filepath.Join(dir, "go.mod")
 		if fileExists(gm) && isProjectModule(gm) {
 			return dir, nil
 		}
-
 		parent := filepath.Dir(dir)
 		if parent == dir {
 			break
 		}
 		dir = parent
 	}
-
 	return "", fmt.Errorf("could not find project root")
 }
 
@@ -343,17 +351,14 @@ func isProjectModule(path string) bool {
 	if err != nil {
 		return false
 	}
-
 	for _, line := range strings.Split(string(data), "\n") {
 		line = strings.TrimSpace(line)
 		if strings.HasPrefix(line, "module ") {
 			return line == projectModule
 		}
 		if line != "" && !strings.HasPrefix(line, "//") {
-			// hit non-empty content before module line
 			return false
 		}
 	}
-
 	return false
 }

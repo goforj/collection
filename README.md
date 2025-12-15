@@ -76,12 +76,15 @@ collection.
 
 ### Performance Benchmarks
 
-| Op | ns/op (col/lo, ×) | B/op (col/lo, ×) | allocs/op (col/lo, ×) |
-|---|-------------------|------------------|-----------------------|
-| Chunk | 1.3µs / 52.3µs (39.95x) | 12288 / 460290 (37.46x) | 1 / 501 (501.00x) |
-| Filter | 32.6µs / 50.6µs (1.55x) | 0 / 401410 (∞) | 0 / 1 (∞) |
-| Map | 19.7µs / 37.6µs (1.91x) | 0 / 401415 (∞) | 0 / 1 (∞) |
-| Pipeline F→M→T→R | 35.7µs / 52.1µs (1.46x) | 0 / 606217 (∞) | 0 / 2 (∞) |
+| Op | ns/op (col/lo ×) | allocs/op (col/lo) | 10k iters Δ (time / allocs) |
+|----|------------------|--------------------|-----------------------------|
+| Chunk | 1.2µs / 56.1µs (45.65x) | 1 / 501 | 548ms / 5.0M |
+| Filter | 33.6µs / 54.3µs (1.62x) | 0 / 1 | 207ms / 10k |
+| Map | 20.2µs / 37.1µs (1.83x) | 0 / 1 | 169ms / 10k |
+| Pipeline F→M→T→R | 36.5µs / 58.4µs (1.60x) | 0 / 2 | 219ms / 20k |
+
+> **Hot-path context**  
+> `10k iters Δ` is a derived estimate showing total time and allocation savings over sustained workloads (e.g. worker pools).
 <!-- bench:embed:end -->
 
 ## Design Principles

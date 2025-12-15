@@ -217,8 +217,8 @@ func renderTable(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Operation | collection ns/op | lo ns/op | speedup (×) | collection B/op | lo B/op | mem (×) | collection allocs/op | lo allocs/op | allocs (×) |\n")
-	buf.WriteString("|-----------|-----------------:|---------:|------------:|-----------------:|--------:|--------:|---------------------:|--------------:|-----------:|\n")
+	buf.WriteString("| Operation | ns/op (col/lo, ×) | B/op (col/lo, ×) | allocs/op (col/lo, ×) |\n")
+	buf.WriteString("|-----------|-------------------|------------------|-----------------------|\n")
 
 	names := make([]string, 0, len(byName))
 	for name := range byName {
@@ -233,18 +233,11 @@ func renderTable(results []benchResult) string {
 			continue
 		}
 
-		buf.WriteString(fmt.Sprintf("| %s | %s | %s | %s | %d | %d | %s | %d | %d | %s |\n",
-			name,
-			formatNs(col.nsPerOp),
-			formatNs(loRes.nsPerOp),
-			formatRatio(loRes.nsPerOp, col.nsPerOp),
-			col.bytesPerOp,
-			loRes.bytesPerOp,
-			formatRatioInt(loRes.bytesPerOp, col.bytesPerOp),
-			col.allocsPerOp,
-			loRes.allocsPerOp,
-			formatRatioInt(loRes.allocsPerOp, col.allocsPerOp),
-		))
+		nsCell := fmt.Sprintf("%s / %s (%s)", formatNs(col.nsPerOp), formatNs(loRes.nsPerOp), formatRatio(loRes.nsPerOp, col.nsPerOp))
+		bCell := fmt.Sprintf("%d / %d (%s)", col.bytesPerOp, loRes.bytesPerOp, formatRatioInt(loRes.bytesPerOp, col.bytesPerOp))
+		allocCell := fmt.Sprintf("%d / %d (%s)", col.allocsPerOp, loRes.allocsPerOp, formatRatioInt(loRes.allocsPerOp, col.allocsPerOp))
+
+		buf.WriteString(fmt.Sprintf("| %s | %s | %s | %s |\n", name, nsCell, bCell, allocCell))
 	}
 
 	return strings.TrimSpace(buf.String())

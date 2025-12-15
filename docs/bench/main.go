@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"sort"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/goforj/collection"
 	"github.com/samber/lo"
@@ -43,8 +41,8 @@ func main() {
 func runBenches() []benchResult {
 	cases := []struct {
 		name string
-		col  func()
-		lo   func()
+		col  func(*testing.B)
+		lo   func(*testing.B)
 	}{
 		{
 			name: "Pipeline F→M→T→R",
@@ -84,31 +82,18 @@ func runBenches() []benchResult {
 	return results
 }
 
-func measure(name, impl string, fn func()) benchResult {
-	const benchIters = 300
-
-	allocs := testing.AllocsPerRun(benchIters, fn)
-
-	var m1, m2 runtime.MemStats
-	runtime.ReadMemStats(&m1)
-	start := time.Now()
-	for i := 0; i < benchIters; i++ {
-		fn()
-	}
-	elapsed := time.Since(start)
-	runtime.ReadMemStats(&m2)
-
-	bytesPerOp := int64(0)
-	if m2.TotalAlloc > m1.TotalAlloc {
-		bytesPerOp = int64((m2.TotalAlloc - m1.TotalAlloc) / benchIters)
-	}
+func measure(name, impl string, fn func(*testing.B)) benchResult {
+	res := testing.Benchmark(func(b *testing.B) {
+		b.ReportAllocs()
+		fn(b)
+	})
 
 	return benchResult{
 		name:        name,
 		impl:        impl,
-		nsPerOp:     float64(elapsed.Nanoseconds()) / benchIters,
-		bytesPerOp:  bytesPerOp,
-		allocsPerOp: int64(allocs),
+		nsPerOp:     float64(res.NsPerOp()),
+		bytesPerOp:  res.AllocedBytesPerOp(),
+		allocsPerOp: res.AllocsPerOp(),
 	}
 }
 
@@ -117,14 +102,16 @@ func measure(name, impl string, fn func()) benchResult {
 // ----------------------------------------------------------------------------
 
 const (
-	benchSize        = 5_000
-	benchPipelineLen = 250
-	benchChunkSize   = 50
+	benchSize        = 50_000
+	benchPipelineLen = 5_000
+	benchChunkSize   = 100
 )
 
 var (
 	benchInts    []int
 	benchIntsDup []int
+	workA        []int
+	workB        []int
 )
 
 func init() {
@@ -137,53 +124,82 @@ func init() {
 	for i := 0; i < benchSize; i++ {
 		benchIntsDup[i] = i % 128
 	}
+
+	workA = make([]int, benchSize)
+	workB = make([]int, benchSize)
 }
 
-func benchPipelineCollection() {
-	_ = collection.New(benchInts).
-		Filter(func(v int) bool { return v%2 == 0 }).
-		Map(func(v int) int { return v * v }).
-		Take(benchPipelineLen).
-		Reduce(0, func(acc, v int) int { return acc + v })
+func benchPipelineCollection(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		copy(workA, benchInts)
+		_ = collection.New(workA).
+			Filter(func(v int) bool { return v%2 == 0 }).
+			Map(func(v int) int { return v * v }).
+			Take(benchPipelineLen).
+			Reduce(0, func(acc, v int) int { return acc + v })
+	}
 }
 
-func benchPipelineLo() {
-	out := lo.Filter(benchInts, func(v int, _ int) bool { return v%2 == 0 })
-	out2 := lo.Map(out, func(v int, _ int) int { return v * v })
-	out3 := lo.Subset(out2, 0, benchPipelineLen)
-	_ = lo.Reduce(out3, func(acc int, v int, _ int) int { return acc + v }, 0)
+func benchPipelineLo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		copy(workB, benchInts)
+		out := lo.Filter(workB, func(v int, _ int) bool { return v%2 == 0 })
+		out2 := lo.Map(out, func(v int, _ int) int { return v * v })
+		out3 := lo.Subset(out2, 0, benchPipelineLen)
+		_ = lo.Reduce(out3, func(acc int, v int, _ int) int { return acc + v }, 0)
+	}
 }
 
-func benchMapCollection() {
-	_ = collection.New(benchInts).Map(func(v int) int { return v * 3 })
+func benchMapCollection(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		copy(workA, benchInts)
+		_ = collection.New(workA).Map(func(v int) int { return v * 3 })
+	}
 }
 
-func benchMapLo() {
-	_ = lo.Map(benchInts, func(v int, _ int) int { return v * 3 })
+func benchMapLo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		copy(workB, benchInts)
+		_ = lo.Map(workB, func(v int, _ int) int { return v * 3 })
+	}
 }
 
-func benchFilterCollection() {
-	_ = collection.New(benchInts).Filter(func(v int) bool { return v%3 == 0 })
+func benchFilterCollection(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		copy(workA, benchInts)
+		_ = collection.New(workA).Filter(func(v int) bool { return v%3 == 0 })
+	}
 }
 
-func benchFilterLo() {
-	_ = lo.Filter(benchInts, func(v int, _ int) bool { return v%3 == 0 })
+func benchFilterLo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		copy(workB, benchInts)
+		_ = lo.Filter(workB, func(v int, _ int) bool { return v%3 == 0 })
+	}
 }
 
-func benchUniqueCollection() {
-	_ = collection.UniqueBy(collection.New(benchIntsDup), func(v int) int { return v })
+func benchUniqueCollection(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = collection.UniqueBy(collection.New(benchIntsDup), func(v int) int { return v })
+	}
 }
 
-func benchUniqueLo() {
-	_ = lo.Uniq(benchIntsDup)
+func benchUniqueLo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = lo.Uniq(benchIntsDup)
+	}
 }
 
-func benchChunkCollection() {
-	_ = collection.New(benchInts).Chunk(benchChunkSize)
+func benchChunkCollection(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = collection.New(benchInts).Chunk(benchChunkSize)
+	}
 }
 
-func benchChunkLo() {
-	_ = lo.Chunk(benchInts, benchChunkSize)
+func benchChunkLo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = lo.Chunk(benchInts, benchChunkSize)
+	}
 }
 
 // ----------------------------------------------------------------------------

@@ -67,15 +67,6 @@ func (c *Collection[T]) Filter(fn func(T) bool) *Collection[T] {
 		}
 	}
 
-	// Zero the tail only when it contained elements we removed, to avoid
-	// unnecessary extra sweeps when the predicate keeps everything.
-	if j < len(c.items) {
-		var zero T
-		for k := j; k < len(c.items); k++ {
-			c.items[k] = zero // release references
-		}
-	}
-
 	c.items = c.items[:j] // shrink to new length
 	return c
 }

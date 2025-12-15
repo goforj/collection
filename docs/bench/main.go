@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/goforj/collection"
 	"github.com/samber/lo"
@@ -27,6 +28,7 @@ type benchResult struct {
 }
 
 func main() {
+	start := time.Now()
 	results := runBenches()
 	table := renderTable(results)
 
@@ -35,7 +37,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("✔ Benchmarks updated in README.md")
+	fmt.Printf("✔ Benchmarks updated in README.md (elapsed %s)\n", time.Since(start).Truncate(time.Millisecond))
 }
 
 func runBenches() []benchResult {

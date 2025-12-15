@@ -217,8 +217,8 @@ func renderTable(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Operation | ns/op (col/lo, ×) | B/op (col/lo, ×) | allocs/op (col/lo, ×) |\n")
-	buf.WriteString("|-----------|-------------------|------------------|-----------------------|\n")
+	buf.WriteString("| Op | ns/op (col/lo, ×) | B/op (col/lo, ×) | allocs/op (col/lo, ×) |\n")
+	buf.WriteString("|---|-------------------|------------------|-----------------------|\n")
 
 	names := make([]string, 0, len(byName))
 	for name := range byName {

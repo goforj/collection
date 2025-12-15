@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"sort"
 	"strings"
+	"testing"
 	"time"
 
 	"github.com/goforj/collection"
@@ -83,49 +84,32 @@ func runBenches() []benchResult {
 	return results
 }
 
-const benchIterations = 200
-
 func measure(name, impl string, fn func()) benchResult {
-	runtime.GC()
+	const benchIters = 300
 
-	var start runtime.MemStats
-	runtime.ReadMemStats(&start)
+	allocs := testing.AllocsPerRun(benchIters, fn)
 
-	startTime := time.Now()
-	allocs := testingAllocsPerRun(fn, benchIterations)
-	duration := time.Since(startTime)
-
-	var end runtime.MemStats
-	runtime.ReadMemStats(&end)
+	var m1, m2 runtime.MemStats
+	runtime.ReadMemStats(&m1)
+	start := time.Now()
+	for i := 0; i < benchIters; i++ {
+		fn()
+	}
+	elapsed := time.Since(start)
+	runtime.ReadMemStats(&m2)
 
 	bytesPerOp := int64(0)
-	if end.TotalAlloc > start.TotalAlloc {
-		bytesPerOp = int64((end.TotalAlloc - start.TotalAlloc) / uint64(benchIterations))
+	if m2.TotalAlloc > m1.TotalAlloc {
+		bytesPerOp = int64((m2.TotalAlloc - m1.TotalAlloc) / benchIters)
 	}
 
 	return benchResult{
 		name:        name,
 		impl:        impl,
-		nsPerOp:     float64(duration.Nanoseconds()) / float64(benchIterations),
+		nsPerOp:     float64(elapsed.Nanoseconds()) / benchIters,
 		bytesPerOp:  bytesPerOp,
-		allocsPerOp: allocs,
+		allocsPerOp: int64(allocs),
 	}
-}
-
-// testing.AllocsPerRun is unexported; reimplement minimal variant to avoid testing.B overhead.
-func testingAllocsPerRun(fn func(), runs int) int64 {
-	var totalAlloc uint64
-	for i := 0; i < runs; i++ {
-		runtime.GC()
-		var m1, m2 runtime.MemStats
-		runtime.ReadMemStats(&m1)
-		fn()
-		runtime.ReadMemStats(&m2)
-		if m2.Mallocs > m1.Mallocs {
-			totalAlloc += m2.Mallocs - m1.Mallocs
-		}
-	}
-	return int64(totalAlloc / uint64(runs))
 }
 
 // ----------------------------------------------------------------------------

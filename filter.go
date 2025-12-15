@@ -67,11 +67,13 @@ func (c *Collection[T]) Filter(fn func(T) bool) *Collection[T] {
 		}
 	}
 
-	// Optional but ensures ZERO allocations + no GC retention of removed values.
-	// Only needed when T contains pointers.
-	var zero T
-	for k := j; k < len(c.items); k++ {
-		c.items[k] = zero // release references
+	// Zero the tail only when it contained elements we removed, to avoid
+	// unnecessary extra sweeps when the predicate keeps everything.
+	if j < len(c.items) {
+		var zero T
+		for k := j; k < len(c.items); k++ {
+			c.items[k] = zero // release references
+		}
 	}
 
 	c.items = c.items[:j] // shrink to new length

@@ -78,11 +78,11 @@ collection.
 
 | Op | ns/op (col/lo, ×) | B/op (col/lo, ×) | allocs/op (col/lo, ×) |
 |---|-------------------|------------------|-----------------------|
-| Chunk | 151.7µs / 153.9µs (1.01x) | 2690 / 44292 (16.47x) | 1 / 101 (101.00x) |
-| Filter | 155.0µs / 158.1µs (1.02x) | 4 / 40964 (10241.00x) | 0 / 1 (∞) |
-| Map | 151.3µs / 150.9µs (1.00x) | 2 / 40964 (20482.00x) | 0 / 1 (∞) |
-| Pipeline F→M→T→R | 244.2µs / 166.0µs (0.68x) | 87 / 81924 (941.66x) | 0 / 2 (∞) |
-| Unique | 174.3µs / 170.8µs (0.98x) | 188764 / 188740 (1.00x) | 19 / 18 (0.95x) |
+| Chunk | 223ns / 3.3µs (14.88x) | 2688 / 44288 (16.48x) | 1 / 101 (101.00x) |
+| Filter | 7.7µs / 5.9µs (0.76x) | 0 / 40960 (∞) | 0 / 1 (∞) |
+| Map | 2.0µs / 3.0µs (1.52x) | 0 / 40960 (∞) | 0 / 1 (∞) |
+| Pipeline F→M→T→R | 10.5µs / 8.6µs (0.81x) | 0 / 81920 (∞) | 0 / 2 (∞) |
+| Unique | 29.2µs / 24.2µs (0.83x) | 188760 / 188736 (1.00x) | 19 / 18 (0.95x) |
 <!-- bench:embed:end -->
 
 ## Design Principles
@@ -153,7 +153,7 @@ go get github.com/goforj/collection
 | **Ordering** | [After](#after) [Before](#before) [Reverse](#reverse) [Shuffle](#shuffle) [Sort](#sort) |
 | **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
 | **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
-| **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) |
+| **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) [UniqueComparable](#uniquecomparable) |
 | **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) [Window](#window) |
 | **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) [Zip](#zip) [ZipWith](#zipwith) |
 
@@ -2364,6 +2364,40 @@ collection.Dump(out3.Items())
 //   0 => 3 #int
 //   1 => 1 #int
 //   2 => 2 #int
+// ]
+```
+
+### <a id="uniquecomparable"></a>UniqueComparable · immutable · fluent
+
+UniqueComparable returns a new collection with duplicate comparable items removed.
+The first occurrence of each value is kept, and order is preserved.
+This is a faster, allocation-friendly path for comparable types.
+
+_Example: integers_
+
+```go
+c := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
+out := collection.UniqueComparable(c)
+collection.Dump(out.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+//   3 => 4 #int
+//   4 => 5 #int
+// ]
+```
+
+_Example: strings_
+
+```go
+c2 := collection.New([]string{"A", "a", "B", "B"})
+out2 := collection.UniqueComparable(c2)
+collection.Dump(out2.Items())
+// #[]string [
+//   0 => "A" #string
+//   1 => "a" #string
+//   2 => "B" #string
 // ]
 ```
 

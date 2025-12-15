@@ -2,21 +2,22 @@ package collection
 
 import "sort"
 
-// Sort returns a new collection sorted using the provided comparison function.
+// Sort sorts the collection in place using the provided comparison function and
+// returns the same collection for chaining.
 // @group Ordering
-// @behavior immutable
+// @behavior mutable
 // @fluent true
 //
 // The comparison function `less(a, b)` should return true if `a` should come
 // before `b` in the sorted order.
 //
-// Sorting does NOT mutate the original collection—Sort always returns a new one.
+// This operation mutates the underlying slice (no allocation).
 //
 // Example: integers
 //
 //	c := collection.New([]int{5, 1, 4, 2})
-//	sorted := c.Sort(func(a, b int) bool { return a < b })
-//	collection.Dump(sorted.Items())
+//	c.Sort(func(a, b int) bool { return a < b })
+//	collection.Dump(c.Items())
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -27,8 +28,8 @@ import "sort"
 // Example: strings (descending)
 //
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
-//	sorted2 := c2.Sort(func(a, b string) bool { return a > b })
-//	collection.Dump(sorted2.Items())
+//	c2.Sort(func(a, b string) bool { return a > b })
+//	collection.Dump(c2.Items())
 //	// #[]string [
 //	//   0 => "cherry" #string
 //	//   1 => "banana" #string
@@ -49,10 +50,10 @@ import "sort"
 //	})
 //
 //	// Sort by age ascending
-//	sortedUsers := users.Sort(func(a, b User) bool {
+//	users.Sort(func(a, b User) bool {
 //		return a.Age < b.Age
 //	})
-//	collection.Dump(sortedUsers.Items())
+//	collection.Dump(users.Items())
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +Name => "Bob" #string
@@ -68,9 +69,8 @@ import "sort"
 //	//   }
 //	// ]
 func (c *Collection[T]) Sort(less func(a, b T) bool) *Collection[T] {
-	out := c.Items()
-	sort.Slice(out, func(i, j int) bool {
-		return less(out[i], out[j])
+	sort.Slice(c.items, func(i, j int) bool {
+		return less(c.items[i], c.items[j])
 	})
-	return &Collection[T]{items: out}
+	return c
 }

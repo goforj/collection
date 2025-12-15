@@ -139,6 +139,10 @@ var knownMutators = map[string]bool{
 	"Prepend":  true,
 	"Merge":    true,
 	"Multiply": true,
+	"Reverse":  true,
+	"Shuffle":  true,
+	"Sort":     true,
+	"Transform": true,
 }
 
 var knownFluentTrue = map[string]bool{

@@ -6,12 +6,13 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Sort returns a new collection sorted using the provided comparison function.
+	// Sort sorts the collection in place using the provided comparison function and
+	// returns the same collection for chaining.
 
 	// Example: integers
 	c := collection.New([]int{5, 1, 4, 2})
-	sorted := c.Sort(func(a, b int) bool { return a < b })
-	collection.Dump(sorted.Items())
+	c.Sort(func(a, b int) bool { return a < b })
+	collection.Dump(c.Items())
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int
@@ -21,8 +22,8 @@ func main() {
 
 	// Example: strings (descending)
 	c2 := collection.New([]string{"apple", "banana", "cherry"})
-	sorted2 := c2.Sort(func(a, b string) bool { return a > b })
-	collection.Dump(sorted2.Items())
+	c2.Sort(func(a, b string) bool { return a > b })
+	collection.Dump(c2.Items())
 	// #[]string [
 	//   0 => "cherry" #string
 	//   1 => "banana" #string
@@ -42,10 +43,10 @@ func main() {
 	})
 
 	// Sort by age ascending
-	sortedUsers := users.Sort(func(a, b User) bool {
+	users.Sort(func(a, b User) bool {
 		return a.Age < b.Age
 	})
-	collection.Dump(sortedUsers.Items())
+	collection.Dump(users.Items())
 	// #[]main.User [
 	//   0 => #main.User {
 	//     +Name => "Bob" #string

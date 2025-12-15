@@ -18,7 +18,7 @@ func setShuffleRand(r *rand.Rand) {
 // Shuffle randomly shuffles the items in the collection in place
 // and returns the same collection for chaining.
 // @group Ordering
-// @behavior immutable
+// @behavior mutable
 // @fluent true
 //
 // This operation performs no allocations.

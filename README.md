@@ -72,6 +72,19 @@ collection.
 // ]
 ```
 
+<!-- bench:embed:start -->
+
+### Performance Benchmarks
+
+| Operation | collection ns/op | lo ns/op | speedup (×) | collection B/op | lo B/op | mem (×) | collection allocs/op | lo allocs/op | allocs (×) |
+|-----------|-----------------:|---------:|------------:|-----------------:|--------:|--------:|---------------------:|--------------:|-----------:|
+| Chunk | 154.6µs | 156.7µs | 1.01x | 2691 | 44294 | 16.46x | 1 | 101 | 101.00x |
+| Filter | 156.5µs | 159.5µs | 1.02x | 2 | 40961 | 20480.50x | 0 | 1 | ∞ |
+| Map | 152.9µs | 151.4µs | 0.99x | 5 | 40963 | 8192.60x | 0 | 1 | ∞ |
+| Pipeline Filter→Map→Take→Reduce | 199.3µs | 163.3µs | 0.82x | 85 | 81924 | 963.81x | 0 | 2 | ∞ |
+| Unique | 175.3µs | 175.0µs | 1.00x | 188766 | 188740 | 1.00x | 19 | 18 | 0.95x |
+<!-- bench:embed:end -->
+
 ## Design Principles
 
 - **Type-safe**: no reflection, no `any` leaks
@@ -1243,7 +1256,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="shuffle"></a>Shuffle · immutable · fluent
+### <a id="shuffle"></a>Shuffle · mutable · fluent
 
 Shuffle randomly shuffles the items in the collection in place
 and returns the same collection for chaining.
@@ -1285,16 +1298,17 @@ users.Shuffle()
 collection.Dump(users.Items())
 ```
 
-### <a id="sort"></a>Sort · immutable · fluent
+### <a id="sort"></a>Sort · mutable · fluent
 
-Sort returns a new collection sorted using the provided comparison function.
+Sort sorts the collection in place using the provided comparison function and
+returns the same collection for chaining.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{5, 1, 4, 2})
-sorted := c.Sort(func(a, b int) bool { return a < b })
-collection.Dump(sorted.Items())
+c.Sort(func(a, b int) bool { return a < b })
+collection.Dump(c.Items())
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -1307,8 +1321,8 @@ _Example: strings (descending)_
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
-sorted2 := c2.Sort(func(a, b string) bool { return a > b })
-collection.Dump(sorted2.Items())
+c2.Sort(func(a, b string) bool { return a > b })
+collection.Dump(c2.Items())
 // #[]string [
 //   0 => "cherry" #string
 //   1 => "banana" #string
@@ -1331,10 +1345,10 @@ users := collection.New([]User{
 })
 
 // Sort by age ascending
-sortedUsers := users.Sort(func(a, b User) bool {
+users.Sort(func(a, b User) bool {
 	return a.Age < b.Age
 })
-collection.Dump(sortedUsers.Items())
+collection.Dump(users.Items())
 // #[]main.User [
 //   0 => #main.User {
 //     +Name => "Bob" #string
@@ -3966,7 +3980,7 @@ collection.Dump(cTimes3.Items())
 // ]
 ```
 
-### <a id="transform"></a>Transform · fluent
+### <a id="transform"></a>Transform · mutable · fluent
 
 Transform applies fn to every item *in place*, mutating the collection.
 

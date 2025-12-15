@@ -46,7 +46,7 @@ func runBenches() []benchResult {
 		lo   func()
 	}{
 		{
-			name: "Pipeline Filter → Map → Take → Reduce",
+			name: "Pipeline F→M→T→R",
 			col:  benchPipelineCollection,
 			lo:   benchPipelineLo,
 		},

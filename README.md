@@ -79,38 +79,38 @@ collection.
 | Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |
 |---:|----------------|:--:|------------------|:--:|--------------------|
 | **All** | 232ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Any** | 233ns / 232ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Chunk** | 127ns / 1.0µs | **8.24x** | 1.3KB / 9.3KB | **7.25x less** | 1 / 51 |
-| **Contains** | 232ns / 232ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **CountBy** | 7.9µs / 8.0µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
-| **CountByValue** | 7.9µs / 8.0µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
-| **Difference** | 19.0µs / 43.5µs | **2.29x** | 82.1KB / 108.8KB | **1.33x less** | 12 / 43 |
+| **Any** | 235ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Chunk** | 129ns / 1.1µs | **8.78x** | 1.3KB / 9.3KB | **7.25x less** | 1 / 51 |
+| **Contains** | 238ns / 232ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **CountBy** | 8.0µs / 8.0µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
+| **CountByValue** | 8.0µs / 8.1µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
+| **Difference** | 19.6µs / 43.7µs | **2.23x** | 82.1KB / 108.8KB | **1.33x less** | 12 / 43 |
 | **Each** | 230ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Filter** | 645ns / 1.1µs | **1.65x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Find** | 233ns / 232ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Filter** | 647ns / 1.1µs | **1.70x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **Find** | 233ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
 | **First** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
-| **GroupBySlice** | 8.0µs / 8.3µs | ≈ | 21.0KB / 21.0KB | ≈ | 83 / 83 |
-| **IndexWhere** | 234ns / 234ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Intersect** | 17.0µs / 10.7µs | 0.63x | 82.1KB / 11.4KB | 0.14x more | 12 / 19 |
+| **GroupBySlice** | 8.1µs / 8.2µs | ≈ | 21.0KB / 21.0KB | ≈ | 83 / 83 |
+| **IndexWhere** | 232ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Intersect** | 10.9µs / 10.7µs | ≈ | 11.4KB / 11.4KB | ≈ | 19 / 19 |
 | **Last** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
-| **Map** | 345ns / 816ns | **2.37x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Max** | 230ns / 238ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Min** | 230ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **None** | 234ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Pipeline F→M→T→R** | 477ns / 1.3µs | **2.73x** | 0B / 12.3KB | **∞x less** | 0 / 2 |
-| **Reduce (sum)** | 231ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Reverse** | 214ns / 232ns | **1.08x** | 0B / 0B | ≈ | 0 / 0 |
-| **Shuffle** | 3.5µs / 5.3µs | **1.50x** | 0B / 0B | ≈ | 0 / 0 |
-| **Skip** | 0ns / 715ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **SkipLast** | 0ns / 714ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Sum** | 231ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Map** | 351ns / 820ns | **2.34x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **Max** | 230ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Min** | 230ns / 229ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **None** | 231ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Pipeline F→M→T→R** | 516ns / 1.3µs | **2.49x** | 0B / 12.3KB | **∞x less** | 0 / 2 |
+| **Reduce (sum)** | 230ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Reverse** | 212ns / 233ns | **1.10x** | 0B / 0B | ≈ | 0 / 0 |
+| **Shuffle** | 3.5µs / 5.3µs | **1.49x** | 0B / 0B | ≈ | 0 / 0 |
+| **Skip** | 0ns / 710ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **SkipLast** | 0ns / 712ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **Sum** | 231ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
 | **Take** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
-| **ToMap** | 7.6µs / 7.8µs | ≈ | 36.9KB / 37.0KB | ≈ | 5 / 6 |
-| **Union** | 16.8µs / 17.5µs | ≈ | 90.3KB / 90.3KB | ≈ | 11 / 10 |
-| **Unique** | 6.3µs / 6.2µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
-| **UniqueBy** | 6.7µs / 6.3µs | 0.94x | 45.2KB / 45.1KB | ≈ | 7 / 6 |
-| **Zip** | 1.4µs / 3.1µs | **2.22x** | 16.4KB / 16.4KB | ≈ | 1 / 1 |
-| **ZipWith** | 984ns / 2.9µs | **2.99x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **ToMap** | 7.5µs / 7.8µs | ≈ | 36.9KB / 37.0KB | ≈ | 5 / 6 |
+| **Union** | 17.1µs / 17.8µs | ≈ | 90.3KB / 90.3KB | ≈ | 11 / 10 |
+| **Unique** | 6.3µs / 6.3µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
+| **UniqueBy** | 6.6µs / 6.3µs | ≈ | 45.2KB / 45.1KB | ≈ | 7 / 6 |
+| **Zip** | 1.4µs / 3.2µs | **2.29x** | 16.4KB / 16.4KB | ≈ | 1 / 1 |
+| **ZipWith** | 988ns / 3.1µs | **3.11x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
 <!-- bench:embed:end -->
 
 ## Design Principles
@@ -2143,8 +2143,8 @@ collection.Dump(out3.Items())
 
 ### <a id="intersect"></a>Intersect · immutable · fluent
 
-Intersect returns a new collection containing elements present in both collections.
-Order follows the first collection, and duplicates are removed.
+Intersect returns a new collection containing elements from the second
+collection that are also present in the first.
 
 _Example: integers_
 
@@ -2157,6 +2157,7 @@ collection.Dump(out.Items())
 // #[]int [
 //   0 => 2 #int
 //   1 => 4 #int
+//   2 => 4 #int
 // ]
 ```
 
@@ -2171,6 +2172,7 @@ collection.Dump(out2.Items())
 // #[]string [
 //   0 => "banana" #string
 //   1 => "cherry" #string
+//   2 => "banana" #string
 // ]
 ```
 

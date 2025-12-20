@@ -8,7 +8,7 @@ func TestIntersect_Ints(t *testing.T) {
 
 	out := Intersect(a, b)
 
-	exp := []int{2, 4}
+	exp := []int{2, 4, 4}
 	if got := out.Items(); !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
@@ -20,7 +20,7 @@ func TestIntersect_Strings(t *testing.T) {
 
 	out := Intersect(left, right)
 
-	exp := []string{"banana", "cherry"}
+	exp := []string{"banana", "cherry", "banana"}
 	if got := out.Items(); !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
@@ -44,6 +44,18 @@ func TestIntersect_DuplicateInFirstOnlyOnce(t *testing.T) {
 	out := Intersect(a, b)
 
 	exp := []int{1, 2}
+	if got := out.Items(); !slicesEqual(got, exp) {
+		t.Fatalf("expected %v, got %v", exp, got)
+	}
+}
+
+func TestIntersect_DuplicatesInSecondPreserved(t *testing.T) {
+	a := New([]int{1, 2, 3})
+	b := New([]int{2, 2, 2, 4})
+
+	out := Intersect(a, b)
+
+	exp := []int{2, 2, 2}
 	if got := out.Items(); !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}

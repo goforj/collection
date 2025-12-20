@@ -1,10 +1,13 @@
 package collection
 
-// Intersect returns a new collection containing elements present in both collections.
-// Order follows the first collection, and duplicates are removed.
+// Intersect returns a new collection containing elements from the second
+// collection that are also present in the first.
 // @group Set Operations
 // @behavior immutable
 // @fluent true
+//
+// Order follows the second collection.
+// Duplicates are preserved based on the second collection.
 //
 // Example: integers
 //
@@ -16,6 +19,7 @@ package collection
 //	// #[]int [
 //	//   0 => 2 #int
 //	//   1 => 4 #int
+//	//   2 => 4 #int
 //	// ]
 //
 // Example: strings
@@ -28,6 +32,7 @@ package collection
 //	// #[]string [
 //	//   0 => "banana" #string
 //	//   1 => "cherry" #string
+//	//   2 => "banana" #string
 //	// ]
 //
 // Example: structs
@@ -66,23 +71,16 @@ func Intersect[T comparable](a, b *Collection[T]) *Collection[T] {
 		return New([]T{})
 	}
 
-	lookup := make(map[T]struct{}, len(b.items))
-	for _, v := range b.items {
-		lookup[v] = struct{}{}
+	seen := make(map[T]struct{})
+	for _, v := range a.items {
+		seen[v] = struct{}{}
 	}
 
-	out := make([]T, 0, len(a.items))
-	seen := make(map[T]struct{}, len(a.items))
-
-	for _, v := range a.items {
-		if _, ok := lookup[v]; !ok {
-			continue
+	var out []T
+	for _, v := range b.items {
+		if _, ok := seen[v]; ok {
+			out = append(out, v)
 		}
-		if _, already := seen[v]; already {
-			continue
-		}
-		seen[v] = struct{}{}
-		out = append(out, v)
 	}
 
 	return &Collection[T]{items: out}

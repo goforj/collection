@@ -6,8 +6,8 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Intersect returns a new collection containing elements present in both collections.
-	// Order follows the first collection, and duplicates are removed.
+	// Intersect returns a new collection containing elements from the second
+	// collection that are also present in the first.
 
 	// Example: integers
 	a := collection.New([]int{1, 2, 2, 3, 4})
@@ -18,6 +18,7 @@ func main() {
 	// #[]int [
 	//   0 => 2 #int
 	//   1 => 4 #int
+	//   2 => 4 #int
 	// ]
 
 	// Example: strings
@@ -29,6 +30,7 @@ func main() {
 	// #[]string [
 	//   0 => "banana" #string
 	//   1 => "cherry" #string
+	//   2 => "banana" #string
 	// ]
 
 	// Example: structs

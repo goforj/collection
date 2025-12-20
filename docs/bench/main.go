@@ -697,8 +697,8 @@ func renderTable(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Op | ns/op (collection vs lo ×) | allocs/op (collection vs lo) |\n")
-	buf.WriteString("|----|------------------|--------------------|\n")
+	buf.WriteString("| Op | ns/op (collection vs lo) | collection vs lo × | allocs/op (collection vs lo) |\n")
+	buf.WriteString("|----|--------------------------|-------------------|-------------------------------|\n")
 
 	names := make([]string, 0, len(byName))
 	for name := range byName {
@@ -711,18 +711,19 @@ func renderTable(results []benchResult) string {
 		loRes := byName[name]["lo"]
 
 		nsCell := fmt.Sprintf(
-			"%s / %s (%s)",
+			"%s / %s",
 			formatNs(col.nsPerOp),
 			formatNs(loRes.nsPerOp),
-			formatRatio(loRes.nsPerOp, col.nsPerOp),
 		)
+		ratioCell := formatRatio(loRes.nsPerOp, col.nsPerOp)
 
 		allocCell := fmt.Sprintf("%d / %d", col.allocsPerOp, loRes.allocsPerOp)
 
 		buf.WriteString(fmt.Sprintf(
-			"| %s | %s | %s |\n",
+			"| %s | %s | %s | %s |\n",
 			name,
 			nsCell,
+			ratioCell,
 			allocCell,
 		))
 	}
@@ -759,6 +760,9 @@ func formatRatio(lo, col float64) string {
 		return "∞"
 	}
 	ratio := lo / col
+	if ratio >= 0.95 && ratio <= 1.05 {
+		return "≈"
+	}
 	out := fmt.Sprintf("%.2fx", ratio)
 	if ratio > 1 {
 		return fmt.Sprintf("**%s**", out)

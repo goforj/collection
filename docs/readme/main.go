@@ -5,11 +5,13 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -17,8 +19,10 @@ import (
 )
 
 const (
-	apiStart = "<!-- api:embed:start -->"
-	apiEnd   = "<!-- api:embed:end -->"
+	apiStart       = "<!-- api:embed:start -->"
+	apiEnd         = "<!-- api:embed:end -->"
+	testCountStart = "<!-- test-count:embed:start -->"
+	testCountEnd   = "<!-- test-count:embed:end -->"
 )
 
 func main() {
@@ -35,6 +39,11 @@ func run() error {
 		return err
 	}
 
+	testsCount, err := countTests(root)
+	if err != nil {
+		return fmt.Errorf("count tests: %w", err)
+	}
+
 	funcs, err := parseFuncs(root)
 	if err != nil {
 		return err
@@ -49,6 +58,11 @@ func run() error {
 	}
 
 	out, err := replaceAPISection(string(data), api)
+	if err != nil {
+		return err
+	}
+
+	out, err = updateTestsSection(out, testsCount)
 	if err != nil {
 		return err
 	}
@@ -105,9 +119,14 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 		return nil, err
 	}
 
-	pkg, ok := pkgs["collection"]
+	pkgName, err := selectPackage(pkgs)
+	if err != nil {
+		return nil, err
+	}
+
+	pkg, ok := pkgs[pkgName]
 	if !ok {
-		return nil, fmt.Errorf(`package "collection" not found`)
+		return nil, fmt.Errorf(`package %q not found`, pkgName)
 	}
 
 	funcs := map[string]*FuncDoc{}
@@ -250,6 +269,51 @@ func extractExamples(fset *token.FileSet, fn *ast.FuncDecl) []Example {
 	return out
 }
 
+// selectPackage picks the primary package to document.
+// Strategy:
+//  1. If only one package exists, use it.
+//  2. Prefer the non-"main" package with the most files.
+//  3. Fall back to the first package alphabetically.
+func selectPackage(pkgs map[string]*ast.Package) (string, error) {
+	if len(pkgs) == 0 {
+		return "", fmt.Errorf("no packages found")
+	}
+
+	if len(pkgs) == 1 {
+		for name := range pkgs {
+			return name, nil
+		}
+	}
+
+	type candidate struct {
+		name  string
+		count int
+	}
+
+	candidates := make([]candidate, 0, len(pkgs))
+	for name, pkg := range pkgs {
+		candidates = append(candidates, candidate{
+			name:  name,
+			count: len(pkg.Files),
+		})
+	}
+
+	sort.Slice(candidates, func(i, j int) bool {
+		if candidates[i].count == candidates[j].count {
+			return candidates[i].name < candidates[j].name
+		}
+		return candidates[i].count > candidates[j].count
+	})
+
+	for _, cand := range candidates {
+		if cand.name != "main" {
+			return cand.name, nil
+		}
+	}
+
+	return candidates[0].name, nil
+}
+
 //
 // ------------------------------------------------------------
 // Rendering
@@ -272,7 +336,7 @@ func renderAPI(funcs []*FuncDoc) string {
 	var buf bytes.Buffer
 
 	// ---------------- Index ----------------
-	buf.WriteString("### Index\n\n")
+	buf.WriteString("## API Index\n\n")
 	buf.WriteString("| Group | Functions |\n")
 	buf.WriteString("|------:|-----------|\n")
 
@@ -316,7 +380,7 @@ func renderAPI(funcs []*FuncDoc) string {
 			}
 
 			for _, ex := range fn.Examples {
-				if ex.Label != "" {
+				if ex.Label != "" && len(fn.Examples) > 1 {
 					buf.WriteString(fmt.Sprintf("_Example: %s_\n\n", ex.Label))
 				}
 
@@ -352,6 +416,61 @@ func replaceAPISection(readme, api string) (string, error) {
 	out.WriteString(readme[end:])
 
 	return out.String(), nil
+}
+
+func countTests(root string) (int, error) {
+	cmd := exec.Command("go", "test", "./...", "-run", "Test", "-count=1", "-json")
+	cmd.Dir = root
+
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &out
+
+	if err := cmd.Run(); err != nil {
+		return 0, fmt.Errorf("go test -json: %w\n%s", err, out.String())
+	}
+
+	var total int
+	dec := json.NewDecoder(bytes.NewReader(out.Bytes()))
+
+	for dec.More() {
+		var event struct {
+			Action string `json:"Action"`
+			Test   string `json:"Test"`
+		}
+		if err := dec.Decode(&event); err != nil {
+			return 0, err
+		}
+		if event.Action == "run" && event.Test != "" {
+			total++
+		}
+	}
+
+	return total, nil
+}
+
+var testsBadgePattern = regexp.MustCompile(`tests-\d+-brightgreen`)
+
+func updateTestsSection(readme string, tests int) (string, error) {
+	start := strings.Index(readme, testCountStart)
+	end := strings.Index(readme, testCountEnd)
+
+	if start == -1 || end == -1 || end < start {
+		return "", fmt.Errorf("test count anchors not found or malformed")
+	}
+
+	before := readme[:start+len(testCountStart)]
+	body := readme[start+len(testCountStart) : end]
+	after := readme[end:]
+
+	leading := ""
+	if strings.HasPrefix(body, "\n") {
+		leading = "\n"
+	}
+
+	badge := fmt.Sprintf("%s    <img src=\"https://img.shields.io/badge/tests-%d-brightgreen\" alt=\"Tests\">\n", leading, tests)
+
+	return before + badge + after, nil
 }
 
 //

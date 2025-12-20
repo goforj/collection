@@ -13,6 +13,9 @@
     <a href="https://golang.org"><img src="https://img.shields.io/badge/go-1.21+-blue?logo=go" alt="Go version"></a>
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
+<!-- test-count:embed:start -->
+    <img src="https://img.shields.io/badge/tests-446-brightgreen" alt="Tests">
+<!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
 
@@ -250,7 +253,7 @@ go get github.com/goforj/collection
 
 <!-- api:embed:start -->
 
-### Index
+## API Index
 
 | Group | Functions |
 |------:|-----------|
@@ -352,8 +355,6 @@ collection.Dump(c2.Avg())
 ### <a id="count"></a>Count · readonly · fluent
 
 Count returns the total number of items in the collection.
-
-_Example: integers_
 
 ```go
 count := collection.New([]int{1, 2, 3, 4}).Count()
@@ -923,8 +924,6 @@ Dd prints items then terminates execution.
 Like Laravel's dd(), this is intended for debugging and
 should not be used in production control flow.
 
-_Example: strings_
-
 ```go
 c := collection.New([]string{"a", "b"})
 c.Dd()
@@ -981,8 +980,6 @@ collection.Dump(c2.Items())
 DumpStr returns the pretty-printed dump of the items as a string,
 without printing or exiting.
 Useful for logging, snapshot testing, and non-interactive debugging.
-
-_Example: integers_
 
 ```go
 c := collection.New([]int{10, 20})
@@ -1316,8 +1313,6 @@ collection.Dump(out2)
 After returns all items after the first element for which pred returns true.
 If no element matches, an empty collection is returned.
 
-_Example: integers_
-
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
 c.After(func(v int) bool { return v == 3 }).Dump()
@@ -1594,8 +1589,6 @@ collection.Dump(all)
 
 Any returns true if at least one item satisfies fn.
 
-_Example: integers_
-
 ```go
 c := collection.New([]int{1, 2, 3, 4})
 has := c.Any(func(v int) bool { return v%2 == 0 }) // true
@@ -1821,8 +1814,6 @@ collection.Dump(v3, ok4)
 FirstWhere returns the first item in the collection for which the provided
 predicate function returns true. If no items match, ok=false is returned
 along with the zero value of T.
-
-_Example: integers_
 
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
@@ -2129,8 +2120,6 @@ collection.Dump(none)
 
 ToJSON converts the collection's items into a compact JSON string.
 
-_Example: strings - pretty JSON_
-
 ```go
 pj1 := collection.New([]string{"a", "b"})
 out1, _ := pj1.ToJSON()
@@ -2142,8 +2131,6 @@ fmt.Println(out1)
 
 ToPrettyJSON converts the collection's items into a human-readable,
 indented JSON string.
-
-_Example: strings - pretty JSON_
 
 ```go
 pj1 := collection.New([]string{"a", "b"})
@@ -3453,8 +3440,6 @@ users.Append(
 
 Concat appends the values from the given slice onto the end of the collection,
 
-_Example: strings_
-
 ```go
 c := collection.New([]string{"John Doe"})
 concatenated := c.
@@ -4024,8 +4009,6 @@ collection.Dump(out4.Items())
 ### <a id="push"></a>Push · immutable · fluent
 
 Push returns a new collection with the given values appended.
-
-_Example: integers_
 
 ```go
 nums := collection.New([]int{1, 2}).Push(3, 4)

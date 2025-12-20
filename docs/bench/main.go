@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -30,8 +31,11 @@ type benchResult struct {
 }
 
 func main() {
+	onlyFlag := flag.String("only", "", "Run only benchmarks matching the name (comma-separated, case-insensitive)")
+	flag.Parse()
+
 	start := time.Now()
-	results := runBenches()
+	results := runBenches(parseOnly(*onlyFlag))
 	table := renderTable(results)
 
 	if err := updateReadme(table); err != nil {
@@ -49,7 +53,7 @@ func main() {
 // Benchmark runner
 // ----------------------------------------------------------------------------
 
-func runBenches() []benchResult {
+func runBenches(only map[string]struct{}) []benchResult {
 	cases := []struct {
 		name string
 		col  func(*testing.B)
@@ -70,7 +74,7 @@ func runBenches() []benchResult {
 		{"Take", benchTakeCollection, benchTakeLo},
 		{"Contains", benchContainsCollection, benchContainsLo},
 		{"Find", benchFindCollection, benchFindLo},
-		{"GroupBy", benchGroupByCollection, benchGroupByLo},
+		{"GroupBySlice", benchGroupByCollection, benchGroupByLo},
 		{"CountBy", benchCountByCollection, benchCountByLo},
 		{"CountByValue", benchCountByValueCollection, benchCountByValueLo},
 		{"Skip", benchSkipCollection, benchSkipLo},
@@ -92,6 +96,12 @@ func runBenches() []benchResult {
 
 	var results []benchResult
 	for _, c := range cases {
+		if len(only) > 0 {
+			if _, ok := only[strings.ToLower(c.name)]; !ok {
+				continue
+			}
+		}
+
 		results = append(
 			results,
 			measure(c.name, "collection", c.col),
@@ -99,6 +109,18 @@ func runBenches() []benchResult {
 		)
 	}
 	return results
+}
+
+func parseOnly(raw string) map[string]struct{} {
+	only := make(map[string]struct{})
+	for _, part := range strings.Split(raw, ",") {
+		name := strings.ToLower(strings.TrimSpace(part))
+		if name == "" {
+			continue
+		}
+		only[name] = struct{}{}
+	}
+	return only
 }
 
 func measure(name, impl string, fn func(*testing.B)) benchResult {
@@ -399,7 +421,7 @@ func benchFindLo(b *testing.B) {
 func benchGroupByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.GroupBy(collection.New(benchInts), func(v int) int { return v % benchGroupByMod })
+		_ = collection.GroupBySlice(collection.New(benchInts), func(v int) int { return v % benchGroupByMod })
 	}
 }
 

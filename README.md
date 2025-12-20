@@ -78,39 +78,39 @@ collection.
 
 | Op | ns/op (collection vs lo ×) | allocs/op (collection vs lo) |
 |----|------------------|--------------------|
-| All | 56ns / 54ns (0.96x) | 0 / 0 |
-| Any | 55ns / 55ns (1.00x) | 0 / 0 |
-| Chunk | 36ns / 243ns (6.75x) | 1 / 11 |
-| Contains | 57ns / 57ns (1.00x) | 0 / 0 |
-| CountBy | 1.9µs / 4.1µs (2.11x) | 3 / 11 |
-| CountByValue | 1.4µs / 4.0µs (2.87x) | 3 / 11 |
-| Difference | 3.1µs / 9.4µs (3.09x) | 8 / 30 |
-| Each | 51ns / 51ns (1.00x) | 0 / 0 |
-| Filter | 131ns / 258ns (1.97x) | 0 / 1 |
-| Find | 65ns / 55ns (0.85x) | 0 / 0 |
+| All | 53ns / 52ns (0.98x) | 0 / 0 |
+| Any | 54ns / 53ns (0.98x) | 0 / 0 |
+| Chunk | 34ns / 233ns (6.85x) | 1 / 11 |
+| Contains | 54ns / 52ns (0.96x) | 0 / 0 |
+| CountBy | 1.3µs / 3.8µs (2.83x) | 3 / 11 |
+| CountByValue | 1.4µs / 3.8µs (2.82x) | 3 / 11 |
+| Difference | 3.1µs / 9.8µs (3.20x) | 8 / 30 |
+| Each | 52ns / 53ns (1.02x) | 0 / 0 |
+| Filter | 132ns / 243ns (1.84x) | 0 / 1 |
+| Find | 55ns / 53ns (0.96x) | 0 / 0 |
 | First | 0ns / 0ns (∞) | 0 / 0 |
-| GroupBy | 2.7µs / 2.4µs (0.88x) | 73 / 63 |
-| IndexWhere | 53ns / 52ns (0.98x) | 0 / 0 |
-| Intersect | 3.9µs / 4.7µs (1.18x) | 8 / 19 |
+| GroupBySlice | 2.2µs / 2.3µs (1.03x) | 63 / 63 |
+| IndexWhere | 54ns / 52ns (0.96x) | 0 / 0 |
+| Intersect | 4.0µs / 4.9µs (1.21x) | 8 / 19 |
 | Last | 0ns / 0ns (∞) | 0 / 0 |
-| Map | 75ns / 169ns (2.25x) | 0 / 1 |
-| Max | 51ns / 51ns (1.00x) | 0 / 0 |
-| Min | 51ns / 51ns (1.00x) | 0 / 0 |
-| None | 53ns / 52ns (0.98x) | 0 / 0 |
-| Pipeline F→M→T→R | 110ns / 292ns (2.65x) | 0 / 2 |
-| Reduce (sum) | 51ns / 51ns (1.00x) | 0 / 0 |
+| Map | 74ns / 171ns (2.31x) | 0 / 1 |
+| Max | 57ns / 65ns (1.14x) | 0 / 0 |
+| Min | 54ns / 55ns (1.02x) | 0 / 0 |
+| None | 54ns / 52ns (0.96x) | 0 / 0 |
+| Pipeline F→M→T→R | 109ns / 283ns (2.60x) | 0 / 2 |
+| Reduce (sum) | 51ns / 52ns (1.02x) | 0 / 0 |
 | Reverse | 43ns / 43ns (1.00x) | 0 / 0 |
-| Shuffle | 737ns / 1.1µs (1.48x) | 0 / 0 |
-| Skip | 0ns / 123ns (∞) | 0 / 1 |
-| SkipLast | 0ns / 123ns (∞) | 0 / 1 |
-| Sum | 52ns / 51ns (0.98x) | 0 / 0 |
+| Shuffle | 732ns / 1.1µs (1.46x) | 0 / 0 |
+| Skip | 0ns / 119ns (∞) | 0 / 1 |
+| SkipLast | 0ns / 118ns (∞) | 0 / 1 |
+| Sum | 55ns / 52ns (0.95x) | 0 / 0 |
 | Take | 0ns / 0ns (∞) | 0 / 0 |
-| ToMap | 1.5µs / 1.5µs (1.00x) | 3 / 4 |
-| Union | 3.2µs / 3.4µs (1.07x) | 5 / 4 |
-| Unique | 1.7µs / 1.8µs (1.06x) | 4 / 4 |
-| UniqueBy | 1.8µs / 1.8µs (0.95x) | 5 / 4 |
-| Zip | 304ns / 687ns (2.26x) | 1 / 1 |
-| ZipWith | 207ns / 663ns (3.20x) | 1 / 1 |
+| ToMap | 1.6µs / 1.5µs (0.95x) | 3 / 4 |
+| Union | 3.2µs / 3.3µs (1.05x) | 5 / 4 |
+| Unique | 4.9µs / 1.9µs (0.38x) | 4 / 4 |
+| UniqueBy | 1.8µs / 1.7µs (0.94x) | 5 / 4 |
+| Zip | 307ns / 706ns (2.30x) | 1 / 1 |
+| ZipWith | 208ns / 1.2µs (5.61x) | 1 / 1 |
 <!-- bench:embed:end -->
 
 ## Design Principles
@@ -176,7 +176,7 @@ go get github.com/goforj/collection
 | **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [MaxBy](#maxby) [Median](#median) [Min](#min) [MinBy](#minby) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
 | **Construction** | [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
 | **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
-| **Grouping** | [GroupBy](#groupby) |
+| **Grouping** | [GroupBy](#groupby) [GroupBySlice](#groupbyslice) |
 | **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
 | **Ordering** | [After](#after) [Before](#before) [Reverse](#reverse) [Shuffle](#shuffle) [Sort](#sort) |
 | **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
@@ -978,6 +978,78 @@ collection.Dump(groups2["admin"].Items())
 //  }
 // ]
 collection.Dump(groups2["user"].Items())
+// []main.User [
+//  0 => #main.User {
+//    +ID   => 2 #int
+//    +Role => "user" #string
+//  }
+// ]
+```
+
+### <a id="groupbyslice"></a>GroupBySlice · readonly
+
+GroupBySlice partitions the collection into groups keyed by the value
+returned from keyFn.
+
+_Example: grouping integers by parity_
+
+```go
+values := []int{1, 2, 3, 4, 5}
+
+groups := collection.GroupBySlice(
+	collection.New(values),
+	func(v int) string {
+		if v%2 == 0 {
+			return "even"
+		}
+		return "odd"
+	},
+)
+
+collection.Dump(groups["even"])
+// []int [
+//  0 => 2 #int
+//  1 => 4 #int
+// ]
+collection.Dump(groups["odd"])
+// []int [
+//  0 => 1 #int
+//  1 => 3 #int
+//  2 => 5 #int
+// ]
+```
+
+_Example: grouping structs by field_
+
+```go
+type User struct {
+	ID   int
+	Role string
+}
+
+users := []User{
+	{ID: 1, Role: "admin"},
+	{ID: 2, Role: "user"},
+	{ID: 3, Role: "admin"},
+}
+
+groups2 := collection.GroupBySlice(
+	collection.New(users),
+	func(u User) string { return u.Role },
+)
+
+collection.Dump(groups2["admin"])
+// []main.User [
+//  0 => #main.User {
+//    +ID   => 1 #int
+//    +Role => "admin" #string
+//  }
+//  1 => #main.User {
+//    +ID   => 3 #int
+//    +Role => "admin" #string
+//  }
+// ]
+collection.Dump(groups2["user"])
 // []main.User [
 //  0 => #main.User {
 //    +ID   => 2 #int

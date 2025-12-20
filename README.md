@@ -78,39 +78,39 @@ collection.
 
 | Op | ns/op (collection vs lo ×) | allocs/op (collection vs lo) |
 |----|------------------|--------------------|
-| All | 232ns / 231ns (1.00x) | 0 / 0 |
-| Any | 233ns / 234ns (1.00x) | 0 / 0 |
-| Chunk | 127ns / 1.0µs (8.26x) | 1 / 51 |
-| Contains | 233ns / 231ns (0.99x) | 0 / 0 |
+| All | 231ns / 230ns (1.00x) | 0 / 0 |
+| Any | 232ns / 231ns (1.00x) | 0 / 0 |
+| Chunk | 127ns / 1.0µs (**8.25x**) | 1 / 51 |
+| Contains | 234ns / 231ns (0.99x) | 0 / 0 |
 | CountBy | 8.5µs / 8.1µs (0.95x) | 5 / 11 |
-| CountByValue | 8.5µs / 8.0µs (0.95x) | 5 / 11 |
-| Difference | 19.4µs / 43.7µs (2.25x) | 12 / 43 |
+| CountByValue | 8.5µs / 8.4µs (0.98x) | 5 / 11 |
+| Difference | 19.6µs / 44.0µs (**2.24x**) | 12 / 43 |
 | Each | 230ns / 230ns (1.00x) | 0 / 0 |
-| Filter | 646ns / 1.1µs (1.65x) | 0 / 1 |
-| Find | 233ns / 231ns (0.99x) | 0 / 0 |
+| Filter | 651ns / 1.1µs (**1.64x**) | 0 / 1 |
+| Find | 232ns / 232ns (1.00x) | 0 / 0 |
 | First | 0ns / 0ns (∞) | 0 / 0 |
-| GroupBySlice | 8.0µs / 8.3µs (1.03x) | 83 / 83 |
-| IndexWhere | 235ns / 232ns (0.99x) | 0 / 0 |
-| Intersect | 17.2µs / 10.7µs (0.62x) | 12 / 19 |
+| GroupBySlice | 8.1µs / 8.3µs (**1.03x**) | 83 / 83 |
+| IndexWhere | 243ns / 233ns (0.96x) | 0 / 0 |
+| Intersect | 17.3µs / 10.8µs (0.62x) | 12 / 19 |
 | Last | 0ns / 0ns (∞) | 0 / 0 |
-| Map | 346ns / 811ns (2.34x) | 0 / 1 |
-| Max | 231ns / 230ns (1.00x) | 0 / 0 |
-| Min | 230ns / 229ns (1.00x) | 0 / 0 |
-| None | 231ns / 230ns (1.00x) | 0 / 0 |
-| Pipeline F→M→T→R | 489ns / 1.3µs (2.62x) | 0 / 2 |
-| Reduce (sum) | 232ns / 230ns (0.99x) | 0 / 0 |
-| Reverse | 215ns / 228ns (1.06x) | 0 / 0 |
-| Shuffle | 3.5µs / 5.3µs (1.50x) | 0 / 0 |
-| Skip | 0ns / 708ns (∞) | 0 / 1 |
-| SkipLast | 0ns / 704ns (∞) | 0 / 1 |
-| Sum | 231ns / 230ns (1.00x) | 0 / 0 |
+| Map | 349ns / 811ns (**2.32x**) | 0 / 1 |
+| Max | 230ns / 229ns (1.00x) | 0 / 0 |
+| Min | 230ns / 231ns (**1.00x**) | 0 / 0 |
+| None | 231ns / 231ns (1.00x) | 0 / 0 |
+| Pipeline F→M→T→R | 491ns / 1.3µs (**2.63x**) | 0 / 2 |
+| Reduce (sum) | 231ns / 230ns (1.00x) | 0 / 0 |
+| Reverse | 212ns / 230ns (**1.08x**) | 0 / 0 |
+| Shuffle | 3.5µs / 5.3µs (**1.51x**) | 0 / 0 |
+| Skip | 0ns / 712ns (∞) | 0 / 1 |
+| SkipLast | 0ns / 712ns (∞) | 0 / 1 |
+| Sum | 234ns / 230ns (0.98x) | 0 / 0 |
 | Take | 0ns / 0ns (∞) | 0 / 0 |
-| ToMap | 7.7µs / 7.9µs (1.03x) | 5 / 6 |
-| Union | 17.0µs / 17.6µs (1.03x) | 11 / 10 |
-| Unique | 6.4µs / 6.2µs (0.98x) | 6 / 6 |
-| UniqueBy | 6.6µs / 6.3µs (0.95x) | 7 / 6 |
-| Zip | 1.4µs / 3.1µs (2.26x) | 1 / 1 |
-| ZipWith | 1.0µs / 3.0µs (2.93x) | 1 / 1 |
+| ToMap | 7.6µs / 8.3µs (**1.08x**) | 5 / 6 |
+| Union | 17.2µs / 17.8µs (**1.04x**) | 11 / 10 |
+| Unique | 6.4µs / 6.3µs (0.99x) | 6 / 6 |
+| UniqueBy | 6.7µs / 6.4µs (0.96x) | 7 / 6 |
+| Zip | 1.4µs / 3.2µs (**2.27x**) | 1 / 1 |
+| ZipWith | 985ns / 3.0µs (**3.00x**) | 1 / 1 |
 <!-- bench:embed:end -->
 
 ## Design Principles

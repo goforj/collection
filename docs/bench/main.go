@@ -758,7 +758,12 @@ func formatRatio(lo, col float64) string {
 	if col == 0 {
 		return "∞"
 	}
-	return fmt.Sprintf("%.2fx", lo/col)
+	ratio := lo / col
+	out := fmt.Sprintf("%.2fx", ratio)
+	if ratio > 1 {
+		return fmt.Sprintf("**%s**", out)
+	}
+	return out
 }
 
 func formatInt(v int64) string {

@@ -24,17 +24,17 @@
 
 # Features
 
-- 🔗 **Fluent chaining** - pipeline your operations like Laravel Collections
-- 🧬 **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
-- ⚡ **Zero dependencies** - pure Go, fast, lightweight
-- 🧵 **Minimal allocations** - avoids unnecessary copies; most operations reuse the underlying slice
-- 🧹 **Map / Filter / Reduce** - clean functional transforms
-- 🔍 **First / Last / Find / Contains** helpers
-- 📏 **Sort, GroupBy, Chunk**, and more
-- 🧪 **Safe-by-default** - defensive copies where appropriate
-- 📜 **Built-in JSON helpers** (`ToJSON()`, `ToPrettyJSON()`)
-- 🧰 **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`)
-- 🧱 **Works with any Go type**, including structs, pointers, and deeply nested composites
+- **Fluent chaining** - pipeline your operations like Laravel Collections
+- **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
+- **Zero dependencies** - pure Go, fast, lightweight
+- **Minimal allocations** - avoids unnecessary copies; most operations reuse the underlying slice
+- **Map / Filter / Reduce** - clean functional transforms
+- **First / Last / Find / Contains** helpers
+- **Sort, GroupBy, Chunk**, and more
+- **Safe-by-default** - defensive copies where appropriate
+- **Built-in JSON helpers** (`ToJSON()`, `ToPrettyJSON()`)
+- **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`)
+- **Works with any Go type**, including structs, pointers, and deeply nested composites
 
 ## Fluent Chaining
 

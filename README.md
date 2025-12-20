@@ -181,17 +181,19 @@ Fluent pipelines don't mean you're locked into mutation.
 When you want to branch a pipeline or preserve the original data, `Clone()` creates a shallow copy of the collection so subsequent operations are isolated and predictable.
 
 ```go
-base := collection.New(items)
+events := collection.New(deviceEvents)
 
-fastPath := base.
+// Fast alerting path: cheap filters, early exit
+alerts := events.
     Clone().
-    Filter(isHot).
+    Filter(func(e DeviceEvent) bool { return e.Severity >= Critical }).
     Take(10)
 
-slowPath := base.
+// Deeper analysis path: heavier work, full ordering
+report := events.
     Clone().
-    Filter(isCold).
-    Sort(byLatency)
+    Filter(func(e DeviceEvent) bool { return e.Region == "us-east" }).
+    Sort(func(a, b DeviceEvent) bool { return a.Timestamp.Before(b.Timestamp) })
 ```
 
 This keeps the performance benefits of in-place operations **where they matter**, while making divergence points explicit and intentional.

@@ -78,10 +78,39 @@ collection.
 
 | Op | ns/op (col/lo ×) | allocs/op (col/lo) | 10k iters Δ (time / allocs) |
 |----|------------------|--------------------|-----------------------------|
-| Chunk | 1.2µs / 56.1µs (45.65x) | 1 / 501 | 548ms / 5.0M |
-| Filter | 33.6µs / 54.3µs (1.62x) | 0 / 1 | 207ms / 10k |
-| Map | 20.2µs / 37.1µs (1.83x) | 0 / 1 | 169ms / 10k |
-| Pipeline F→M→T→R | 36.5µs / 58.4µs (1.60x) | 0 / 2 | 219ms / 20k |
+| All | 54ns / 52ns (0.96x) | 0 / 0 | -20000ns / 0 |
+| Any | 52ns / 52ns (1.00x) | 0 / 0 | 0ns / 0 |
+| Chunk | 36ns / 232ns (6.44x) | 1 / 11 | 2ms / 100k |
+| Contains | 55ns / 53ns (0.96x) | 0 / 0 | -20000ns / 0 |
+| CountBy | 1.3µs / 3.8µs (2.87x) | 3 / 11 | 25ms / 80k |
+| CountByValue | 1.3µs / 3.9µs (2.88x) | 3 / 11 | 25ms / 80k |
+| Difference | 3.0µs / 9.3µs (3.13x) | 8 / 30 | 63ms / 220k |
+| Each | 52ns / 52ns (1.00x) | 0 / 0 | 0ns / 0 |
+| Filter | 131ns / 245ns (1.87x) | 0 / 1 | 1ms / 10k |
+| Find | 53ns / 52ns (0.98x) | 0 / 0 | -10000ns / 0 |
+| First | 0ns / 0ns (∞) | 0 / 0 | 0ns / 0 |
+| GroupBy | 2.5µs / 2.4µs (0.96x) | 73 / 63 | -940000ns / 100k |
+| IndexWhere | 54ns / 52ns (0.96x) | 0 / 0 | -20000ns / 0 |
+| Intersect | 3.8µs / 4.6µs (1.19x) | 8 / 19 | 7ms / 110k |
+| Last | 0ns / 0ns (∞) | 0 / 0 | 0ns / 0 |
+| Map | 74ns / 175ns (2.36x) | 0 / 1 | 1ms / 10k |
+| Max | 51ns / 50ns (0.98x) | 0 / 0 | -10000ns / 0 |
+| Min | 51ns / 51ns (1.00x) | 0 / 0 | 0ns / 0 |
+| None | 52ns / 52ns (1.00x) | 0 / 0 | 0ns / 0 |
+| Pipeline F→M→T→R | 110ns / 287ns (2.61x) | 0 / 2 | 2ms / 20k |
+| Reduce (sum) | 52ns / 51ns (0.98x) | 0 / 0 | -10000ns / 0 |
+| Reverse | 42ns / 42ns (1.00x) | 0 / 0 | 0ns / 0 |
+| Shuffle | 736ns / 1.1µs (1.45x) | 0 / 0 | 3ms / 0 |
+| Skip | 0ns / 119ns (∞) | 0 / 1 | 1ms / 10k |
+| SkipLast | 0ns / 122ns (∞) | 0 / 1 | 1ms / 10k |
+| Sum | 52ns / 51ns (0.98x) | 0 / 0 | -10000ns / 0 |
+| Take | 0ns / 0ns (∞) | 0 / 0 | 0ns / 0 |
+| ToMap | 1.5µs / 1.5µs (1.01x) | 3 / 4 | 90µs / 10k |
+| Union | 3.1µs / 3.3µs (1.08x) | 5 / 4 | 2ms / 10k |
+| Unique | 1.7µs / 1.8µs (1.06x) | 4 / 4 | 980µs / 0 |
+| UniqueBy | 1.8µs / 1.7µs (0.94x) | 5 / 4 | -1020000ns / 10k |
+| Zip | 303ns / 670ns (2.21x) | 1 / 1 | 4ms / 0 |
+| ZipWith | 204ns / 648ns (3.18x) | 1 / 1 | 4ms / 0 |
 
 > **Hot-path context**  
 > `10k iters Δ` is a derived estimate showing total time and allocation savings over sustained workloads (e.g. worker pools).
@@ -114,7 +143,7 @@ Instead, map interaction is explicit and intentional:
 
 This makes transitions between unordered and ordered data visible and honest.
 
-### Behavior semantics
+## Behavior semantics
 
 Each method declares how it interacts with the collection:
 
@@ -124,7 +153,7 @@ Each method declares how it interacts with the collection:
 
 Annotations describe **observable behavior**, not implementation details.
 
-### Runnable examples
+## Runnable examples
 
 Every function has a corresponding runnable example under [`./examples`](./examples).
 

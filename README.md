@@ -76,7 +76,7 @@ collection.
 
 ### Performance Benchmarks
 
-lo is a fantastic library and a major inspiration for this project. Our focus differs: `collection` is built for fluent chaining with explicit mutability, which lets hot paths avoid intermediate allocations. That shows up most in chained pipelines and in-place operations where we can keep work on the same backing slice while still being explicit about behavior.
+[lo](https://github.com/samber/lo) is a fantastic library and a major inspiration for this project. Our focus differs: `collection` is built for fluent chaining with explicit mutability, which lets hot paths avoid intermediate allocations. That shows up most in chained pipelines and in-place operations where we can keep work on the same backing slice while still being explicit about behavior.
 
 | Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |
 |---:|----------------|:--:|------------------|:--:|--------------------|
@@ -119,24 +119,23 @@ lo is a fantastic library and a major inspiration for this project. Our focus di
 
 * **≈** means the two libraries are effectively equivalent
 * **∞x less** means one side allocates while the other allocates nothing
-* Single-operation helpers are intentionally close in performance
+* Single-operation helpers are intentionally close in performance if not exceeds
 * Multi-step pipelines highlight the architectural difference
 
-If you prefer immutable, one-off helpers — `lo` is outstanding.
-If you write **expressive, chained data pipelines** and care about hot-path performance — `collection` is built for that job.
+If you prefer immutable, one-off helpers - `lo` is outstanding.
+If you write **expressive, chained data pipelines** and care about hot-path performance - `collection` is built for that job.
 
 ## Performance Philosophy
 
-> **tl;dr**: *lo* is excellent. We solve a different problem — and in chained pipelines, that difference matters.
+> **tl;dr**: *lo* is excellent. We solve a different problem - and in chained pipelines, that difference matters.
 
 `lo` is a fantastic library and a major inspiration for this project. It is battle-tested, idiomatic, and often the right choice when you want small, standalone helpers that operate on slices in isolation.
 
 `collection` takes a different approach.
 
-Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines**. Many operations are designed to **mutate the same backing slice intentionally**, allowing chained workflows to avoid intermediate allocations and unnecessary copying — while still making that behavior visible and documented.
+Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines**. Many operations are designed to **mutate the same backing slice intentionally**, allowing chained workflows to avoid intermediate allocations and unnecessary copying - while still making that behavior visible and documented.
 
-That design choice doesn’t matter much for single operations.
-It matters a *lot* once you start chaining.
+That design choice doesn't matter much for some single operations. It matters a *lot* once you start chaining and especially in hot paths.
 
 ## Why chaining changes the performance story
 
@@ -146,7 +145,7 @@ Most functional helpers (including `lo`) operate like this:
 input → Map → new slice → Filter → new slice → Take → new slice
 ```
 
-That model is simple and safe — but each step typically allocates.
+That model is simple and safe - but each step typically allocates.
 
 `collection` pipelines are designed to look more like this:
 
@@ -161,7 +160,7 @@ When you opt into mutation, **the pipeline stays on the same backing array** unl
 * **Lower end-to-end latency in hot paths**
 * **Much stronger scaling in multi-step pipelines**
 
-That’s why the biggest deltas appear in benchmarks like:
+That's why the biggest deltas appear in benchmarks like:
 
 * `Pipeline F→M→T→R`
 * `Map`
@@ -170,7 +169,31 @@ That’s why the biggest deltas appear in benchmarks like:
 * `Zip / ZipWith`
 * `Skip / SkipLast`
 
-In these cases, `collection` can be **2×–30× faster** and often reduce allocations to **zero**, not by doing “clever tricks”, but by making mutation *explicit and opt-in*.
+In these cases, `collection` can be **2×–30× faster** and often reduce allocations to **zero**, not by doing "clever tricks", but by making mutation *explicit and opt-in*.
+
+## Explicit branching with `Clone`
+
+Fluent pipelines don't mean you're locked into mutation.
+
+When you want to branch a pipeline or preserve the original data, `Clone()` creates a shallow copy of the collection so subsequent operations are isolated and predictable.
+
+```go
+base := collection.New(items)
+
+fastPath := base.
+    Clone().
+    Filter(isHot).
+    Take(10)
+
+slowPath := base.
+    Clone().
+    Filter(isCold).
+    Sort(byLatency)
+```
+
+This keeps the performance benefits of in-place operations **where they matter**, while making divergence points explicit and intentional.
+
+No hidden copies. No surprises.
 
 ## Design Principles
 

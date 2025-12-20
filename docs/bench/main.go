@@ -697,8 +697,8 @@ func renderTable(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Op | ns/op (collection vs lo) | × | allocs/op (collection vs lo) |\n")
-	buf.WriteString("|----|--------------------------|-------------------|-------------------------------|\n")
+	buf.WriteString("| Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |\n")
+	buf.WriteString("|---:|----------------|:--:|------------------|:--:|--------------------|\n")
 
 	names := make([]string, 0, len(byName))
 	for name := range byName {
@@ -717,13 +717,22 @@ func renderTable(results []benchResult) string {
 		)
 		ratioCell := formatRatio(loRes.nsPerOp, col.nsPerOp)
 
+		bytesCell := fmt.Sprintf(
+			"%s / %s",
+			formatBytes(col.bytesPerOp),
+			formatBytes(loRes.bytesPerOp),
+		)
+		bytesRatioCell := formatRatioBytes(loRes.bytesPerOp, col.bytesPerOp)
+
 		allocCell := fmt.Sprintf("%d / %d", col.allocsPerOp, loRes.allocsPerOp)
 
 		buf.WriteString(fmt.Sprintf(
-			"| %s | %s | %s | %s |\n",
+			"| **%s** | %s | %s | %s | %s | %s |\n",
 			name,
 			nsCell,
 			ratioCell,
+			bytesCell,
+			bytesRatioCell,
 			allocCell,
 		))
 	}
@@ -739,6 +748,17 @@ func formatNs(ns float64) string {
 		return fmt.Sprintf("%.1fµs", ns/1e3)
 	default:
 		return fmt.Sprintf("%.0fns", ns)
+	}
+}
+
+func formatBytes(bytes int64) string {
+	switch {
+	case bytes >= 1_000_000:
+		return fmt.Sprintf("%.1fMB", float64(bytes)/1_000_000)
+	case bytes >= 1_000:
+		return fmt.Sprintf("%.1fKB", float64(bytes)/1_000)
+	default:
+		return fmt.Sprintf("%dB", bytes)
 	}
 }
 
@@ -768,6 +788,28 @@ func formatRatio(lo, col float64) string {
 		return fmt.Sprintf("**%s**", out)
 	}
 	return out
+}
+
+func formatRatioBytes(lo, col int64) string {
+	switch {
+	case lo == 0 && col == 0:
+		return "≈"
+	case col == 0:
+		return "**∞x less**"
+	case lo == 0:
+		return "∞x more"
+	}
+
+	ratio := float64(lo) / float64(col)
+	if ratio >= 0.95 && ratio <= 1.05 {
+		return "≈"
+	}
+
+	out := fmt.Sprintf("%.2fx", ratio)
+	if ratio > 1 {
+		return fmt.Sprintf("**%s less**", out)
+	}
+	return fmt.Sprintf("%s more", out)
 }
 
 func formatInt(v int64) string {

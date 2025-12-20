@@ -76,41 +76,41 @@ collection.
 
 ### Performance Benchmarks
 
-| Op | ns/op (collection vs lo) | × | allocs/op (collection vs lo) |
-|----|--------------------------|-------------------|-------------------------------|
-| All | 233ns / 232ns | ≈ | 0 / 0 |
-| Any | 234ns / 232ns | ≈ | 0 / 0 |
-| Chunk | 129ns / 1.1µs | **8.17x** | 1 / 51 |
-| Contains | 234ns / 238ns | ≈ | 0 / 0 |
-| CountBy | 8.4µs / 8.1µs | ≈ | 5 / 11 |
-| CountByValue | 8.5µs / 8.1µs | 0.95x | 5 / 11 |
-| Difference | 19.5µs / 43.9µs | **2.25x** | 12 / 43 |
-| Each | 230ns / 230ns | ≈ | 0 / 0 |
-| Filter | 655ns / 1.1µs | **1.62x** | 0 / 1 |
-| Find | 236ns / 235ns | ≈ | 0 / 0 |
-| First | 0ns / 0ns | ∞ | 0 / 0 |
-| GroupBySlice | 8.3µs / 8.4µs | ≈ | 83 / 83 |
-| IndexWhere | 233ns / 231ns | ≈ | 0 / 0 |
-| Intersect | 18.7µs / 10.7µs | 0.57x | 12 / 19 |
-| Last | 0ns / 0ns | ∞ | 0 / 0 |
-| Map | 350ns / 825ns | **2.36x** | 0 / 1 |
-| Max | 232ns / 229ns | ≈ | 0 / 0 |
-| Min | 229ns / 230ns | ≈ | 0 / 0 |
-| None | 232ns / 230ns | ≈ | 0 / 0 |
-| Pipeline F→M→T→R | 507ns / 1.3µs | **2.60x** | 0 / 2 |
-| Reduce (sum) | 230ns / 230ns | ≈ | 0 / 0 |
-| Reverse | 217ns / 230ns | **1.06x** | 0 / 0 |
-| Shuffle | 3.5µs / 5.3µs | **1.50x** | 0 / 0 |
-| Skip | 0ns / 718ns | ∞ | 0 / 1 |
-| SkipLast | 0ns / 712ns | ∞ | 0 / 1 |
-| Sum | 233ns / 231ns | ≈ | 0 / 0 |
-| Take | 0ns / 0ns | ∞ | 0 / 0 |
-| ToMap | 7.7µs / 7.9µs | ≈ | 5 / 6 |
-| Union | 18.4µs / 19.0µs | ≈ | 11 / 10 |
-| Unique | 6.3µs / 6.3µs | ≈ | 6 / 6 |
-| UniqueBy | 6.7µs / 6.9µs | ≈ | 7 / 6 |
-| Zip | 1.4µs / 3.2µs | **2.29x** | 1 / 1 |
-| ZipWith | 984ns / 3.2µs | **3.26x** | 1 / 1 |
+| Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |
+|---:|----------------|:--:|------------------|:--:|--------------------|
+| **All** | 232ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Any** | 233ns / 233ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Chunk** | 125ns / 1.1µs | **8.48x** | 1.3KB / 9.3KB | **7.25x less** | 1 / 51 |
+| **Contains** | 236ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **CountBy** | 8.5µs / 8.3µs | ≈ | 36.9KB / 9.4KB | 0.25x more | 5 / 11 |
+| **CountByValue** | 8.6µs / 8.0µs | 0.93x | 36.9KB / 9.4KB | 0.25x more | 5 / 11 |
+| **Difference** | 19.2µs / 43.7µs | **2.27x** | 82.1KB / 108.8KB | **1.33x less** | 12 / 43 |
+| **Each** | 233ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Filter** | 652ns / 1.1µs | **1.64x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **Find** | 232ns / 233ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **First** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
+| **GroupBySlice** | 8.1µs / 8.3µs | ≈ | 21.0KB / 21.0KB | ≈ | 83 / 83 |
+| **IndexWhere** | 241ns / 233ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Intersect** | 17.4µs / 10.7µs | 0.62x | 82.1KB / 11.4KB | 0.14x more | 12 / 19 |
+| **Last** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
+| **Map** | 348ns / 829ns | **2.38x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **Max** | 238ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Min** | 231ns / 234ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **None** | 232ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Pipeline F→M→T→R** | 499ns / 1.3µs | **2.61x** | 0B / 12.3KB | **∞x less** | 0 / 2 |
+| **Reduce (sum)** | 231ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Reverse** | 235ns / 229ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Shuffle** | 3.5µs / 5.3µs | **1.50x** | 0B / 0B | ≈ | 0 / 0 |
+| **Skip** | 0ns / 717ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **SkipLast** | 0ns / 723ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **Sum** | 233ns / 239ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Take** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
+| **ToMap** | 7.6µs / 7.8µs | ≈ | 36.9KB / 37.0KB | ≈ | 5 / 6 |
+| **Union** | 17.2µs / 17.9µs | ≈ | 90.3KB / 90.3KB | ≈ | 11 / 10 |
+| **Unique** | 6.3µs / 6.3µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
+| **UniqueBy** | 6.6µs / 6.4µs | ≈ | 45.2KB / 45.1KB | ≈ | 7 / 6 |
+| **Zip** | 1.4µs / 3.2µs | **2.27x** | 16.4KB / 16.4KB | ≈ | 1 / 1 |
+| **ZipWith** | 993ns / 3.2µs | **3.22x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
 <!-- bench:embed:end -->
 
 ## Design Principles

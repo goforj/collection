@@ -76,7 +76,7 @@ collection.
 
 ### Performance Benchmarks
 
-| Op | ns/op (col/lo ×) | allocs/op (col/lo) |
+| Op | ns/op (collection vs lo ×) | allocs/op (collection vs lo) |
 |----|------------------|--------------------|
 | All | 56ns / 54ns (0.96x) | 0 / 0 |
 | Any | 55ns / 55ns (1.00x) | 0 / 0 |

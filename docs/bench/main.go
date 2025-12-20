@@ -697,7 +697,7 @@ func renderTable(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Op | ns/op (collection vs lo) | collection vs lo × | allocs/op (collection vs lo) |\n")
+	buf.WriteString("| Op | ns/op (collection vs lo) | × | allocs/op (collection vs lo) |\n")
 	buf.WriteString("|----|--------------------------|-------------------|-------------------------------|\n")
 
 	names := make([]string, 0, len(byName))

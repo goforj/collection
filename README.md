@@ -76,44 +76,41 @@ collection.
 
 ### Performance Benchmarks
 
-| Op | ns/op (col/lo ×) | allocs/op (col/lo) | 10k iters Δ (time / allocs) |
-|----|------------------|--------------------|-----------------------------|
-| All | 54ns / 52ns (0.96x) | 0 / 0 | -20000ns / 0 |
-| Any | 52ns / 52ns (1.00x) | 0 / 0 | 0ns / 0 |
-| Chunk | 36ns / 232ns (6.44x) | 1 / 11 | 2ms / 100k |
-| Contains | 55ns / 53ns (0.96x) | 0 / 0 | -20000ns / 0 |
-| CountBy | 1.3µs / 3.8µs (2.87x) | 3 / 11 | 25ms / 80k |
-| CountByValue | 1.3µs / 3.9µs (2.88x) | 3 / 11 | 25ms / 80k |
-| Difference | 3.0µs / 9.3µs (3.13x) | 8 / 30 | 63ms / 220k |
-| Each | 52ns / 52ns (1.00x) | 0 / 0 | 0ns / 0 |
-| Filter | 131ns / 245ns (1.87x) | 0 / 1 | 1ms / 10k |
-| Find | 53ns / 52ns (0.98x) | 0 / 0 | -10000ns / 0 |
-| First | 0ns / 0ns (∞) | 0 / 0 | 0ns / 0 |
-| GroupBy | 2.5µs / 2.4µs (0.96x) | 73 / 63 | -940000ns / 100k |
-| IndexWhere | 54ns / 52ns (0.96x) | 0 / 0 | -20000ns / 0 |
-| Intersect | 3.8µs / 4.6µs (1.19x) | 8 / 19 | 7ms / 110k |
-| Last | 0ns / 0ns (∞) | 0 / 0 | 0ns / 0 |
-| Map | 74ns / 175ns (2.36x) | 0 / 1 | 1ms / 10k |
-| Max | 51ns / 50ns (0.98x) | 0 / 0 | -10000ns / 0 |
-| Min | 51ns / 51ns (1.00x) | 0 / 0 | 0ns / 0 |
-| None | 52ns / 52ns (1.00x) | 0 / 0 | 0ns / 0 |
-| Pipeline F→M→T→R | 110ns / 287ns (2.61x) | 0 / 2 | 2ms / 20k |
-| Reduce (sum) | 52ns / 51ns (0.98x) | 0 / 0 | -10000ns / 0 |
-| Reverse | 42ns / 42ns (1.00x) | 0 / 0 | 0ns / 0 |
-| Shuffle | 736ns / 1.1µs (1.45x) | 0 / 0 | 3ms / 0 |
-| Skip | 0ns / 119ns (∞) | 0 / 1 | 1ms / 10k |
-| SkipLast | 0ns / 122ns (∞) | 0 / 1 | 1ms / 10k |
-| Sum | 52ns / 51ns (0.98x) | 0 / 0 | -10000ns / 0 |
-| Take | 0ns / 0ns (∞) | 0 / 0 | 0ns / 0 |
-| ToMap | 1.5µs / 1.5µs (1.01x) | 3 / 4 | 90µs / 10k |
-| Union | 3.1µs / 3.3µs (1.08x) | 5 / 4 | 2ms / 10k |
-| Unique | 1.7µs / 1.8µs (1.06x) | 4 / 4 | 980µs / 0 |
-| UniqueBy | 1.8µs / 1.7µs (0.94x) | 5 / 4 | -1020000ns / 10k |
-| Zip | 303ns / 670ns (2.21x) | 1 / 1 | 4ms / 0 |
-| ZipWith | 204ns / 648ns (3.18x) | 1 / 1 | 4ms / 0 |
-
-> **Hot-path context**  
-> `10k iters Δ` is a derived estimate showing total time and allocation savings over sustained workloads (e.g. worker pools).
+| Op | ns/op (col/lo ×) | allocs/op (col/lo) |
+|----|------------------|--------------------|
+| All | 56ns / 54ns (0.96x) | 0 / 0 |
+| Any | 55ns / 55ns (1.00x) | 0 / 0 |
+| Chunk | 36ns / 243ns (6.75x) | 1 / 11 |
+| Contains | 57ns / 57ns (1.00x) | 0 / 0 |
+| CountBy | 1.9µs / 4.1µs (2.11x) | 3 / 11 |
+| CountByValue | 1.4µs / 4.0µs (2.87x) | 3 / 11 |
+| Difference | 3.1µs / 9.4µs (3.09x) | 8 / 30 |
+| Each | 51ns / 51ns (1.00x) | 0 / 0 |
+| Filter | 131ns / 258ns (1.97x) | 0 / 1 |
+| Find | 65ns / 55ns (0.85x) | 0 / 0 |
+| First | 0ns / 0ns (∞) | 0 / 0 |
+| GroupBy | 2.7µs / 2.4µs (0.88x) | 73 / 63 |
+| IndexWhere | 53ns / 52ns (0.98x) | 0 / 0 |
+| Intersect | 3.9µs / 4.7µs (1.18x) | 8 / 19 |
+| Last | 0ns / 0ns (∞) | 0 / 0 |
+| Map | 75ns / 169ns (2.25x) | 0 / 1 |
+| Max | 51ns / 51ns (1.00x) | 0 / 0 |
+| Min | 51ns / 51ns (1.00x) | 0 / 0 |
+| None | 53ns / 52ns (0.98x) | 0 / 0 |
+| Pipeline F→M→T→R | 110ns / 292ns (2.65x) | 0 / 2 |
+| Reduce (sum) | 51ns / 51ns (1.00x) | 0 / 0 |
+| Reverse | 43ns / 43ns (1.00x) | 0 / 0 |
+| Shuffle | 737ns / 1.1µs (1.48x) | 0 / 0 |
+| Skip | 0ns / 123ns (∞) | 0 / 1 |
+| SkipLast | 0ns / 123ns (∞) | 0 / 1 |
+| Sum | 52ns / 51ns (0.98x) | 0 / 0 |
+| Take | 0ns / 0ns (∞) | 0 / 0 |
+| ToMap | 1.5µs / 1.5µs (1.00x) | 3 / 4 |
+| Union | 3.2µs / 3.4µs (1.07x) | 5 / 4 |
+| Unique | 1.7µs / 1.8µs (1.06x) | 4 / 4 |
+| UniqueBy | 1.8µs / 1.8µs (0.95x) | 5 / 4 |
+| Zip | 304ns / 687ns (2.26x) | 1 / 1 |
+| ZipWith | 207ns / 663ns (3.20x) | 1 / 1 |
 <!-- bench:embed:end -->
 
 ## Design Principles

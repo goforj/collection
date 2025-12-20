@@ -675,8 +675,8 @@ func renderTable(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Op | ns/op (col/lo ×) | allocs/op (col/lo) | 10k iters Δ (time / allocs) |\n")
-	buf.WriteString("|----|------------------|--------------------|-----------------------------|\n")
+	buf.WriteString("| Op | ns/op (col/lo ×) | allocs/op (col/lo) |\n")
+	buf.WriteString("|----|------------------|--------------------|\n")
 
 	names := make([]string, 0, len(byName))
 	for name := range byName {
@@ -697,26 +697,13 @@ func renderTable(results []benchResult) string {
 
 		allocCell := fmt.Sprintf("%d / %d", col.allocsPerOp, loRes.allocsPerOp)
 
-		timeDelta := (loRes.nsPerOp - col.nsPerOp) * hotPathIters
-		allocDelta := (loRes.allocsPerOp - col.allocsPerOp) * hotPathIters
-
-		deltaCell := fmt.Sprintf(
-			"%s / %s",
-			formatDurationNs(timeDelta),
-			formatInt(allocDelta),
-		)
-
 		buf.WriteString(fmt.Sprintf(
-			"| %s | %s | %s | %s |\n",
+			"| %s | %s | %s |\n",
 			name,
 			nsCell,
 			allocCell,
-			deltaCell,
 		))
 	}
-
-	buf.WriteString("\n> **Hot-path context**  \n")
-	buf.WriteString("> `10k iters Δ` is a derived estimate showing total time and allocation savings over sustained workloads (e.g. worker pools).")
 
 	return strings.TrimSpace(buf.String())
 }

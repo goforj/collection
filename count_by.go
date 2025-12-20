@@ -58,7 +58,7 @@ package collection
 //	// }
 func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 	items := c.Items()
-	result := make(map[K]int, len(items))
+	result := make(map[K]int)
 	for _, v := range items {
 		result[fn(v)]++
 	}
@@ -115,7 +115,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 //	// ]
 func CountByValue[T comparable](c *Collection[T]) map[T]int {
 	items := c.Items()
-	result := make(map[T]int, len(items))
+	result := make(map[T]int)
 
 	for _, v := range items {
 		result[v]++

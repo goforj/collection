@@ -163,7 +163,7 @@ An automated test executes **every example** to verify it builds and runs succes
 
 This guarantees all examples are valid, up-to-date, and remain functional as the API evolves.
 
-# 📦 Installation
+# Installation
 
 ```bash
 go get github.com/goforj/collection

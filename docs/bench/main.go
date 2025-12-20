@@ -143,7 +143,7 @@ func measure(name, impl string, fn func(*testing.B)) benchResult {
 // ----------------------------------------------------------------------------
 
 const (
-	benchSize        = 200
+	benchSize        = 1000
 	benchPipelineLen = 40
 	benchChunkSize   = 20
 	benchSkipN       = 40

@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-446-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-448-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
@@ -269,7 +269,7 @@ go get github.com/goforj/collection
 | **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
 | **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
 | **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) [UniqueComparable](#uniquecomparable) |
-| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) [Window](#window) |
+| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) [Where](#where) [Window](#window) |
 | **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) [Zip](#zip) [ZipWith](#zipwith) |
 
 
@@ -3278,6 +3278,57 @@ collection.Dump(out3.Items())
 //	0 => 1 #int
 //	1 => 2 #int
 //	2 => 3 #int
+// ]
+```
+
+### <a id="where"></a>Where · mutable · fluent
+
+Where keeps only the elements for which fn returns true.
+This is an alias for Filter(fn) for SQL-style ergonomics.
+This method mutates the collection in place and returns the same instance.
+
+_Example: integers_
+
+```go
+nums := collection.New([]int{1, 2, 3, 4})
+nums.Where(func(v int) bool {
+	return v%2 == 0
+})
+collection.Dump(nums.Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+```
+
+_Example: structs_
+
+```go
+type User struct {
+	ID   int
+	Name string
+}
+
+users := collection.New([]User{
+	{ID: 1, Name: "Alice"},
+	{ID: 2, Name: "Bob"},
+	{ID: 3, Name: "Carol"},
+})
+
+users.Where(func(u User) bool {
+	return u.ID >= 2
+})
+
+collection.Dump(users.Items())
+// #[]main.User [
+//   0 => #main.User {
+//     +ID   => 2 #int
+//     +Name => "Bob" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
+//   }
 // ]
 ```
 

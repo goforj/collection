@@ -4,6 +4,7 @@ package collection
 // @group Slicing
 // @behavior mutable
 // @fluent false
+// @terminal true
 //
 // If the collection is empty, the zero value of T is returned with ok=false.
 //
@@ -83,6 +84,7 @@ func (c *Collection[T]) Pop() (T, bool) {
 // @group Slicing
 // @behavior mutable
 // @fluent false
+// @terminal true
 //
 // Example: integers – pop 2
 //

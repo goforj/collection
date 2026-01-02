@@ -4,7 +4,8 @@ package collection
 // The final chunk may be smaller if len(items) is not divisible by size.
 // @group Slicing
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // If size <= 0, nil is returned.
 //

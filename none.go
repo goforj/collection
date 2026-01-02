@@ -4,7 +4,8 @@ package collection
 // If the collection is empty, None returns true.
 // @group Querying
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // Example: integers – none even
 //

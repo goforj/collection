@@ -5,7 +5,8 @@ package collection
 // If no item matches, it returns (0, false).
 // @group Querying
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // This operation performs no allocations and short-circuits
 // on the first match.

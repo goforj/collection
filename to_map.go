@@ -5,6 +5,7 @@ package collection
 // @group Maps
 // @behavior readonly
 // @fluent false
+// @terminal true
 //
 // If multiple items produce the same key, the last value wins.
 //

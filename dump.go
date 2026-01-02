@@ -43,7 +43,8 @@ func (c *Collection[T]) Dump() *Collection[T] {
 // Like Laravel's dd(), this is intended for debugging and
 // should not be used in production control flow.
 // @group Debugging
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // This method never returns.
 //
@@ -65,7 +66,8 @@ func (c *Collection[T]) Dd() {
 // Useful for logging, snapshot testing, and non-interactive debugging.
 // @group Debugging
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // Example: integers
 //
@@ -91,6 +93,7 @@ func setDumpWriter(w io.Writer) {
 // Dump is a convenience function that calls godump.Dump.
 // @group Debugging
 // @fluent false
+// @terminal true
 //
 // Example: integers
 //

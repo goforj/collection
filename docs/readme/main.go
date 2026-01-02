@@ -81,6 +81,7 @@ type FuncDoc struct {
 	Group       string
 	Behavior    string
 	Fluent      string
+	Terminal    string
 	Description string
 	Examples    []Example
 }
@@ -101,6 +102,7 @@ var (
 	groupHeader    = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
 	behaviorHeader = regexp.MustCompile(`(?i)^\s*@behavior\s+(.+)$`)
 	fluentHeader   = regexp.MustCompile(`(?i)^\s*@fluent\s+(.+)$`)
+	terminalHeader = regexp.MustCompile(`(?i)^\s*@terminal\s+(.+)$`)
 	exampleHeader  = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
 )
 
@@ -147,6 +149,7 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 				Group:       extractGroup(fn.Doc),
 				Behavior:    extractBehavior(fn.Doc),
 				Fluent:      extractFluent(fn.Doc),
+				Terminal:    extractTerminal(fn.Doc),
 				Description: extractDescription(fn.Doc),
 				Examples:    extractExamples(fset, fn),
 			}
@@ -200,6 +203,16 @@ func extractFluent(group *ast.CommentGroup) string {
 	return ""
 }
 
+func extractTerminal(group *ast.CommentGroup) string {
+	for _, c := range group.List {
+		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
+		if m := terminalHeader.FindStringSubmatch(line); m != nil {
+			return strings.ToLower(strings.TrimSpace(m[1]))
+		}
+	}
+	return ""
+}
+
 func extractDescription(group *ast.CommentGroup) string {
 	var lines []string
 
@@ -209,7 +222,8 @@ func extractDescription(group *ast.CommentGroup) string {
 		if exampleHeader.MatchString(line) ||
 			groupHeader.MatchString(line) ||
 			behaviorHeader.MatchString(line) ||
-			fluentHeader.MatchString(line) {
+			fluentHeader.MatchString(line) ||
+			terminalHeader.MatchString(line) {
 			break
 		}
 
@@ -371,6 +385,9 @@ func renderAPI(funcs []*FuncDoc) string {
 			}
 			if fn.Fluent == "true" {
 				header += " · fluent"
+			}
+			if fn.Terminal == "true" {
+				header += " · terminal"
 			}
 
 			buf.WriteString(fmt.Sprintf("### <a id=\"%s\"></a>%s\n\n", anchor, header))

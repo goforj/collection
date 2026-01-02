@@ -275,7 +275,7 @@ go get github.com/goforj/collection
 
 ## Access
 
-### <a id="items"></a>Items · readonly · fluent
+### <a id="items"></a>Items · readonly · terminal
 
 Items returns the backing slice of items.
 
@@ -331,7 +331,7 @@ collection.Dump(out)
 // ]
 ```
 
-### <a id="itemscopy"></a>ItemsCopy · readonly · fluent
+### <a id="itemscopy"></a>ItemsCopy · readonly · terminal
 
 ItemsCopy returns a copy of the collection's items.
 
@@ -348,7 +348,7 @@ collection.Dump(items)
 
 ## Aggregation
 
-### <a id="avg"></a>Avg · readonly
+### <a id="avg"></a>Avg · readonly · terminal
 
 Avg returns the average of the collection values as a float64.
 If the collection is empty, Avg returns 0.
@@ -369,7 +369,7 @@ collection.Dump(c2.Avg())
 // 2.333333 #float64
 ```
 
-### <a id="count"></a>Count · readonly · fluent
+### <a id="count"></a>Count · readonly · terminal
 
 Count returns the total number of items in the collection.
 
@@ -379,7 +379,7 @@ collection.Dump(count)
 // 4 #int
 ```
 
-### <a id="countby"></a>CountBy · readonly
+### <a id="countby"></a>CountBy · readonly · terminal
 
 CountBy returns a map of keys extracted by fn to their occurrence counts.
 K must be comparable.
@@ -441,7 +441,7 @@ collection.Dump(roleCounts)
 // }
 ```
 
-### <a id="countbyvalue"></a>CountByValue · readonly
+### <a id="countbyvalue"></a>CountByValue · readonly · terminal
 
 CountByValue returns a map where each distinct item in the collection
 is mapped to the number of times it appears.
@@ -493,7 +493,7 @@ collection.Dump(counts3)
 // ]
 ```
 
-### <a id="max"></a>Max · readonly
+### <a id="max"></a>Max · readonly · terminal
 
 Max returns the largest numeric item in the collection.
 The second return value is false if the collection is empty.
@@ -531,7 +531,7 @@ collection.Dump(max3, ok3)
 // false #bool
 ```
 
-### <a id="maxby"></a>MaxBy · readonly
+### <a id="maxby"></a>MaxBy · readonly · terminal
 
 MaxBy returns the item whose key (produced by keyFn) is the largest.
 The second return value is false if the collection is empty.
@@ -586,7 +586,7 @@ collection.Dump(maxVal, ok)
 // false #bool
 ```
 
-### <a id="median"></a>Median · readonly
+### <a id="median"></a>Median · readonly · terminal
 
 Median returns the statistical median of the numeric collection as float64.
 Returns (0, false) if the collection is empty.
@@ -635,7 +635,7 @@ collection.Dump(median4, ok4)
 // false    #bool
 ```
 
-### <a id="min"></a>Min · readonly
+### <a id="min"></a>Min · readonly · terminal
 
 Min returns the smallest numeric item in the collection.
 The second return value is false if the collection is empty.
@@ -670,7 +670,7 @@ collection.Dump(min3, ok3)
 // false #bool
 ```
 
-### <a id="minby"></a>MinBy · readonly
+### <a id="minby"></a>MinBy · readonly · terminal
 
 MinBy returns the item whose key (produced by keyFn) is the smallest.
 The second return value is false if the collection is empty.
@@ -725,7 +725,7 @@ collection.Dump(minVal, ok)
 // false #bool
 ```
 
-### <a id="mode"></a>Mode · readonly
+### <a id="mode"></a>Mode · readonly · terminal
 
 Mode returns the most frequent numeric value(s) in the collection.
 If multiple values tie for highest frequency, all are returned
@@ -774,7 +774,7 @@ collection.Dump(mode4)
 // <nil>
 ```
 
-### <a id="reduce"></a>Reduce · readonly · fluent
+### <a id="reduce"></a>Reduce · readonly · terminal
 
 Reduce collapses the collection into a single accumulated value.
 The accumulator has the same type T as the collection's elements.
@@ -826,7 +826,7 @@ collection.Dump(total)
 // ]
 ```
 
-### <a id="sum"></a>Sum · readonly
+### <a id="sum"></a>Sum · readonly · terminal
 
 Sum returns the sum of all numeric items in the NumericCollection.
 If the collection is empty, Sum returns the zero value of T.
@@ -968,7 +968,7 @@ NewNumeric wraps a slice of numeric types in a NumericCollection.
 
 ## Debugging
 
-### <a id="dd"></a>Dd · fluent
+### <a id="dd"></a>Dd · terminal
 
 Dd prints items then terminates execution.
 Like Laravel's dd(), this is intended for debugging and
@@ -1025,7 +1025,7 @@ collection.Dump(c2.Items())
 // ]
 ```
 
-### <a id="dumpstr"></a>DumpStr · readonly · fluent
+### <a id="dumpstr"></a>DumpStr · readonly · terminal
 
 DumpStr returns the pretty-printed dump of the items as a string,
 without printing or exiting.
@@ -1043,7 +1043,7 @@ fmt.Println(s)
 
 ## Grouping
 
-### <a id="groupby"></a>GroupBy · readonly
+### <a id="groupby"></a>GroupBy · readonly · terminal
 
 GroupBy partitions the collection into groups keyed by the value
 returned from keyFn.
@@ -1115,7 +1115,7 @@ collection.Dump(groups2["user"].Items())
 // ]
 ```
 
-### <a id="groupbyslice"></a>GroupBySlice · readonly
+### <a id="groupbyslice"></a>GroupBySlice · readonly · terminal
 
 GroupBySlice partitions the collection into groups keyed by the value
 returned from keyFn.
@@ -1260,7 +1260,7 @@ collection.Dump(out2)
 // ]
 ```
 
-### <a id="tomap"></a>ToMap · readonly
+### <a id="tomap"></a>ToMap · readonly · terminal
 
 ToMap reduces a collection into a map using the provided key and value
 selector functions.
@@ -1301,7 +1301,7 @@ byID := collection.ToMap(
 collection.Dump(byID)
 ```
 
-### <a id="tomapkv"></a>ToMapKV · readonly
+### <a id="tomapkv"></a>ToMapKV · readonly · terminal
 
 ToMapKV converts a collection of key/value pairs into a map.
 
@@ -1593,7 +1593,7 @@ collection.Dump(users.Items())
 
 ## Querying
 
-### <a id="all"></a>All · readonly · fluent
+### <a id="all"></a>All · readonly · terminal
 
 All returns true if fn returns true for every item in the collection.
 If the collection is empty, All returns true (vacuously true).
@@ -1634,7 +1634,7 @@ collection.Dump(all)
 // true #bool
 ```
 
-### <a id="any"></a>Any · readonly · fluent
+### <a id="any"></a>Any · readonly · terminal
 
 Any returns true if at least one item satisfies fn.
 
@@ -1645,7 +1645,7 @@ collection.Dump(has)
 // true #bool
 ```
 
-### <a id="at"></a>At · readonly · fluent
+### <a id="at"></a>At · readonly · terminal
 
 At returns the item at the given index and a boolean indicating
 whether the index was within bounds.
@@ -1685,7 +1685,7 @@ collection.Dump(u, ok3)
 // {ID:1 Name:"Alice"} true
 ```
 
-### <a id="contains"></a>Contains · readonly · fluent
+### <a id="contains"></a>Contains · readonly · terminal
 
 Contains returns true if the collection contains the given value.
 
@@ -1707,7 +1707,7 @@ collection.Dump(hasBanana)
 // true #bool
 ```
 
-### <a id="first"></a>First · readonly · fluent
+### <a id="first"></a>First · readonly · terminal
 
 First returns the first element in the collection.
 If the collection is empty, ok will be false.
@@ -1766,7 +1766,7 @@ collection.Dump(v3, ok4)
 // false #bool
 ```
 
-### <a id="firstwhere"></a>FirstWhere · readonly · fluent
+### <a id="firstwhere"></a>FirstWhere · readonly · terminal
 
 FirstWhere returns the first item in the collection for which the provided
 predicate function returns true. If no items match, ok=false is returned
@@ -1789,7 +1789,7 @@ collection.Dump(v, ok)
 // false #bool
 ```
 
-### <a id="indexwhere"></a>IndexWhere · readonly · fluent
+### <a id="indexwhere"></a>IndexWhere · readonly · terminal
 
 IndexWhere returns the index of the first item in the collection
 for which the provided predicate function returns true.
@@ -1834,7 +1834,7 @@ collection.Dump(idx3, ok3)
 // 1 true
 ```
 
-### <a id="isempty"></a>IsEmpty · readonly · fluent
+### <a id="isempty"></a>IsEmpty · readonly · terminal
 
 IsEmpty returns true if the collection has no items.
 
@@ -1885,7 +1885,7 @@ collection.Dump(empty4)
 // true #bool
 ```
 
-### <a id="last"></a>Last · readonly · fluent
+### <a id="last"></a>Last · readonly · terminal
 
 Last returns the last element in the collection.
 If the collection is empty, ok will be false.
@@ -1946,7 +1946,7 @@ collection.Dump(v3, ok4)
 // false #bool
 ```
 
-### <a id="lastwhere"></a>LastWhere · readonly · fluent
+### <a id="lastwhere"></a>LastWhere · readonly · terminal
 
 LastWhere returns the last element in the collection that satisfies the predicate fn.
 If fn is nil, LastWhere returns the final element in the underlying slice.
@@ -2039,7 +2039,7 @@ collection.Dump(v5, ok6)
 // false #bool
 ```
 
-### <a id="none"></a>None · readonly · fluent
+### <a id="none"></a>None · readonly · terminal
 
 None returns true if fn returns false for every item in the collection.
 If the collection is empty, None returns true.
@@ -2073,7 +2073,7 @@ collection.Dump(none)
 
 ## Serialization
 
-### <a id="tojson"></a>ToJSON · readonly · fluent
+### <a id="tojson"></a>ToJSON · readonly · terminal
 
 ToJSON converts the collection's items into a compact JSON string.
 
@@ -2084,7 +2084,7 @@ fmt.Println(out1)
 // ["a","b"]
 ```
 
-### <a id="toprettyjson"></a>ToPrettyJSON · readonly · fluent
+### <a id="toprettyjson"></a>ToPrettyJSON · readonly · terminal
 
 ToPrettyJSON converts the collection's items into a human-readable,
 indented JSON string.
@@ -2531,7 +2531,7 @@ collection.Dump(out2.Items())
 
 ## Slicing
 
-### <a id="chunk"></a>Chunk · readonly · fluent
+### <a id="chunk"></a>Chunk · readonly · terminal
 
 Chunk splits the collection into chunks of the given size.
 The final chunk may be smaller if len(items) is not divisible by size.
@@ -2745,7 +2745,7 @@ collection.Dump(active.Items(), inactive.Items())
 // ]
 ```
 
-### <a id="pop"></a>Pop · mutable
+### <a id="pop"></a>Pop · mutable · terminal
 
 Pop removes and returns the last item in the collection.
 
@@ -2817,7 +2817,7 @@ collection.Dump(item4, ok4, empty.Items())
 // ]
 ```
 
-### <a id="popn"></a>PopN · mutable
+### <a id="popn"></a>PopN · mutable · terminal
 
 PopN removes and returns the last n items in original order.
 
@@ -3754,7 +3754,7 @@ collection.Dump(none.Items())
 // ]
 ```
 
-### <a id="pipe"></a>Pipe · readonly · fluent
+### <a id="pipe"></a>Pipe · readonly · terminal
 
 Pipe passes the entire collection into the given function
 and returns the function's result.
@@ -4026,7 +4026,7 @@ collection.Dump(cTimes3.Items())
 // ]
 ```
 
-### <a id="transform"></a>Transform · mutable · fluent
+### <a id="transform"></a>Transform · mutable · terminal
 
 Transform applies fn to every item *in place*, mutating the collection.
 

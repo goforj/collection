@@ -4,7 +4,8 @@ package collection
 // and returns the function's result.
 // @group Transformation
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // This is a typed escape hatch for branching into arbitrary logic without `any`.
 //

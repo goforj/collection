@@ -4,7 +4,8 @@ package collection
 // The accumulator has the same type T as the collection's elements.
 // @group Aggregation
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // This is useful for computing sums, concatenations, aggregates,
 // or any fold-style reduction.

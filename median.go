@@ -7,6 +7,7 @@ import "sort"
 // @group Aggregation
 // @behavior readonly
 // @fluent false
+// @terminal true
 //
 // Odd count  → middle value
 // Even count → average of the two middle values

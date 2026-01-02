@@ -5,7 +5,8 @@ package collection
 // If the collection is empty or no element matches, ok will be false.
 // @group Querying
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // Example: integers
 //

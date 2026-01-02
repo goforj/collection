@@ -5,6 +5,7 @@ package collection
 // @group Grouping
 // @behavior readonly
 // @fluent false
+// @terminal true
 //
 // The order of items within each group is preserved.
 // The order of the groups themselves is unspecified.

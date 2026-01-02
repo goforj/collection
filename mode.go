@@ -6,6 +6,7 @@ package collection
 // @group Aggregation
 // @behavior readonly
 // @fluent false
+// @terminal true
 //
 // Example: integers – single mode
 //

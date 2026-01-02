@@ -5,6 +5,7 @@ package collection
 // @group Aggregation
 // @behavior readonly
 // @fluent false
+// @terminal true
 //
 // This cannot be a method because methods can't introduce a new type parameter K.
 // When multiple items share the same maximal key, the first such item is returned.

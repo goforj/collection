@@ -117,7 +117,8 @@ func AttachNumeric[T Number](items []T) *NumericCollection[T] {
 // Items returns the backing slice of items.
 // @group Access
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // Items shares the backing array with the collection. Mutating the returned
 // slice will mutate the collection.
@@ -174,7 +175,8 @@ func (c *Collection[T]) Items() []T {
 // ItemsCopy returns a copy of the collection's items.
 // @group Access
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // ItemsCopy allocates a new slice.
 //

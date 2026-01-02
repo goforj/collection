@@ -3,7 +3,8 @@ package collection
 // Contains returns true if the collection contains the given value.
 // @group Querying
 // @behavior readonly
-// @fluent true
+// @fluent false
+// @terminal true
 //
 // Similar to: Any (differs by using equality on a value).
 //

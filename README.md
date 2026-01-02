@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-442-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-450-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
@@ -34,7 +34,7 @@
 - **Map / Filter / Reduce** - clean functional transforms
 - **First / Last / FirstWhere / IndexWhere / Contains** helpers
 - **Sort, GroupBy, Chunk**, and more
-- **Safe-by-default** - defensive copies where appropriate
+- **Borrow-by-default** - no defensive copies unless you ask for them
 - **Built-in JSON helpers** (`ToJSON()`, `ToPrettyJSON()`)
 - **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`)
 - **Works with any Go type**, including structs, pointers, and deeply nested composites
@@ -93,6 +93,8 @@ That design choice doesn't matter much for some single operations. It matters a 
 
 Full raw tables: see `BENCHMARKS.md`.
 
+### Borrow-by-default (New)
+
 #### Read-only scalar ops (wrapper overhead only)
 
 | Op | Speed vs lo | Memory | Allocs |
@@ -115,17 +117,17 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Chunk** | **7.39x** | -8.0KB | -49 |
+| **Chunk** | **7.84x** | -8.0KB | -49 |
 | **Take** | ≈ | +48B | +2 |
-| **Skip** | **63.96x** | -8.2KB | ≈ |
-| **SkipLast** | **63.64x** | -8.2KB | ≈ |
-| **Zip** | **2.28x** | +48B | +2 |
-| **ZipWith** | **2.96x** | +48B | +2 |
+| **Skip** | **62.99x** | -8.2KB | ≈ |
+| **SkipLast** | **62.29x** | -8.2KB | ≈ |
+| **Zip** | **2.27x** | +48B | +2 |
+| **ZipWith** | **3.22x** | +48B | +2 |
 | **Unique** | ≈ | +24B | +1 |
 | **UniqueBy** | ≈ | +48B | +2 |
 | **Union** | ≈ | +72B | +3 |
 | **Intersect** | ≈ | +72B | +3 |
-| **Difference** | **2.37x** | -51.9KB | -41 |
+| **Difference** | **2.27x** | -26.7KB | -29 |
 | **GroupBySlice** | ≈ | +24B | +1 |
 | **CountBy** | ≈ | +24B | +1 |
 | **CountByValue** | ≈ | +24B | +1 |
@@ -135,16 +137,72 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | **2.47x** | -12.2KB | ≈ |
+| **Pipeline F→M→T→R** | **1.74x** | -12.2KB | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Map** | **2.68x** | -8.2KB | ≈ |
-| **Filter** | **1.41x** | -8.2KB | ≈ |
+| **Map** | **2.18x** | -8.2KB | ≈ |
+| **Filter** | **1.55x** | -8.2KB | ≈ |
 | **Reverse** | ≈ | +24B | +1 |
-| **Shuffle** | **1.44x** | +8.2KB | +3 |
+| **Shuffle** | **1.43x** | +8.2KB | +3 |
+
+
+### Explicit copy cost (Clone)
+
+#### Read-only scalar ops (wrapper overhead only)
+
+| Op | Speed vs lo | Memory | Allocs |
+|---:|:-----------:|:------:|:------:|
+| **All** | 0.26x | +8.2KB | +3 |
+| **Any** | 0.27x | +8.2KB | +3 |
+| **None** | 0.27x | +8.2KB | +3 |
+| **First** | 0.00x | +8.2KB | +3 |
+| **Last** | 0.00x | +8.2KB | +3 |
+| **FirstWhere** | 0.26x | +8.2KB | +3 |
+| **IndexWhere** | 0.27x | +8.2KB | +3 |
+| **Contains** | 0.27x | +8.2KB | +3 |
+| **Reduce (sum)** | 0.26x | +8.2KB | +3 |
+| **Sum** | 0.25x | +8.3KB | +5 |
+| **Min** | 0.25x | +8.3KB | +5 |
+| **Max** | 0.25x | +8.3KB | +5 |
+| **Each** | 0.26x | +8.2KB | +3 |
+
+#### Transforming ops
+
+| Op | Speed vs lo | Memory | Allocs |
+|---:|:-----------:|:------:|:------:|
+| **Chunk** | **1.27x** | +240B | -47 |
+| **Take** | 0.00x | +8.3KB | +4 |
+| **Skip** | ≈ | +48B | +2 |
+| **SkipLast** | ≈ | +48B | +2 |
+| **Zip** | **1.19x** | +16.5KB | +6 |
+| **ZipWith** | **1.37x** | +16.5KB | +6 |
+| **Unique** | 0.89x | +8.2KB | +3 |
+| **UniqueBy** | 0.87x | +8.3KB | +4 |
+| **Union** | ≈ | +16.5KB | +7 |
+| **Intersect** | ≈ | +16.5KB | +7 |
+| **Difference** | **2.16x** | -10.2KB | -25 |
+| **GroupBySlice** | ≈ | +8.2KB | +3 |
+| **CountBy** | ≈ | +8.2KB | +3 |
+| **CountByValue** | ≈ | +8.2KB | +3 |
+| **ToMap** | ≈ | +8.2KB | +2 |
+
+#### Pipelines
+
+| Op | Speed vs lo | Memory | Allocs |
+|---:|:-----------:|:------:|:------:|
+| **Pipeline F→M→T→R** | ≈ | -4.0KB | +2 |
+
+#### Mutating ops
+
+| Op | Speed vs lo | Memory | Allocs |
+|---:|:-----------:|:------:|:------:|
+| **Map** | 0.87x | +48B | +2 |
+| **Filter** | 0.90x | +48B | +2 |
+| **Reverse** | 0.28x | +8.2KB | +3 |
+| **Shuffle** | **1.26x** | +16.5KB | +5 |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
@@ -196,7 +254,8 @@ In these cases, `collection` can be **2×–30× faster** and often reduce alloc
 
 Fluent pipelines don't mean you're locked into mutation.
 
-`New` borrows the input slice by default. If you need an owned copy, use `CopyOf()` or `Clone()` explicitly.
+This library borrows slices by default. It does not perform defensive copies.
+Use `Clone()` or `ItemsCopy()` to explicitly copy.
 
 When you want to branch a pipeline or preserve the original data, `Clone()` creates a shallow copy of the collection so subsequent operations are isolated and predictable.
 
@@ -281,7 +340,7 @@ go get github.com/goforj/collection
 |------:|-----------|
 | **Access** | [Items](#items) [ItemsCopy](#itemscopy) |
 | **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [MaxBy](#maxby) [Median](#median) [Min](#min) [MinBy](#minby) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
-| **Construction** | [Clone](#clone) [CopyOf](#copyof) [CopyOfNumeric](#copyofnumeric) [New](#new) [NewNumeric](#newnumeric) |
+| **Construction** | [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
 | **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
 | **Grouping** | [GroupBy](#groupby) [GroupBySlice](#groupbyslice) |
 | **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
@@ -880,7 +939,7 @@ collection.Dump(total3)
 
 ## Construction
 
-### <a id="clone"></a>Clone · immutable · fluent
+### <a id="clone"></a>Clone · immutable · chainable
 
 Clone returns a copy of the collection.
 
@@ -944,45 +1003,11 @@ collection.Dump(odds.Items())
 // ]
 ```
 
-### <a id="copyof"></a>CopyOf · immutable · fluent
-
-CopyOf creates a new Collection by copying the provided slice.
-
-```go
-items := []int{1, 2, 3}
-c := collection.CopyOf(items)
-
-items[0] = 9
-collection.Dump(c.Items())
-// #[]int [
-//   0 => 1 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
-```
-
-### <a id="copyofnumeric"></a>CopyOfNumeric · immutable · fluent
-
-CopyOfNumeric creates a new NumericCollection by copying the provided slice.
-
-```go
-items := []int{1, 2, 3}
-c := collection.CopyOfNumeric(items)
-
-items[0] = 9
-collection.Dump(c.Items())
-// #[]int [
-//   0 => 1 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
-```
-
-### <a id="new"></a>New · immutable · fluent
+### <a id="new"></a>New · immutable · chainable
 
 New creates a new Collection from the provided slice and borrows it.
 
-### <a id="newnumeric"></a>NewNumeric · immutable · fluent
+### <a id="newnumeric"></a>NewNumeric · immutable · chainable
 
 NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
 
@@ -1004,7 +1029,7 @@ c.Dd()
 // Process finished with the exit code 1
 ```
 
-### <a id="dump"></a>Dump · readonly · fluent
+### <a id="dump"></a>Dump · readonly · chainable
 
 Dump prints items with godump and returns the same collection.
 This is a no-op on the collection itself and never panics.
@@ -1209,7 +1234,7 @@ collection.Dump(groups2["user"])
 
 ## Maps
 
-### <a id="frommap"></a>FromMap · immutable · fluent
+### <a id="frommap"></a>FromMap · immutable · chainable
 
 FromMap materializes a map into a collection of key/value pairs.
 
@@ -1378,7 +1403,7 @@ collection.Dump(out2)
 
 ## Ordering
 
-### <a id="after"></a>After · immutable · fluent
+### <a id="after"></a>After · immutable · chainable
 
 After returns all items after the first element for which pred returns true.
 If no element matches, an empty collection is returned.
@@ -1392,7 +1417,7 @@ c.After(func(v int) bool { return v == 3 }).Dump()
 // ]
 ```
 
-### <a id="before"></a>Before · immutable · fluent
+### <a id="before"></a>Before · immutable · chainable
 
 Before returns a new collection containing all items that appear
 *before* the first element for which pred returns true.
@@ -1445,7 +1470,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="reverse"></a>Reverse · mutable · fluent
+### <a id="reverse"></a>Reverse · mutable · chainable
 
 Reverse reverses the order of items in the collection in place
 and returns the same collection for chaining.
@@ -1503,7 +1528,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="shuffle"></a>Shuffle · immutable · fluent
+### <a id="shuffle"></a>Shuffle · immutable · chainable
 
 Shuffle returns a shuffled copy of the collection.
 
@@ -1544,7 +1569,7 @@ out3 := users.Shuffle()
 collection.Dump(out3.Items())
 ```
 
-### <a id="sort"></a>Sort · mutable · fluent
+### <a id="sort"></a>Sort · mutable · chainable
 
 Sort sorts the collection in place using the provided comparison function and
 returns the same collection for chaining.
@@ -2121,7 +2146,7 @@ fmt.Println(out1)
 
 ## Set Operations
 
-### <a id="difference"></a>Difference · immutable · fluent
+### <a id="difference"></a>Difference · immutable · chainable
 
 Difference returns a new collection containing elements from the first collection
 that are not present in the second. Order follows the first collection, and
@@ -2187,7 +2212,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="intersect"></a>Intersect · immutable · fluent
+### <a id="intersect"></a>Intersect · immutable · chainable
 
 Intersect returns a new collection containing elements from the second
 collection that are also present in the first.
@@ -2256,7 +2281,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="symmetricdifference"></a>SymmetricDifference · immutable · fluent
+### <a id="symmetricdifference"></a>SymmetricDifference · immutable · chainable
 
 SymmetricDifference returns a new collection containing elements that appear
 in exactly one of the two collections. Order follows the first collection for
@@ -2324,7 +2349,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="union"></a>Union · immutable · fluent
+### <a id="union"></a>Union · immutable · chainable
 
 Union returns a new collection containing the unique elements from both collections.
 Items from the first collection are kept in order, followed by items from the second
@@ -2398,7 +2423,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="unique"></a>Unique · immutable · fluent
+### <a id="unique"></a>Unique · immutable · chainable
 
 Unique returns a new collection with duplicate items removed, based on the
 equality function `eq`. The first occurrence of each unique value is kept,
@@ -2458,7 +2483,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="uniqueby"></a>UniqueBy · immutable · fluent
+### <a id="uniqueby"></a>UniqueBy · immutable · chainable
 
 UniqueBy returns a new collection containing only the first occurrence
 of each element as determined by keyFn.
@@ -2515,7 +2540,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="uniquecomparable"></a>UniqueComparable · immutable · fluent
+### <a id="uniquecomparable"></a>UniqueComparable · immutable · chainable
 
 UniqueComparable returns a new collection with duplicate comparable items removed.
 The first occurrence of each value is kept, and order is preserved.
@@ -2620,7 +2645,7 @@ collection.Dump(userChunks)
 //]
 ```
 
-### <a id="filter"></a>Filter · mutable · fluent
+### <a id="filter"></a>Filter · mutable · chainable
 
 Filter keeps only the elements for which fn returns true.
 This method mutates the collection in place and returns the same instance.
@@ -2685,7 +2710,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="partition"></a>Partition · immutable · fluent
+### <a id="partition"></a>Partition · immutable · chainable
 
 Partition splits the collection into two new collections based on predicate fn.
 The first collection contains items where fn returns true; the second contains
@@ -2934,7 +2959,7 @@ collection.Dump(popped5, c4.Items())
 // ]
 ```
 
-### <a id="skip"></a>Skip · immutable · fluent
+### <a id="skip"></a>Skip · immutable · chainable
 
 Skip returns a new collection with the first n items skipped.
 If n is less than or equal to zero, Skip returns the full collection.
@@ -3001,7 +3026,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="skiplast"></a>SkipLast · immutable · fluent
+### <a id="skiplast"></a>SkipLast · immutable · chainable
 
 SkipLast returns a new collection with the last n items skipped.
 If n is less than or equal to zero, SkipLast returns the full collection.
@@ -3064,7 +3089,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="take"></a>Take · immutable · fluent
+### <a id="take"></a>Take · immutable · chainable
 
 Take returns a new collection containing the first `n` items when n > 0,
 or the last `|n|` items when n < 0.
@@ -3116,7 +3141,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="takelast"></a>TakeLast · immutable · fluent
+### <a id="takelast"></a>TakeLast · immutable · chainable
 
 TakeLast returns a new collection containing the last n items.
 If n is less than or equal to zero, TakeLast returns an empty collection.
@@ -3177,7 +3202,7 @@ collection.Dump(out4.Items())
 // ]
 ```
 
-### <a id="takeuntil"></a>TakeUntil · immutable · fluent
+### <a id="takeuntil"></a>TakeUntil · immutable · chainable
 
 TakeUntil returns items until the first element equals `value`.
 The matching item is NOT included.
@@ -3217,7 +3242,7 @@ collection.Dump(out6.Items())
 // ]
 ```
 
-### <a id="takeuntilfn"></a>TakeUntilFn · immutable · fluent
+### <a id="takeuntilfn"></a>TakeUntilFn · immutable · chainable
 
 TakeUntilFn returns items until the predicate function returns true.
 The matching item is NOT included.
@@ -3257,7 +3282,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="window"></a>Window · allocates · fluent
+### <a id="window"></a>Window · allocates · chainable
 
 Window returns overlapping (or stepped) windows of the collection.
 Each window is a slice of length size; iteration advances by step (default 1 if step <= 0).
@@ -3359,7 +3384,7 @@ collection.Dump(win3.Items())
 
 ## Transformation
 
-### <a id="append"></a>Append · immutable · fluent
+### <a id="append"></a>Append · immutable · chainable
 
 Append returns a new collection with the given values appended.
 
@@ -3414,7 +3439,7 @@ users.Append(
 // ]
 ```
 
-### <a id="concat"></a>Concat · mutable · fluent
+### <a id="concat"></a>Concat · mutable · chainable
 
 Concat appends the values from the given slice onto the end of the collection,
 
@@ -3433,7 +3458,7 @@ collection.Dump(concatenated)
 // ]
 ```
 
-### <a id="each"></a>Each · readonly · fluent
+### <a id="each"></a>Each · readonly · chainable
 
 Each runs fn for every item in the collection and returns the same collection,
 so it can be used in chains for side effects (logging, debugging, etc.).
@@ -3497,9 +3522,9 @@ collection.Dump(names)
 // ]
 ```
 
-### <a id="map"></a>Map · mutable · fluent
+### <a id="map"></a>Map · mutable · chainable
 
-Map applies a same-type transformation in place.
+Map applies a same-type transformation in place and returns the same collection.
 
 _Example: integers_
 
@@ -3566,7 +3591,7 @@ collection.Dump(updated.Items())
 // ]
 ```
 
-### <a id="mapto"></a>MapTo · immutable · fluent
+### <a id="mapto"></a>MapTo · immutable · chainable
 
 MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
 
@@ -3628,7 +3653,7 @@ collection.Dump(names.Items())
 // ]
 ```
 
-### <a id="merge"></a>Merge · immutable · fluent
+### <a id="merge"></a>Merge · immutable · chainable
 
 Merge merges the given data into a new collection.
 
@@ -3704,7 +3729,7 @@ collection.Dump(merged3.Items())
 // ]
 ```
 
-### <a id="multiply"></a>Multiply · immutable · fluent
+### <a id="multiply"></a>Multiply · immutable · chainable
 
 Multiply creates `n` copies of all items in the collection
 and returns a new collection.
@@ -3837,7 +3862,7 @@ collection.Dump(names)
 // ]
 ```
 
-### <a id="prepend"></a>Prepend · mutable · fluent
+### <a id="prepend"></a>Prepend · mutable · chainable
 
 Prepend adds the given values to the beginning of the collection.
 
@@ -3919,7 +3944,7 @@ collection.Dump(c2.Items())
 // ]
 ```
 
-### <a id="tap"></a>Tap · immutable · fluent
+### <a id="tap"></a>Tap · immutable · chainable
 
 Tap invokes fn with the collection pointer for side effects (logging, debugging,
 inspection) and returns the same collection to allow chaining.
@@ -3979,7 +4004,7 @@ users2 := users.Tap(func(col *collection.Collection[User]) {
 collection.Dump(users2.Items()) // ensures users2 is used
 ```
 
-### <a id="times"></a>Times · immutable · fluent
+### <a id="times"></a>Times · immutable · chainable
 
 Times creates a new collection by calling fn(i) for i = 1..count.
 This mirrors Laravel's Collection::times(), which is 1-indexed.
@@ -4101,7 +4126,7 @@ collection.Dump(c3.Items())
 // ]
 ```
 
-### <a id="zip"></a>Zip · immutable · fluent
+### <a id="zip"></a>Zip · immutable · chainable
 
 Zip combines two collections element-wise into a collection of tuples.
 The resulting length is the smaller of the two inputs.
@@ -4161,7 +4186,7 @@ collection.Dump(out2.Items())
 // ]
 ```
 
-### <a id="zipwith"></a>ZipWith · immutable · fluent
+### <a id="zipwith"></a>ZipWith · immutable · chainable
 
 ZipWith combines two collections element-wise using combiner fn.
 The resulting length is the smaller of the two inputs.

@@ -3,7 +3,7 @@ package collection
 // IsEmpty returns true if the collection has no items.
 // @group Querying
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // Example: integers (non-empty)

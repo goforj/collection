@@ -3,7 +3,8 @@ package collection
 // Prepend adds the given values to the beginning of the collection.
 // @group Transformation
 // @behavior mutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // This method mutates the collection in place and returns the same instance.
 //

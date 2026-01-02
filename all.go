@@ -4,7 +4,7 @@ package collection
 // If the collection is empty, All returns true (vacuously true).
 // @group Querying
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // Example: integers – all even

@@ -3,7 +3,8 @@ package collection
 // Append returns a new collection with the given values appended.
 // @group Transformation
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 // Example: integers
 //
 //	c := collection.New([]int{1, 2})

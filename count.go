@@ -3,7 +3,7 @@ package collection
 // Count returns the total number of items in the collection.
 // @group Aggregation
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 // Example: integers
 //

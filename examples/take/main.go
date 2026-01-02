@@ -8,7 +8,8 @@ import "github.com/goforj/collection"
 func main() {
 	// Take returns a new collection containing the first `n` items when n > 0,
 	// or the last `|n|` items when n < 0.
-	// @fluent true
+	// @chainable true
+	// @terminal false
 	// 
 	// If n exceeds the collection length, the entire collection is returned.
 	// If n == 0, an empty collection is returned.

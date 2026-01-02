@@ -4,7 +4,7 @@ package collection
 // whether the index was within bounds.
 // @group Querying
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // This method is safe and does not panic for out-of-range indices.

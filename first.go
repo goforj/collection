@@ -4,7 +4,7 @@ package collection
 // If the collection is empty, ok will be false.
 // @group Querying
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // Example: integers

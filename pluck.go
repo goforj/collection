@@ -3,7 +3,8 @@ package collection
 // MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
 // @group Transformation
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // This cannot be a method because methods can't introduce a new type parameter R.
 //

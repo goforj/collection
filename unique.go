@@ -5,7 +5,8 @@ package collection
 // and order is preserved.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // The `eq` function should return true when two values are considered equal.
 //

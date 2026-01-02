@@ -5,7 +5,8 @@ package collection
 // Windows that are shorter than size are omitted.
 // @group Slicing
 // @behavior allocates
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // NOTE: windows share the backing array with the source collection.
 //

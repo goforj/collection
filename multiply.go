@@ -4,7 +4,8 @@ package collection
 // and returns a new collection.
 // @group Transformation
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers
 //

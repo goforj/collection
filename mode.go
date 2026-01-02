@@ -5,7 +5,7 @@ package collection
 // in first-seen order.
 // @group Aggregation
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // Example: integers – single mode

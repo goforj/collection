@@ -4,7 +4,8 @@ package collection
 // so it can be used in chains for side effects (logging, debugging, etc.).
 // @group Transformation
 // @behavior readonly
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers
 //

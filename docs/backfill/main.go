@@ -19,7 +19,7 @@ func main() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("✔ @behavior and @fluent annotations backfilled")
+	fmt.Println("✔ @behavior, @chainable, and @terminal annotations backfilled")
 }
 
 func run() error {
@@ -56,10 +56,12 @@ func run() error {
 				continue
 			}
 
-			// Fluent backfill (boolean) – always refresh to keep canonical.
+			// Chainable/terminal backfill (boolean) – always refresh to keep canonical.
 			stripChainable(fn.Doc) // legacy cleanup
 			stripFluent(fn.Doc)
-			insertFluent(fn.Doc, inferFluent(fn))
+			stripTerminal(fn.Doc)
+			insertChainable(fn.Doc, inferChainable(fn))
+			insertTerminal(fn.Doc, inferTerminal(fn))
 			changed = true
 
 			// Respect explicit annotation
@@ -116,19 +118,23 @@ func inferBehavior(fn *ast.FuncDecl) (string, bool) {
 	return "", false
 }
 
-func inferFluent(fn *ast.FuncDecl) string {
-	if knownFluentTrue[fn.Name.Name] {
+func inferChainable(fn *ast.FuncDecl) string {
+	if fn.Type.Results == nil || len(fn.Type.Results.List) != 1 {
+		return "false"
+	}
+
+	if returnsCollectionLike(fn) {
 		return "true"
 	}
 
-	if isCollectionMethod(fn) {
-		return "true"
-	}
-
-	if returnsCollectionLike(fn) && len(fn.Type.Results.List) == 1 {
-		return "true"
-	}
 	return "false"
+}
+
+func inferTerminal(fn *ast.FuncDecl) string {
+	if inferChainable(fn) == "true" {
+		return "false"
+	}
+	return "true"
 }
 
 var knownMutators = map[string]bool{
@@ -143,33 +149,6 @@ var knownMutators = map[string]bool{
 	"Shuffle":  true,
 	"Sort":     true,
 	"Transform": true,
-}
-
-var knownFluentTrue = map[string]bool{
-	"Dd": true,
-}
-
-func isCollectionMethod(fn *ast.FuncDecl) bool {
-	if fn.Recv == nil || len(fn.Recv.List) == 0 {
-		return false
-	}
-
-	typ := fn.Recv.List[0].Type
-	star, ok := typ.(*ast.StarExpr)
-	if !ok {
-		return false
-	}
-
-	switch t := star.X.(type) {
-	case *ast.IndexExpr:
-		if ident, ok := t.X.(*ast.Ident); ok {
-			return ident.Name == "Collection"
-		}
-	case *ast.Ident:
-		return t.Name == "NumericCollection"
-	}
-
-	return false
 }
 
 func returnsCollection(fn *ast.FuncDecl) bool {
@@ -309,15 +288,6 @@ func hasBehavior(doc *ast.CommentGroup) bool {
 	return false
 }
 
-func hasFluent(doc *ast.CommentGroup) bool {
-	for _, c := range doc.List {
-		if strings.Contains(c.Text, "@fluent") {
-			return true
-		}
-	}
-	return false
-}
-
 func insertBehavior(doc *ast.CommentGroup, behavior string) {
 	for i, c := range doc.List {
 		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
@@ -337,14 +307,14 @@ func insertBehavior(doc *ast.CommentGroup, behavior string) {
 	})
 }
 
-func insertFluent(doc *ast.CommentGroup, val string) {
+func insertChainable(doc *ast.CommentGroup, val string) {
 	for i, c := range doc.List {
 		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
 		if strings.HasPrefix(text, "Example:") || text == "" {
 			doc.List = append(
 				doc.List[:i],
 				append([]*ast.Comment{
-					{Text: fmt.Sprintf("// @fluent %s", val)},
+					{Text: fmt.Sprintf("// @chainable %s", val)},
 				}, doc.List[i:]...)...,
 			)
 			return
@@ -352,7 +322,26 @@ func insertFluent(doc *ast.CommentGroup, val string) {
 	}
 
 	doc.List = append(doc.List, &ast.Comment{
-		Text: fmt.Sprintf("// @fluent %s", val),
+		Text: fmt.Sprintf("// @chainable %s", val),
+	})
+}
+
+func insertTerminal(doc *ast.CommentGroup, val string) {
+	for i, c := range doc.List {
+		text := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
+		if strings.HasPrefix(text, "Example:") || text == "" {
+			doc.List = append(
+				doc.List[:i],
+				append([]*ast.Comment{
+					{Text: fmt.Sprintf("// @terminal %s", val)},
+				}, doc.List[i:]...)...,
+			)
+			return
+		}
+	}
+
+	doc.List = append(doc.List, &ast.Comment{
+		Text: fmt.Sprintf("// @terminal %s", val),
 	})
 }
 
@@ -371,6 +360,17 @@ func stripFluent(doc *ast.CommentGroup) {
 	out := doc.List[:0]
 	for _, c := range doc.List {
 		if strings.Contains(c.Text, "@fluent") {
+			continue
+		}
+		out = append(out, c)
+	}
+	doc.List = out
+}
+
+func stripTerminal(doc *ast.CommentGroup) {
+	out := doc.List[:0]
+	for _, c := range doc.List {
+		if strings.Contains(c.Text, "@terminal") {
 			continue
 		}
 		out = append(out, c)

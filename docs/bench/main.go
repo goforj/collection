@@ -39,14 +39,16 @@ func main() {
 	start := time.Now()
 	only := parseOnly(*onlyFlag)
 	borrowResults := runBenches(only, benchBorrow)
-	condensed := renderCondensedTables(borrowResults)
-	rawTable := renderTable(borrowResults)
+	copyResults := runBenches(only, benchCopy)
+	condensed := renderCondensedTables(borrowResults, copyResults)
+	rawBorrow := renderTable(borrowResults)
+	rawCopy := renderTable(copyResults)
 
 	if err := updateReadme(condensed); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	if err := updateBenchmarksFile(rawTable); err != nil {
+	if err := updateBenchmarksFile(rawBorrow, rawCopy); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -65,6 +67,7 @@ type benchMode string
 
 const (
 	benchBorrow benchMode = "borrow"
+	benchCopy   benchMode = "copy"
 )
 
 var (
@@ -76,6 +79,14 @@ var (
 func setBenchMode(mode benchMode) {
 	currentMode = mode
 	switch mode {
+	case benchCopy:
+		ctorInts = func(items []int) *collection.Collection[int] {
+			return collection.New(items).Clone()
+		}
+		ctorNumericInt = func(items []int) *collection.NumericCollection[int] {
+			base := collection.NewNumeric(items)
+			return &collection.NumericCollection[int]{Collection: base.Collection.Clone()}
+		}
 	default:
 		ctorInts = collection.New[int]
 		ctorNumericInt = collection.NewNumeric[int]
@@ -402,7 +413,7 @@ func benchMapCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := benchInts
+			input := collectionInputForMutating(benchInts)
 			_ = ctorInts(input).Map(func(v int) int { return v * 3 })
 
 		}
@@ -972,15 +983,7 @@ type benchGroup struct {
 	ops  []string
 }
 
-func renderCondensedTables(results []benchResult) string {
-	byName := map[string]map[string]benchResult{}
-	for _, r := range results {
-		if _, ok := byName[r.name]; !ok {
-			byName[r.name] = map[string]benchResult{}
-		}
-		byName[r.name][r.impl] = r
-	}
-
+func renderCondensedTables(borrowResults, copyResults []benchResult) string {
 	groups := []benchGroup{
 		{
 			name: "Read-only scalar ops (wrapper overhead only)",
@@ -1039,7 +1042,22 @@ func renderCondensedTables(results []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("Full raw tables: see `BENCHMARKS.md`.\n\n")
+	renderCondensedTable(&buf, "Borrow-by-default (New)", borrowResults, groups)
+	buf.WriteString("\n")
+	renderCondensedTable(&buf, "Explicit copy cost (Clone)", copyResults, groups)
+	return strings.TrimSpace(buf.String())
+}
 
+func renderCondensedTable(buf *bytes.Buffer, title string, results []benchResult, groups []benchGroup) {
+	byName := map[string]map[string]benchResult{}
+	for _, r := range results {
+		if _, ok := byName[r.name]; !ok {
+			byName[r.name] = map[string]benchResult{}
+		}
+		byName[r.name][r.impl] = r
+	}
+
+	buf.WriteString(fmt.Sprintf("### %s\n\n", title))
 	for _, group := range groups {
 		rows := make([]string, 0, len(group.ops))
 		for _, name := range group.ops {
@@ -1069,8 +1087,6 @@ func renderCondensedTables(results []benchResult) string {
 		buf.WriteString(strings.Join(rows, "\n"))
 		buf.WriteString("\n\n")
 	}
-
-	return strings.TrimSpace(buf.String())
 }
 
 func formatNs(ns float64) string {
@@ -1279,7 +1295,7 @@ func replaceBenchTable(section, condensed string) (string, error) {
 	return "\n\n" + trimmed + "\n", nil
 }
 
-func updateBenchmarksFile(rawTable string) error {
+func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	root, err := findRoot()
 	if err != nil {
 		return err
@@ -1289,7 +1305,10 @@ func updateBenchmarksFile(rawTable string) error {
 	var buf bytes.Buffer
 	buf.WriteString("# Benchmarks\n\n")
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`.\n\n")
-	buf.WriteString(rawTable)
+	buf.WriteString(rawBorrowTable)
+	buf.WriteString("\n\n")
+	buf.WriteString("Raw results for `collection.New().Clone()` (explicit copy) vs `lo`.\n\n")
+	buf.WriteString(rawCopyTable)
 	buf.WriteString("\n")
 	return os.WriteFile(path, buf.Bytes(), 0o644)
 }

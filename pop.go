@@ -3,7 +3,7 @@ package collection
 // Pop removes and returns the last item in the collection.
 // @group Slicing
 // @behavior mutable
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // If the collection is empty, the zero value of T is returned with ok=false.
@@ -83,7 +83,7 @@ func (c *Collection[T]) Pop() (T, bool) {
 // PopN removes and returns the last n items in original order.
 // @group Slicing
 // @behavior mutable
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // Example: integers – pop 2

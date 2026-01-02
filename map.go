@@ -1,11 +1,13 @@
 package collection
 
-// Map applies a same-type transformation in place.
+// Map applies a same-type transformation in place and returns the same collection.
 // @group Transformation
 // @behavior mutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Use this when you're transforming T -> T (e.g., enrichment, normalization).
+// Map mutates the receiver's backing slice. Use Clone() if you need isolation.
 //
 // Example: integers
 //

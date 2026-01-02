@@ -5,7 +5,8 @@ package collection
 // items where fn returns false. Order is preserved within each partition.
 // @group Slicing
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers - even/odd
 //

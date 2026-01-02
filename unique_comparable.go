@@ -5,7 +5,8 @@ package collection
 // This is a faster, allocation-friendly path for comparable types.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers
 //

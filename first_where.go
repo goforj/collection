@@ -5,7 +5,7 @@ package collection
 // along with the zero value of T.
 // @group Querying
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // This method is equivalent to Laravel's collection->first(fn) and mirrors

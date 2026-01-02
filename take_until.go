@@ -4,7 +4,8 @@ package collection
 // The matching item is NOT included.
 // @group Slicing
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // NOTE: returns a view (shares backing array). Use Clone() to detach.
 // Example: integers - stop when value >= 3
@@ -49,7 +50,8 @@ func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T] {
 
 // TakeUntil returns items until the first element equals `value`.
 // The matching item is NOT included.
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Uses == comparison, so T must be comparable.
 // @group Slicing

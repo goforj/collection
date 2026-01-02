@@ -8,7 +8,8 @@ import "github.com/goforj/collection"
 func main() {
 	// TakeUntil returns items until the first element equals `value`.
 	// The matching item is NOT included.
-	// @fluent true
+	// @chainable true
+	// @terminal false
 	// 
 	// Uses == comparison, so T must be comparable.
 

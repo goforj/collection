@@ -4,7 +4,8 @@ package collection
 // If no element matches, an empty collection is returned.
 // @group Ordering
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // NOTE: returns a view (shares backing array). Use Clone() to detach.
 //

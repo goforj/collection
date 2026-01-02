@@ -3,7 +3,7 @@ package collection
 // Any returns true if at least one item satisfies fn.
 // @group Querying
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 // Example: integers
 //

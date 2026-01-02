@@ -4,7 +4,8 @@ package collection
 // This mirrors Laravel's Collection::times(), which is 1-indexed.
 // @group Transformation
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // If count <= 0, an empty collection is returned.
 //

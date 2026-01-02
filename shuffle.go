@@ -18,7 +18,8 @@ func setShuffleRand(r *rand.Rand) {
 // Shuffle returns a shuffled copy of the collection.
 // @group Ordering
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // This operation allocates a new slice and does not mutate the receiver.
 //

@@ -4,7 +4,8 @@ package collection
 // *before* the first element for which pred returns true.
 // @group Ordering
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // NOTE: returns a view (shares backing array). Use Clone() to detach.
 //

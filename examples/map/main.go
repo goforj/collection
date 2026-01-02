@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// Map applies a same-type transformation in place.
+	// Map applies a same-type transformation in place and returns the same collection.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3})

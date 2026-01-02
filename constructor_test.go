@@ -22,26 +22,6 @@ func TestNew_PreservesNilSlice(t *testing.T) {
 	}
 }
 
-func TestCopyOf_CopiesInputSlice(t *testing.T) {
-	items := []int{1, 2, 3}
-	c := CopyOf(items)
-
-	items[0] = 9
-
-	if c.Items()[0] == 9 {
-		t.Fatalf("CopyOf should copy input slice")
-	}
-}
-
-func TestCopyOf_PreservesNilSlice(t *testing.T) {
-	var items []int
-	c := CopyOf(items)
-
-	if c.Items() != nil {
-		t.Fatalf("CopyOf should preserve nil slice")
-	}
-}
-
 func TestNewNumeric_PreservesNilSlice(t *testing.T) {
 	var items []int
 	c := NewNumeric(items)
@@ -59,26 +39,6 @@ func TestNewNumeric_BorrowsInputSlice(t *testing.T) {
 
 	if c.Items()[0] != 9 {
 		t.Fatalf("NewNumeric should borrow input slice")
-	}
-}
-
-func TestCopyOfNumeric_CopiesInputSlice(t *testing.T) {
-	items := []int{1, 2, 3}
-	c := CopyOfNumeric(items)
-
-	items[0] = 9
-
-	if c.Items()[0] == 9 {
-		t.Fatalf("CopyOfNumeric should copy input slice")
-	}
-}
-
-func TestCopyOfNumeric_PreservesNilSlice(t *testing.T) {
-	var items []int
-	c := CopyOfNumeric(items)
-
-	if c.Items() != nil {
-		t.Fatalf("CopyOfNumeric should preserve nil slice")
 	}
 }
 

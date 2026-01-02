@@ -3,7 +3,7 @@ package collection
 // Transform applies fn to every item *in place*, mutating the collection.
 // @group Transformation
 // @behavior mutable
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // This mirrors Laravel's transform(), which modifies the underlying values

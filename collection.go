@@ -24,7 +24,8 @@ type Pair[K comparable, V any] struct {
 // New creates a new Collection from the provided slice and borrows it.
 // @group Construction
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // The returned Collection is a lightweight, strongly-typed wrapper
 // around the slice, enabling fluent, chainable operations such as
@@ -41,77 +42,18 @@ type NumericCollection[T Number] struct {
 // NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
 // @group Construction
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 func NewNumeric[T Number](items []T) *NumericCollection[T] {
 	return &NumericCollection[T]{
 		Collection: &Collection[T]{items: items},
 	}
 }
 
-// CopyOf creates a new Collection by copying the provided slice.
-// @group Construction
-// @behavior immutable
-// @fluent true
-//
-// CopyOf allocates a new backing slice.
-//
-// Example: copying input slice
-//
-//	items := []int{1, 2, 3}
-//	c := collection.CopyOf(items)
-//
-//	items[0] = 9
-//	collection.Dump(c.Items())
-//	// #[]int [
-//	//   0 => 1 #int
-//	//   1 => 2 #int
-//	//   2 => 3 #int
-//	// ]
-func CopyOf[T any](items []T) *Collection[T] {
-	var out []T
-	if items == nil {
-		out = nil
-	} else {
-		out = make([]T, len(items))
-		copy(out, items)
-	}
-	return &Collection[T]{items: out}
-}
-
-// CopyOfNumeric creates a new NumericCollection by copying the provided slice.
-// @group Construction
-// @behavior immutable
-// @fluent true
-//
-// CopyOfNumeric allocates a new backing slice.
-//
-// Example: copying input slice
-//
-//	items := []int{1, 2, 3}
-//	c := collection.CopyOfNumeric(items)
-//
-//	items[0] = 9
-//	collection.Dump(c.Items())
-//	// #[]int [
-//	//   0 => 1 #int
-//	//   1 => 2 #int
-//	//   2 => 3 #int
-//	// ]
-func CopyOfNumeric[T Number](items []T) *NumericCollection[T] {
-	var out []T
-	if items == nil {
-		out = nil
-	} else {
-		out = make([]T, len(items))
-		copy(out, items)
-	}
-	return &NumericCollection[T]{Collection: &Collection[T]{items: out}}
-}
-
 // Items returns the backing slice of items.
 // @group Access
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // Items shares the backing array with the collection. Mutating the returned
@@ -169,7 +111,7 @@ func (c *Collection[T]) Items() []T {
 // ItemsCopy returns a copy of the collection's items.
 // @group Access
 // @behavior readonly
-// @fluent false
+// @chainable false
 // @terminal true
 //
 // ItemsCopy allocates a new slice.

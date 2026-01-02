@@ -21,7 +21,7 @@ const (
 
 	hotPathIters = 10_000
 
-	benchInner = 16
+	benchInner = 8
 )
 
 type benchResult struct {
@@ -69,7 +69,6 @@ var (
 	ctorInts       func([]int) *collection.Collection[int]
 	ctorNumericInt func([]int) *collection.NumericCollection[int]
 	currentMode    benchMode
-	loWrapperSink  []byte
 )
 
 func setBenchMode(mode benchMode) {
@@ -247,7 +246,7 @@ func benchPipelineLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := loInputCopied(benchInts)
+			input := benchInts
 
 			out := lo.Filter(input, func(v int, _ int) bool { return v%2 == 0 })
 			out2 := lo.Map(out, func(v int, _ int) int { return v * v })
@@ -272,7 +271,7 @@ func benchAllLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.EveryBy(loInput(benchInts), func(v int) bool { return v < benchSize+1 })
+			_ = lo.EveryBy(benchInts, func(v int) bool { return v < benchSize+1 })
 
 		}
 	}
@@ -292,7 +291,7 @@ func benchAnyLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.SomeBy(loInput(benchInts), func(v int) bool { return v == benchSize-1 })
+			_ = lo.SomeBy(benchInts, func(v int) bool { return v == benchSize-1 })
 
 		}
 	}
@@ -312,7 +311,7 @@ func benchNoneLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.NoneBy(loInput(benchInts), func(v int) bool { return v < 0 })
+			_ = lo.NoneBy(benchInts, func(v int) bool { return v < 0 })
 
 		}
 	}
@@ -332,7 +331,7 @@ func benchFirstLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_, _ = lo.First(loInput(benchInts))
+			_, _ = lo.First(benchInts)
 
 		}
 	}
@@ -352,7 +351,7 @@ func benchLastLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_, _ = lo.Last(loInput(benchInts))
+			_, _ = lo.Last(benchInts)
 
 		}
 	}
@@ -372,7 +371,7 @@ func benchIndexWhereLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_, _, _ = lo.FindIndexOf(loInput(benchInts), func(v int) bool { return v == benchSize-1 })
+			_, _, _ = lo.FindIndexOf(benchInts, func(v int) bool { return v == benchSize-1 })
 
 		}
 	}
@@ -394,7 +393,7 @@ func benchEachLo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
 			sum := 0
-			lo.ForEach(loInput(benchInts), func(v int, _ int) { sum += v })
+			lo.ForEach(benchInts, func(v int, _ int) { sum += v })
 
 		}
 	}
@@ -404,7 +403,7 @@ func benchMapCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := collectionInputCopied(benchInts)
+			input := benchInts
 			_ = ctorInts(input).Map(func(v int) int { return v * 3 })
 
 		}
@@ -415,7 +414,7 @@ func benchMapLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := loInputCopied(benchInts)
+			input := benchInts
 			_ = lo.Map(input, func(v int, _ int) int { return v * 3 })
 
 		}
@@ -436,7 +435,7 @@ func benchReduceLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Reduce(loInput(benchInts), func(acc int, v int, _ int) int { return acc + v }, 0)
+			_ = lo.Reduce(benchInts, func(acc int, v int, _ int) int { return acc + v }, 0)
 
 		}
 	}
@@ -457,7 +456,7 @@ func benchFilterLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := loInputCopied(benchInts)
+			input := benchInts
 			_ = lo.Filter(input, func(v int, _ int) bool { return v%3 == 0 })
 
 		}
@@ -478,7 +477,7 @@ func benchChunkLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Chunk(loInput(benchInts), benchChunkSize)
+			_ = lo.Chunk(benchInts, benchChunkSize)
 
 		}
 	}
@@ -498,7 +497,7 @@ func benchTakeLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Subset(loInput(benchInts), 0, uint(benchTakeN))
+			_ = lo.Subset(benchInts, 0, uint(benchTakeN))
 
 		}
 	}
@@ -518,7 +517,7 @@ func benchContainsLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.ContainsBy(loInput(benchInts), func(v int) bool { return v == benchSize-1 })
+			_ = lo.ContainsBy(benchInts, func(v int) bool { return v == benchSize-1 })
 
 		}
 	}
@@ -538,7 +537,7 @@ func benchFindLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_, _ = lo.Find(loInput(benchInts), func(v int) bool { return v == benchSize-1 })
+			_, _ = lo.Find(benchInts, func(v int) bool { return v == benchSize-1 })
 
 		}
 	}
@@ -558,7 +557,7 @@ func benchGroupByLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.GroupBy(loInput(benchInts), func(v int) int { return v % benchGroupByMod })
+			_ = lo.GroupBy(benchInts, func(v int) int { return v % benchGroupByMod })
 
 		}
 	}
@@ -578,7 +577,7 @@ func benchCountByLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.CountValuesBy(loInput(benchIntsDup), func(v int) int { return v })
+			_ = lo.CountValuesBy(benchIntsDup, func(v int) int { return v })
 
 		}
 	}
@@ -598,7 +597,7 @@ func benchCountByValueLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.CountValues(loInput(benchIntsDup))
+			_ = lo.CountValues(benchIntsDup)
 
 		}
 	}
@@ -618,7 +617,7 @@ func benchSkipLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Drop(loInput(benchInts), benchSkipN)
+			_ = lo.Drop(benchInts, benchSkipN)
 
 		}
 	}
@@ -638,7 +637,7 @@ func benchSkipLastLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.DropRight(loInput(benchInts), benchSkipN)
+			_ = lo.DropRight(benchInts, benchSkipN)
 
 		}
 	}
@@ -659,8 +658,8 @@ func benchReverseLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := loInputCopied(benchInts)
-			_ = lo.Reverse(input)
+			copy(workB, benchInts)
+			_ = lo.Reverse(workB)
 
 		}
 	}
@@ -681,8 +680,8 @@ func benchShuffleLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := loInputCopied(benchInts)
-			_ = lo.Shuffle(input)
+			copy(workB, benchInts)
+			_ = lo.Shuffle(workB)
 
 		}
 	}
@@ -702,7 +701,7 @@ func benchZipLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Zip2(loInput(benchInts), loInput(benchIntsDup))
+			_ = lo.Zip2(benchInts, benchIntsDup)
 
 		}
 	}
@@ -724,7 +723,7 @@ func benchZipWithLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.ZipBy2(loInput(benchInts), loInput(benchIntsDup), func(a, b int) int {
+			_ = lo.ZipBy2(benchInts, benchIntsDup, func(a, b int) int {
 				return a + b
 			})
 
@@ -746,7 +745,7 @@ func benchUniqueLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Uniq(loInput(benchIntsDup))
+			_ = lo.Uniq(benchIntsDup)
 
 		}
 	}
@@ -766,7 +765,7 @@ func benchUniqueByLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.UniqBy(loInput(benchIntsDup), func(v int) int { return v })
+			_ = lo.UniqBy(benchIntsDup, func(v int) int { return v })
 
 		}
 	}
@@ -786,7 +785,7 @@ func benchUnionLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Union(loInput(unionLeft), loInput(unionRight))
+			_ = lo.Union(unionLeft, unionRight)
 
 		}
 	}
@@ -806,7 +805,7 @@ func benchIntersectLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Intersect(loInput(intersectLeft), loInput(intersectRight))
+			_ = lo.Intersect(intersectLeft, intersectRight)
 
 		}
 	}
@@ -826,7 +825,7 @@ func benchDifferenceLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_, _ = lo.Difference(loInput(differenceLeft), loInput(differenceRight))
+			_, _ = lo.Difference(differenceLeft, differenceRight)
 
 		}
 	}
@@ -846,7 +845,7 @@ func benchToMapLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.SliceToMap(loInput(benchInts), func(v int) (int, int) { return v, v })
+			_ = lo.SliceToMap(benchInts, func(v int) (int, int) { return v, v })
 
 		}
 	}
@@ -866,7 +865,7 @@ func benchSumLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Sum(loInput(benchInts))
+			_ = lo.Sum(benchInts)
 
 		}
 	}
@@ -886,7 +885,7 @@ func benchMinLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Min(loInput(benchInts))
+			_ = lo.Min(benchInts)
 
 		}
 	}
@@ -906,7 +905,7 @@ func benchMaxLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			_ = lo.Max(loInput(benchInts))
+			_ = lo.Max(benchInts)
 
 		}
 	}
@@ -1004,14 +1003,20 @@ func formatDurationNs(ns float64) string {
 	}
 }
 
+const wrapperEpsilon = 0.10 // ±10% wrapper overhead tolerance
+
 func formatRatio(lo, col float64) string {
 	if col == 0 {
 		return "∞"
 	}
+
 	ratio := lo / col
-	if ratio >= 0.95 && ratio <= 1.05 {
+
+	// Treat small deltas as equivalent (wrapper overhead, measurement noise)
+	if ratio >= 1-wrapperEpsilon && ratio <= 1+wrapperEpsilon {
 		return "≈"
 	}
+
 	out := fmt.Sprintf("%.2fx", ratio)
 	if ratio > 1 {
 		return fmt.Sprintf("**%s**", out)
@@ -1061,34 +1066,6 @@ func collectionInputCopied(src []int) []int {
 		return workA
 	}
 	return src
-}
-
-func loInputCopied(src []int) []int {
-	if currentMode == benchNew {
-		loWrapAlloc()
-		cp := make([]int, len(src))
-		copy(cp, src)
-		return cp
-	}
-	copy(workB, src)
-	return workB
-}
-
-func loInput(src []int) []int {
-	if currentMode == benchNew {
-		loWrapAlloc()
-		cp := make([]int, len(src))
-		copy(cp, src)
-		return cp
-	}
-	return src
-}
-
-func loWrapAlloc() {
-	if currentMode != benchNew {
-		return
-	}
-	loWrapperSink = make([]byte, 24)
 }
 
 // ----------------------------------------------------------------------------

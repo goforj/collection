@@ -919,7 +919,7 @@ func renderTable(results []benchResult) string {
 	}
 
 	var buf bytes.Buffer
-	buf.WriteString("| Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |\n")
+	buf.WriteString("| Op | ns/op (vs lo) | × (faster) | bytes/op (vs lo) | × (less memory) | allocs/op (vs lo) |\n")
 	buf.WriteString("|---:|----------------|:--:|------------------|:--:|--------------------|\n")
 
 	names := make([]string, 0, len(byName))

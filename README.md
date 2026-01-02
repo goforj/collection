@@ -27,11 +27,6 @@
 
 # Features
 
-This library is ideal when:
-- you write multi-step slice pipelines
-- allocation behavior matters
-- you want fluent APIs without hidden costs
-
 - **Fluent chaining** - pipeline your operations like Laravel Collections
 - **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
 - **Minimal dependencies** - small footprint (godump for debugging)

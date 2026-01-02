@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/logo.png" width="600" alt="goforj/collection logo">
+  <img src="./docs/assets/logo.png" width="500" alt="goforj/collection logo">
 </p>
 
 <p align="center">

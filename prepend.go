@@ -7,6 +7,7 @@ package collection
 // @terminal false
 //
 // This method mutates the collection in place and returns the same instance.
+// It allocates a new backing slice to insert the values at the front.
 //
 // Example: integers
 //

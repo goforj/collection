@@ -56,24 +56,24 @@ func (c *Collection[T]) Take(n int) *Collection[T] {
 
 	// Empty or zero → empty collection
 	if n == 0 || length == 0 {
-		return Attach([]T{})
+		return New([]T{})
 	}
 
 	// Positive → take from start
 	if n > 0 {
 		if n >= length {
 			// no need to allocate; just reuse original
-			return Attach(c.items)
+			return New(c.items)
 		}
-		return Attach(c.items[:n])
+		return New(c.items[:n])
 	}
 
 	// Negative → take from end
 	n = -n
 	if n >= length {
-		return Attach(c.items)
+		return New(c.items)
 	}
 
 	start := length - n
-	return Attach(c.items[start:])
+	return New(c.items[start:])
 }

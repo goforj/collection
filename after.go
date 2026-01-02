@@ -27,8 +27,8 @@ func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
 
 	// If no match found → empty collection
 	if idx == -1 || idx+1 >= len(c.items) {
-		return Attach(c.items[:0])
+		return New(c.items[:0])
 	}
 
-	return Attach(c.items[idx+1:])
+	return New(c.items[idx+1:])
 }

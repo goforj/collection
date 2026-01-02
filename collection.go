@@ -21,7 +21,7 @@ type Pair[K comparable, V any] struct {
 	Value V
 }
 
-// New creates a new Collection from the provided slice.
+// New creates a new Collection from the provided slice and borrows it.
 // @group Construction
 // @behavior immutable
 // @fluent true
@@ -29,9 +29,45 @@ type Pair[K comparable, V any] struct {
 // The returned Collection is a lightweight, strongly-typed wrapper
 // around the slice, enabling fluent, chainable operations such as
 // filtering, mapping, reducing, sorting, and more.
-//
-// New copies the input slice to avoid shared backing.
 func New[T any](items []T) *Collection[T] {
+	return &Collection[T]{items: items}
+}
+
+// NumericCollection is a Collection specialized for numeric types.
+type NumericCollection[T Number] struct {
+	*Collection[T]
+}
+
+// NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
+// @group Construction
+// @behavior immutable
+// @fluent true
+func NewNumeric[T Number](items []T) *NumericCollection[T] {
+	return &NumericCollection[T]{
+		Collection: &Collection[T]{items: items},
+	}
+}
+
+// CopyOf creates a new Collection by copying the provided slice.
+// @group Construction
+// @behavior immutable
+// @fluent true
+//
+// CopyOf allocates a new backing slice.
+//
+// Example: copying input slice
+//
+//	items := []int{1, 2, 3}
+//	c := collection.CopyOf(items)
+//
+//	items[0] = 9
+//	collection.Dump(c.Items())
+//	// #[]int [
+//	//   0 => 1 #int
+//	//   1 => 2 #int
+//	//   2 => 3 #int
+//	// ]
+func CopyOf[T any](items []T) *Collection[T] {
 	var out []T
 	if items == nil {
 		out = nil
@@ -42,18 +78,26 @@ func New[T any](items []T) *Collection[T] {
 	return &Collection[T]{items: out}
 }
 
-// NumericCollection is a Collection specialized for numeric types.
-type NumericCollection[T Number] struct {
-	*Collection[T]
-}
-
-// NewNumeric wraps a slice of numeric types in a NumericCollection.
+// CopyOfNumeric creates a new NumericCollection by copying the provided slice.
 // @group Construction
 // @behavior immutable
 // @fluent true
 //
-// NewNumeric copies the input slice to avoid shared backing.
-func NewNumeric[T Number](items []T) *NumericCollection[T] {
+// CopyOfNumeric allocates a new backing slice.
+//
+// Example: copying input slice
+//
+//	items := []int{1, 2, 3}
+//	c := collection.CopyOfNumeric(items)
+//
+//	items[0] = 9
+//	collection.Dump(c.Items())
+//	// #[]int [
+//	//   0 => 1 #int
+//	//   1 => 2 #int
+//	//   2 => 3 #int
+//	// ]
+func CopyOfNumeric[T Number](items []T) *NumericCollection[T] {
 	var out []T
 	if items == nil {
 		out = nil
@@ -61,57 +105,7 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 		out = make([]T, len(items))
 		copy(out, items)
 	}
-	return &NumericCollection[T]{
-		Collection: &Collection[T]{items: out},
-	}
-}
-
-// Attach wraps a slice without copying.
-// @group Construction
-// @behavior immutable
-// @fluent true
-//
-// Attach shares the backing array with the caller. Mutating either side
-// will affect the other. Use New to copy the input.
-//
-// Example: sharing backing slice
-//
-//	items := []int{1, 2, 3}
-//	c := collection.Attach(items)
-//
-//	items[0] = 9
-//	collection.Dump(c.Items())
-//	// #[]int [
-//	//   0 => 9 #int
-//	//   1 => 2 #int
-//	//   2 => 3 #int
-//	// ]
-func Attach[T any](items []T) *Collection[T] {
-	return &Collection[T]{items: items}
-}
-
-// AttachNumeric wraps a slice of numeric types without copying.
-// @group Construction
-// @behavior immutable
-// @fluent true
-//
-// AttachNumeric shares the backing array with the caller. Mutating either side
-// will affect the other. Use NewNumeric to copy the input.
-//
-// Example: sharing backing slice
-//
-//	items := []int{1, 2, 3}
-//	c := collection.AttachNumeric(items)
-//
-//	items[0] = 9
-//	collection.Dump(c.Items())
-//	// #[]int [
-//	//   0 => 9 #int
-//	//   1 => 2 #int
-//	//   2 => 3 #int
-//	// ]
-func AttachNumeric[T Number](items []T) *NumericCollection[T] {
-	return &NumericCollection[T]{Collection: &Collection[T]{items: items}}
+	return &NumericCollection[T]{Collection: &Collection[T]{items: out}}
 }
 
 // Items returns the backing slice of items.

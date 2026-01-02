@@ -44,7 +44,7 @@ func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T] {
 		}
 	}
 
-	return Attach(c.items[:idx])
+	return New(c.items[:idx])
 }
 
 // TakeUntil returns items until the first element equals `value`.
@@ -93,5 +93,5 @@ func TakeUntil[T comparable](c *Collection[T], value T) *Collection[T] {
 		}
 	}
 
-	return Attach(c.items[:idx])
+	return New(c.items[:idx])
 }

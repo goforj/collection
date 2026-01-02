@@ -60,5 +60,5 @@ func (c *Collection[T]) Before(pred func(T) bool) *Collection[T] {
 		}
 	}
 
-	return Attach(c.items[:idx])
+	return New(c.items[:idx])
 }

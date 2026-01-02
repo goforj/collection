@@ -86,7 +86,7 @@ func TestReverse_Chainable(t *testing.T) {
 
 func TestReverse_MutatesInPlace(t *testing.T) {
 	items := []int{1, 2, 3}
-	c := Attach(items)
+	c := New(items)
 
 	c.Reverse()
 

@@ -2,14 +2,14 @@ package collection
 
 import "testing"
 
-func TestNew_CopiesInputSlice(t *testing.T) {
+func TestNew_BorrowsInputSlice(t *testing.T) {
 	items := []int{1, 2, 3}
 	c := New(items)
 
 	items[0] = 9
 
-	if c.Items()[0] == 9 {
-		t.Fatalf("New should copy input slice")
+	if c.Items()[0] != 9 {
+		t.Fatalf("New should borrow input slice")
 	}
 }
 
@@ -22,14 +22,23 @@ func TestNew_PreservesNilSlice(t *testing.T) {
 	}
 }
 
-func TestAttach_SharesBackingSlice(t *testing.T) {
+func TestCopyOf_CopiesInputSlice(t *testing.T) {
 	items := []int{1, 2, 3}
-	c := Attach(items)
+	c := CopyOf(items)
 
 	items[0] = 9
 
-	if c.Items()[0] != 9 {
-		t.Fatalf("Attach should share backing slice")
+	if c.Items()[0] == 9 {
+		t.Fatalf("CopyOf should copy input slice")
+	}
+}
+
+func TestCopyOf_PreservesNilSlice(t *testing.T) {
+	var items []int
+	c := CopyOf(items)
+
+	if c.Items() != nil {
+		t.Fatalf("CopyOf should preserve nil slice")
 	}
 }
 
@@ -42,31 +51,31 @@ func TestNewNumeric_PreservesNilSlice(t *testing.T) {
 	}
 }
 
-func TestNewNumeric_CopiesInputSlice(t *testing.T) {
+func TestNewNumeric_BorrowsInputSlice(t *testing.T) {
 	items := []int{1, 2, 3}
 	c := NewNumeric(items)
 
 	items[0] = 9
 
-	if c.Items()[0] == 9 {
-		t.Fatalf("NewNumeric should copy input slice")
+	if c.Items()[0] != 9 {
+		t.Fatalf("NewNumeric should borrow input slice")
 	}
 }
 
-func TestAttachNumeric_SharesBackingSlice(t *testing.T) {
+func TestCopyOfNumeric_CopiesInputSlice(t *testing.T) {
 	items := []int{1, 2, 3}
-	c := AttachNumeric(items)
+	c := CopyOfNumeric(items)
 
 	items[0] = 9
 
-	if c.Items()[0] != 9 {
-		t.Fatalf("AttachNumeric should share backing slice")
+	if c.Items()[0] == 9 {
+		t.Fatalf("CopyOfNumeric should copy input slice")
 	}
 }
 
 func TestSelectionOps_ShareBackingSlice(t *testing.T) {
 	items := []int{1, 2, 3, 4}
-	c := Attach(items)
+	c := New(items)
 
 	view := c.Take(2)
 	items[0] = 9
@@ -78,7 +87,7 @@ func TestSelectionOps_ShareBackingSlice(t *testing.T) {
 
 func TestItemsCopy_ReturnsCopy(t *testing.T) {
 	items := []int{1, 2, 3}
-	c := Attach(items)
+	c := New(items)
 
 	copyItems := c.ItemsCopy()
 	copyItems[0] = 9

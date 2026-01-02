@@ -67,5 +67,5 @@ func (c *Collection[T]) Shuffle() *Collection[T] {
 		out[i], out[j] = out[j], out[i]
 	}
 
-	return Attach(out)
+	return New(out)
 }

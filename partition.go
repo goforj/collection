@@ -76,7 +76,7 @@ package collection
 //	// ]
 func (c *Collection[T]) Partition(fn func(T) bool) (*Collection[T], *Collection[T]) {
 	if len(c.items) == 0 {
-		return Attach([]T{}), Attach([]T{})
+		return New([]T{}), New([]T{})
 	}
 
 	// Pre-size to total length; each partition will shrink to its own length.
@@ -91,5 +91,5 @@ func (c *Collection[T]) Partition(fn func(T) bool) (*Collection[T], *Collection[
 		}
 	}
 
-	return Attach(left), Attach(right)
+	return New(left), New(right)
 }

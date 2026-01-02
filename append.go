@@ -54,5 +54,5 @@ func (c *Collection[T]) Append(values ...T) *Collection[T] {
 	out := make([]T, 0, len(c.items)+len(values))
 	out = append(out, c.items...)
 	out = append(out, values...)
-	return Attach(out)
+	return New(out)
 }

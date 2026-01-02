@@ -70,5 +70,5 @@ package collection
 func (c *Collection[T]) Clone() *Collection[T] {
 	out := make([]T, len(c.items))
 	copy(out, c.items)
-	return Attach(out)
+	return &Collection[T]{items: out}
 }

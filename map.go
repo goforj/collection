@@ -70,5 +70,5 @@ func (c *Collection[T]) Map(fn func(T) T) *Collection[T] {
 	for i, v := range c.items {
 		out[i] = fn(v)
 	}
-	return Attach(out)
+	return New(out)
 }

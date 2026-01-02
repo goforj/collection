@@ -97,7 +97,7 @@ func (c *Collection[T]) mergeSlice(values []T) *Collection[T] {
 	out := make([]T, len(c.items)+len(values))
 	copy(out, c.items)
 	copy(out[len(c.items):], values)
-	return Attach(out)
+	return New(out)
 }
 
 /*
@@ -150,7 +150,7 @@ func (c *Collection[T]) mergeMap(values map[string]T) *Collection[T] {
 	}
 
 	// IMPORTANT: return without copying out again
-	return Attach(out)
+	return New(out)
 }
 
 // fastParseInt is much lighter than strconv.Atoi

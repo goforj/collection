@@ -38,12 +38,12 @@ func main() {
 
 	start := time.Now()
 	only := parseOnly(*onlyFlag)
-	attachResults := runBenches(only, benchAttach)
-	newResults := runBenches(only, benchNew)
-	attachTable := renderTable(attachResults)
-	newTable := renderTable(newResults)
+	borrowResults := runBenches(only, benchBorrow)
+	copyResults := runBenches(only, benchCopy)
+	borrowTable := renderTable(borrowResults)
+	copyTable := renderTable(copyResults)
 
-	if err := updateReadme(attachTable, newTable); err != nil {
+	if err := updateReadme(borrowTable, copyTable); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -61,8 +61,8 @@ func main() {
 type benchMode string
 
 const (
-	benchAttach benchMode = "attach"
-	benchNew    benchMode = "new"
+	benchBorrow benchMode = "borrow"
+	benchCopy   benchMode = "copy"
 )
 
 var (
@@ -74,12 +74,12 @@ var (
 func setBenchMode(mode benchMode) {
 	currentMode = mode
 	switch mode {
-	case benchNew:
+	case benchCopy:
+		ctorInts = collection.CopyOf[int]
+		ctorNumericInt = collection.CopyOfNumeric[int]
+	default:
 		ctorInts = collection.New[int]
 		ctorNumericInt = collection.NewNumeric[int]
-	default:
-		ctorInts = collection.Attach[int]
-		ctorNumericInt = collection.AttachNumeric[int]
 	}
 }
 
@@ -231,7 +231,7 @@ func benchPipelineCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := collectionInputCopied(benchInts)
+			input := collectionInputForMutating(benchInts)
 			_ = ctorInts(input).
 				Filter(func(v int) bool { return v%2 == 0 }).
 				Map(func(v int) int { return v * v }).
@@ -445,7 +445,7 @@ func benchFilterCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := collectionInputCopied(benchInts)
+			input := collectionInputForMutating(benchInts)
 			_ = ctorInts(input).Filter(func(v int) bool { return v%3 == 0 })
 
 		}
@@ -647,7 +647,7 @@ func benchReverseCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := collectionInputCopied(benchInts)
+			input := collectionInputForMutating(benchInts)
 			_ = ctorInts(input).Reverse()
 
 		}
@@ -669,7 +669,7 @@ func benchShuffleCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < benchInner; j++ {
-			input := collectionInputCopied(benchInts)
+			input := collectionInputForMutating(benchInts)
 			_ = ctorInts(input).Shuffle()
 
 		}
@@ -1035,7 +1035,7 @@ func formatRatioBytes(lo, col int64) string {
 	}
 
 	ratio := float64(lo) / float64(col)
-	if ratio >= 0.95 && ratio <= 1.05 {
+	if ratio >= 0.90 && ratio <= 1.10 {
 		return "≈"
 	}
 
@@ -1060,8 +1060,8 @@ func formatInt(v int64) string {
 	}
 }
 
-func collectionInputCopied(src []int) []int {
-	if currentMode == benchAttach {
+func collectionInputForMutating(src []int) []int {
+	if currentMode == benchBorrow {
 		copy(workA, src)
 		return workA
 	}
@@ -1072,7 +1072,7 @@ func collectionInputCopied(src []int) []int {
 // README injection
 // ----------------------------------------------------------------------------
 
-func updateReadme(attachTable, newTable string) error {
+func updateReadme(borrowTable, copyTable string) error {
 	root, err := findRoot()
 	if err != nil {
 		return err
@@ -1084,7 +1084,7 @@ func updateReadme(attachTable, newTable string) error {
 		return err
 	}
 
-	out, err := replaceSection(string(data), attachTable, newTable)
+	out, err := replaceSection(string(data), borrowTable, copyTable)
 	if err != nil {
 		return err
 	}
@@ -1092,7 +1092,7 @@ func updateReadme(attachTable, newTable string) error {
 	return os.WriteFile(readmePath, []byte(out), 0o644)
 }
 
-func replaceSection(readme, attachTable, newTable string) (string, error) {
+func replaceSection(readme, borrowTable, copyTable string) (string, error) {
 	start := strings.Index(readme, benchStart)
 	end := strings.Index(readme, benchEnd)
 	if start == -1 || end == -1 || end < start {
@@ -1100,7 +1100,7 @@ func replaceSection(readme, attachTable, newTable string) (string, error) {
 	}
 
 	section := readme[start+len(benchStart) : end]
-	updated, err := replaceBenchTables(section, attachTable, newTable)
+	updated, err := replaceBenchTables(section, borrowTable, copyTable)
 	if err != nil {
 		return "", err
 	}
@@ -1112,7 +1112,7 @@ func replaceSection(readme, attachTable, newTable string) (string, error) {
 	return buf.String(), nil
 }
 
-func replaceBenchTables(section, attachTable, newTable string) (string, error) {
+func replaceBenchTables(section, borrowTable, copyTable string) (string, error) {
 	lines := strings.Split(section, "\n")
 	tableStarts := []int{}
 	for i, line := range lines {
@@ -1145,13 +1145,13 @@ func replaceBenchTables(section, attachTable, newTable string) (string, error) {
 		buf.WriteString(strings.Join(lines[:firstStart], "\n"))
 		buf.WriteString("\n")
 	}
-	buf.WriteString(strings.TrimSpace(attachTable))
+	buf.WriteString(strings.TrimSpace(borrowTable))
 	buf.WriteString("\n")
 	buf.WriteString(strings.Join(lines[firstEnd:secondStart], "\n"))
 	if buf.Len() > 0 && !strings.HasSuffix(buf.String(), "\n") {
 		buf.WriteString("\n")
 	}
-	buf.WriteString(strings.TrimSpace(newTable))
+	buf.WriteString(strings.TrimSpace(copyTable))
 	buf.WriteString("\n")
 	buf.WriteString(strings.Join(lines[secondEnd:], "\n"))
 	return buf.String(), nil

@@ -6,16 +6,16 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Attach wraps a slice without copying.
+	// CopyOf creates a new Collection by copying the provided slice.
 
-	// Example: sharing backing slice
+	// Example: copying input slice
 	items := []int{1, 2, 3}
-	c := collection.Attach(items)
+	c := collection.CopyOf(items)
 
 	items[0] = 9
 	collection.Dump(c.Items())
 	// #[]int [
-	//   0 => 9 #int
+	//   0 => 1 #int
 	//   1 => 2 #int
 	//   2 => 3 #int
 	// ]

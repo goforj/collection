@@ -93,7 +93,7 @@ func TestTakeLast_DoesNotMutateOriginal(t *testing.T) {
 
 func TestTakeLast_ReusesBackingSlice(t *testing.T) {
 	items := []int{1, 2, 3, 4}
-	c := Attach(items)
+	c := New(items)
 
 	out := c.TakeLast(2)
 	out.Items()[0] = 99

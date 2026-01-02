@@ -64,7 +64,7 @@ package collection
 //	// ]
 func (c *Collection[T]) Multiply(n int) *Collection[T] {
 	if n <= 0 {
-		return Attach([]T{})
+		return New([]T{})
 	}
 
 	orig := c.items
@@ -74,5 +74,5 @@ func (c *Collection[T]) Multiply(n int) *Collection[T] {
 		out = append(out, orig...)
 	}
 
-	return Attach(out)
+	return New(out)
 }

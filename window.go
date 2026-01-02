@@ -98,7 +98,7 @@ package collection
 //	// ]
 func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 	if size <= 0 {
-		return Attach([][]T(nil))
+		return New([][]T(nil))
 	}
 
 	if step <= 0 {
@@ -107,7 +107,7 @@ func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 
 	n := len(c.items)
 	if n < size {
-		return Attach([][]T(nil))
+		return New([][]T(nil))
 	}
 
 	// Compute number of windows.
@@ -118,5 +118,5 @@ func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 		out = append(out, c.items[i:i+size])
 	}
 
-	return Attach(out)
+	return New(out)
 }

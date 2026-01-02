@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-440-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-441-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
@@ -91,80 +91,80 @@ That design choice doesn't matter much for some single operations. It matters a 
 
 <!-- bench:embed:start -->
 
-#### Operator-only (Attach) vs lo
+#### Default (New, borrowed) vs lo
 
 | Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |
 |---:|----------------|:--:|------------------|:--:|--------------------|
-| **All** | 247ns / 233ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **Any** | 249ns / 241ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **Chunk** | 136ns / 1.0µs | **7.64x** | 1.3KB / 9.3KB | **7.12x less** | 2 / 51 |
-| **Contains** | 249ns / 231ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **CountBy** | 8.1µs / 7.9µs | ≈ | 9.4KB / 9.4KB | ≈ | 12 / 11 |
-| **CountByValue** | 8.4µs / 7.8µs | ≈ | 9.4KB / 9.4KB | ≈ | 12 / 11 |
-| **Difference** | 19.3µs / 44.0µs | **2.28x** | 82.2KB / 108.8KB | **1.32x less** | 14 / 43 |
-| **Each** | 251ns / 235ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **Filter** | 644ns / 1.0µs | **1.58x** | 24B / 8.2KB | **341.33x less** | 1 / 1 |
+| **All** | 249ns / 232ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **Any** | 249ns / 234ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **Chunk** | 138ns / 1.0µs | **7.55x** | 1.3KB / 9.3KB | **7.12x less** | 2 / 51 |
+| **Contains** | 249ns / 233ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **CountBy** | 7.9µs / 7.9µs | ≈ | 9.4KB / 9.4KB | ≈ | 12 / 11 |
+| **CountByValue** | 8.2µs / 8.5µs | ≈ | 9.4KB / 9.4KB | ≈ | 12 / 11 |
+| **Difference** | 18.7µs / 42.9µs | **2.29x** | 82.2KB / 108.8KB | **1.32x less** | 14 / 43 |
+| **Each** | 248ns / 232ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **Filter** | 626ns / 1.0µs | **1.64x** | 24B / 8.2KB | **341.33x less** | 1 / 1 |
 | **First** | 11ns / 0ns | 0.02x | 24B / 0B | ∞x more | 1 / 0 |
-| **FirstWhere** | 247ns / 232ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **GroupBySlice** | 8.0µs / 8.4µs | ≈ | 21.0KB / 21.0KB | ≈ | 84 / 83 |
-| **IndexWhere** | 248ns / 233ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **Intersect** | 11.0µs / 10.7µs | ≈ | 11.5KB / 11.4KB | ≈ | 22 / 19 |
+| **FirstWhere** | 249ns / 233ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **GroupBySlice** | 7.9µs / 8.3µs | ≈ | 21.0KB / 21.0KB | ≈ | 84 / 83 |
+| **IndexWhere** | 249ns / 233ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **Intersect** | 10.8µs / 10.5µs | ≈ | 11.5KB / 11.4KB | ≈ | 22 / 19 |
 | **Last** | 11ns / 0ns | 0.02x | 24B / 0B | ∞x more | 1 / 0 |
-| **Map** | 804ns / 784ns | ≈ | 8.2KB / 8.2KB | ≈ | 2 / 1 |
-| **Max** | 267ns / 263ns | ≈ | 32B / 0B | ∞x more | 2 / 0 |
-| **Min** | 263ns / 232ns | 0.88x | 32B / 0B | ∞x more | 2 / 0 |
-| **None** | 250ns / 232ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **Pipeline F→M→T→R** | 777ns / 1.3µs | **1.64x** | 4.1KB / 12.3KB | **2.97x less** | 3 / 2 |
-| **Reduce (sum)** | 246ns / 230ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **Reverse** | 228ns / 238ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
-| **Shuffle** | 3.9µs / 5.3µs | **1.35x** | 8.2KB / 0B | ∞x more | 3 / 0 |
-| **Skip** | 11ns / 712ns | **64.69x** | 24B / 8.2KB | **341.33x less** | 1 / 1 |
-| **SkipLast** | 11ns / 708ns | **63.62x** | 24B / 8.2KB | **341.33x less** | 1 / 1 |
-| **Sum** | 264ns / 233ns | 0.88x | 32B / 0B | ∞x more | 2 / 0 |
-| **Take** | 22ns / 0ns | 0.01x | 48B / 0B | ∞x more | 2 / 0 |
-| **ToMap** | 8.0µs / 7.9µs | ≈ | 37.0KB / 37.0KB | ≈ | 6 / 6 |
-| **Union** | 16.9µs / 17.5µs | ≈ | 90.3KB / 90.3KB | ≈ | 13 / 10 |
+| **Map** | 829ns / 788ns | ≈ | 8.2KB / 8.2KB | ≈ | 2 / 1 |
+| **Max** | 265ns / 249ns | ≈ | 32B / 0B | ∞x more | 2 / 0 |
+| **Min** | 264ns / 232ns | 0.88x | 32B / 0B | ∞x more | 2 / 0 |
+| **None** | 249ns / 233ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **Pipeline F→M→T→R** | 767ns / 1.2µs | **1.62x** | 4.1KB / 12.3KB | **2.97x less** | 3 / 2 |
+| **Reduce (sum)** | 248ns / 237ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **Reverse** | 225ns / 232ns | ≈ | 24B / 0B | ∞x more | 1 / 0 |
+| **Shuffle** | 3.8µs / 5.2µs | **1.37x** | 8.2KB / 0B | ∞x more | 3 / 0 |
+| **Skip** | 11ns / 709ns | **65.92x** | 24B / 8.2KB | **341.33x less** | 1 / 1 |
+| **SkipLast** | 11ns / 708ns | **65.15x** | 24B / 8.2KB | **341.33x less** | 1 / 1 |
+| **Sum** | 264ns / 232ns | 0.88x | 32B / 0B | ∞x more | 2 / 0 |
+| **Take** | 21ns / 0ns | 0.01x | 48B / 0B | ∞x more | 2 / 0 |
+| **ToMap** | 7.5µs / 7.8µs | ≈ | 37.0KB / 37.0KB | ≈ | 6 / 6 |
+| **Union** | 17.1µs / 17.5µs | ≈ | 90.3KB / 90.3KB | ≈ | 13 / 10 |
 | **Unique** | 6.3µs / 6.3µs | ≈ | 45.2KB / 45.1KB | ≈ | 7 / 6 |
-| **UniqueBy** | 6.7µs / 6.3µs | ≈ | 45.2KB / 45.1KB | ≈ | 8 / 6 |
-| **Zip** | 1.4µs / 3.1µs | **2.22x** | 16.4KB / 16.4KB | ≈ | 3 / 1 |
-| **ZipWith** | 1.0µs / 3.0µs | **2.93x** | 8.2KB / 8.2KB | ≈ | 3 / 1 |
+| **UniqueBy** | 6.6µs / 6.3µs | ≈ | 45.2KB / 45.1KB | ≈ | 8 / 6 |
+| **Zip** | 1.4µs / 3.1µs | **2.21x** | 16.4KB / 16.4KB | ≈ | 3 / 1 |
+| **ZipWith** | 1.0µs / 2.9µs | **2.85x** | 8.2KB / 8.2KB | ≈ | 3 / 1 |
 
-#### Safe-by-default (New) vs lo
+#### Explicit Copy (CopyOf) vs lo
 | Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |
 |---:|----------------|:--:|------------------|:--:|--------------------|
-| **All** | 850ns / 235ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **Any** | 853ns / 234ns | 0.27x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **Chunk** | 813ns / 1.1µs | **1.30x** | 9.5KB / 9.3KB | ≈ | 3 / 51 |
-| **Contains** | 842ns / 234ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **CountBy** | 8.7µs / 8.0µs | ≈ | 17.6KB / 9.4KB | 0.53x more | 13 / 11 |
-| **CountByValue** | 9.0µs / 8.3µs | ≈ | 17.6KB / 9.4KB | 0.53x more | 13 / 11 |
+| **All** | 840ns / 233ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **Any** | 1.0µs / 236ns | 0.24x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **Chunk** | 799ns / 1.1µs | **1.34x** | 9.5KB / 9.3KB | ≈ | 3 / 51 |
+| **Contains** | 833ns / 234ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **CountBy** | 8.4µs / 7.9µs | ≈ | 17.6KB / 9.4KB | 0.53x more | 13 / 11 |
+| **CountByValue** | 8.7µs / 8.5µs | ≈ | 17.6KB / 9.4KB | 0.53x more | 13 / 11 |
 | **Difference** | 20.3µs / 43.5µs | **2.14x** | 98.5KB / 108.8KB | **1.10x less** | 16 / 43 |
-| **Each** | 844ns / 236ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **Each** | 831ns / 232ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
 | **Filter** | 1.1µs / 1.0µs | ≈ | 8.2KB / 8.2KB | ≈ | 2 / 1 |
-| **First** | 684ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **FirstWhere** | 850ns / 233ns | 0.27x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **GroupBySlice** | 8.6µs / 8.6µs | ≈ | 29.2KB / 21.0KB | 0.72x more | 85 / 83 |
-| **IndexWhere** | 845ns / 233ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **Intersect** | 12.5µs / 10.8µs | 0.86x | 27.8KB / 11.4KB | 0.41x more | 24 / 19 |
-| **Last** | 687ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **Map** | 1.4µs / 794ns | 0.55x | 16.4KB / 8.2KB | 0.50x more | 3 / 1 |
-| **Max** | 841ns / 235ns | 0.28x | 8.2KB / 0B | ∞x more | 3 / 0 |
-| **Min** | 854ns / 230ns | 0.27x | 8.2KB / 0B | ∞x more | 3 / 0 |
-| **None** | 852ns / 232ns | 0.27x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **First** | 677ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **FirstWhere** | 842ns / 234ns | 0.28x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **GroupBySlice** | 8.5µs / 8.3µs | ≈ | 29.2KB / 21.0KB | 0.72x more | 85 / 83 |
+| **IndexWhere** | 855ns / 234ns | 0.27x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **Intersect** | 11.8µs / 10.7µs | ≈ | 27.8KB / 11.4KB | 0.41x more | 24 / 19 |
+| **Last** | 688ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **Map** | 1.4µs / 799ns | 0.55x | 16.4KB / 8.2KB | 0.50x more | 3 / 1 |
+| **Max** | 848ns / 232ns | 0.27x | 8.2KB / 0B | ∞x more | 3 / 0 |
+| **Min** | 846ns / 232ns | 0.27x | 8.2KB / 0B | ∞x more | 3 / 0 |
+| **None** | 911ns / 234ns | 0.26x | 8.2KB / 0B | ∞x more | 2 / 0 |
 | **Pipeline F→M→T→R** | 1.3µs / 1.3µs | ≈ | 12.3KB / 12.3KB | ≈ | 4 / 2 |
-| **Reduce (sum)** | 841ns / 230ns | 0.27x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **Reverse** | 780ns / 240ns | 0.31x | 8.2KB / 0B | ∞x more | 2 / 0 |
-| **Shuffle** | 4.3µs / 5.3µs | **1.22x** | 16.4KB / 0B | ∞x more | 4 / 0 |
-| **Skip** | 675ns / 711ns | ≈ | 8.2KB / 8.2KB | ≈ | 2 / 1 |
-| **SkipLast** | 680ns / 714ns | ≈ | 8.2KB / 8.2KB | ≈ | 2 / 1 |
-| **Sum** | 845ns / 230ns | 0.27x | 8.2KB / 0B | ∞x more | 3 / 0 |
-| **Take** | 685ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 3 / 0 |
-| **ToMap** | 8.0µs / 7.8µs | ≈ | 45.2KB / 37.0KB | 0.82x more | 7 / 6 |
-| **Union** | 18.1µs / 17.7µs | ≈ | 106.7KB / 90.3KB | 0.85x more | 15 / 10 |
-| **Unique** | 7.0µs / 6.3µs | ≈ | 53.4KB / 45.1KB | 0.85x more | 8 / 6 |
-| **UniqueBy** | 7.3µs / 6.4µs | 0.88x | 53.4KB / 45.1KB | 0.85x more | 9 / 6 |
-| **Zip** | 2.6µs / 3.2µs | **1.19x** | 32.8KB / 16.4KB | 0.50x more | 5 / 1 |
-| **ZipWith** | 2.3µs / 2.9µs | **1.29x** | 24.6KB / 8.2KB | 0.33x more | 5 / 1 |
+| **Reduce (sum)** | 838ns / 240ns | 0.29x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **Reverse** | 780ns / 233ns | 0.30x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **Shuffle** | 4.2µs / 5.2µs | **1.24x** | 16.4KB / 0B | ∞x more | 4 / 0 |
+| **Skip** | 680ns / 714ns | ≈ | 8.2KB / 8.2KB | ≈ | 2 / 1 |
+| **SkipLast** | 677ns / 715ns | ≈ | 8.2KB / 8.2KB | ≈ | 2 / 1 |
+| **Sum** | 847ns / 233ns | 0.27x | 8.2KB / 0B | ∞x more | 3 / 0 |
+| **Take** | 693ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 3 / 0 |
+| **ToMap** | 8.1µs / 7.8µs | ≈ | 45.2KB / 37.0KB | 0.82x more | 7 / 6 |
+| **Union** | 18.1µs / 17.5µs | ≈ | 106.7KB / 90.3KB | 0.85x more | 15 / 10 |
+| **Unique** | 7.0µs / 6.4µs | ≈ | 53.4KB / 45.1KB | 0.85x more | 8 / 6 |
+| **UniqueBy** | 7.3µs / 6.3µs | 0.87x | 53.4KB / 45.1KB | 0.85x more | 9 / 6 |
+| **Zip** | 2.6µs / 3.1µs | **1.19x** | 32.8KB / 16.4KB | 0.50x more | 5 / 1 |
+| **ZipWith** | 2.3µs / 2.9µs | **1.27x** | 24.6KB / 8.2KB | 0.33x more | 5 / 1 |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
@@ -215,6 +215,8 @@ In these cases, `collection` can be **2×–30× faster** and often reduce alloc
 ## Explicit branching with `Clone`
 
 Fluent pipelines don't mean you're locked into mutation.
+
+`New` borrows the input slice by default. If you need an owned copy, use `CopyOf()` or `Clone()` explicitly.
 
 When you want to branch a pipeline or preserve the original data, `Clone()` creates a shallow copy of the collection so subsequent operations are isolated and predictable.
 
@@ -299,7 +301,7 @@ go get github.com/goforj/collection
 |------:|-----------|
 | **Access** | [Items](#items) [ItemsCopy](#itemscopy) |
 | **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [MaxBy](#maxby) [Median](#median) [Min](#min) [MinBy](#minby) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
-| **Construction** | [Attach](#attach) [AttachNumeric](#attachnumeric) [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
+| **Construction** | [Clone](#clone) [CopyOf](#copyof) [CopyOfNumeric](#copyofnumeric) [New](#new) [NewNumeric](#newnumeric) |
 | **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
 | **Grouping** | [GroupBy](#groupby) [GroupBySlice](#groupbyslice) |
 | **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
@@ -898,40 +900,6 @@ collection.Dump(total3)
 
 ## Construction
 
-### <a id="attach"></a>Attach · immutable · fluent
-
-Attach wraps a slice without copying.
-
-```go
-items := []int{1, 2, 3}
-c := collection.Attach(items)
-
-items[0] = 9
-collection.Dump(c.Items())
-// #[]int [
-//   0 => 9 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
-```
-
-### <a id="attachnumeric"></a>AttachNumeric · immutable · fluent
-
-AttachNumeric wraps a slice of numeric types without copying.
-
-```go
-items := []int{1, 2, 3}
-c := collection.AttachNumeric(items)
-
-items[0] = 9
-collection.Dump(c.Items())
-// #[]int [
-//   0 => 9 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
-```
-
 ### <a id="clone"></a>Clone · immutable · fluent
 
 Clone returns a copy of the collection.
@@ -996,13 +964,47 @@ collection.Dump(odds.Items())
 // ]
 ```
 
+### <a id="copyof"></a>CopyOf · immutable · fluent
+
+CopyOf creates a new Collection by copying the provided slice.
+
+```go
+items := []int{1, 2, 3}
+c := collection.CopyOf(items)
+
+items[0] = 9
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
+### <a id="copyofnumeric"></a>CopyOfNumeric · immutable · fluent
+
+CopyOfNumeric creates a new NumericCollection by copying the provided slice.
+
+```go
+items := []int{1, 2, 3}
+c := collection.CopyOfNumeric(items)
+
+items[0] = 9
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
 ### <a id="new"></a>New · immutable · fluent
 
-New creates a new Collection from the provided slice.
+New creates a new Collection from the provided slice and borrows it.
 
 ### <a id="newnumeric"></a>NewNumeric · immutable · fluent
 
-NewNumeric wraps a slice of numeric types in a NumericCollection.
+NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
 
 ## Debugging
 

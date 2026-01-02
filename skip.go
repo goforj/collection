@@ -69,12 +69,12 @@ func (c *Collection[T]) Skip(n int) *Collection[T] {
 	l := len(items)
 
 	if n <= 0 {
-		return Attach(items)
+		return New(items)
 	}
 
 	if n >= l {
-		return Attach(items[:0])
+		return New(items[:0])
 	}
 
-	return Attach(items[n:])
+	return New(items[n:])
 }

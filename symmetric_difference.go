@@ -98,5 +98,5 @@ func SymmetricDifference[T comparable](a, b *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	return Attach(out)
+	return New(out)
 }

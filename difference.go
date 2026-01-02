@@ -62,7 +62,7 @@ package collection
 //	// ]
 func Difference[T comparable](a, b *Collection[T]) *Collection[T] {
 	if len(a.items) == 0 {
-		return Attach([]T{})
+		return New([]T{})
 	}
 
 	lookup := make(map[T]struct{}, len(b.items))
@@ -84,5 +84,5 @@ func Difference[T comparable](a, b *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	return Attach(out)
+	return New(out)
 }

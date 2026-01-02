@@ -65,12 +65,12 @@ func (c *Collection[T]) SkipLast(n int) *Collection[T] {
 	l := len(items)
 
 	if n <= 0 {
-		return Attach(items)
+		return New(items)
 	}
 
 	if n >= l {
-		return Attach(items[:0])
+		return New(items[:0])
 	}
 
-	return Attach(items[:l-n])
+	return New(items[:l-n])
 }

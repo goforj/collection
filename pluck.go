@@ -64,5 +64,5 @@ func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
 	for i, v := range items {
 		out[i] = fn(v)
 	}
-	return Attach(out)
+	return New(out)
 }

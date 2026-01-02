@@ -964,6 +964,8 @@ func renderTable(results []benchResult) string {
 
 func formatNs(ns float64) string {
 	switch {
+	case ns < 1:
+		return "<1ns"
 	case ns >= 1e6:
 		return fmt.Sprintf("%.1fms", ns/1e6)
 	case ns >= 1e3:
@@ -997,9 +999,15 @@ func formatDurationNs(ns float64) string {
 	}
 }
 
-const wrapperEpsilon = 0.10 // ±10% wrapper overhead tolerance
+const (
+	wrapperEpsilon    = 0.10 // ±10% wrapper overhead tolerance
+	benchRatioNoiseNs = 50.0
+)
 
 func formatRatio(lo, col float64) string {
+	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
+		return "≈"
+	}
 	if col == 0 {
 		return "∞"
 	}

@@ -21,7 +21,7 @@
 
 <p align="center">
   <code>collection</code> brings an expressive, fluent API to Go.
-    Iterate, filter, transform, sort, reduce, group, and debug data with zero dependencies — familiar to Go developers, pleasant to use everywhere.
+    Iterate, filter, transform, sort, reduce, group, and debug data with zero dependencies - familiar to Go developers, pleasant to use everywhere.
 </p>
 
 ## Features

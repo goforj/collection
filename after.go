@@ -6,6 +6,8 @@ package collection
 // @behavior immutable
 // @fluent true
 //
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
+//
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
@@ -25,10 +27,8 @@ func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
 
 	// If no match found → empty collection
 	if idx == -1 || idx+1 >= len(c.items) {
-		return &Collection[T]{items: []T{}}
+		return Attach(c.items[:0])
 	}
 
-	out := make([]T, len(c.items)-(idx+1))
-	copy(out, c.items[idx+1:])
-	return &Collection[T]{items: out}
+	return Attach(c.items[idx+1:])
 }

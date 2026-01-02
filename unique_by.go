@@ -58,7 +58,7 @@ func UniqueBy[T any, K comparable](c *Collection[T], keyFn func(T) K) *Collectio
 	items := c.items
 	n := len(items)
 	if n == 0 {
-		return New([]T{})
+		return Attach([]T{})
 	}
 
 	seen := make(map[K]struct{}, n)
@@ -73,5 +73,5 @@ func UniqueBy[T any, K comparable](c *Collection[T], keyFn func(T) K) *Collectio
 		out = append(out, v)
 	}
 
-	return &Collection[T]{items: out}
+	return Attach(out)
 }

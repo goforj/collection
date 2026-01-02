@@ -67,7 +67,7 @@ func Zip[A any, B any](a *Collection[A], b *Collection[B]) *Collection[Tuple[A, 
 		out[i] = Tuple[A, B]{First: a.items[i], Second: b.items[i]}
 	}
 
-	return New(out)
+	return Attach(out)
 }
 
 // ZipWith combines two collections element-wise using combiner fn.
@@ -138,5 +138,5 @@ func ZipWith[A any, B any, R any](a *Collection[A], b *Collection[B], fn func(A,
 		out[i] = fn(a.items[i], b.items[i])
 	}
 
-	return New(out)
+	return Attach(out)
 }

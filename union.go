@@ -88,5 +88,5 @@ func Union[T comparable](a, b *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	return &Collection[T]{items: out}
+	return Attach(out)
 }

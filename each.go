@@ -3,7 +3,7 @@ package collection
 // Each runs fn for every item in the collection and returns the same collection,
 // so it can be used in chains for side effects (logging, debugging, etc.).
 // @group Transformation
-// @behavior immutable
+// @behavior readonly
 // @fluent true
 //
 // Example: integers

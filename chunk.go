@@ -7,6 +7,8 @@ package collection
 // @fluent true
 //
 // If size <= 0, nil is returned.
+//
+// NOTE: chunks share the backing array with the source collection.
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)

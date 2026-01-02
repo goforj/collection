@@ -78,5 +78,5 @@ func FromMap[K comparable, V any](m map[K]V) *Collection[Pair[K, V]] {
 			Value: v,
 		})
 	}
-	return &Collection[Pair[K, V]]{items: items}
+	return Attach(items)
 }

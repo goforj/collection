@@ -14,6 +14,8 @@ func main() {
 	// If n == 0, an empty collection is returned.
 	// 
 	// Mirrors Laravel's take() semantics.
+	// 
+	// NOTE: returns a view (shares backing array). Use Clone() to detach.
 
 	// Example: integers - take first 3
 	c1 := collection.New([]int{0, 1, 2, 3, 4, 5})

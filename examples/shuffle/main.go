@@ -6,21 +6,20 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Shuffle randomly shuffles the items in the collection in place
-	// and returns the same collection for chaining.
+	// Shuffle returns a shuffled copy of the collection.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})
-	c.Shuffle()
-	collection.Dump(c.Items())
+	out1 := c.Shuffle()
+	collection.Dump(out1.Items())
 
 	// Example: strings – chaining
-	out := collection.New([]string{"a", "b", "c"}).
+	out2 := collection.New([]string{"a", "b", "c"}).
 		Shuffle().
 		Append("d").
 		Items()
 
-	collection.Dump(out)
+	collection.Dump(out2)
 
 	// Example: structs
 	type User struct {
@@ -34,6 +33,6 @@ func main() {
 		{ID: 4},
 	})
 
-	users.Shuffle()
-	collection.Dump(users.Items())
+	out3 := users.Shuffle()
+	collection.Dump(out3.Items())
 }

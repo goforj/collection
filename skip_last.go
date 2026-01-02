@@ -11,6 +11,8 @@ package collection
 // This operation performs no element allocations; it re-slices the
 // underlying slice.
 //
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
+//
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
@@ -63,12 +65,12 @@ func (c *Collection[T]) SkipLast(n int) *Collection[T] {
 	l := len(items)
 
 	if n <= 0 {
-		return &Collection[T]{items: items}
+		return Attach(items)
 	}
 
 	if n >= l {
-		return &Collection[T]{items: items[:0]}
+		return Attach(items[:0])
 	}
 
-	return &Collection[T]{items: items[:l-n]}
+	return Attach(items[:l-n])
 }

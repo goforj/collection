@@ -22,8 +22,8 @@ func TestFluentChainWithStructs(t *testing.T) {
 		Filter(func(u User) bool { return u.Age >= 35 }).
 		Sort(func(a, b User) bool { return a.Age < b.Age })
 
-	// Type change happens at the edge using MapTo/Pluck.
-	names := Pluck(filteredAndSorted, func(u User) string {
+	// Type change happens at the edge using MapTo.
+	names := MapTo(filteredAndSorted, func(u User) string {
 		return u.Name
 	}).Items()
 

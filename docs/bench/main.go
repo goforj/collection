@@ -393,7 +393,7 @@ func benchTakeLo(b *testing.B) {
 func benchContainsCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Contains(func(v int) bool { return v == benchSize-1 })
+	_ = collection.Contains(collection.New(benchInts), benchSize-1)
 	}
 }
 

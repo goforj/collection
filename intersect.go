@@ -68,7 +68,7 @@ package collection
 //	// ]
 func Intersect[T comparable](a, b *Collection[T]) *Collection[T] {
 	if len(a.items) == 0 || len(b.items) == 0 {
-		return New([]T{})
+		return Attach([]T{})
 	}
 
 	seen := make(map[T]struct{})
@@ -83,5 +83,5 @@ func Intersect[T comparable](a, b *Collection[T]) *Collection[T] {
 		}
 	}
 
-	return &Collection[T]{items: out}
+	return Attach(out)
 }

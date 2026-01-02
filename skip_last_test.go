@@ -94,7 +94,7 @@ func TestSkipLast_DoesNotMutateOriginal(t *testing.T) {
 
 func TestSkipLast_ReusesBackingSlice(t *testing.T) {
 	items := []int{1, 2, 3, 4}
-	c := New(items)
+	c := Attach(items)
 
 	out := c.SkipLast(1)
 	out.Items()[0] = 99

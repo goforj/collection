@@ -15,13 +15,12 @@ func setShuffleRand(r *rand.Rand) {
 	shuffleRand = r
 }
 
-// Shuffle randomly shuffles the items in the collection in place
-// and returns the same collection for chaining.
+// Shuffle returns a shuffled copy of the collection.
 // @group Ordering
-// @behavior mutable
+// @behavior immutable
 // @fluent true
 //
-// This operation performs no allocations.
+// This operation allocates a new slice and does not mutate the receiver.
 //
 // The shuffle uses an internal random source. Tests may override
 // this source to achieve deterministic behavior.
@@ -29,17 +28,17 @@ func setShuffleRand(r *rand.Rand) {
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
-//	c.Shuffle()
-//	collection.Dump(c.Items())
+//	out1 := c.Shuffle()
+//	collection.Dump(out1.Items())
 //
 // Example: strings – chaining
 //
-//	out := collection.New([]string{"a", "b", "c"}).
+//	out2 := collection.New([]string{"a", "b", "c"}).
 //		Shuffle().
 //		Append("d").
 //		Items()
 //
-//	collection.Dump(out)
+//	collection.Dump(out2)
 //
 // Example: structs
 //
@@ -54,17 +53,19 @@ func setShuffleRand(r *rand.Rand) {
 //		{ID: 4},
 //	})
 //
-//	users.Shuffle()
-//	collection.Dump(users.Items())
+//	out3 := users.Shuffle()
+//	collection.Dump(out3.Items())
 func (c *Collection[T]) Shuffle() *Collection[T] {
 	items := c.items
-	n := len(items)
+	out := make([]T, len(items))
+	copy(out, items)
+	n := len(out)
 
-	// Fisher–Yates shuffle (in place, zero alloc)
+	// Fisher–Yates shuffle (in place on the copy)
 	for i := n - 1; i > 0; i-- {
 		j := shuffleRand.Intn(i + 1)
-		items[i], items[j] = items[j], items[i]
+		out[i], out[j] = out[j], out[i]
 	}
 
-	return c
+	return Attach(out)
 }

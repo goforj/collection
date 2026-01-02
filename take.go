@@ -9,6 +9,8 @@ package collection
 //
 // Mirrors Laravel's take() semantics.
 //
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
+//
 // @group Slicing
 // @behavior immutable
 // Example: integers - take first 3
@@ -54,24 +56,24 @@ func (c *Collection[T]) Take(n int) *Collection[T] {
 
 	// Empty or zero → empty collection
 	if n == 0 || length == 0 {
-		return New([]T{})
+		return Attach([]T{})
 	}
 
 	// Positive → take from start
 	if n > 0 {
 		if n >= length {
 			// no need to allocate; just reuse original
-			return &Collection[T]{items: c.items}
+			return Attach(c.items)
 		}
-		return &Collection[T]{items: c.items[:n]}
+		return Attach(c.items[:n])
 	}
 
 	// Negative → take from end
 	n = -n
 	if n >= length {
-		return &Collection[T]{items: c.items}
+		return Attach(c.items)
 	}
 
 	start := length - n
-	return &Collection[T]{items: c.items[start:]}
+	return Attach(c.items[start:])
 }

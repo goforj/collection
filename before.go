@@ -6,6 +6,8 @@ package collection
 // @behavior immutable
 // @fluent true
 //
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
+//
 // If no element matches the predicate, the entire collection is returned.
 //
 // Example: integers
@@ -58,7 +60,5 @@ func (c *Collection[T]) Before(pred func(T) bool) *Collection[T] {
 		}
 	}
 
-	out := make([]T, idx)
-	copy(out, c.items[:idx])
-	return &Collection[T]{items: out}
+	return Attach(c.items[:idx])
 }

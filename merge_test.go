@@ -15,6 +15,10 @@ func TestMerge_AppendsSlice(t *testing.T) {
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("Merge([]T) append failed.\nwant=%v\ngot=%v", want, got)
 	}
+
+	if !reflect.DeepEqual(c.Items(), []string{"Desk", "Chair"}) {
+		t.Fatalf("Merge should not mutate original collection")
+	}
 }
 
 func TestMerge_AppendsCollection(t *testing.T) {

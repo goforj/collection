@@ -72,5 +72,5 @@ func (c *Collection[T]) Unique(eq func(a, b T) bool) *Collection[T] {
 		}
 	}
 
-	return &Collection[T]{items: out}
+	return Attach(out)
 }

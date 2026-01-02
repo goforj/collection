@@ -10,9 +10,13 @@ func TestPrepend_Basic(t *testing.T) {
 
 	out := c.Prepend(1, 2)
 
+	if out != c {
+		t.Fatalf("expected Prepend to return same collection instance")
+	}
+
 	expected := []int{1, 2, 3, 4}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(c.items, expected) {
+		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }
 
@@ -21,9 +25,13 @@ func TestPrepend_EmptyCollection(t *testing.T) {
 
 	out := c.Prepend(1, 2, 3)
 
+	if out != c {
+		t.Fatalf("expected Prepend to return same collection instance")
+	}
+
 	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(c.items, expected) {
+		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }
 
@@ -32,9 +40,13 @@ func TestPrepend_NoValues(t *testing.T) {
 
 	out := c.Prepend() // no-op
 
+	if out != c {
+		t.Fatalf("expected Prepend to return same collection instance")
+	}
+
 	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(c.items, expected) {
+		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }
 
@@ -51,6 +63,10 @@ func TestPrepend_Structs(t *testing.T) {
 
 	out := c.Prepend(User{1, "Chris"}, User{2, "Matt"})
 
+	if out != c {
+		t.Fatalf("expected Prepend to return same collection instance")
+	}
+
 	expected := []User{
 		{1, "Chris"},
 		{2, "Matt"},
@@ -58,25 +74,27 @@ func TestPrepend_Structs(t *testing.T) {
 		{4, "Van"},
 	}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(c.items, expected) {
+		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }
 
-func TestPrepend_NoMutation(t *testing.T) {
+func TestPrepend_DoesNotMutateSourceSlice(t *testing.T) {
 	orig := []int{10, 20, 30}
 	c := New(orig)
 
 	out := c.Prepend(5, 7)
 
-	// original must remain unchanged
-	if !reflect.DeepEqual(c.items, orig) {
-		t.Fatalf("Prepend mutated original collection: %v", c.items)
+	if out != c {
+		t.Fatalf("expected Prepend to return same collection instance")
 	}
 
-	// ensure new collection is different & correct
+	if !reflect.DeepEqual(orig, []int{10, 20, 30}) {
+		t.Fatalf("Prepend mutated source slice: %v", orig)
+	}
+
 	expected := []int{5, 7, 10, 20, 30}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(c.items, expected) {
+		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }

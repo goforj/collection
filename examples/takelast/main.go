@@ -14,6 +14,8 @@ func main() {
 	// 
 	// This operation performs no element allocations; it re-slices the
 	// underlying slice.
+	// 
+	// NOTE: returns a view (shares backing array). Use Clone() to detach.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})

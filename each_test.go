@@ -23,15 +23,8 @@ func TestEach_ReturnsSameCollection(t *testing.T) {
 
 	out := c.Each(func(v int) {})
 
-	// They should hold identical items
-	if !reflect.DeepEqual(out.items, c.items) {
-		t.Fatalf("Each should return the same items: %v vs %v", out.items, c.items)
-	}
-
-	// But ensure it's the same collection struct (value semantics)
-	// Structs compare equal by fields, so this is fine.
-	if out.Count() != c.Count() {
-		t.Fatalf("collection count mismatch")
+	if out != c {
+		t.Fatalf("Each should return the same collection instance")
 	}
 }
 

@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Clone returns a shallow copy of the collection.
+	// Clone returns a copy of the collection.
 	// @fluent true
 	// 
 	// The returned collection has its own backing slice, so subsequent mutations
@@ -19,7 +19,7 @@ func main() {
 	c := collection.New([]int{1, 2, 3})
 	clone := c.Clone()
 
-	clone.Push(4)
+	clone.Append(4)
 
 	collection.Dump(c.Items())
 	// #[]int [

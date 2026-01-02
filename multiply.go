@@ -3,7 +3,7 @@ package collection
 // Multiply creates `n` copies of all items in the collection
 // and returns a new collection.
 // @group Transformation
-// @behavior mutable
+// @behavior immutable
 // @fluent true
 //
 // Example: integers
@@ -64,7 +64,7 @@ package collection
 //	// ]
 func (c *Collection[T]) Multiply(n int) *Collection[T] {
 	if n <= 0 {
-		return New([]T{})
+		return Attach([]T{})
 	}
 
 	orig := c.items
@@ -74,5 +74,5 @@ func (c *Collection[T]) Multiply(n int) *Collection[T] {
 		out = append(out, orig...)
 	}
 
-	return New(out)
+	return Attach(out)
 }

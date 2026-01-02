@@ -8,6 +8,8 @@ package collection
 //
 // This operation performs no element allocations; it re-slices the
 // underlying slice.
+//
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
 // @group Slicing
 // @behavior immutable
 // Example: integers
@@ -60,12 +62,12 @@ func (c *Collection[T]) TakeLast(n int) *Collection[T] {
 	l := len(items)
 
 	if n <= 0 {
-		return &Collection[T]{items: items[:0]}
+		return Attach(items[:0])
 	}
 
 	if n >= l {
-		return &Collection[T]{items: items}
+		return Attach(items)
 	}
 
-	return &Collection[T]{items: items[l-n:]}
+	return Attach(items[l-n:])
 }

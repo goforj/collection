@@ -17,6 +17,10 @@ func TestMap_Ints(t *testing.T) {
 	if !reflect.DeepEqual(mapped.items, expected) {
 		t.Fatalf("expected %v, got %v", expected, mapped.items)
 	}
+
+	if !reflect.DeepEqual(c.Items(), []int{1, 2, 3}) {
+		t.Fatalf("Map should not mutate original collection")
+	}
 }
 
 func TestMap_Structs(t *testing.T) {
@@ -42,6 +46,10 @@ func TestMap_Structs(t *testing.T) {
 
 	if !reflect.DeepEqual(mapped.items, expected) {
 		t.Fatalf("expected %v, got %v", expected, mapped.items)
+	}
+
+	if !reflect.DeepEqual(c.Items(), []User{{1, "Chris"}, {2, "Van"}}) {
+		t.Fatalf("Map should not mutate original collection")
 	}
 }
 

@@ -33,7 +33,7 @@ package collection
 func UniqueComparable[T comparable](c *Collection[T]) *Collection[T] {
 	n := len(c.items)
 	if n == 0 {
-		return New([]T{})
+		return Attach([]T{})
 	}
 
 	seen := make(map[T]struct{}, n)
@@ -48,5 +48,5 @@ func UniqueComparable[T comparable](c *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	return &Collection[T]{items: out}
+	return Attach(out)
 }

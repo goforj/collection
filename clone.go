@@ -1,6 +1,6 @@
 package collection
 
-// Clone returns a shallow copy of the collection.
+// Clone returns a copy of the collection.
 // @fluent true
 //
 // The returned collection has its own backing slice, so subsequent mutations
@@ -10,14 +10,14 @@ package collection
 // the original collection.
 //
 // @group Construction
-// @behavior allocates
+// @behavior immutable
 //
 // Example: basic cloning
 //
 //	c := collection.New([]int{1, 2, 3})
 //	clone := c.Clone()
 //
-//	clone.Push(4)
+//	clone.Append(4)
 //
 //	collection.Dump(c.Items())
 //	// #[]int [
@@ -70,5 +70,5 @@ package collection
 func (c *Collection[T]) Clone() *Collection[T] {
 	out := make([]T, len(c.items))
 	copy(out, c.items)
-	return &Collection[T]{items: out}
+	return Attach(out)
 }

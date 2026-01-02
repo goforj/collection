@@ -8,7 +8,7 @@ import (
 func TestPipe_ReturnsTransformedValue(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	result := c.Pipe(func(col *Collection[int]) any {
+	result := Pipe(c, func(col *Collection[int]) int {
 		sum := 0
 		for _, v := range col.Items() {
 			sum += v
@@ -16,7 +16,7 @@ func TestPipe_ReturnsTransformedValue(t *testing.T) {
 		return sum
 	})
 
-	if result.(int) != 6 {
+	if result != 6 {
 		t.Fatalf("Pipe() expected sum=6, got=%v", result)
 	}
 }
@@ -24,11 +24,11 @@ func TestPipe_ReturnsTransformedValue(t *testing.T) {
 func TestPipe_CanReturnCollection(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	result := c.Pipe(func(col *Collection[int]) any {
+	result := Pipe(c, func(col *Collection[int]) *Collection[int] {
 		return col.Filter(func(v int) bool { return v > 1 })
 	})
 
-	out := result.(*Collection[int]).Items()
+	out := result.Items()
 	want := []int{2, 3}
 
 	if !reflect.DeepEqual(out, want) {
@@ -39,9 +39,13 @@ func TestPipe_CanReturnCollection(t *testing.T) {
 func TestPipe_IsNonMutating(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	_ = c.Pipe(func(col *Collection[int]) any {
+	_ = Pipe(c, func(col *Collection[int]) *Collection[int] {
 		return col.Map(func(v int) int { return v * 2 })
 	})
+
+	if !reflect.DeepEqual(c.Items(), []int{1, 2, 3}) {
+		t.Fatalf("Pipe() should not mutate original collection")
+	}
 }
 
 func TestPipe_ReceivesCorrectCollection(t *testing.T) {
@@ -49,9 +53,9 @@ func TestPipe_ReceivesCorrectCollection(t *testing.T) {
 
 	calledWith := ""
 
-	c.Pipe(func(col *Collection[string]) any {
+	Pipe(c, func(col *Collection[string]) string {
 		calledWith = col.Items()[0]
-		return nil
+		return ""
 	})
 
 	if calledWith != "a" {

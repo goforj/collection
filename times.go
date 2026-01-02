@@ -65,7 +65,7 @@ package collection
 //	// ]
 func Times[T any](count int, fn func(int) T) *Collection[T] {
 	if count <= 0 {
-		return New([]T{})
+		return Attach([]T{})
 	}
 
 	out := make([]T, count)
@@ -73,5 +73,5 @@ func Times[T any](count int, fn func(int) T) *Collection[T] {
 		out[i-1] = fn(i)
 	}
 
-	return New(out)
+	return Attach(out)
 }

@@ -94,7 +94,7 @@ func TestSkip_DoesNotMutateOriginal(t *testing.T) {
 
 func TestSkip_ReusesBackingSlice(t *testing.T) {
 	items := []int{1, 2, 3, 4}
-	c := New(items)
+	c := Attach(items)
 
 	out := c.Skip(1)
 

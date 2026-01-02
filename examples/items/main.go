@@ -6,7 +6,7 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Items returns the underlying slice of items.
+	// Items returns the backing slice of items.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3})

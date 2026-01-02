@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-448-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-440-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
@@ -259,25 +259,25 @@ go get github.com/goforj/collection
 
 | Group | Functions |
 |------:|-----------|
-| **Access** | [Items](#items) |
+| **Access** | [Items](#items) [ItemsCopy](#itemscopy) |
 | **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [MaxBy](#maxby) [Median](#median) [Min](#min) [MinBy](#minby) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
-| **Construction** | [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
+| **Construction** | [Attach](#attach) [AttachNumeric](#attachnumeric) [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
 | **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
 | **Grouping** | [GroupBy](#groupby) [GroupBySlice](#groupbyslice) |
 | **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
 | **Ordering** | [After](#after) [Before](#before) [Reverse](#reverse) [Shuffle](#shuffle) [Sort](#sort) |
-| **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [FindWhere](#findwhere) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
+| **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
 | **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
 | **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) [UniqueComparable](#uniquecomparable) |
-| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) [Where](#where) [Window](#window) |
-| **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Pluck](#pluck) [Prepend](#prepend) [Push](#push) [Tap](#tap) [Times](#times) [Transform](#transform) [Zip](#zip) [ZipWith](#zipwith) |
+| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) [Window](#window) |
+| **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Prepend](#prepend) [Tap](#tap) [Times](#times) [Transform](#transform) [Zip](#zip) [ZipWith](#zipwith) |
 
 
 ## Access
 
 ### <a id="items"></a>Items · readonly · fluent
 
-Items returns the underlying slice of items.
+Items returns the backing slice of items.
 
 _Example: integers_
 
@@ -328,6 +328,21 @@ collection.Dump(out)
 //     +ID   => 2 #int
 //     +Name => "Bob" #string
 //   }
+// ]
+```
+
+### <a id="itemscopy"></a>ItemsCopy · readonly · fluent
+
+ItemsCopy returns a copy of the collection's items.
+
+```go
+c := collection.New([]int{1, 2, 3})
+items := c.ItemsCopy()
+collection.Dump(items)
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
 // ]
 ```
 
@@ -845,9 +860,43 @@ collection.Dump(total3)
 
 ## Construction
 
-### <a id="clone"></a>Clone · allocates · fluent
+### <a id="attach"></a>Attach · immutable · fluent
 
-Clone returns a shallow copy of the collection.
+Attach wraps a slice without copying.
+
+```go
+items := []int{1, 2, 3}
+c := collection.Attach(items)
+
+items[0] = 9
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 9 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
+### <a id="attachnumeric"></a>AttachNumeric · immutable · fluent
+
+AttachNumeric wraps a slice of numeric types without copying.
+
+```go
+items := []int{1, 2, 3}
+c := collection.AttachNumeric(items)
+
+items[0] = 9
+collection.Dump(c.Items())
+// #[]int [
+//   0 => 9 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
+### <a id="clone"></a>Clone · immutable · fluent
+
+Clone returns a copy of the collection.
 
 _Example: basic cloning_
 
@@ -855,7 +904,7 @@ _Example: basic cloning_
 c := collection.New([]int{1, 2, 3})
 clone := c.Clone()
 
-clone.Push(4)
+clone.Append(4)
 
 collection.Dump(c.Items())
 // #[]int [
@@ -916,7 +965,6 @@ New creates a new Collection from the provided slice.
 ### <a id="newnumeric"></a>NewNumeric · immutable · fluent
 
 NewNumeric wraps a slice of numeric types in a NumericCollection.
-A shallow copy is made so that further operations don't mutate the original slice.
 
 ## Debugging
 
@@ -1435,28 +1483,27 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="shuffle"></a>Shuffle · mutable · fluent
+### <a id="shuffle"></a>Shuffle · immutable · fluent
 
-Shuffle randomly shuffles the items in the collection in place
-and returns the same collection for chaining.
+Shuffle returns a shuffled copy of the collection.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-c.Shuffle()
-collection.Dump(c.Items())
+out1 := c.Shuffle()
+collection.Dump(out1.Items())
 ```
 
 _Example: strings – chaining_
 
 ```go
-out := collection.New([]string{"a", "b", "c"}).
+out2 := collection.New([]string{"a", "b", "c"}).
 	Shuffle().
 	Append("d").
 	Items()
 
-collection.Dump(out)
+collection.Dump(out2)
 ```
 
 _Example: structs_
@@ -1473,8 +1520,8 @@ users := collection.New([]User{
 	{ID: 4},
 })
 
-users.Shuffle()
-collection.Dump(users.Items())
+out3 := users.Shuffle()
+collection.Dump(out3.Items())
 ```
 
 ### <a id="sort"></a>Sort · mutable · fluent
@@ -1640,16 +1687,14 @@ collection.Dump(u, ok3)
 
 ### <a id="contains"></a>Contains · readonly · fluent
 
-Contains returns true if any item satisfies the predicate.
+Contains returns true if the collection contains the given value.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-hasEven := c.Contains(func(v int) bool {
-	return v%2 == 0
-})
-collection.Dump(hasEven)
+hasTwo := collection.Contains(c, 2)
+collection.Dump(hasTwo)
 // true #bool
 ```
 
@@ -1657,99 +1702,9 @@ _Example: strings_
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
-hasBanana := c2.Contains(func(v string) bool {
-	return v == "banana"
-})
+hasBanana := collection.Contains(c2, "banana")
 collection.Dump(hasBanana)
 // true #bool
-```
-
-_Example: structs_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-	{ID: 3, Name: "Carol"},
-})
-
-hasBob := users.Contains(func(u User) bool {
-	return u.Name == "Bob"
-})
-collection.Dump(hasBob)
-// true #bool
-```
-
-### <a id="findwhere"></a>FindWhere · readonly · fluent
-
-FindWhere returns the first item in the collection for which the provided
-predicate function returns true. This is an alias for FirstWhere(fn) and
-exists for ergonomic parity with functional languages (JavaScript, Rust,
-C#, Python) where developers expect a “find” helper.
-
-_Example: integers_
-
-```go
-nums := collection.New([]int{1, 2, 3, 4, 5})
-
-v1, ok1 := nums.FindWhere(func(n int) bool {
-	return n == 3
-})
-collection.Dump(v1, ok1)
-// 3    #int
-// true #bool
-```
-
-_Example: no match_
-
-```go
-v2, ok2 := nums.FindWhere(func(n int) bool {
-	return n > 10
-})
-collection.Dump(v2, ok2)
-// 0     #int
-// false #bool
-```
-
-_Example: structs_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-	{ID: 3, Name: "Charlie"},
-})
-
-u, ok3 := users.FindWhere(func(u User) bool {
-	return u.ID == 2
-})
-collection.Dump(u, ok3)
-// #collection.User {
-//   +ID    => 2   #int
-//   +Name  => "Bob" #string
-// }
-// true #bool
-```
-
-_Example: integers - empty collection_
-
-```go
-empty := collection.New([]int{})
-
-v4, ok4 := empty.FindWhere(func(n int) bool { return n == 1 })
-collection.Dump(v4, ok4)
-// 0     #int
-// false #bool
 ```
 
 ### <a id="first"></a>First · readonly · fluent
@@ -2790,18 +2745,18 @@ collection.Dump(active.Items(), inactive.Items())
 // ]
 ```
 
-### <a id="pop"></a>Pop · mutable · fluent
+### <a id="pop"></a>Pop · mutable
 
-Pop returns the last item and a new collection with that item removed.
-The original collection remains unchanged.
+Pop removes and returns the last item in the collection.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3})
-item, rest := c.Pop()
-collection.Dump(item, rest.Items())
+item, ok := c.Pop()
+collection.Dump(item, ok, c.Items())
 // 3 #int
+// true #bool
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -2812,9 +2767,10 @@ _Example: strings_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-item2, rest2 := c2.Pop()
-collection.Dump(item2, rest2.Items())
+item2, ok2 := c2.Pop()
+collection.Dump(item2, ok2, c2.Items())
 // "c" #string
+// true #bool
 // #[]string [
 //   0 => "a" #string
 //   1 => "b" #string
@@ -2834,12 +2790,13 @@ users := collection.New([]User{
 	{ID: 2, Name: "Bob"},
 })
 
-item3, rest3 := users.Pop()
-collection.Dump(item3, rest3.Items())
+item3, ok3 := users.Pop()
+collection.Dump(item3, ok3, users.Items())
 // #main.User {
 //   +ID   => 2 #int
 //   +Name => "Bob" #string
 // }
+// true #bool
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -2852,27 +2809,27 @@ _Example: empty collection_
 
 ```go
 empty := collection.New([]int{})
-item4, rest4 := empty.Pop()
-collection.Dump(item4, rest4.Items())
+item4, ok4 := empty.Pop()
+collection.Dump(item4, ok4, empty.Items())
 // 0 #int
+// false #bool
 // #[]int [
 // ]
 ```
 
-### <a id="popn"></a>PopN · mutable · fluent
+### <a id="popn"></a>PopN · mutable
 
-PopN removes and returns the last n items as a new collection,
-and returns a second collection containing the remaining items.
+PopN removes and returns the last n items in original order.
 
 _Example: integers – pop 2_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
-popped, rest := c.PopN(2)
-collection.Dump(popped.Items(), rest.Items())
+popped := c.PopN(2)
+collection.Dump(popped, c.Items())
 // #[]int [
-//   0 => 4 #int
-//   1 => 3 #int
+//   0 => 3 #int
+//   1 => 4 #int
 // ]
 // #[]int [
 //   0 => 1 #int
@@ -2884,8 +2841,8 @@ _Example: strings – pop 1_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-popped2, rest2 := c2.PopN(1)
-collection.Dump(popped2.Items(), rest2.Items())
+popped2 := c2.PopN(1)
+collection.Dump(popped2, c2.Items())
 // #[]string [
 //   0 => "c" #string
 // ]
@@ -2909,16 +2866,16 @@ users := collection.New([]User{
 	{ID: 3, Name: "Carol"},
 })
 
-popped3, rest3 := users.PopN(2)
-collection.Dump(popped3.Items(), rest3.Items())
+popped3 := users.PopN(2)
+collection.Dump(popped3, users.Items())
 // #[]main.User [
 //   0 => #main.User {
-//     +ID   => 3 #int
-//     +Name => "Carol" #string
-//   }
-//   1 => #main.User {
 //     +ID   => 2 #int
 //     +Name => "Bob" #string
+//   }
+//   1 => #main.User {
+//     +ID   => 3 #int
+//     +Name => "Carol" #string
 //   }
 // ]
 // #[]main.User [
@@ -2929,14 +2886,13 @@ collection.Dump(popped3.Items(), rest3.Items())
 // ]
 ```
 
-_Example: integers - n <= 0 → returns empty popped + original collection_
+_Example: integers - n <= 0 → returns nil, no change_
 
 ```go
 c3 := collection.New([]int{1, 2, 3})
-popped4, rest4 := c3.PopN(0)
-collection.Dump(popped4.Items(), rest4.Items())
-// #[]int [
-// ]
+popped4 := c3.PopN(0)
+collection.Dump(popped4, c3.Items())
+// <nil>
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -2948,11 +2904,11 @@ _Example: strings - n exceeds length → all items popped, rest empty_
 
 ```go
 c4 := collection.New([]string{"x", "y"})
-popped5, rest5 := c4.PopN(10)
-collection.Dump(popped5.Items(), rest5.Items())
+popped5 := c4.PopN(10)
+collection.Dump(popped5, c4.Items())
 // #[]string [
-//   0 => "y" #string
-//   1 => "x" #string
+//   0 => "x" #string
+//   1 => "y" #string
 // ]
 // #[]string [
 // ]
@@ -3281,57 +3237,6 @@ collection.Dump(out3.Items())
 // ]
 ```
 
-### <a id="where"></a>Where · mutable · fluent
-
-Where keeps only the elements for which fn returns true.
-This is an alias for Filter(fn) for SQL-style ergonomics.
-This method mutates the collection in place and returns the same instance.
-
-_Example: integers_
-
-```go
-nums := collection.New([]int{1, 2, 3, 4})
-nums.Where(func(v int) bool {
-	return v%2 == 0
-})
-collection.Dump(nums.Items())
-// #[]int [
-//   0 => 2 #int
-//   1 => 4 #int
-// ]
-```
-
-_Example: structs_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-	{ID: 3, Name: "Carol"},
-})
-
-users.Where(func(u User) bool {
-	return u.ID >= 2
-})
-
-collection.Dump(users.Items())
-// #[]main.User [
-//   0 => #main.User {
-//     +ID   => 2 #int
-//     +Name => "Bob" #string
-//   }
-//   1 => #main.User {
-//     +ID   => 3 #int
-//     +Name => "Carol" #string
-//   }
-// ]
-```
-
 ### <a id="window"></a>Window · allocates · fluent
 
 Window returns overlapping (or stepped) windows of the collection.
@@ -3508,7 +3413,7 @@ collection.Dump(concatenated)
 // ]
 ```
 
-### <a id="each"></a>Each · immutable · fluent
+### <a id="each"></a>Each · readonly · fluent
 
 Each runs fn for every item in the collection and returns the same collection,
 so it can be used in chains for side effects (logging, debugging, etc.).
@@ -3703,9 +3608,9 @@ collection.Dump(names.Items())
 // ]
 ```
 
-### <a id="merge"></a>Merge · mutable · fluent
+### <a id="merge"></a>Merge · immutable · fluent
 
-Merge merges the given data into the current collection.
+Merge merges the given data into a new collection.
 
 _Example: integers - merging slices_
 
@@ -3779,7 +3684,7 @@ collection.Dump(merged3.Items())
 // ]
 ```
 
-### <a id="multiply"></a>Multiply · mutable · fluent
+### <a id="multiply"></a>Multiply · immutable · fluent
 
 Multiply creates `n` copies of all items in the collection
 and returns a new collection.
@@ -3858,7 +3763,7 @@ _Example: integers – computing a sum_
 
 ```go
 c := collection.New([]int{1, 2, 3})
-sum := c.Pipe(func(col *collection.Collection[int]) any {
+sum := collection.Pipe(c, func(col *collection.Collection[int]) int {
 	total := 0
 	for _, v := range col.Items() {
 		total += v
@@ -3873,7 +3778,7 @@ _Example: strings – joining values_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-joined := c2.Pipe(func(col *collection.Collection[string]) any {
+joined := collection.Pipe(c2, func(col *collection.Collection[string]) string {
 	out := ""
 	for _, v := range col.Items() {
 		out += v
@@ -3897,7 +3802,7 @@ users := collection.New([]User{
 	{ID: 2, Name: "Bob"},
 })
 
-names := users.Pipe(func(col *collection.Collection[User]) any {
+names := collection.Pipe(users, func(col *collection.Collection[User]) []string {
 	result := make([]string, 0, len(col.Items()))
 	for _, u := range col.Items() {
 		result = append(result, u.Name)
@@ -3912,81 +3817,16 @@ collection.Dump(names)
 // ]
 ```
 
-### <a id="pluck"></a>Pluck · immutable · fluent
-
-Pluck is an alias for MapTo with a more semantic name when projecting fields.
-It extracts a single field or computed value from every element and returns a
-new typed collection.
-
-_Example: integers - extract parity label_
-
-```go
-nums := collection.New([]int{1, 2, 3, 4})
-parity := collection.Pluck(nums, func(n int) string {
-	if n%2 == 0 {
-		return "even"
-	}
-	return "odd"
-})
-collection.Dump(parity.Items())
-// #[]string [
-//   0 => "odd" #string
-//   1 => "even" #string
-//   2 => "odd" #string
-//   3 => "even" #string
-// ]
-```
-
-_Example: strings - length of each value_
-
-```go
-words := collection.New([]string{"go", "forj", "rocks"})
-lengths := collection.Pluck(words, func(s string) int {
-	return len(s)
-})
-collection.Dump(lengths.Items())
-// #[]int [
-//   0 => 2 #int
-//   1 => 4 #int
-//   2 => 5 #int
-// ]
-```
-
-_Example: structs - pluck a field_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-})
-
-names := collection.Pluck(users, func(u User) string {
-	return u.Name
-})
-
-collection.Dump(names.Items())
-// #[]string [
-//   0 => "Alice" #string
-//   1 => "Bob" #string
-// ]
-```
-
 ### <a id="prepend"></a>Prepend · mutable · fluent
 
-Prepend returns a new collection with the given values added
-to the *beginning* of the collection.
+Prepend adds the given values to the beginning of the collection.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{3, 4})
-newC := c.Prepend(1, 2)
-collection.Dump(newC.Items())
+c.Prepend(1, 2)
+collection.Dump(c.Items())
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -3999,8 +3839,8 @@ _Example: strings_
 
 ```go
 letters := collection.New([]string{"c", "d"})
-out := letters.Prepend("a", "b")
-collection.Dump(out.Items())
+letters.Prepend("a", "b")
+collection.Dump(letters.Items())
 // #[]string [
 //   0 => "a" #string
 //   1 => "b" #string
@@ -4021,8 +3861,8 @@ users := collection.New([]User{
 	{ID: 2, Name: "Bob"},
 })
 
-out2 := users.Prepend(User{ID: 1, Name: "Alice"})
-collection.Dump(out2.Items())
+users.Prepend(User{ID: 1, Name: "Alice"})
+collection.Dump(users.Items())
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -4039,71 +3879,23 @@ _Example: integers - Prepending into an empty collection_
 
 ```go
 empty := collection.New([]int{})
-out3 := empty.Prepend(9, 8)
-collection.Dump(out3.Items())
+empty.Prepend(9, 8)
+collection.Dump(empty.Items())
 // #[]int [
 //   0 => 9 #int
 //   1 => 8 #int
 // ]
 ```
 
-_Example: integers - Prepending no values → returns a copy of original_
+_Example: integers - Prepending no values → no change_
 
 ```go
 c2 := collection.New([]int{1, 2})
-out4 := c2.Prepend()
-collection.Dump(out4.Items())
+c2.Prepend()
+collection.Dump(c2.Items())
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
-// ]
-```
-
-### <a id="push"></a>Push · immutable · fluent
-
-Push returns a new collection with the given values appended.
-
-```go
-nums := collection.New([]int{1, 2}).Push(3, 4)
-nums.Dump()
-// #[]int [
-//  0 => 1 #int
-//  1 => 2 #int
-//  2 => 3 #int
-//  3 => 4 #int
-// ]
-
-// Complex type (structs)
-type User struct {
-	Name string
-	Age  int
-}
-
-users := collection.New([]User{
-	{Name: "Alice", Age: 30},
-	{Name: "Bob", Age: 25},
-}).Push(
-	User{Name: "Carol", Age: 40},
-	User{Name: "Dave", Age: 20},
-)
-users.Dump()
-// #[]main.User [
-//  0 => #main.User {
-//    +Name => "Alice" #string
-//    +Age  => 30 #int
-//  }
-//  1 => #main.User {
-//    +Name => "Bob" #string
-//    +Age  => 25 #int
-//  }
-//  2 => #main.User {
-//    +Name => "Carol" #string
-//    +Age  => 40 #int
-//  }
-//  3 => #main.User {
-//    +Name => "Dave" #string
-//    +Age  => 20 #int
-//  }
 // ]
 ```
 

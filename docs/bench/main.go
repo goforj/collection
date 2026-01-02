@@ -192,7 +192,7 @@ func benchPipelineCollection(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		copy(workA, benchInts)
 
-		_ = collection.New(workA).
+		_ = collection.Attach(workA).
 			Filter(func(v int) bool { return v%2 == 0 }).
 			Map(func(v int) int { return v * v }).
 			Take(benchPipelineLen).
@@ -215,7 +215,7 @@ func benchPipelineLo(b *testing.B) {
 func benchAllCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).All(func(v int) bool { return v < benchSize+1 })
+		_ = collection.Attach(benchInts).All(func(v int) bool { return v < benchSize+1 })
 	}
 }
 
@@ -229,7 +229,7 @@ func benchAllLo(b *testing.B) {
 func benchAnyCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Any(func(v int) bool { return v == benchSize-1 })
+		_ = collection.Attach(benchInts).Any(func(v int) bool { return v == benchSize-1 })
 	}
 }
 
@@ -243,7 +243,7 @@ func benchAnyLo(b *testing.B) {
 func benchNoneCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).None(func(v int) bool { return v < 0 })
+		_ = collection.Attach(benchInts).None(func(v int) bool { return v < 0 })
 	}
 }
 
@@ -257,7 +257,7 @@ func benchNoneLo(b *testing.B) {
 func benchFirstCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).First()
+		_, _ = collection.Attach(benchInts).First()
 	}
 }
 
@@ -271,7 +271,7 @@ func benchFirstLo(b *testing.B) {
 func benchLastCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).Last()
+		_, _ = collection.Attach(benchInts).Last()
 	}
 }
 
@@ -285,7 +285,7 @@ func benchLastLo(b *testing.B) {
 func benchIndexWhereCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).IndexWhere(func(v int) bool { return v == benchSize-1 })
+		_, _ = collection.Attach(benchInts).IndexWhere(func(v int) bool { return v == benchSize-1 })
 	}
 }
 
@@ -300,7 +300,7 @@ func benchEachCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		sum := 0
-		collection.New(benchInts).Each(func(v int) { sum += v })
+		collection.Attach(benchInts).Each(func(v int) { sum += v })
 	}
 }
 
@@ -317,7 +317,7 @@ func benchMapCollection(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		copy(workA, benchInts)
 
-		_ = collection.New(workA).Map(func(v int) int { return v * 3 })
+		_ = collection.Attach(workA).Map(func(v int) int { return v * 3 })
 	}
 }
 
@@ -333,7 +333,7 @@ func benchMapLo(b *testing.B) {
 func benchReduceCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Reduce(0, func(acc, v int) int { return acc + v })
+		_ = collection.Attach(benchInts).Reduce(0, func(acc, v int) int { return acc + v })
 	}
 }
 
@@ -349,7 +349,7 @@ func benchFilterCollection(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		copy(workA, benchInts)
 
-		_ = collection.New(workA).Filter(func(v int) bool { return v%3 == 0 })
+		_ = collection.Attach(workA).Filter(func(v int) bool { return v%3 == 0 })
 	}
 }
 
@@ -365,7 +365,7 @@ func benchFilterLo(b *testing.B) {
 func benchChunkCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Chunk(benchChunkSize)
+		_ = collection.Attach(benchInts).Chunk(benchChunkSize)
 	}
 }
 
@@ -379,7 +379,7 @@ func benchChunkLo(b *testing.B) {
 func benchTakeCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Take(benchTakeN)
+		_ = collection.Attach(benchInts).Take(benchTakeN)
 	}
 }
 
@@ -393,7 +393,7 @@ func benchTakeLo(b *testing.B) {
 func benchContainsCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-	_ = collection.Contains(collection.New(benchInts), benchSize-1)
+	_ = collection.Contains(collection.Attach(benchInts), benchSize-1)
 	}
 }
 
@@ -407,7 +407,7 @@ func benchContainsLo(b *testing.B) {
 func benchFindCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).FirstWhere(func(v int) bool { return v == benchSize-1 })
+		_, _ = collection.Attach(benchInts).FirstWhere(func(v int) bool { return v == benchSize-1 })
 	}
 }
 
@@ -421,7 +421,7 @@ func benchFindLo(b *testing.B) {
 func benchGroupByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.GroupBySlice(collection.New(benchInts), func(v int) int { return v % benchGroupByMod })
+		_ = collection.GroupBySlice(collection.Attach(benchInts), func(v int) int { return v % benchGroupByMod })
 	}
 }
 
@@ -435,7 +435,7 @@ func benchGroupByLo(b *testing.B) {
 func benchCountByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.CountBy(collection.New(benchIntsDup), func(v int) int { return v })
+		_ = collection.CountBy(collection.Attach(benchIntsDup), func(v int) int { return v })
 	}
 }
 
@@ -449,7 +449,7 @@ func benchCountByLo(b *testing.B) {
 func benchCountByValueCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.CountByValue(collection.New(benchIntsDup))
+		_ = collection.CountByValue(collection.Attach(benchIntsDup))
 	}
 }
 
@@ -463,7 +463,7 @@ func benchCountByValueLo(b *testing.B) {
 func benchSkipCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Skip(benchSkipN)
+		_ = collection.Attach(benchInts).Skip(benchSkipN)
 	}
 }
 
@@ -477,7 +477,7 @@ func benchSkipLo(b *testing.B) {
 func benchSkipLastCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).SkipLast(benchSkipN)
+		_ = collection.Attach(benchInts).SkipLast(benchSkipN)
 	}
 }
 
@@ -493,7 +493,7 @@ func benchReverseCollection(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		copy(workA, benchInts)
 
-		_ = collection.New(workA).Reverse()
+		_ = collection.Attach(workA).Reverse()
 	}
 }
 
@@ -511,7 +511,7 @@ func benchShuffleCollection(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		copy(workA, benchInts)
 
-		_ = collection.New(workA).Shuffle()
+		_ = collection.Attach(workA).Shuffle()
 	}
 }
 
@@ -527,7 +527,7 @@ func benchShuffleLo(b *testing.B) {
 func benchZipCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Zip(collection.New(benchInts), collection.New(benchIntsDup))
+		_ = collection.Zip(collection.Attach(benchInts), collection.Attach(benchIntsDup))
 	}
 }
 
@@ -541,7 +541,7 @@ func benchZipLo(b *testing.B) {
 func benchZipWithCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.ZipWith(collection.New(benchInts), collection.New(benchIntsDup), func(a, b int) int {
+		_ = collection.ZipWith(collection.Attach(benchInts), collection.Attach(benchIntsDup), func(a, b int) int {
 			return a + b
 		})
 	}
@@ -559,7 +559,7 @@ func benchZipWithLo(b *testing.B) {
 func benchUniqueCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.UniqueComparable(collection.New(benchIntsDup))
+		_ = collection.UniqueComparable(collection.Attach(benchIntsDup))
 	}
 }
 
@@ -573,7 +573,7 @@ func benchUniqueLo(b *testing.B) {
 func benchUniqueByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.UniqueBy(collection.New(benchIntsDup), func(v int) int { return v })
+		_ = collection.UniqueBy(collection.Attach(benchIntsDup), func(v int) int { return v })
 	}
 }
 
@@ -587,7 +587,7 @@ func benchUniqueByLo(b *testing.B) {
 func benchUnionCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Union(collection.New(unionLeft), collection.New(unionRight))
+		_ = collection.Union(collection.Attach(unionLeft), collection.Attach(unionRight))
 	}
 }
 
@@ -601,7 +601,7 @@ func benchUnionLo(b *testing.B) {
 func benchIntersectCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Intersect(collection.New(intersectLeft), collection.New(intersectRight))
+		_ = collection.Intersect(collection.Attach(intersectLeft), collection.Attach(intersectRight))
 	}
 }
 
@@ -615,7 +615,7 @@ func benchIntersectLo(b *testing.B) {
 func benchDifferenceCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Difference(collection.New(differenceLeft), collection.New(differenceRight))
+		_ = collection.Difference(collection.Attach(differenceLeft), collection.Attach(differenceRight))
 	}
 }
 
@@ -629,7 +629,7 @@ func benchDifferenceLo(b *testing.B) {
 func benchToMapCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.ToMap(collection.New(benchInts), func(v int) int { return v }, func(v int) int { return v })
+		_ = collection.ToMap(collection.Attach(benchInts), func(v int) int { return v }, func(v int) int { return v })
 	}
 }
 
@@ -643,7 +643,7 @@ func benchToMapLo(b *testing.B) {
 func benchSumCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.NewNumeric(benchInts).Sum()
+		_ = collection.AttachNumeric(benchInts).Sum()
 	}
 }
 
@@ -657,7 +657,7 @@ func benchSumLo(b *testing.B) {
 func benchMinCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.NewNumeric(benchInts).Min()
+		_, _ = collection.AttachNumeric(benchInts).Min()
 	}
 }
 
@@ -671,7 +671,7 @@ func benchMinLo(b *testing.B) {
 func benchMaxCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.NewNumeric(benchInts).Max()
+		_, _ = collection.AttachNumeric(benchInts).Max()
 	}
 }
 
@@ -696,7 +696,6 @@ func renderTable(results []benchResult) string {
 	}
 
 	var buf bytes.Buffer
-	buf.WriteString("### Performance Benchmarks\n\n")
 	buf.WriteString("| Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |\n")
 	buf.WriteString("|---:|----------------|:--:|------------------|:--:|--------------------|\n")
 
@@ -857,12 +856,49 @@ func replaceSection(readme, content string) (string, error) {
 		return "", fmt.Errorf("benchmark anchors not found or malformed")
 	}
 
+	section := readme[start+len(benchStart) : end]
+	updated, err := replaceBenchTable(section, content)
+	if err != nil {
+		return "", err
+	}
+
 	var buf bytes.Buffer
 	buf.WriteString(readme[:start+len(benchStart)])
-	buf.WriteString("\n\n")
-	buf.WriteString(content)
-	buf.WriteString("\n")
+	buf.WriteString(updated)
 	buf.WriteString(readme[end:])
+	return buf.String(), nil
+}
+
+func replaceBenchTable(section, table string) (string, error) {
+	lines := strings.Split(section, "\n")
+	tableStart := -1
+	for i, line := range lines {
+		if strings.HasPrefix(strings.TrimSpace(line), "| Op |") {
+			tableStart = i
+			break
+		}
+	}
+	if tableStart == -1 {
+		return "", fmt.Errorf("benchmark table header not found")
+	}
+
+	tableEnd := tableStart
+	for tableEnd < len(lines) {
+		line := strings.TrimSpace(lines[tableEnd])
+		if line == "" {
+			break
+		}
+		tableEnd++
+	}
+
+	var buf bytes.Buffer
+	if tableStart > 0 {
+		buf.WriteString(strings.Join(lines[:tableStart], "\n"))
+		buf.WriteString("\n")
+	}
+	buf.WriteString(strings.TrimSpace(table))
+	buf.WriteString("\n")
+	buf.WriteString(strings.Join(lines[tableEnd:], "\n"))
 	return buf.String(), nil
 }
 

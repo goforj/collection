@@ -39,11 +39,9 @@ func main() {
 	start := time.Now()
 	only := parseOnly(*onlyFlag)
 	borrowResults := runBenches(only, benchBorrow)
-	copyResults := runBenches(only, benchCopy)
 	borrowTable := renderTable(borrowResults)
-	copyTable := renderTable(copyResults)
 
-	if err := updateReadme(borrowTable, copyTable); err != nil {
+	if err := updateReadme(borrowTable); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -62,7 +60,6 @@ type benchMode string
 
 const (
 	benchBorrow benchMode = "borrow"
-	benchCopy   benchMode = "copy"
 )
 
 var (
@@ -74,9 +71,6 @@ var (
 func setBenchMode(mode benchMode) {
 	currentMode = mode
 	switch mode {
-	case benchCopy:
-		ctorInts = collection.CopyOf[int]
-		ctorNumericInt = collection.CopyOfNumeric[int]
 	default:
 		ctorInts = collection.New[int]
 		ctorNumericInt = collection.NewNumeric[int]
@@ -1072,7 +1066,7 @@ func collectionInputForMutating(src []int) []int {
 // README injection
 // ----------------------------------------------------------------------------
 
-func updateReadme(borrowTable, copyTable string) error {
+func updateReadme(borrowTable string) error {
 	root, err := findRoot()
 	if err != nil {
 		return err
@@ -1084,7 +1078,7 @@ func updateReadme(borrowTable, copyTable string) error {
 		return err
 	}
 
-	out, err := replaceSection(string(data), borrowTable, copyTable)
+	out, err := replaceSection(string(data), borrowTable)
 	if err != nil {
 		return err
 	}
@@ -1092,7 +1086,7 @@ func updateReadme(borrowTable, copyTable string) error {
 	return os.WriteFile(readmePath, []byte(out), 0o644)
 }
 
-func replaceSection(readme, borrowTable, copyTable string) (string, error) {
+func replaceSection(readme, borrowTable string) (string, error) {
 	start := strings.Index(readme, benchStart)
 	end := strings.Index(readme, benchEnd)
 	if start == -1 || end == -1 || end < start {
@@ -1100,7 +1094,7 @@ func replaceSection(readme, borrowTable, copyTable string) (string, error) {
 	}
 
 	section := readme[start+len(benchStart) : end]
-	updated, err := replaceBenchTables(section, borrowTable, copyTable)
+	updated, err := replaceBenchTable(section, borrowTable)
 	if err != nil {
 		return "", err
 	}
@@ -1112,7 +1106,7 @@ func replaceSection(readme, borrowTable, copyTable string) (string, error) {
 	return buf.String(), nil
 }
 
-func replaceBenchTables(section, borrowTable, copyTable string) (string, error) {
+func replaceBenchTable(section, borrowTable string) (string, error) {
 	lines := strings.Split(section, "\n")
 	tableStarts := []int{}
 	for i, line := range lines {
@@ -1120,8 +1114,8 @@ func replaceBenchTables(section, borrowTable, copyTable string) (string, error) 
 			tableStarts = append(tableStarts, i)
 		}
 	}
-	if len(tableStarts) < 2 {
-		return "", fmt.Errorf("expected two benchmark tables in section")
+	if len(tableStarts) == 0 {
+		return "", fmt.Errorf("expected benchmark table in section")
 	}
 
 	tableEnds := make([]int, len(tableStarts))
@@ -1138,7 +1132,6 @@ func replaceBenchTables(section, borrowTable, copyTable string) (string, error) 
 	}
 
 	firstStart, firstEnd := tableStarts[0], tableEnds[0]
-	secondStart, secondEnd := tableStarts[1], tableEnds[1]
 
 	var buf bytes.Buffer
 	if firstStart > 0 {
@@ -1147,13 +1140,7 @@ func replaceBenchTables(section, borrowTable, copyTable string) (string, error) 
 	}
 	buf.WriteString(strings.TrimSpace(borrowTable))
 	buf.WriteString("\n")
-	buf.WriteString(strings.Join(lines[firstEnd:secondStart], "\n"))
-	if buf.Len() > 0 && !strings.HasSuffix(buf.String(), "\n") {
-		buf.WriteString("\n")
-	}
-	buf.WriteString(strings.TrimSpace(copyTable))
-	buf.WriteString("\n")
-	buf.WriteString(strings.Join(lines[secondEnd:], "\n"))
+	buf.WriteString(strings.Join(lines[firstEnd:], "\n"))
 	return buf.String(), nil
 }
 

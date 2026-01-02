@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-476-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-469-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
@@ -29,7 +29,7 @@
 - **Fluent chaining** - pipeline your operations like Laravel Collections
 - **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
 - **Minimal dependencies** - small footprint (godump for debugging)
-- **Minimal allocations** - views for slice selections; in-place ops reuse backing when possible
+- **Minimal allocations** - slice views where possible; in-place ops reuse backing storage when semantics allow
 - **Map / Filter / Reduce** - clean functional transforms
 - **First / Last / FirstWhere / IndexWhere / Contains** helpers
 - **Sort, GroupBy, Chunk**, and more
@@ -114,17 +114,17 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Chunk** | **7.49x** | -8.0KB | -49 |
+| **Chunk** | **7.64x** | -8.0KB | -49 |
 | **Take** | ≈ | +48B | +2 |
-| **Skip** | **65.27x** | -8.2KB | ≈ |
-| **SkipLast** | **64.89x** | -8.2KB | ≈ |
-| **Zip** | **2.22x** | +48B | +2 |
-| **ZipWith** | **2.87x** | +48B | +2 |
+| **Skip** | **71.40x** | -8.2KB | ≈ |
+| **SkipLast** | **71.90x** | -8.2KB | ≈ |
+| **Zip** | **2.35x** | +48B | +2 |
+| **ZipWith** | **3.15x** | +48B | +2 |
 | **Unique** | ≈ | +24B | +1 |
 | **UniqueBy** | ≈ | +48B | +2 |
 | **Union** | ≈ | +72B | +3 |
 | **Intersect** | ≈ | +72B | +3 |
-| **Difference** | **2.31x** | -26.7KB | -29 |
+| **Difference** | **2.33x** | -26.7KB | -29 |
 | **GroupBySlice** | ≈ | +24B | +1 |
 | **CountBy** | ≈ | +24B | +1 |
 | **CountByValue** | ≈ | +24B | +1 |
@@ -134,16 +134,16 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | **2.53x** | -12.2KB | ≈ |
+| **Pipeline F→M→T→R** | **1.79x** | -12.2KB | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Map** | **2.29x** | -8.2KB | ≈ |
-| **Filter** | **1.64x** | -8.2KB | ≈ |
+| **Map** | **2.21x** | -8.2KB | ≈ |
+| **Filter** | **1.41x** | -8.2KB | ≈ |
 | **Reverse** | ≈ | +24B | +1 |
-| **Shuffle** | **1.56x** | +24B | +1 |
+| **Shuffle** | **1.57x** | +24B | +1 |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
@@ -234,6 +234,7 @@ No hidden copies. No surprises.
 - Not concurrency-aware
 - Not immutable-by-default
 - Not a replacement for idiomatic loops in simple cases
+- Not designed to hide allocation, mutation, or ordering semantics
 
 ## Working with maps
 

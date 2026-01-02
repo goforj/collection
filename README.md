@@ -27,6 +27,11 @@
 
 # Features
 
+This library is ideal when:
+- you write multi-step slice pipelines
+- allocation behavior matters
+- you want fluent APIs without hidden costs
+
 - **Fluent chaining** - pipeline your operations like Laravel Collections
 - **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
 - **Minimal dependencies** - small footprint (godump for debugging)
@@ -43,7 +48,7 @@
 
 Many methods return the collection itself, allowing for fluent method chaining.
 
-Some methods maybe limited to due to go's generic constraints. 
+Some methods may be limited due to Go's generic constraints.
 
 > **Fluent example:**  
 > [`examples/chaining/main.go`](./examples/chaining/main.go)
@@ -150,7 +155,7 @@ Full raw tables: see `BENCHMARKS.md`.
 ## How to read the benchmarks
 
 * **≈** means the two libraries are effectively equivalent
-* **∞x less** means one side allocates while the other allocates nothing
+* Explicit memory deltas show fixed wrapper overhead vs avoided allocations
 * Single-operation helpers are intentionally close in performance if not exceeds
 * Multi-step pipelines highlight the architectural difference
 
@@ -947,7 +952,7 @@ collection.Dump(odds.Items())
 
 ### <a id="new"></a>New · immutable · chainable
 
-New creates a new Collection from the provided slice and borrows it.
+New creates a new Collection that borrows the provided slice without copying.
 
 ### <a id="newnumeric"></a>NewNumeric · immutable · chainable
 

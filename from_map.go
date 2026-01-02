@@ -3,7 +3,8 @@ package collection
 // FromMap materializes a map into a collection of key/value pairs.
 // @group Maps
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // The iteration order of the resulting collection is unspecified,
 // matching Go's map iteration semantics.
@@ -78,5 +79,5 @@ func FromMap[K comparable, V any](m map[K]V) *Collection[Pair[K, V]] {
 			Value: v,
 		})
 	}
-	return &Collection[Pair[K, V]]{items: items}
+	return New(items)
 }

@@ -4,15 +4,15 @@ package collection
 // and returns the function's result.
 // @group Transformation
 // @behavior readonly
-// @fluent true
+// @chainable false
+// @terminal true
 //
-// This is useful for inline transformations, aggregations,
-// or "exiting" a chain with a non-collection value.
+// This is a typed escape hatch for branching into arbitrary logic without `any`.
 //
 // Example: integers – computing a sum
 //
 //	c := collection.New([]int{1, 2, 3})
-//	sum := c.Pipe(func(col *collection.Collection[int]) any {
+//	sum := collection.Pipe(c, func(col *collection.Collection[int]) int {
 //		total := 0
 //		for _, v := range col.Items() {
 //			total += v
@@ -25,7 +25,7 @@ package collection
 // Example: strings – joining values
 //
 //	c2 := collection.New([]string{"a", "b", "c"})
-//	joined := c2.Pipe(func(col *collection.Collection[string]) any {
+//	joined := collection.Pipe(c2, func(col *collection.Collection[string]) string {
 //		out := ""
 //		for _, v := range col.Items() {
 //			out += v
@@ -47,7 +47,7 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	names := users.Pipe(func(col *collection.Collection[User]) any {
+//	names := collection.Pipe(users, func(col *collection.Collection[User]) []string {
 //		result := make([]string, 0, len(col.Items()))
 //		for _, u := range col.Items() {
 //			result = append(result, u.Name)
@@ -60,6 +60,6 @@ package collection
 //	//   0 => "Alice" #string
 //	//   1 => "Bob" #string
 //	// ]
-func (c *Collection[T]) Pipe(fn func(*Collection[T]) any) any {
+func Pipe[T any, R any](c *Collection[T], fn func(*Collection[T]) R) R {
 	return fn(c)
 }

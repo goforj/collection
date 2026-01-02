@@ -3,8 +3,9 @@ package collection
 // Multiply creates `n` copies of all items in the collection
 // and returns a new collection.
 // @group Transformation
-// @behavior mutable
-// @fluent true
+// @behavior immutable
+// @chainable true
+// @terminal false
 //
 // Example: integers
 //

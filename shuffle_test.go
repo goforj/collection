@@ -20,14 +20,12 @@ func TestShuffle_Deterministic(t *testing.T) {
 	withDeterministicShuffle(t, 42, func() {
 		c := New([]int{1, 2, 3, 4, 5})
 
-		c.Shuffle()
-		first := append([]int(nil), c.Items()...) // snapshot
+		first := append([]int(nil), c.Shuffle().Items()...) // snapshot
 
 		// Shuffle again with the same deterministic RNG reset
 		setShuffleRand(rand.New(rand.NewSource(42)))
 		c2 := New([]int{1, 2, 3, 4, 5})
-		c2.Shuffle()
-		second := c2.Items()
+		second := c2.Shuffle().Items()
 
 		if !reflect.DeepEqual(first, second) {
 			t.Fatalf("expected deterministic shuffle within same RNG, got %v vs %v", first, second)
@@ -40,8 +38,7 @@ func TestShuffle_PreservesAllElements(t *testing.T) {
 		orig := []int{1, 2, 3, 4, 5}
 		c := New(orig)
 
-		c.Shuffle()
-		out := c.Items()
+		out := c.Shuffle().Items()
 
 		if len(out) != len(orig) {
 			t.Fatalf("expected length %d, got %d", len(orig), len(out))
@@ -62,20 +59,20 @@ func TestShuffle_PreservesAllElements(t *testing.T) {
 
 func TestShuffle_Empty(t *testing.T) {
 	c := New([]int{})
-	c.Shuffle()
+	out := c.Shuffle()
 
-	if len(c.Items()) != 0 {
-		t.Fatalf("expected empty slice, got %v", c.Items())
+	if len(out.Items()) != 0 {
+		t.Fatalf("expected empty slice, got %v", out.Items())
 	}
 }
 
 func TestShuffle_SingleElement(t *testing.T) {
 	c := New([]int{42})
-	c.Shuffle()
+	out := c.Shuffle()
 
 	expect := []int{42}
-	if !reflect.DeepEqual(c.Items(), expect) {
-		t.Fatalf("expected %v, got %v", expect, c.Items())
+	if !reflect.DeepEqual(out.Items(), expect) {
+		t.Fatalf("expected %v, got %v", expect, out.Items())
 	}
 }
 
@@ -91,10 +88,10 @@ func TestShuffle_Structs(t *testing.T) {
 			{ID: 3},
 		})
 
-		c.Shuffle()
+		out := c.Shuffle()
 
 		ids := map[int]bool{}
-		for _, u := range c.Items() {
+		for _, u := range out.Items() {
 			ids[u.ID] = true
 		}
 
@@ -111,10 +108,24 @@ func TestShuffle_MutatesInPlace(t *testing.T) {
 		items := []int{1, 2, 3, 4}
 		c := New(items)
 
-		c.Shuffle()
+		out := c.Shuffle()
+
+		if out != c {
+			t.Fatalf("Shuffle should return the same collection")
+		}
 
 		if reflect.DeepEqual(items, []int{1, 2, 3, 4}) {
-			t.Fatalf("expected underlying slice to be shuffled in place")
+			t.Fatalf("expected source slice to be shuffled in place")
 		}
 	})
+}
+
+func TestShuffle_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Shuffle()
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
 }

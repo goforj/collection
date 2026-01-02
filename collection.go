@@ -21,18 +21,15 @@ type Pair[K comparable, V any] struct {
 	Value V
 }
 
-// New creates a new Collection from the provided slice.
+// New creates a new Collection from the provided slice and borrows it.
 // @group Construction
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // The returned Collection is a lightweight, strongly-typed wrapper
 // around the slice, enabling fluent, chainable operations such as
 // filtering, mapping, reducing, sorting, and more.
-//
-// The underlying slice is stored as-is (no copy is made), allowing
-// New to be both fast and allocation-friendly. Callers should clone
-// the input beforehand if they need to prevent shared mutation.
 func New[T any](items []T) *Collection[T] {
 	return &Collection[T]{items: items}
 }
@@ -42,21 +39,25 @@ type NumericCollection[T Number] struct {
 	*Collection[T]
 }
 
-// NewNumeric wraps a slice of numeric types in a NumericCollection.
-// A shallow copy is made so that further operations don't mutate the original slice.
+// NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
 // @group Construction
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 func NewNumeric[T Number](items []T) *NumericCollection[T] {
 	return &NumericCollection[T]{
 		Collection: &Collection[T]{items: items},
 	}
 }
 
-// Items returns the underlying slice of items.
+// Items returns the backing slice of items.
 // @group Access
 // @behavior readonly
-// @fluent true
+// @chainable false
+// @terminal true
+//
+// Items shares the backing array with the collection. Mutating the returned
+// slice will mutate the collection.
 //
 // Example: integers
 //
@@ -105,4 +106,28 @@ func NewNumeric[T Number](items []T) *NumericCollection[T] {
 //	// ]
 func (c *Collection[T]) Items() []T {
 	return c.items
+}
+
+// ItemsCopy returns a copy of the collection's items.
+// @group Access
+// @behavior readonly
+// @chainable false
+// @terminal true
+//
+// ItemsCopy allocates a new slice.
+//
+// Example: integers
+//
+//	c := collection.New([]int{1, 2, 3})
+//	items := c.ItemsCopy()
+//	collection.Dump(items)
+//	// #[]int [
+//	//   0 => 1 #int
+//	//   1 => 2 #int
+//	//   2 => 3 #int
+//	// ]
+func (c *Collection[T]) ItemsCopy() []T {
+	out := make([]T, len(c.items))
+	copy(out, c.items)
+	return out
 }

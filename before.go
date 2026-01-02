@@ -4,7 +4,10 @@ package collection
 // *before* the first element for which pred returns true.
 // @group Ordering
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
+//
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
 //
 // If no element matches the predicate, the entire collection is returned.
 //
@@ -58,7 +61,5 @@ func (c *Collection[T]) Before(pred func(T) bool) *Collection[T] {
 		}
 	}
 
-	out := make([]T, idx)
-	copy(out, c.items[:idx])
-	return &Collection[T]{items: out}
+	return New(c.items[:idx])
 }

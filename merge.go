@@ -1,9 +1,10 @@
 package collection
 
-// Merge merges the given data into the current collection.
+// Merge merges the given data into a new collection.
 // @group Transformation
-// @behavior mutable
-// @fluent true
+// @behavior immutable
+// @chainable true
+// @terminal false
 //
 // Example: integers - merging slices
 //
@@ -97,7 +98,7 @@ func (c *Collection[T]) mergeSlice(values []T) *Collection[T] {
 	out := make([]T, len(c.items)+len(values))
 	copy(out, c.items)
 	copy(out[len(c.items):], values)
-	return &Collection[T]{items: out}
+	return New(out)
 }
 
 /*
@@ -150,7 +151,7 @@ func (c *Collection[T]) mergeMap(values map[string]T) *Collection[T] {
 	}
 
 	// IMPORTANT: return without copying out again
-	return &Collection[T]{items: out}
+	return New(out)
 }
 
 // fastParseInt is much lighter than strconv.Atoi

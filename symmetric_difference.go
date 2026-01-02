@@ -5,7 +5,8 @@ package collection
 // its unique items, then the second for its unique items. Duplicates are removed.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers
 //
@@ -98,5 +99,5 @@ func SymmetricDifference[T comparable](a, b *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	return &Collection[T]{items: out}
+	return New(out)
 }

@@ -4,7 +4,8 @@ package collection
 // The resulting length is the smaller of the two inputs.
 // @group Transformation
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers and strings
 //
@@ -74,7 +75,8 @@ func Zip[A any, B any](a *Collection[A], b *Collection[B]) *Collection[Tuple[A, 
 // The resulting length is the smaller of the two inputs.
 // @group Transformation
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: sum ints
 //

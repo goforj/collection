@@ -1,18 +1,19 @@
 package collection
 
-// Prepend returns a new collection with the given values added
-// to the *beginning* of the collection.
+// Prepend adds the given values to the beginning of the collection.
 // @group Transformation
 // @behavior mutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
-// The original collection is not modified.
+// This method mutates the collection in place and returns the same instance.
+// It allocates a new backing slice to insert the values at the front.
 //
 // Example: integers
 //
 //	c := collection.New([]int{3, 4})
-//	newC := c.Prepend(1, 2)
-//	collection.Dump(newC.Items())
+//	c.Prepend(1, 2)
+//	collection.Dump(c.Items())
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -23,8 +24,8 @@ package collection
 // Example: strings
 //
 //	letters := collection.New([]string{"c", "d"})
-//	out := letters.Prepend("a", "b")
-//	collection.Dump(out.Items())
+//	letters.Prepend("a", "b")
+//	collection.Dump(letters.Items())
 //	// #[]string [
 //	//   0 => "a" #string
 //	//   1 => "b" #string
@@ -43,8 +44,8 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	out2 := users.Prepend(User{ID: 1, Name: "Alice"})
-//	collection.Dump(out2.Items())
+//	users.Prepend(User{ID: 1, Name: "Alice"})
+//	collection.Dump(users.Items())
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -59,18 +60,18 @@ package collection
 // Example: integers - Prepending into an empty collection
 //
 //	empty := collection.New([]int{})
-//	out3 := empty.Prepend(9, 8)
-//	collection.Dump(out3.Items())
+//	empty.Prepend(9, 8)
+//	collection.Dump(empty.Items())
 //	// #[]int [
 //	//   0 => 9 #int
 //	//   1 => 8 #int
 //	// ]
 //
-// Example: integers - Prepending no values → returns a copy of original
+// Example: integers - Prepending no values → no change
 //
 //	c2 := collection.New([]int{1, 2})
-//	out4 := c2.Prepend()
-//	collection.Dump(out4.Items())
+//	c2.Prepend()
+//	collection.Dump(c2.Items())
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -79,5 +80,6 @@ func (c *Collection[T]) Prepend(values ...T) *Collection[T] {
 	out := make([]T, 0, len(c.items)+len(values))
 	out = append(out, values...)
 	out = append(out, c.items...)
-	return &Collection[T]{items: out}
+	c.items = out
+	return c
 }

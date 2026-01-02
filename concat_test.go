@@ -116,3 +116,24 @@ func TestConcat_NoAllocationWhenCapacityAllows(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }
+
+func TestConcat_PreservesNilSliceWhenEmptyValues(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Concat([]int{})
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}
+
+func TestConcat_NilSliceWithValues(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Concat([]int{1, 2})
+
+	expected := []int{1, 2}
+	if !reflect.DeepEqual(c.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, c.Items())
+	}
+}

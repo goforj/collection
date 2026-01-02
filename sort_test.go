@@ -111,3 +111,35 @@ func TestSort_SingleElement(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, sorted.items)
 	}
 }
+
+func TestSort_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Sort(func(a, b int) bool { return a < b })
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}
+
+func TestSort_WritesThroughSourceSlice(t *testing.T) {
+	items := []int{3, 1, 2}
+	c := New(items)
+
+	c.Sort(func(a, b int) bool { return a < b })
+
+	want := []int{1, 2, 3}
+	if !reflect.DeepEqual(items, want) {
+		t.Fatalf("expected source slice %v, got %v", want, items)
+	}
+}
+
+func TestSort_LengthUnchanged(t *testing.T) {
+	c := New([]int{3, 1, 2})
+
+	c.Sort(func(a, b int) bool { return a < b })
+
+	if len(c.Items()) != 3 {
+		t.Fatalf("expected length 3, got %d", len(c.Items()))
+	}
+}

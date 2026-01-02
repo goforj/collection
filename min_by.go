@@ -4,7 +4,8 @@ package collection
 // The second return value is false if the collection is empty.
 // @group Aggregation
 // @behavior readonly
-// @fluent false
+// @chainable false
+// @terminal true
 //
 // This cannot be a method because methods can't introduce a new type parameter K.
 // When multiple items share the same minimal key, the first such item is returned.

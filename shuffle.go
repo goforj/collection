@@ -15,13 +15,13 @@ func setShuffleRand(r *rand.Rand) {
 	shuffleRand = r
 }
 
-// Shuffle randomly shuffles the items in the collection in place
-// and returns the same collection for chaining.
+// Shuffle shuffles the collection in place and returns the same collection.
 // @group Ordering
 // @behavior mutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
-// This operation performs no allocations.
+// This operation mutates the receiver's backing slice.
 //
 // The shuffle uses an internal random source. Tests may override
 // this source to achieve deterministic behavior.
@@ -34,12 +34,12 @@ func setShuffleRand(r *rand.Rand) {
 //
 // Example: strings – chaining
 //
-//	out := collection.New([]string{"a", "b", "c"}).
+//	out2 := collection.New([]string{"a", "b", "c"}).
 //		Shuffle().
 //		Append("d").
 //		Items()
 //
-//	collection.Dump(out)
+//	collection.Dump(out2)
 //
 // Example: structs
 //
@@ -57,13 +57,12 @@ func setShuffleRand(r *rand.Rand) {
 //	users.Shuffle()
 //	collection.Dump(users.Items())
 func (c *Collection[T]) Shuffle() *Collection[T] {
-	items := c.items
-	n := len(items)
+	n := len(c.items)
 
-	// Fisher–Yates shuffle (in place, zero alloc)
+	// Fisher–Yates shuffle (in place)
 	for i := n - 1; i > 0; i-- {
 		j := shuffleRand.Intn(i + 1)
-		items[i], items[j] = items[j], items[i]
+		c.items[i], c.items[j] = c.items[j], c.items[i]
 	}
 
 	return c

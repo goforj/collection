@@ -6,10 +6,13 @@ package collection
 // an empty collection.
 // @group Slicing
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // This operation performs no element allocations; it re-slices the
 // underlying slice.
+//
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
 //
 // Example: integers
 //
@@ -67,12 +70,12 @@ func (c *Collection[T]) Skip(n int) *Collection[T] {
 	l := len(items)
 
 	if n <= 0 {
-		return &Collection[T]{items: items}
+		return New(items)
 	}
 
 	if n >= l {
-		return &Collection[T]{items: items[:0]}
+		return New(items[:0])
 	}
 
-	return &Collection[T]{items: items[n:]}
+	return New(items[n:])
 }

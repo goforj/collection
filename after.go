@@ -4,7 +4,10 @@ package collection
 // If no element matches, an empty collection is returned.
 // @group Ordering
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
+//
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
 //
 // Example: integers
 //
@@ -25,10 +28,8 @@ func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
 
 	// If no match found → empty collection
 	if idx == -1 || idx+1 >= len(c.items) {
-		return &Collection[T]{items: []T{}}
+		return New(c.items[:0])
 	}
 
-	out := make([]T, len(c.items)-(idx+1))
-	copy(out, c.items[idx+1:])
-	return &Collection[T]{items: out}
+	return New(c.items[idx+1:])
 }

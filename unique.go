@@ -5,7 +5,8 @@ package collection
 // and order is preserved.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // The `eq` function should return true when two values are considered equal.
 //
@@ -72,5 +73,5 @@ func (c *Collection[T]) Unique(eq func(a, b T) bool) *Collection[T] {
 		}
 	}
 
-	return &Collection[T]{items: out}
+	return New(out)
 }

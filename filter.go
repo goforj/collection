@@ -4,7 +4,8 @@ package collection
 // This method mutates the collection in place and returns the same instance.
 // @group Slicing
 // @behavior mutable
-// @fluent true
+// @chainable true
+// @terminal false
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4})

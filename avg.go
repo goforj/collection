@@ -4,7 +4,8 @@ package collection
 // If the collection is empty, Avg returns 0.
 // @group Aggregation
 // @behavior readonly
-// @fluent false
+// @chainable false
+// @terminal true
 //
 // Example: integers
 //

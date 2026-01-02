@@ -5,7 +5,10 @@ package collection
 // Windows that are shorter than size are omitted.
 // @group Slicing
 // @behavior allocates
-// @fluent true
+// @chainable true
+// @terminal false
+//
+// NOTE: windows share the backing array with the source collection.
 //
 // Example: integers - step 1
 //
@@ -96,7 +99,7 @@ package collection
 //	// ]
 func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 	if size <= 0 {
-		return &Collection[[]T]{items: nil}
+		return New([][]T(nil))
 	}
 
 	if step <= 0 {
@@ -105,7 +108,7 @@ func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 
 	n := len(c.items)
 	if n < size {
-		return &Collection[[]T]{items: nil}
+		return New([][]T(nil))
 	}
 
 	// Compute number of windows.
@@ -113,10 +116,8 @@ func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 	out := make([][]T, 0, count)
 
 	for i := 0; i+size <= n; i += step {
-		window := make([]T, size)
-		copy(window, c.items[i:i+size])
-		out = append(out, window)
+		out = append(out, c.items[i:i+size])
 	}
 
-	return &Collection[[]T]{items: out}
+	return New(out)
 }

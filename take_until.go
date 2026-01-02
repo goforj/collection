@@ -4,7 +4,10 @@ package collection
 // The matching item is NOT included.
 // @group Slicing
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
+//
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
 // Example: integers - stop when value >= 3
 //
 //	c1 := collection.New([]int{1, 2, 3, 4})
@@ -34,25 +37,27 @@ package collection
 //	//	2 => 3 #int
 //	// ]
 func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T] {
-	out := make([]T, 0, len(c.items))
-
-	for _, v := range c.items {
+	idx := len(c.items)
+	for i, v := range c.items {
 		if pred(v) {
+			idx = i
 			break
 		}
-		out = append(out, v)
 	}
 
-	return New(out)
+	return New(c.items[:idx])
 }
 
 // TakeUntil returns items until the first element equals `value`.
 // The matching item is NOT included.
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Uses == comparison, so T must be comparable.
 // @group Slicing
 // @behavior immutable
+//
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
 // Example: integers - stop at value 3
 //
 //	c4 := collection.New([]int{1, 2, 3, 4})
@@ -82,14 +87,13 @@ func (c *Collection[T]) TakeUntilFn(pred func(T) bool) *Collection[T] {
 //	// #[]int [
 //	// ]
 func TakeUntil[T comparable](c *Collection[T], value T) *Collection[T] {
-	out := make([]T, 0, len(c.items))
-
-	for _, v := range c.items {
+	idx := len(c.items)
+	for i, v := range c.items {
 		if v == value {
+			idx = i
 			break
 		}
-		out = append(out, v)
 	}
 
-	return New(out)
+	return New(c.items[:idx])
 }

@@ -4,7 +4,8 @@ package collection
 // collection that are also present in the first.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Order follows the second collection.
 // Duplicates are preserved based on the second collection.
@@ -83,5 +84,5 @@ func Intersect[T comparable](a, b *Collection[T]) *Collection[T] {
 		}
 	}
 
-	return &Collection[T]{items: out}
+	return New(out)
 }

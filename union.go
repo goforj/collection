@@ -5,7 +5,8 @@ package collection
 // that were not already present.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers
 //
@@ -88,5 +89,5 @@ func Union[T comparable](a, b *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	return &Collection[T]{items: out}
+	return New(out)
 }

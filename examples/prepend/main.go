@@ -6,13 +6,12 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Prepend returns a new collection with the given values added
-	// to the *beginning* of the collection.
+	// Prepend adds the given values to the beginning of the collection.
 
 	// Example: integers
 	c := collection.New([]int{3, 4})
-	newC := c.Prepend(1, 2)
-	collection.Dump(newC.Items())
+	c.Prepend(1, 2)
+	collection.Dump(c.Items())
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int
@@ -22,8 +21,8 @@ func main() {
 
 	// Example: strings
 	letters := collection.New([]string{"c", "d"})
-	out := letters.Prepend("a", "b")
-	collection.Dump(out.Items())
+	letters.Prepend("a", "b")
+	collection.Dump(letters.Items())
 	// #[]string [
 	//   0 => "a" #string
 	//   1 => "b" #string
@@ -41,8 +40,8 @@ func main() {
 		{ID: 2, Name: "Bob"},
 	})
 
-	out2 := users.Prepend(User{ID: 1, Name: "Alice"})
-	collection.Dump(out2.Items())
+	users.Prepend(User{ID: 1, Name: "Alice"})
+	collection.Dump(users.Items())
 	// #[]main.User [
 	//   0 => #main.User {
 	//     +ID   => 1 #int
@@ -56,17 +55,17 @@ func main() {
 
 	// Example: integers - Prepending into an empty collection
 	empty := collection.New([]int{})
-	out3 := empty.Prepend(9, 8)
-	collection.Dump(out3.Items())
+	empty.Prepend(9, 8)
+	collection.Dump(empty.Items())
 	// #[]int [
 	//   0 => 9 #int
 	//   1 => 8 #int
 	// ]
 
-	// Example: integers - Prepending no values → returns a copy of original
+	// Example: integers - Prepending no values → no change
 	c2 := collection.New([]int{1, 2})
-	out4 := c2.Prepend()
-	collection.Dump(out4.Items())
+	c2.Prepend()
+	collection.Dump(c2.Items())
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int

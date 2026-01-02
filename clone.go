@@ -1,7 +1,8 @@
 package collection
 
-// Clone returns a shallow copy of the collection.
-// @fluent true
+// Clone returns a copy of the collection.
+// @chainable true
+// @terminal false
 //
 // The returned collection has its own backing slice, so subsequent mutations
 // do not affect the original collection.
@@ -10,14 +11,14 @@ package collection
 // the original collection.
 //
 // @group Construction
-// @behavior allocates
+// @behavior immutable
 //
 // Example: basic cloning
 //
 //	c := collection.New([]int{1, 2, 3})
 //	clone := c.Clone()
 //
-//	clone.Push(4)
+//	clone.Append(4)
 //
 //	collection.Dump(c.Items())
 //	// #[]int [

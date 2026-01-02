@@ -4,7 +4,8 @@ package collection
 // of each element as determined by keyFn.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // The key returned by keyFn must be comparable.
 // Order is preserved.
@@ -73,5 +74,5 @@ func UniqueBy[T any, K comparable](c *Collection[T], keyFn func(T) K) *Collectio
 		out = append(out, v)
 	}
 
-	return &Collection[T]{items: out}
+	return New(out)
 }

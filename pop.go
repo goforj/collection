@@ -1,20 +1,20 @@
 package collection
 
-// Pop returns the last item and a new collection with that item removed.
-// The original collection remains unchanged.
+// Pop removes and returns the last item in the collection.
 // @group Slicing
 // @behavior mutable
-// @fluent true
+// @chainable false
+// @terminal true
 //
-// If the collection is empty, the zero value of T is returned along with
-// an empty collection.
+// If the collection is empty, the zero value of T is returned with ok=false.
 //
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3})
-//	item, rest := c.Pop()
-//	collection.Dump(item, rest.Items())
+//	item, ok := c.Pop()
+//	collection.Dump(item, ok, c.Items())
 //	// 3 #int
+//	// true #bool
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -23,9 +23,10 @@ package collection
 // Example: strings
 //
 //	c2 := collection.New([]string{"a", "b", "c"})
-//	item2, rest2 := c2.Pop()
-//	collection.Dump(item2, rest2.Items())
+//	item2, ok2 := c2.Pop()
+//	collection.Dump(item2, ok2, c2.Items())
 //	// "c" #string
+//	// true #bool
 //	// #[]string [
 //	//   0 => "a" #string
 //	//   1 => "b" #string
@@ -43,12 +44,13 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	item3, rest3 := users.Pop()
-//	collection.Dump(item3, rest3.Items())
+//	item3, ok3 := users.Pop()
+//	collection.Dump(item3, ok3, users.Items())
 //	// #main.User {
 //	//   +ID   => 2 #int
 //	//   +Name => "Bob" #string
 //	// }
+//	// true #bool
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -59,42 +61,39 @@ package collection
 // Example: empty collection
 //
 //	empty := collection.New([]int{})
-//	item4, rest4 := empty.Pop()
-//	collection.Dump(item4, rest4.Items())
+//	item4, ok4 := empty.Pop()
+//	collection.Dump(item4, ok4, empty.Items())
 //	// 0 #int
+//	// false #bool
 //	// #[]int [
 //	// ]
-func (c *Collection[T]) Pop() (T, *Collection[T]) {
+func (c *Collection[T]) Pop() (T, bool) {
 	n := len(c.items)
 
 	if n == 0 {
 		var zero T
-		return zero, New([]T{})
+		return zero, false
 	}
 
 	item := c.items[n-1]
-	rest := c.items[:n-1]
-
-	return item, New(rest)
+	c.items = c.items[:n-1]
+	return item, true
 }
 
-// PopN removes and returns the last n items as a new collection,
-// and returns a second collection containing the remaining items.
+// PopN removes and returns the last n items in original order.
 // @group Slicing
 // @behavior mutable
-// @fluent true
-//
-// The popped items are returned in reverse order, matching the behavior
-// of repeated Pop() calls.
+// @chainable false
+// @terminal true
 //
 // Example: integers – pop 2
 //
 //	c := collection.New([]int{1, 2, 3, 4})
-//	popped, rest := c.PopN(2)
-//	collection.Dump(popped.Items(), rest.Items())
+//	popped := c.PopN(2)
+//	collection.Dump(popped, c.Items())
 //	// #[]int [
-//	//   0 => 4 #int
-//	//   1 => 3 #int
+//	//   0 => 3 #int
+//	//   1 => 4 #int
 //	// ]
 //	// #[]int [
 //	//   0 => 1 #int
@@ -104,8 +103,8 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 // Example: strings – pop 1
 //
 //	c2 := collection.New([]string{"a", "b", "c"})
-//	popped2, rest2 := c2.PopN(1)
-//	collection.Dump(popped2.Items(), rest2.Items())
+//	popped2 := c2.PopN(1)
+//	collection.Dump(popped2, c2.Items())
 //	// #[]string [
 //	//   0 => "c" #string
 //	// ]
@@ -127,16 +126,16 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //		{ID: 3, Name: "Carol"},
 //	})
 //
-//	popped3, rest3 := users.PopN(2)
-//	collection.Dump(popped3.Items(), rest3.Items())
+//	popped3 := users.PopN(2)
+//	collection.Dump(popped3, users.Items())
 //	// #[]main.User [
 //	//   0 => #main.User {
-//	//     +ID   => 3 #int
-//	//     +Name => "Carol" #string
-//	//   }
-//	//   1 => #main.User {
 //	//     +ID   => 2 #int
 //	//     +Name => "Bob" #string
+//	//   }
+//	//   1 => #main.User {
+//	//     +ID   => 3 #int
+//	//     +Name => "Carol" #string
 //	//   }
 //	// ]
 //	// #[]main.User [
@@ -146,13 +145,12 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 //	//   }
 //	// ]
 //
-// Example: integers - n <= 0 → returns empty popped + original collection
+// Example: integers - n <= 0 → returns nil, no change
 //
 //	c3 := collection.New([]int{1, 2, 3})
-//	popped4, rest4 := c3.PopN(0)
-//	collection.Dump(popped4.Items(), rest4.Items())
-//	// #[]int [
-//	// ]
+//	popped4 := c3.PopN(0)
+//	collection.Dump(popped4, c3.Items())
+//	// <nil>
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -162,35 +160,25 @@ func (c *Collection[T]) Pop() (T, *Collection[T]) {
 // Example: strings - n exceeds length → all items popped, rest empty
 //
 //	c4 := collection.New([]string{"x", "y"})
-//	popped5, rest5 := c4.PopN(10)
-//	collection.Dump(popped5.Items(), rest5.Items())
+//	popped5 := c4.PopN(10)
+//	collection.Dump(popped5, c4.Items())
 //	// #[]string [
-//	//   0 => "y" #string
-//	//   1 => "x" #string
+//	//   0 => "x" #string
+//	//   1 => "y" #string
 //	// ]
 //	// #[]string [
 //	// ]
-func (c *Collection[T]) PopN(n int) (*Collection[T], *Collection[T]) {
+func (c *Collection[T]) PopN(n int) []T {
 	if n <= 0 || len(c.items) == 0 {
-		return New([]T{}), c
+		return nil
 	}
 
 	total := len(c.items)
-
-	if n >= total {
-		return New(reverseCopy(c.items)), New([]T{})
+	if n > total {
+		n = total
 	}
 
-	remain := c.items[:total-n]
 	popped := c.items[total-n:]
-
-	return New(reverseCopy(popped)), New(remain)
-}
-
-func reverseCopy[T any](src []T) []T {
-	out := make([]T, len(src))
-	for i := range src {
-		out[i] = src[len(src)-1-i]
-	}
-	return out
+	c.items = c.items[:total-n]
+	return popped
 }

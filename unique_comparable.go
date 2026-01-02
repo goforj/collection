@@ -5,7 +5,8 @@ package collection
 // This is a faster, allocation-friendly path for comparable types.
 // @group Set Operations
 // @behavior immutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // Example: integers
 //
@@ -48,5 +49,5 @@ func UniqueComparable[T comparable](c *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	return &Collection[T]{items: out}
+	return New(out)
 }

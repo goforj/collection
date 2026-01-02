@@ -3,7 +3,8 @@ package collection
 // ToMapKV converts a collection of key/value pairs into a map.
 // @group Maps
 // @behavior readonly
-// @fluent false
+// @chainable false
+// @terminal true
 //
 // If multiple pairs contain the same key, the last value wins.
 //

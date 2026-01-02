@@ -5,98 +5,76 @@ import (
 	"testing"
 )
 
-func TestAppendAndPush(t *testing.T) {
-	ops := []struct {
-		name string
-		fn   func(*Collection[int], ...int) *Collection[int]
-	}{
-		{"Append", (*Collection[int]).Append},
-		{"Push", (*Collection[int]).Push}, // alias
-	}
+func TestAppend(t *testing.T) {
+	t.Run("Basic", func(t *testing.T) {
+		c := New([]int{1, 2})
 
-	for _, op := range ops {
-		t.Run(op.name+"_Basic", func(t *testing.T) {
-			c := New([]int{1, 2})
+		out := c.Append(3, 4)
+		expected := []int{1, 2, 3, 4}
 
-			out := op.fn(c, 3, 4)
-			expected := []int{1, 2, 3, 4}
+		if !reflect.DeepEqual(out.items, expected) {
+			t.Fatalf("Append basic expected %v, got %v", expected, out.items)
+		}
+	})
 
-			if !reflect.DeepEqual(out.items, expected) {
-				t.Fatalf("%s basic expected %v, got %v", op.name, expected, out.items)
-			}
-		})
+	t.Run("EmptyCollection", func(t *testing.T) {
+		c := New([]int{})
 
-		t.Run(op.name+"_EmptyCollection", func(t *testing.T) {
-			c := New([]int{})
+		out := c.Append(5, 6)
+		expected := []int{5, 6}
 
-			out := op.fn(c, 5, 6)
-			expected := []int{5, 6}
+		if !reflect.DeepEqual(out.items, expected) {
+			t.Fatalf("Append empty expected %v, got %v", expected, out.items)
+		}
+	})
 
-			if !reflect.DeepEqual(out.items, expected) {
-				t.Fatalf("%s empty expected %v, got %v", op.name, expected, out.items)
-			}
-		})
+	t.Run("NoValues", func(t *testing.T) {
+		c := New([]int{10, 20, 30})
 
-		t.Run(op.name+"_NoValues", func(t *testing.T) {
-			c := New([]int{10, 20, 30})
+		out := c.Append() // no-op
+		expected := []int{10, 20, 30}
 
-			out := op.fn(c) // no-op
-			expected := []int{10, 20, 30}
+		if !reflect.DeepEqual(out.items, expected) {
+			t.Fatalf("Append no-values expected %v, got %v", expected, out.items)
+		}
+	})
 
-			if !reflect.DeepEqual(out.items, expected) {
-				t.Fatalf("%s no-values expected %v, got %v", op.name, expected, out.items)
-			}
-		})
+	t.Run("NoMutation", func(t *testing.T) {
+		orig := []int{1, 2, 3}
+		c := New(orig)
 
-		t.Run(op.name+"_NoMutation", func(t *testing.T) {
-			orig := []int{1, 2, 3}
-			c := New(orig)
+		_ = c.Append(4, 5)
 
-			_ = op.fn(c, 4, 5)
-
-			if !reflect.DeepEqual(c.items, orig) {
-				t.Fatalf("%s mutated original %v", op.name, c.items)
-			}
-		})
-	}
+		if !reflect.DeepEqual(c.items, orig) {
+			t.Fatalf("Append mutated original %v", c.items)
+		}
+	})
 }
 
-func TestAppendAndPush_Structs(t *testing.T) {
+func TestAppend_Structs(t *testing.T) {
 	type User struct {
 		ID   int
 		Name string
 	}
 
-	ops := []struct {
-		name string
-		fn   func(*Collection[User], ...User) *Collection[User]
-	}{
-		{"Append", (*Collection[User]).Append},
-		{"Push", (*Collection[User]).Push}, // alias
+	c := New([]User{
+		{1, "Chris"},
+		{2, "Van"},
+	})
+
+	out := c.Append(
+		User{3, "Shawn"},
+		User{4, "Matt"},
+	)
+
+	expected := []User{
+		{1, "Chris"},
+		{2, "Van"},
+		{3, "Shawn"},
+		{4, "Matt"},
 	}
 
-	for _, op := range ops {
-		t.Run(op.name+"_Structs", func(t *testing.T) {
-			c := New([]User{
-				{1, "Chris"},
-				{2, "Van"},
-			})
-
-			out := op.fn(c,
-				User{3, "Shawn"},
-				User{4, "Matt"},
-			)
-
-			expected := []User{
-				{1, "Chris"},
-				{2, "Van"},
-				{3, "Shawn"},
-				{4, "Matt"},
-			}
-
-			if !reflect.DeepEqual(out.items, expected) {
-				t.Fatalf("%s structs expected %v, got %v", op.name, expected, out.items)
-			}
-		})
+	if !reflect.DeepEqual(out.items, expected) {
+		t.Fatalf("Append structs expected %v, got %v", expected, out.items)
 	}
 }

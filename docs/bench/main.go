@@ -35,10 +35,17 @@ func main() {
 	flag.Parse()
 
 	start := time.Now()
-	results := runBenches(parseOnly(*onlyFlag))
-	table := renderTable(results)
+	only := parseOnly(*onlyFlag)
+	borrowResults := runBenches(only, benchBorrow)
+	copyResults := runBenches(only, benchCopy)
+	condensed := renderCondensedTables(borrowResults)
+	rawBorrow := renderTable(borrowResults)
 
-	if err := updateReadme(table); err != nil {
+	if err := updateReadme(condensed); err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+	if err := updateBenchmarksFile(rawBorrow, renderTable(copyResults)); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -53,7 +60,38 @@ func main() {
 // Benchmark runner
 // ----------------------------------------------------------------------------
 
-func runBenches(only map[string]struct{}) []benchResult {
+type benchMode string
+
+const (
+	benchBorrow benchMode = "borrow"
+	benchCopy   benchMode = "copy"
+)
+
+var (
+	ctorInts       func([]int) *collection.Collection[int]
+	ctorNumericInt func([]int) *collection.NumericCollection[int]
+	currentMode    benchMode
+)
+
+func setBenchMode(mode benchMode) {
+	currentMode = mode
+	switch mode {
+	case benchCopy:
+		ctorInts = func(items []int) *collection.Collection[int] {
+			return collection.New(items).Clone()
+		}
+		ctorNumericInt = func(items []int) *collection.NumericCollection[int] {
+			base := collection.NewNumeric(items)
+			return &collection.NumericCollection[int]{Collection: base.Collection.Clone()}
+		}
+	default:
+		ctorInts = collection.New[int]
+		ctorNumericInt = collection.NewNumeric[int]
+	}
+}
+
+func runBenches(only map[string]struct{}, mode benchMode) []benchResult {
+	setBenchMode(mode)
 	cases := []struct {
 		name string
 		col  func(*testing.B)
@@ -73,7 +111,7 @@ func runBenches(only map[string]struct{}) []benchResult {
 		{"Chunk", benchChunkCollection, benchChunkLo},
 		{"Take", benchTakeCollection, benchTakeLo},
 		{"Contains", benchContainsCollection, benchContainsLo},
-		{"Find", benchFindCollection, benchFindLo},
+		{"FirstWhere", benchFindCollection, benchFindLo},
 		{"GroupBySlice", benchGroupByCollection, benchGroupByLo},
 		{"CountBy", benchCountByCollection, benchCountByLo},
 		{"CountByValue", benchCountByValueCollection, benchCountByValueLo},
@@ -129,12 +167,16 @@ func measure(name, impl string, fn func(*testing.B)) benchResult {
 		fn(b)
 	})
 
+	nsPerOp := float64(res.NsPerOp())
+	bytesPerOp := res.AllocedBytesPerOp()
+	allocsPerOp := res.AllocsPerOp()
+
 	return benchResult{
 		name:        name,
 		impl:        impl,
-		nsPerOp:     float64(res.NsPerOp()),
-		bytesPerOp:  res.AllocedBytesPerOp(),
-		allocsPerOp: res.AllocsPerOp(),
+		nsPerOp:     nsPerOp,
+		bytesPerOp:  bytesPerOp,
+		allocsPerOp: allocsPerOp,
 	}
 }
 
@@ -190,32 +232,34 @@ func init() {
 func benchPipelineCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workA, benchInts)
-
-		_ = collection.New(workA).
+		input := collectionInputForMutating(benchInts)
+		_ = ctorInts(input).
 			Filter(func(v int) bool { return v%2 == 0 }).
 			Map(func(v int) int { return v * v }).
 			Take(benchPipelineLen).
 			Reduce(0, func(acc, v int) int { return acc + v })
+
 	}
 }
 
 func benchPipelineLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workB, benchInts)
+		input := benchInts
 
-		out := lo.Filter(workB, func(v int, _ int) bool { return v%2 == 0 })
+		out := lo.Filter(input, func(v int, _ int) bool { return v%2 == 0 })
 		out2 := lo.Map(out, func(v int, _ int) int { return v * v })
 		out3 := lo.Subset(out2, 0, benchPipelineLen)
 		_ = lo.Reduce(out3, func(acc int, v int, _ int) int { return acc + v }, 0)
+
 	}
 }
 
 func benchAllCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).All(func(v int) bool { return v < benchSize+1 })
+		_ = ctorInts(benchInts).All(func(v int) bool { return v < benchSize+1 })
+
 	}
 }
 
@@ -223,13 +267,15 @@ func benchAllLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.EveryBy(benchInts, func(v int) bool { return v < benchSize+1 })
+
 	}
 }
 
 func benchAnyCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Any(func(v int) bool { return v == benchSize-1 })
+		_ = ctorInts(benchInts).Any(func(v int) bool { return v == benchSize-1 })
+
 	}
 }
 
@@ -237,13 +283,15 @@ func benchAnyLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.SomeBy(benchInts, func(v int) bool { return v == benchSize-1 })
+
 	}
 }
 
 func benchNoneCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).None(func(v int) bool { return v < 0 })
+		_ = ctorInts(benchInts).None(func(v int) bool { return v < 0 })
+
 	}
 }
 
@@ -251,13 +299,15 @@ func benchNoneLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.NoneBy(benchInts, func(v int) bool { return v < 0 })
+
 	}
 }
 
 func benchFirstCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).First()
+		_, _ = ctorInts(benchInts).First()
+
 	}
 }
 
@@ -265,13 +315,15 @@ func benchFirstLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = lo.First(benchInts)
+
 	}
 }
 
 func benchLastCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).Last()
+		_, _ = ctorInts(benchInts).Last()
+
 	}
 }
 
@@ -279,13 +331,15 @@ func benchLastLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = lo.Last(benchInts)
+
 	}
 }
 
 func benchIndexWhereCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).IndexWhere(func(v int) bool { return v == benchSize-1 })
+		_, _ = ctorInts(benchInts).IndexWhere(func(v int) bool { return v == benchSize-1 })
+
 	}
 }
 
@@ -293,6 +347,7 @@ func benchIndexWhereLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _, _ = lo.FindIndexOf(benchInts, func(v int) bool { return v == benchSize-1 })
+
 	}
 }
 
@@ -300,7 +355,8 @@ func benchEachCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		sum := 0
-		collection.New(benchInts).Each(func(v int) { sum += v })
+		ctorInts(benchInts).Each(func(v int) { sum += v })
+
 	}
 }
 
@@ -309,31 +365,33 @@ func benchEachLo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		sum := 0
 		lo.ForEach(benchInts, func(v int, _ int) { sum += v })
+
 	}
 }
 
 func benchMapCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workA, benchInts)
+		input := collectionInputForMutating(benchInts)
+		_ = ctorInts(input).Map(func(v int) int { return v * 3 })
 
-		_ = collection.New(workA).Map(func(v int) int { return v * 3 })
 	}
 }
 
 func benchMapLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workB, benchInts)
+		input := benchInts
+		_ = lo.Map(input, func(v int, _ int) int { return v * 3 })
 
-		_ = lo.Map(workB, func(v int, _ int) int { return v * 3 })
 	}
 }
 
 func benchReduceCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Reduce(0, func(acc, v int) int { return acc + v })
+		_ = ctorInts(benchInts).Reduce(0, func(acc, v int) int { return acc + v })
+
 	}
 }
 
@@ -341,31 +399,33 @@ func benchReduceLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Reduce(benchInts, func(acc int, v int, _ int) int { return acc + v }, 0)
+
 	}
 }
 
 func benchFilterCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workA, benchInts)
+		input := collectionInputForMutating(benchInts)
+		_ = ctorInts(input).Filter(func(v int) bool { return v%3 == 0 })
 
-		_ = collection.New(workA).Filter(func(v int) bool { return v%3 == 0 })
 	}
 }
 
 func benchFilterLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workB, benchInts)
+		input := benchInts
+		_ = lo.Filter(input, func(v int, _ int) bool { return v%3 == 0 })
 
-		_ = lo.Filter(workB, func(v int, _ int) bool { return v%3 == 0 })
 	}
 }
 
 func benchChunkCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Chunk(benchChunkSize)
+		_ = ctorInts(benchInts).Chunk(benchChunkSize)
+
 	}
 }
 
@@ -373,13 +433,15 @@ func benchChunkLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Chunk(benchInts, benchChunkSize)
+
 	}
 }
 
 func benchTakeCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Take(benchTakeN)
+		_ = ctorInts(benchInts).Take(benchTakeN)
+
 	}
 }
 
@@ -387,13 +449,15 @@ func benchTakeLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Subset(benchInts, 0, uint(benchTakeN))
+
 	}
 }
 
 func benchContainsCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Contains(func(v int) bool { return v == benchSize-1 })
+		_ = collection.Contains(ctorInts(benchInts), benchSize-1)
+
 	}
 }
 
@@ -401,13 +465,15 @@ func benchContainsLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.ContainsBy(benchInts, func(v int) bool { return v == benchSize-1 })
+
 	}
 }
 
 func benchFindCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.New(benchInts).FirstWhere(func(v int) bool { return v == benchSize-1 })
+		_, _ = ctorInts(benchInts).FirstWhere(func(v int) bool { return v == benchSize-1 })
+
 	}
 }
 
@@ -415,13 +481,15 @@ func benchFindLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = lo.Find(benchInts, func(v int) bool { return v == benchSize-1 })
+
 	}
 }
 
 func benchGroupByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.GroupBySlice(collection.New(benchInts), func(v int) int { return v % benchGroupByMod })
+		_ = collection.GroupBySlice(ctorInts(benchInts), func(v int) int { return v % benchGroupByMod })
+
 	}
 }
 
@@ -429,13 +497,15 @@ func benchGroupByLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.GroupBy(benchInts, func(v int) int { return v % benchGroupByMod })
+
 	}
 }
 
 func benchCountByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.CountBy(collection.New(benchIntsDup), func(v int) int { return v })
+		_ = collection.CountBy(ctorInts(benchIntsDup), func(v int) int { return v })
+
 	}
 }
 
@@ -443,13 +513,15 @@ func benchCountByLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.CountValuesBy(benchIntsDup, func(v int) int { return v })
+
 	}
 }
 
 func benchCountByValueCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.CountByValue(collection.New(benchIntsDup))
+		_ = collection.CountByValue(ctorInts(benchIntsDup))
+
 	}
 }
 
@@ -457,13 +529,15 @@ func benchCountByValueLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.CountValues(benchIntsDup)
+
 	}
 }
 
 func benchSkipCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).Skip(benchSkipN)
+		_ = ctorInts(benchInts).Skip(benchSkipN)
+
 	}
 }
 
@@ -471,13 +545,15 @@ func benchSkipLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Drop(benchInts, benchSkipN)
+
 	}
 }
 
 func benchSkipLastCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.New(benchInts).SkipLast(benchSkipN)
+		_ = ctorInts(benchInts).SkipLast(benchSkipN)
+
 	}
 }
 
@@ -485,15 +561,16 @@ func benchSkipLastLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.DropRight(benchInts, benchSkipN)
+
 	}
 }
 
 func benchReverseCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workA, benchInts)
+		input := collectionInputForMutating(benchInts)
+		_ = ctorInts(input).Reverse()
 
-		_ = collection.New(workA).Reverse()
 	}
 }
 
@@ -501,17 +578,17 @@ func benchReverseLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		copy(workB, benchInts)
-
 		_ = lo.Reverse(workB)
+
 	}
 }
 
 func benchShuffleCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		copy(workA, benchInts)
+		input := collectionInputForMutating(benchInts)
+		_ = ctorInts(input).Shuffle()
 
-		_ = collection.New(workA).Shuffle()
 	}
 }
 
@@ -519,15 +596,16 @@ func benchShuffleLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		copy(workB, benchInts)
-
 		_ = lo.Shuffle(workB)
+
 	}
 }
 
 func benchZipCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Zip(collection.New(benchInts), collection.New(benchIntsDup))
+		_ = collection.Zip(ctorInts(benchInts), ctorInts(benchIntsDup))
+
 	}
 }
 
@@ -535,15 +613,17 @@ func benchZipLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Zip2(benchInts, benchIntsDup)
+
 	}
 }
 
 func benchZipWithCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.ZipWith(collection.New(benchInts), collection.New(benchIntsDup), func(a, b int) int {
+		_ = collection.ZipWith(ctorInts(benchInts), ctorInts(benchIntsDup), func(a, b int) int {
 			return a + b
 		})
+
 	}
 }
 
@@ -553,13 +633,15 @@ func benchZipWithLo(b *testing.B) {
 		_ = lo.ZipBy2(benchInts, benchIntsDup, func(a, b int) int {
 			return a + b
 		})
+
 	}
 }
 
 func benchUniqueCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.UniqueComparable(collection.New(benchIntsDup))
+		_ = collection.UniqueComparable(ctorInts(benchIntsDup))
+
 	}
 }
 
@@ -567,13 +649,15 @@ func benchUniqueLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Uniq(benchIntsDup)
+
 	}
 }
 
 func benchUniqueByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.UniqueBy(collection.New(benchIntsDup), func(v int) int { return v })
+		_ = collection.UniqueBy(ctorInts(benchIntsDup), func(v int) int { return v })
+
 	}
 }
 
@@ -581,13 +665,15 @@ func benchUniqueByLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.UniqBy(benchIntsDup, func(v int) int { return v })
+
 	}
 }
 
 func benchUnionCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Union(collection.New(unionLeft), collection.New(unionRight))
+		_ = collection.Union(ctorInts(unionLeft), ctorInts(unionRight))
+
 	}
 }
 
@@ -595,13 +681,15 @@ func benchUnionLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Union(unionLeft, unionRight)
+
 	}
 }
 
 func benchIntersectCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Intersect(collection.New(intersectLeft), collection.New(intersectRight))
+		_ = collection.Intersect(ctorInts(intersectLeft), ctorInts(intersectRight))
+
 	}
 }
 
@@ -609,13 +697,15 @@ func benchIntersectLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Intersect(intersectLeft, intersectRight)
+
 	}
 }
 
 func benchDifferenceCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.Difference(collection.New(differenceLeft), collection.New(differenceRight))
+		_ = collection.Difference(ctorInts(differenceLeft), ctorInts(differenceRight))
+
 	}
 }
 
@@ -623,13 +713,15 @@ func benchDifferenceLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = lo.Difference(differenceLeft, differenceRight)
+
 	}
 }
 
 func benchToMapCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.ToMap(collection.New(benchInts), func(v int) int { return v }, func(v int) int { return v })
+		_ = collection.ToMap(ctorInts(benchInts), func(v int) int { return v }, func(v int) int { return v })
+
 	}
 }
 
@@ -637,13 +729,15 @@ func benchToMapLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.SliceToMap(benchInts, func(v int) (int, int) { return v, v })
+
 	}
 }
 
 func benchSumCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.NewNumeric(benchInts).Sum()
+		_ = ctorNumericInt(benchInts).Sum()
+
 	}
 }
 
@@ -651,13 +745,15 @@ func benchSumLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Sum(benchInts)
+
 	}
 }
 
 func benchMinCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.NewNumeric(benchInts).Min()
+		_, _ = ctorNumericInt(benchInts).Min()
+
 	}
 }
 
@@ -665,13 +761,15 @@ func benchMinLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Min(benchInts)
+
 	}
 }
 
 func benchMaxCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = collection.NewNumeric(benchInts).Max()
+		_, _ = ctorNumericInt(benchInts).Max()
+
 	}
 }
 
@@ -679,6 +777,7 @@ func benchMaxLo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = lo.Max(benchInts)
+
 	}
 }
 
@@ -696,8 +795,7 @@ func renderTable(results []benchResult) string {
 	}
 
 	var buf bytes.Buffer
-	buf.WriteString("### Performance Benchmarks\n\n")
-	buf.WriteString("| Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |\n")
+	buf.WriteString("| Op | ns/op (vs lo) | × (faster) | bytes/op (vs lo) | × (less memory) | allocs/op (vs lo) |\n")
 	buf.WriteString("|---:|----------------|:--:|------------------|:--:|--------------------|\n")
 
 	names := make([]string, 0, len(byName))
@@ -740,8 +838,115 @@ func renderTable(results []benchResult) string {
 	return strings.TrimSpace(buf.String())
 }
 
+type benchGroup struct {
+	name string
+	ops  []string
+}
+
+func renderCondensedTables(results []benchResult) string {
+	groups := []benchGroup{
+		{
+			name: "Read-only scalar ops (wrapper overhead only)",
+			ops: []string{
+				"All",
+				"Any",
+				"None",
+				"First",
+				"Last",
+				"FirstWhere",
+				"IndexWhere",
+				"Contains",
+				"Reduce (sum)",
+				"Sum",
+				"Min",
+				"Max",
+				"Each",
+			},
+		},
+		{
+			name: "Transforming ops",
+			ops: []string{
+				"Chunk",
+				"Take",
+				"Skip",
+				"SkipLast",
+				"Zip",
+				"ZipWith",
+				"Unique",
+				"UniqueBy",
+				"Union",
+				"Intersect",
+				"Difference",
+				"GroupBySlice",
+				"CountBy",
+				"CountByValue",
+				"ToMap",
+			},
+		},
+		{
+			name: "Pipelines",
+			ops: []string{
+				"Pipeline F→M→T→R",
+			},
+		},
+		{
+			name: "Mutating ops",
+			ops: []string{
+				"Map",
+				"Filter",
+				"Reverse",
+				"Shuffle",
+			},
+		},
+	}
+
+	var buf bytes.Buffer
+	buf.WriteString("Full raw tables: see `BENCHMARKS.md`.\n\n")
+	byName := map[string]map[string]benchResult{}
+	for _, r := range results {
+		if _, ok := byName[r.name]; !ok {
+			byName[r.name] = map[string]benchResult{}
+		}
+		byName[r.name][r.impl] = r
+	}
+
+	for _, group := range groups {
+		rows := make([]string, 0, len(group.ops))
+		for _, name := range group.ops {
+			entry, ok := byName[name]
+			if !ok {
+				continue
+			}
+			col := entry["collection"]
+			loRes := entry["lo"]
+
+			wrapperOnly := group.name == "Read-only scalar ops (wrapper overhead only)"
+			allowBold := group.name == "Pipelines" || group.name == "Transforming ops" || group.name == "Mutating ops"
+			speed := formatSpeed(loRes.nsPerOp, col.nsPerOp, allowBold, wrapperOnly)
+			mem := formatDeltaBytes(col.bytesPerOp, loRes.bytesPerOp)
+			allocs := formatDeltaAllocs(col.allocsPerOp, loRes.allocsPerOp)
+
+			rows = append(rows, fmt.Sprintf("| **%s** | %s | %s | %s |", name, speed, mem, allocs))
+		}
+
+		if len(rows) == 0 {
+			continue
+		}
+
+		buf.WriteString(fmt.Sprintf("#### %s\n\n", group.name))
+		buf.WriteString("| Op | Speed vs lo | Memory | Allocs |\n")
+		buf.WriteString("|---:|:-----------:|:------:|:------:|\n")
+		buf.WriteString(strings.Join(rows, "\n"))
+		buf.WriteString("\n\n")
+	}
+
+	return strings.TrimSpace(buf.String())
+}
+
 func formatNs(ns float64) string {
 	switch {
+	case ns < 1:
+		return "<1ns"
 	case ns >= 1e6:
 		return fmt.Sprintf("%.1fms", ns/1e6)
 	case ns >= 1e3:
@@ -775,16 +980,52 @@ func formatDurationNs(ns float64) string {
 	}
 }
 
+const (
+	wrapperEpsilon     = 0.10 // ±10% wrapper overhead tolerance
+	benchRatioNoiseNs  = 50.0
+	wrapperOnlyEpsilon = 0.15
+)
+
 func formatRatio(lo, col float64) string {
+	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
+		return "≈"
+	}
 	if col == 0 {
 		return "∞"
 	}
+
 	ratio := lo / col
-	if ratio >= 0.95 && ratio <= 1.05 {
+
+	// Treat small deltas as equivalent (wrapper overhead, measurement noise)
+	if ratio >= 1-wrapperEpsilon && ratio <= 1+wrapperEpsilon {
 		return "≈"
 	}
+
 	out := fmt.Sprintf("%.2fx", ratio)
 	if ratio > 1 {
+		return fmt.Sprintf("**%s**", out)
+	}
+	return out
+}
+
+func formatSpeed(lo, col float64, allowBold bool, wrapperOnly bool) string {
+	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
+		return "≈"
+	}
+	if col == 0 {
+		return "∞"
+	}
+
+	ratio := lo / col
+	if wrapperOnly && ratio >= 1-wrapperOnlyEpsilon && ratio <= 1+wrapperOnlyEpsilon {
+		return "≈"
+	}
+	if ratio >= 1-wrapperEpsilon && ratio <= 1+wrapperEpsilon {
+		return "≈"
+	}
+
+	out := fmt.Sprintf("%.2fx", ratio)
+	if ratio > 1 && allowBold {
 		return fmt.Sprintf("**%s**", out)
 	}
 	return out
@@ -801,7 +1042,7 @@ func formatRatioBytes(lo, col int64) string {
 	}
 
 	ratio := float64(lo) / float64(col)
-	if ratio >= 0.95 && ratio <= 1.05 {
+	if ratio >= 0.90 && ratio <= 1.10 {
 		return "≈"
 	}
 
@@ -826,11 +1067,41 @@ func formatInt(v int64) string {
 	}
 }
 
+func formatDeltaBytes(col, lo int64) string {
+	if col == lo {
+		return "≈"
+	}
+	diff := col - lo
+	if diff > 0 {
+		return fmt.Sprintf("+%s", formatBytes(diff))
+	}
+	return fmt.Sprintf("-%s", formatBytes(-diff))
+}
+
+func formatDeltaAllocs(col, lo int64) string {
+	if col == lo {
+		return "≈"
+	}
+	diff := col - lo
+	if diff > 0 {
+		return fmt.Sprintf("+%d", diff)
+	}
+	return fmt.Sprintf("%d", diff)
+}
+
+func collectionInputForMutating(src []int) []int {
+	if currentMode == benchBorrow {
+		copy(workA, src)
+		return workA
+	}
+	return src
+}
+
 // ----------------------------------------------------------------------------
 // README injection
 // ----------------------------------------------------------------------------
 
-func updateReadme(table string) error {
+func updateReadme(condensed string) error {
 	root, err := findRoot()
 	if err != nil {
 		return err
@@ -842,7 +1113,7 @@ func updateReadme(table string) error {
 		return err
 	}
 
-	out, err := replaceSection(string(data), table)
+	out, err := replaceSection(string(data), condensed)
 	if err != nil {
 		return err
 	}
@@ -850,20 +1121,50 @@ func updateReadme(table string) error {
 	return os.WriteFile(readmePath, []byte(out), 0o644)
 }
 
-func replaceSection(readme, content string) (string, error) {
+func replaceSection(readme, condensed string) (string, error) {
 	start := strings.Index(readme, benchStart)
 	end := strings.Index(readme, benchEnd)
 	if start == -1 || end == -1 || end < start {
 		return "", fmt.Errorf("benchmark anchors not found or malformed")
 	}
 
+	section := readme[start+len(benchStart) : end]
+	updated, err := replaceBenchTable(section, condensed)
+	if err != nil {
+		return "", err
+	}
+
 	var buf bytes.Buffer
 	buf.WriteString(readme[:start+len(benchStart)])
-	buf.WriteString("\n\n")
-	buf.WriteString(content)
-	buf.WriteString("\n")
+	buf.WriteString(updated)
 	buf.WriteString(readme[end:])
 	return buf.String(), nil
+}
+
+func replaceBenchTable(section, condensed string) (string, error) {
+	trimmed := strings.TrimSpace(condensed)
+	if trimmed == "" {
+		return "", fmt.Errorf("condensed benchmark content is empty")
+	}
+	return "\n\n" + trimmed + "\n", nil
+}
+
+func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
+	root, err := findRoot()
+	if err != nil {
+		return err
+	}
+
+	path := filepath.Join(root, "BENCHMARKS.md")
+	var buf bytes.Buffer
+	buf.WriteString("# Benchmarks\n\n")
+	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`.\n\n")
+	buf.WriteString(rawBorrowTable)
+	buf.WriteString("\n\n")
+	buf.WriteString("Raw results for `collection.New().Clone()` (explicit copy) vs `lo`.\n\n")
+	buf.WriteString(rawCopyTable)
+	buf.WriteString("\n")
+	return os.WriteFile(path, buf.Bytes(), 0o644)
 }
 
 // ----------------------------------------------------------------------------

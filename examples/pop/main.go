@@ -6,14 +6,14 @@ package main
 import "github.com/goforj/collection"
 
 func main() {
-	// Pop returns the last item and a new collection with that item removed.
-	// The original collection remains unchanged.
+	// Pop removes and returns the last item in the collection.
 
 	// Example: integers
 	c := collection.New([]int{1, 2, 3})
-	item, rest := c.Pop()
-	collection.Dump(item, rest.Items())
+	item, ok := c.Pop()
+	collection.Dump(item, ok, c.Items())
 	// 3 #int
+	// true #bool
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int
@@ -21,9 +21,10 @@ func main() {
 
 	// Example: strings
 	c2 := collection.New([]string{"a", "b", "c"})
-	item2, rest2 := c2.Pop()
-	collection.Dump(item2, rest2.Items())
+	item2, ok2 := c2.Pop()
+	collection.Dump(item2, ok2, c2.Items())
 	// "c" #string
+	// true #bool
 	// #[]string [
 	//   0 => "a" #string
 	//   1 => "b" #string
@@ -40,12 +41,13 @@ func main() {
 		{ID: 2, Name: "Bob"},
 	})
 
-	item3, rest3 := users.Pop()
-	collection.Dump(item3, rest3.Items())
+	item3, ok3 := users.Pop()
+	collection.Dump(item3, ok3, users.Items())
 	// #main.User {
 	//   +ID   => 2 #int
 	//   +Name => "Bob" #string
 	// }
+	// true #bool
 	// #[]main.User [
 	//   0 => #main.User {
 	//     +ID   => 1 #int
@@ -55,9 +57,10 @@ func main() {
 
 	// Example: empty collection
 	empty := collection.New([]int{})
-	item4, rest4 := empty.Pop()
-	collection.Dump(item4, rest4.Items())
+	item4, ok4 := empty.Pop()
+	collection.Dump(item4, ok4, empty.Items())
 	// 0 #int
+	// false #bool
 	// #[]int [
 	// ]
 }

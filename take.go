@@ -2,12 +2,15 @@ package collection
 
 // Take returns a new collection containing the first `n` items when n > 0,
 // or the last `|n|` items when n < 0.
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // If n exceeds the collection length, the entire collection is returned.
 // If n == 0, an empty collection is returned.
 //
 // Mirrors Laravel's take() semantics.
+//
+// NOTE: returns a view (shares backing array). Use Clone() to detach.
 //
 // @group Slicing
 // @behavior immutable
@@ -61,17 +64,17 @@ func (c *Collection[T]) Take(n int) *Collection[T] {
 	if n > 0 {
 		if n >= length {
 			// no need to allocate; just reuse original
-			return &Collection[T]{items: c.items}
+			return New(c.items)
 		}
-		return &Collection[T]{items: c.items[:n]}
+		return New(c.items[:n])
 	}
 
 	// Negative → take from end
 	n = -n
 	if n >= length {
-		return &Collection[T]{items: c.items}
+		return New(c.items)
 	}
 
 	start := length - n
-	return &Collection[T]{items: c.items[start:]}
+	return New(c.items[start:])
 }

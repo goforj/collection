@@ -6,7 +6,8 @@ import "sort"
 // returns the same collection for chaining.
 // @group Ordering
 // @behavior mutable
-// @fluent true
+// @chainable true
+// @terminal false
 //
 // The comparison function `less(a, b)` should return true if `a` should come
 // before `b` in the sorted order.

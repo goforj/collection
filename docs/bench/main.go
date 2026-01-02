@@ -40,15 +40,14 @@ func main() {
 	only := parseOnly(*onlyFlag)
 	borrowResults := runBenches(only, benchBorrow)
 	copyResults := runBenches(only, benchCopy)
-	condensed := renderCondensedTables(borrowResults, copyResults)
+	condensed := renderCondensedTables(borrowResults)
 	rawBorrow := renderTable(borrowResults)
-	rawCopy := renderTable(copyResults)
 
 	if err := updateReadme(condensed); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	if err := updateBenchmarksFile(rawBorrow, rawCopy); err != nil {
+	if err := updateBenchmarksFile(rawBorrow, renderTable(copyResults)); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -983,7 +982,7 @@ type benchGroup struct {
 	ops  []string
 }
 
-func renderCondensedTables(borrowResults, copyResults []benchResult) string {
+func renderCondensedTables(results []benchResult) string {
 	groups := []benchGroup{
 		{
 			name: "Read-only scalar ops (wrapper overhead only)",
@@ -1042,13 +1041,6 @@ func renderCondensedTables(borrowResults, copyResults []benchResult) string {
 
 	var buf bytes.Buffer
 	buf.WriteString("Full raw tables: see `BENCHMARKS.md`.\n\n")
-	renderCondensedTable(&buf, "Borrow-by-default (New)", borrowResults, groups)
-	buf.WriteString("\n")
-	renderCondensedTable(&buf, "Explicit copy cost (Clone)", copyResults, groups)
-	return strings.TrimSpace(buf.String())
-}
-
-func renderCondensedTable(buf *bytes.Buffer, title string, results []benchResult, groups []benchGroup) {
 	byName := map[string]map[string]benchResult{}
 	for _, r := range results {
 		if _, ok := byName[r.name]; !ok {
@@ -1057,7 +1049,6 @@ func renderCondensedTable(buf *bytes.Buffer, title string, results []benchResult
 		byName[r.name][r.impl] = r
 	}
 
-	buf.WriteString(fmt.Sprintf("### %s\n\n", title))
 	for _, group := range groups {
 		rows := make([]string, 0, len(group.ops))
 		for _, name := range group.ops {
@@ -1087,6 +1078,8 @@ func renderCondensedTable(buf *bytes.Buffer, title string, results []benchResult
 		buf.WriteString(strings.Join(rows, "\n"))
 		buf.WriteString("\n\n")
 	}
+
+	return strings.TrimSpace(buf.String())
 }
 
 func formatNs(ns float64) string {

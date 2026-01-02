@@ -93,8 +93,6 @@ That design choice doesn't matter much for some single operations. It matters a 
 
 Full raw tables: see `BENCHMARKS.md`.
 
-### Borrow-by-default (New)
-
 #### Read-only scalar ops (wrapper overhead only)
 
 | Op | Speed vs lo | Memory | Allocs |
@@ -117,12 +115,12 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Chunk** | **7.84x** | -8.0KB | -49 |
+| **Chunk** | **7.57x** | -8.0KB | -49 |
 | **Take** | ≈ | +48B | +2 |
-| **Skip** | **62.99x** | -8.2KB | ≈ |
-| **SkipLast** | **62.29x** | -8.2KB | ≈ |
-| **Zip** | **2.27x** | +48B | +2 |
-| **ZipWith** | **3.22x** | +48B | +2 |
+| **Skip** | **59.96x** | -8.2KB | ≈ |
+| **SkipLast** | **61.68x** | -8.2KB | ≈ |
+| **Zip** | **2.44x** | +48B | +2 |
+| **ZipWith** | **3.09x** | +48B | +2 |
 | **Unique** | ≈ | +24B | +1 |
 | **UniqueBy** | ≈ | +48B | +2 |
 | **Union** | ≈ | +72B | +3 |
@@ -137,72 +135,16 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | **1.74x** | -12.2KB | ≈ |
+| **Pipeline F→M→T→R** | **2.70x** | -12.2KB | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
 | **Map** | **2.18x** | -8.2KB | ≈ |
-| **Filter** | **1.55x** | -8.2KB | ≈ |
+| **Filter** | **1.57x** | -8.2KB | ≈ |
 | **Reverse** | ≈ | +24B | +1 |
-| **Shuffle** | **1.43x** | +8.2KB | +3 |
-
-
-### Explicit copy cost (Clone)
-
-#### Read-only scalar ops (wrapper overhead only)
-
-| Op | Speed vs lo | Memory | Allocs |
-|---:|:-----------:|:------:|:------:|
-| **All** | 0.26x | +8.2KB | +3 |
-| **Any** | 0.27x | +8.2KB | +3 |
-| **None** | 0.27x | +8.2KB | +3 |
-| **First** | 0.00x | +8.2KB | +3 |
-| **Last** | 0.00x | +8.2KB | +3 |
-| **FirstWhere** | 0.26x | +8.2KB | +3 |
-| **IndexWhere** | 0.27x | +8.2KB | +3 |
-| **Contains** | 0.27x | +8.2KB | +3 |
-| **Reduce (sum)** | 0.26x | +8.2KB | +3 |
-| **Sum** | 0.25x | +8.3KB | +5 |
-| **Min** | 0.25x | +8.3KB | +5 |
-| **Max** | 0.25x | +8.3KB | +5 |
-| **Each** | 0.26x | +8.2KB | +3 |
-
-#### Transforming ops
-
-| Op | Speed vs lo | Memory | Allocs |
-|---:|:-----------:|:------:|:------:|
-| **Chunk** | **1.27x** | +240B | -47 |
-| **Take** | 0.00x | +8.3KB | +4 |
-| **Skip** | ≈ | +48B | +2 |
-| **SkipLast** | ≈ | +48B | +2 |
-| **Zip** | **1.19x** | +16.5KB | +6 |
-| **ZipWith** | **1.37x** | +16.5KB | +6 |
-| **Unique** | 0.89x | +8.2KB | +3 |
-| **UniqueBy** | 0.87x | +8.3KB | +4 |
-| **Union** | ≈ | +16.5KB | +7 |
-| **Intersect** | ≈ | +16.5KB | +7 |
-| **Difference** | **2.16x** | -10.2KB | -25 |
-| **GroupBySlice** | ≈ | +8.2KB | +3 |
-| **CountBy** | ≈ | +8.2KB | +3 |
-| **CountByValue** | ≈ | +8.2KB | +3 |
-| **ToMap** | ≈ | +8.2KB | +2 |
-
-#### Pipelines
-
-| Op | Speed vs lo | Memory | Allocs |
-|---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | ≈ | -4.0KB | +2 |
-
-#### Mutating ops
-
-| Op | Speed vs lo | Memory | Allocs |
-|---:|:-----------:|:------:|:------:|
-| **Map** | 0.87x | +48B | +2 |
-| **Filter** | 0.90x | +48B | +2 |
-| **Reverse** | 0.28x | +8.2KB | +3 |
-| **Shuffle** | **1.26x** | +16.5KB | +5 |
+| **Shuffle** | **1.41x** | +8.2KB | +3 |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
@@ -229,7 +171,7 @@ That model is simple and safe - but each step typically allocates.
 `collection` pipelines are designed to look more like this:
 
 ```
-input → Filter (in place) → Sort (in place) → Take (slice view)
+input → Filter (in place) → Map (in place) → Take (slice view)
 ```
 
 When you opt into mutation, **the pipeline stays on the same backing array** unless an operation explicitly documents that it allocates. The result is:
@@ -2710,7 +2652,7 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="partition"></a>Partition · immutable · chainable
+### <a id="partition"></a>Partition · immutable · terminal
 
 Partition splits the collection into two new collections based on predicate fn.
 The first collection contains items where fn returns true; the second contains

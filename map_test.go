@@ -18,8 +18,12 @@ func TestMap_Ints(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, mapped.items)
 	}
 
-	if !reflect.DeepEqual(c.Items(), []int{1, 2, 3}) {
-		t.Fatalf("Map should not mutate original collection")
+	if mapped != c {
+		t.Fatalf("Map should return the same collection")
+	}
+
+	if !reflect.DeepEqual(c.Items(), expected) {
+		t.Fatalf("Map should mutate original collection")
 	}
 }
 
@@ -48,8 +52,12 @@ func TestMap_Structs(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, mapped.items)
 	}
 
-	if !reflect.DeepEqual(c.Items(), []User{{1, "Chris"}, {2, "Van"}}) {
-		t.Fatalf("Map should not mutate original collection")
+	if mapped != c {
+		t.Fatalf("Map should return the same collection")
+	}
+
+	if !reflect.DeepEqual(c.Items(), expected) {
+		t.Fatalf("Map should mutate original collection")
 	}
 }
 
@@ -62,5 +70,9 @@ func TestMap_Empty(t *testing.T) {
 
 	if len(mapped.items) != 0 {
 		t.Fatalf("expected empty slice, got %v", mapped.items)
+	}
+
+	if mapped != c {
+		t.Fatalf("Map should return the same collection")
 	}
 }

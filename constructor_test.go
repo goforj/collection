@@ -73,6 +73,15 @@ func TestCopyOfNumeric_CopiesInputSlice(t *testing.T) {
 	}
 }
 
+func TestCopyOfNumeric_PreservesNilSlice(t *testing.T) {
+	var items []int
+	c := CopyOfNumeric(items)
+
+	if c.Items() != nil {
+		t.Fatalf("CopyOfNumeric should preserve nil slice")
+	}
+}
+
 func TestSelectionOps_ShareBackingSlice(t *testing.T) {
 	items := []int{1, 2, 3, 4}
 	c := New(items)

@@ -40,7 +40,7 @@ func TestPipe_IsNonMutating(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
 	_ = Pipe(c, func(col *Collection[int]) *Collection[int] {
-		return col.Map(func(v int) int { return v * 2 })
+		return col
 	})
 
 	if !reflect.DeepEqual(c.Items(), []int{1, 2, 3}) {

@@ -1003,7 +1003,6 @@ func renderCondensedTables(results []benchResult) string {
 		{
 			name: "Transforming ops",
 			ops: []string{
-				"Map",
 				"Chunk",
 				"Take",
 				"Skip",
@@ -1030,6 +1029,7 @@ func renderCondensedTables(results []benchResult) string {
 		{
 			name: "Mutating ops",
 			ops: []string{
+				"Map",
 				"Filter",
 				"Reverse",
 				"Shuffle",

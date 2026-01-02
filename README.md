@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-441-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-442-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
@@ -115,18 +115,17 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Map** | ≈ | +24B | +1 |
-| **Chunk** | **7.55x** | -8.0KB | -49 |
+| **Chunk** | **7.39x** | -8.0KB | -49 |
 | **Take** | ≈ | +48B | +2 |
-| **Skip** | **64.23x** | -8.2KB | ≈ |
-| **SkipLast** | **63.73x** | -8.2KB | ≈ |
+| **Skip** | **63.96x** | -8.2KB | ≈ |
+| **SkipLast** | **63.64x** | -8.2KB | ≈ |
 | **Zip** | **2.28x** | +48B | +2 |
-| **ZipWith** | **3.00x** | +48B | +2 |
+| **ZipWith** | **2.96x** | +48B | +2 |
 | **Unique** | ≈ | +24B | +1 |
 | **UniqueBy** | ≈ | +48B | +2 |
 | **Union** | ≈ | +72B | +3 |
 | **Intersect** | ≈ | +72B | +3 |
-| **Difference** | **2.26x** | -26.7KB | -29 |
+| **Difference** | **2.37x** | -51.9KB | -41 |
 | **GroupBySlice** | ≈ | +24B | +1 |
 | **CountBy** | ≈ | +24B | +1 |
 | **CountByValue** | ≈ | +24B | +1 |
@@ -136,15 +135,16 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | **1.66x** | -8.1KB | +1 |
+| **Pipeline F→M→T→R** | **2.47x** | -12.2KB | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Filter** | **1.56x** | -8.2KB | ≈ |
+| **Map** | **2.68x** | -8.2KB | ≈ |
+| **Filter** | **1.41x** | -8.2KB | ≈ |
 | **Reverse** | ≈ | +24B | +1 |
-| **Shuffle** | **1.33x** | +8.2KB | +3 |
+| **Shuffle** | **1.44x** | +8.2KB | +3 |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
@@ -3497,9 +3497,9 @@ collection.Dump(names)
 // ]
 ```
 
-### <a id="map"></a>Map · immutable · fluent
+### <a id="map"></a>Map · mutable · fluent
 
-Map applies a same-type transformation and returns a new collection.
+Map applies a same-type transformation in place.
 
 _Example: integers_
 

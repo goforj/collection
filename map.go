@@ -1,8 +1,8 @@
 package collection
 
-// Map applies a same-type transformation and returns a new collection.
+// Map applies a same-type transformation in place.
 // @group Transformation
-// @behavior immutable
+// @behavior mutable
 // @fluent true
 //
 // Use this when you're transforming T -> T (e.g., enrichment, normalization).
@@ -66,9 +66,8 @@ package collection
 //	//   }
 //	// ]
 func (c *Collection[T]) Map(fn func(T) T) *Collection[T] {
-	out := make([]T, len(c.items))
 	for i, v := range c.items {
-		out[i] = fn(v)
+		c.items[i] = fn(v)
 	}
-	return New(out)
+	return c
 }

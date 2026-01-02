@@ -30,7 +30,7 @@ package collection
 //
 //	collection.Dump(out)
 //	// #[]string [
-//	//   0 => "APPLE"  #string
+//	//   0 => "APPLE" #string
 //	//   1 => "BANANA" #string
 //	//   2 => "CHERRY" #string
 //	// ]
@@ -55,8 +55,8 @@ package collection
 //
 //	collection.Dump(names)
 //	// #[]string [
-//	//   0 => "Alice"   #string
-//	//   1 => "Bob"     #string
+//	//   0 => "Alice" #string
+//	//   1 => "Bob" #string
 //	//   2 => "Charlie" #string
 //	// ]
 func (c *Collection[T]) Each(fn func(T)) *Collection[T] {

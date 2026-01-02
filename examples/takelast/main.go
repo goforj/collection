@@ -30,7 +30,8 @@ func main() {
 	// Example: take none
 	out2 := c.TakeLast(0)
 	collection.Dump(out2.Items())
-	// #[]int []
+	// #[]int [
+	// ]
 
 	// Example: take all
 	out3 := c.TakeLast(10)
@@ -56,7 +57,9 @@ func main() {
 
 	out4 := users.TakeLast(1)
 	collection.Dump(out4.Items())
-	// #[]collection.User [
-	//   0 => {ID:3} #collection.User
+	// #[]main.User [
+	//  0 => #main.User {
+	//    +ID => 3 #int
+	//  }
 	// ]
 }

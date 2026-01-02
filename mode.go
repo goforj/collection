@@ -41,7 +41,7 @@ package collection
 //	empty := collection.NewNumeric([]int{})
 //	mode4 := empty.Mode()
 //	collection.Dump(mode4)
-//	// <nil>
+//	// []int(nil)
 func (c *NumericCollection[T]) Mode() []T {
 	items := c.items
 	n := len(items)

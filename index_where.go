@@ -16,13 +16,15 @@ package collection
 //	c := collection.New([]int{10, 20, 30, 40})
 //	idx, ok := c.IndexWhere(func(v int) bool { return v == 30 })
 //	collection.Dump(idx, ok)
-//	// 2 true
+//	// 2 #int
+//	// true #bool
 //
 // Example: not found
 //
 //	idx2, ok2 := c.IndexWhere(func(v int) bool { return v == 99 })
 //	collection.Dump(idx2, ok2)
-//	// 0 false
+//	// 0 #int
+//	// false #bool
 //
 // Example: structs
 //
@@ -42,7 +44,8 @@ package collection
 //	})
 //
 //	collection.Dump(idx3, ok3)
-//	// 1 true
+//	// 1 #int
+//	// true #bool
 func (c *Collection[T]) IndexWhere(fn func(T) bool) (int, bool) {
 	for i, v := range c.items {
 		if fn(v) {

@@ -20,11 +20,11 @@ func main() {
 
 	collection.Dump(out)
 
-	// #map[string]int [
-	//   "a" => 1
-	//   "b" => 2
-	//   "c" => 3
-	// ]
+	// #map[string]int {
+	//  a => 1 #int
+	//  b => 2 #int
+	//  c => 3 #int
+	// }
 
 	// Example: filtering before conversion
 	type Config struct {
@@ -48,8 +48,14 @@ func main() {
 
 	collection.Dump(out2)
 
-	// #map[string]collection.Config [
-	//   "router-1" => {Enabled:true Timeout:30}
-	//   "router-3" => {Enabled:true Timeout:45}
-	// ]
+	// #map[string]main.Config {
+	//  router-1 => #main.Config {
+	//    +Enabled => true #bool
+	//    +Timeout => 30 #int
+	//  }
+	//  router-3 => #main.Config {
+	//    +Enabled => true #bool
+	//    +Timeout => 45 #int
+	//  }
+	// }
 }

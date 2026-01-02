@@ -47,9 +47,15 @@ func main() {
 
 	users.Reverse()
 	collection.Dump(users.Items())
-	// #[]collection.User [
-	//   0 => {ID:3} #collection.User
-	//   1 => {ID:2} #collection.User
-	//   2 => {ID:1} #collection.User
+	// #[]main.User [
+	//   0 => #main.User {
+	//     +ID => 3 #int
+	//   }
+	//   1 => #main.User {
+	//     +ID => 2 #int
+	//   }
+	//   2 => #main.User {
+	//     +ID => 1 #int
+	//   }
 	// ]
 }

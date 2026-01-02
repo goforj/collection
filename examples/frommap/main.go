@@ -16,12 +16,24 @@ func main() {
 	}
 
 	c := collection.FromMap(m)
+	c.Sort(func(a, b collection.Pair[string, int]) bool {
+		return a.Key < b.Key
+	})
 	collection.Dump(c.Items())
 
 	// #[]collection.Pair[string,int] [
-	//   0 => {Key:"a" Value:1}
-	//   1 => {Key:"b" Value:2}
-	//   2 => {Key:"c" Value:3}
+	//   0 => #collection.Pair[string,int] {
+	//     +Key   => "a" #string
+	//     +Value => 1 #int
+	//   }
+	//   1 => #collection.Pair[string,int] {
+	//     +Key   => "b" #string
+	//     +Value => 2 #int
+	//   }
+	//   2 => #collection.Pair[string,int] {
+	//     +Key   => "c" #string
+	//     +Value => 3 #int
+	//   }
 	// ]
 
 	// Example: filtering map entries
@@ -41,13 +53,28 @@ func main() {
 		Filter(func(p collection.Pair[string, Config]) bool {
 			return p.Value.Enabled
 		}).
+		Sort(func(a, b collection.Pair[string, Config]) bool {
+			return a.Key < b.Key
+		}).
 		Items()
 
 	collection.Dump(out)
 
-	// #[]collection.Pair[string,collection.Config] [
-	//   0 => {Key:"router-1" Value:{Enabled:true Timeout:30}}
-	//   1 => {Key:"router-3" Value:{Enabled:true Timeout:45}}
+	// #[]collection.Pair[string,main.Config·1] [
+	//   0 => #collection.Pair[string,main.Config·1] {
+	//     +Key       => "router-1" #string
+	//     +Value     => #main.Config {
+	//       +Enabled => true #bool
+	//       +Timeout => 30 #int
+	//     }
+	//   }
+	//   1 => #collection.Pair[string,main.Config·1] {
+	//     +Key       => "router-3" #string
+	//     +Value     => #main.Config {
+	//       +Enabled => true #bool
+	//       +Timeout => 45 #int
+	//     }
+	//   }
 	// ]
 
 	// Example: map → collection → map
@@ -61,8 +88,8 @@ func main() {
 
 	collection.Dump(out2)
 
-	// #map[string]int [
-	//   "alice" => 1
-	//   "bob"   => 2
-	// ]
+	// #map[string]int {
+	//   alice => 1 #int
+	//   bob => 2 #int
+	// }
 }

@@ -19,7 +19,7 @@ import "sort"
 //	median1, ok1 := c.Median()
 //	collection.Dump(median1, ok1)
 //	// 2.000000 #float64
-//	// true     #bool
+//	// true #bool
 //
 // Example: integers - even number of items
 //
@@ -28,7 +28,7 @@ import "sort"
 //	median2, ok2 := c2.Median()
 //	collection.Dump(median2, ok2)
 //	// 5.000000 #float64
-//	// true     #bool
+//	// true #bool
 //
 // Example: floats
 //
@@ -37,7 +37,7 @@ import "sort"
 //	median3, ok3 := c3.Median()
 //	collection.Dump(median3, ok3)
 //	// 3.300000 #float64
-//	// true     #bool
+//	// true #bool
 //
 // Example: integers - empty numeric collection
 //
@@ -46,7 +46,7 @@ import "sort"
 //	median4, ok4 := c4.Median()
 //	collection.Dump(median4, ok4)
 //	// 0.000000 #float64
-//	// false    #bool
+//	// false #bool
 func (c *NumericCollection[T]) Median() (float64, bool) {
 	n := len(c.items)
 	if n == 0 {

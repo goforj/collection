@@ -49,9 +49,15 @@ package collection
 //	})
 //
 //	collection.Dump(c3.Items())
-//	// #[]collection.User [
-//	//	0 => {ID:1 Name:"ALICE"} #collection.User
-//	//	1 => {ID:2 Name:"BOB"}   #collection.User
+//	// #[]main.User [
+//	//  0 => #main.User {
+//	//    +ID   => 1 #int
+//	//    +Name => "ALICE" #string
+//	//  }
+//	//  1 => #main.User {
+//	//    +ID   => 2 #int
+//	//    +Name => "BOB" #string
+//	//  }
 //	// ]
 func (c *Collection[T]) Transform(fn func(T) T) {
 	for i, v := range c.items {

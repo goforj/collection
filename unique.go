@@ -53,9 +53,15 @@ package collection
 //	})
 //
 //	collection.Dump(out3.Items())
-//	// #[]collection.User [
-//	//	0 => {ID:1 Name:"Alice"} #collection.User
-//	//	1 => {ID:2 Name:"Bob"}   #collection.User
+//	// #[]main.User [
+//	//  0 => #main.User {
+//	//    +ID   => 1 #int
+//	//    +Name => "Alice" #string
+//	//  }
+//	//  1 => #main.User {
+//	//    +ID   => 2 #int
+//	//    +Name => "Bob" #string
+//	//  }
 //	// ]
 func (c *Collection[T]) Unique(eq func(a, b T) bool) *Collection[T] {
 	out := make([]T, 0, len(c.items))

@@ -16,7 +16,7 @@ package collection
 //		return v < 3
 //	})
 //	collection.Dump(v, ok)
-//	// 2    #int
+//	// 2 #int
 //	// true #bool
 //
 // Example: integers without predicate (equivalent to Last())
@@ -25,7 +25,7 @@ package collection
 //
 //	v2, ok2 := c2.LastWhere(nil)
 //	collection.Dump(v2, ok2)
-//	// 40   #int
+//	// 40 #int
 //	// true #bool
 //
 // Example: strings
@@ -37,7 +37,7 @@ package collection
 //	})
 //	collection.Dump(v3, ok3)
 //	// "gamma" #string
-//	// true    #bool
+//	// true #bool
 //
 // Example: structs
 //
@@ -58,8 +58,8 @@ package collection
 //	})
 //	collection.Dump(u, ok4)
 //	// #main.User {
-//	//   +ID   => 3        #int
-//	//   +Name => "Alex"  #string
+//	//   +ID   => 3 #int
+//	//   +Name => "Alex" #string
 //	// }
 //	// true #bool
 //
@@ -71,7 +71,7 @@ package collection
 //		return v > 10
 //	})
 //	collection.Dump(v4, ok5)
-//	// 0     #int
+//	// 0 #int
 //	// false #bool
 //
 // Example: empty collection
@@ -80,7 +80,7 @@ package collection
 //
 //	v5, ok6 := c5.LastWhere(nil)
 //	collection.Dump(v5, ok6)
-//	// 0     #int
+//	// 0 #int
 //	// false #bool
 func (c *Collection[T]) LastWhere(fn func(T, int) bool) (value T, ok bool) {
 	if len(c.items) == 0 {

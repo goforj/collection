@@ -14,10 +14,10 @@ package collection
 //		return v
 //	})
 //	collection.Dump(counts)
-//	// map[int]int {
-//	//   1: 1 #int
-//	//   2: 2 #int
-//	//   3: 3 #int
+//	// #map[int]int {
+//	//   1 => 1 #int
+//	//   2 => 2 #int
+//	//   3 => 3 #int
 //	// }
 //
 // Example: strings
@@ -27,10 +27,10 @@ package collection
 //		return v
 //	})
 //	collection.Dump(counts2)
-//	// map[string]int {
-//	//   "apple":  2 #int
-//	//   "banana": 2 #int
-//	//   "cherry": 1 #int
+//	// #map[string]int {
+//	//   apple => 2 #int
+//	//   banana => 2 #int
+//	//   cherry => 1 #int
 //	// }
 //
 // Example: structs
@@ -53,9 +53,9 @@ package collection
 //	})
 //
 //	collection.Dump(roleCounts)
-//	// map[string]int {
-//	//   "admin": 3 #int
-//	//   "user":  2 #int
+//	// #map[string]int {
+//	//   admin => 3 #int
+//	//   user => 2 #int
 //	// }
 func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 	items := c.Items()
@@ -80,21 +80,21 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 //	c1 := collection.New([]string{"a", "b", "a"})
 //	counts1 := collection.CountByValue(c1)
 //	collection.Dump(counts1)
-//	// #map[string]int [
-//	//	"a" => 2 #int
-//	//	"b" => 1 #int
-//	// ]
+//	// #map[string]int {
+//	//  a => 2 #int
+//	//  b => 1 #int
+//	// }
 //
 // Example: integers
 //
 //	c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
 //	counts2 := collection.CountByValue(c2)
 //	collection.Dump(counts2)
-//	// #map[int]int [
-//	//	1 => 1 #int
-//	//	2 => 2 #int
-//	//	3 => 3 #int
-//	// ]
+//	// #map[int]int {
+//	//  1 => 1 #int
+//	//  2 => 2 #int
+//	//  3 => 3 #int
+//	// }
 //
 // Example: structs (comparable)
 //
@@ -111,10 +111,10 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 //
 //	counts3 := collection.CountByValue(c3)
 //	collection.Dump(counts3)
-//	// #map[collection.Point]int [
-//	//	{X:1 Y:1} => 2 #int
-//	//	{X:2 Y:2} => 1 #int
-//	// ]
+//	// #map[main.Point]int {
+//	//  {1 1} => 2 #int
+//	//  {2 2} => 1 #int
+//	// }
 func CountByValue[T comparable](c *Collection[T]) map[T]int {
 	items := c.Items()
 	result := make(map[T]int)

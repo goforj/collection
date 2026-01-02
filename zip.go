@@ -41,15 +41,15 @@ package collection
 //
 //	out2 := collection.Zip(users, roles)
 //	collection.Dump(out2.Items())
-//	// #[]collection.Tuple[main.User,string] [
-//	//   0 => #collection.Tuple[main.User,string] {
+//	// #[]collection.Tuple[main.User·1,string] [
+//	//   0 => #collection.Tuple[main.User·1,string] {
 //	//     +First  => #main.User {
 //	//       +ID   => 1 #int
 //	//       +Name => "Alice" #string
 //	//     }
 //	//     +Second => "admin" #string
 //	//   }
-//	//   1 => #collection.Tuple[main.User,string] {
+//	//   1 => #collection.Tuple[main.User·1,string] {
 //	//     +First  => #main.User {
 //	//       +ID   => 2 #int
 //	//       +Name => "Bob" #string

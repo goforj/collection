@@ -34,7 +34,7 @@ func main() {
 
 	collection.Dump(upper.Items())
 	// #[]string [
-	//   0 => "APPLE"  #string
+	//   0 => "APPLE" #string
 	//   1 => "BANANA" #string
 	//   2 => "CHERRY" #string
 	// ]
@@ -58,12 +58,12 @@ func main() {
 	collection.Dump(updated.Items())
 	// #[]main.User [
 	//   0 => #main.User {
-	//     +ID   => 1        #int
-	//     +Name => "ALICE"  #string
+	//     +ID   => 1 #int
+	//     +Name => "ALICE" #string
 	//   }
 	//   1 => #main.User {
-	//     +ID   => 2        #int
-	//     +Name => "BOB"    #string
+	//     +ID   => 2 #int
+	//     +Name => "BOB" #string
 	//   }
 	// ]
 }

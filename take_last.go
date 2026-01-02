@@ -27,7 +27,8 @@ package collection
 //
 //	out2 := c.TakeLast(0)
 //	collection.Dump(out2.Items())
-//	// #[]int []
+//	// #[]int [
+//	// ]
 //
 // Example: take all
 //
@@ -55,8 +56,10 @@ package collection
 //
 //	out4 := users.TakeLast(1)
 //	collection.Dump(out4.Items())
-//	// #[]collection.User [
-//	//   0 => {ID:3} #collection.User
+//	// #[]main.User [
+//	//  0 => #main.User {
+//	//    +ID => 3 #int
+//	//  }
 //	// ]
 func (c *Collection[T]) TakeLast(n int) *Collection[T] {
 	items := c.items

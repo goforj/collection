@@ -41,7 +41,8 @@ package collection
 //
 //	out3 := c.Skip(10)
 //	collection.Dump(out3.Items())
-//	// #[]int []
+//	// #[]int [
+//	// ]
 //
 // Example: structs
 //
@@ -57,7 +58,7 @@ package collection
 //
 //	out4 := users.Skip(1)
 //	collection.Dump(out4.Items())
-//	// []main.User [
+//	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID => 2 #int
 //	//  }

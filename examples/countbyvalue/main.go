@@ -13,20 +13,20 @@ func main() {
 	c1 := collection.New([]string{"a", "b", "a"})
 	counts1 := collection.CountByValue(c1)
 	collection.Dump(counts1)
-	// #map[string]int [
-	//	"a" => 2 #int
-	//	"b" => 1 #int
-	// ]
+	// #map[string]int {
+	//  a => 2 #int
+	//  b => 1 #int
+	// }
 
 	// Example: integers
 	c2 := collection.New([]int{1, 2, 2, 3, 3, 3})
 	counts2 := collection.CountByValue(c2)
 	collection.Dump(counts2)
-	// #map[int]int [
-	//	1 => 1 #int
-	//	2 => 2 #int
-	//	3 => 3 #int
-	// ]
+	// #map[int]int {
+	//  1 => 1 #int
+	//  2 => 2 #int
+	//  3 => 3 #int
+	// }
 
 	// Example: structs (comparable)
 	type Point struct {
@@ -42,8 +42,8 @@ func main() {
 
 	counts3 := collection.CountByValue(c3)
 	collection.Dump(counts3)
-	// #map[collection.Point]int [
-	//	{X:1 Y:1} => 2 #int
-	//	{X:2 Y:2} => 1 #int
-	// ]
+	// #map[main.Point]int {
+	//  {1 1} => 2 #int
+	//  {2 2} => 1 #int
+	// }
 }

@@ -46,10 +46,10 @@ package collection
 //	})
 //
 //	collection.Dump(total)
-//	// #main.Stats [
+//	// #main.Stats {
 //	//   +Count => 3 #int
 //	//   +Sum   => 60 #int
-//	// ]
+//	// }
 func (c *Collection[T]) Reduce(initial T, fn func(T, T) T) T {
 	acc := initial
 	for _, v := range c.items {

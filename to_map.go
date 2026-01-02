@@ -22,6 +22,11 @@ package collection
 //	)
 //
 //	collection.Dump(out)
+//	// #map[string]int {
+//	//  alice => 5 #int
+//	//  bob => 3 #int
+//	//  carol => 5 #int
+//	// }
 //
 // Example: re-keying structs
 //
@@ -42,6 +47,16 @@ package collection
 //	)
 //
 //	collection.Dump(byID)
+//	// #map[int]main.User {
+//	//  1 => #main.User {
+//	//    +ID   => 1 #int
+//	//    +Name => "Alice" #string
+//	//  }
+//	//  2 => #main.User {
+//	//    +ID   => 2 #int
+//	//    +Name => "Bob" #string
+//	//  }
+//	// }
 func ToMap[T any, K comparable, V any](
 	c *Collection[T],
 	keyFn func(T) K,

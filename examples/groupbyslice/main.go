@@ -23,12 +23,12 @@ func main() {
 	)
 
 	collection.Dump(groups["even"])
-	// []int [
+	// #[]int [
 	//  0 => 2 #int
 	//  1 => 4 #int
 	// ]
 	collection.Dump(groups["odd"])
-	// []int [
+	// #[]int [
 	//  0 => 1 #int
 	//  1 => 3 #int
 	//  2 => 5 #int
@@ -52,7 +52,7 @@ func main() {
 	)
 
 	collection.Dump(groups2["admin"])
-	// []main.User [
+	// #[]main.User [
 	//  0 => #main.User {
 	//    +ID   => 1 #int
 	//    +Role => "admin" #string
@@ -63,7 +63,7 @@ func main() {
 	//  }
 	// ]
 	collection.Dump(groups2["user"])
-	// []main.User [
+	// #[]main.User [
 	//  0 => #main.User {
 	//    +ID   => 2 #int
 	//    +Role => "user" #string

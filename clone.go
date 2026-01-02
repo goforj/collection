@@ -18,7 +18,7 @@ package collection
 //	c := collection.New([]int{1, 2, 3})
 //	clone := c.Clone()
 //
-//	clone.Append(4)
+//	clone = clone.Append(4)
 //
 //	collection.Dump(c.Items())
 //	// #[]int [

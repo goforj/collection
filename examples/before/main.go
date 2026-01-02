@@ -14,8 +14,8 @@ func main() {
 	out1 := c1.Before(func(v int) bool { return v >= 3 })
 	collection.Dump(out1.Items())
 	// #[]int [
-	//	0 => 1 #int
-	//	1 => 2 #int
+	//  0 => 1 #int
+	//  1 => 2 #int
 	// ]
 
 	// Example: predicate never matches → whole collection returned
@@ -23,9 +23,9 @@ func main() {
 	out2 := c2.Before(func(v int) bool { return v == 99 })
 	collection.Dump(out2.Items())
 	// #[]int [
-	//	0 => 10 #int
-	//	1 => 20 #int
-	//	2 => 30 #int
+	//  0 => 10 #int
+	//  1 => 20 #int
+	//  2 => 30 #int
 	// ]
 
 	// Example: structs: get all users before the first admin
@@ -43,8 +43,14 @@ func main() {
 
 	out3 := c3.Before(func(u User) bool { return u.Admin })
 	collection.Dump(out3.Items())
-	// #[]collection.User [
-	//	0 => {Name:"Alice" Admin:false}  #collection.User
-	//	1 => {Name:"Bob"   Admin:false}  #collection.User
+	// #[]main.User [
+	//  0 => #main.User {
+	//    +Name  => "Alice" #string
+	//    +Admin => false #bool
+	//  }
+	//  1 => #main.User {
+	//    +Name  => "Bob" #string
+	//    +Admin => false #bool
+	//  }
 	// ]
 }

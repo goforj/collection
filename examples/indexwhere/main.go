@@ -14,12 +14,14 @@ func main() {
 	c := collection.New([]int{10, 20, 30, 40})
 	idx, ok := c.IndexWhere(func(v int) bool { return v == 30 })
 	collection.Dump(idx, ok)
-	// 2 true
+	// 2 #int
+	// true #bool
 
 	// Example: not found
 	idx2, ok2 := c.IndexWhere(func(v int) bool { return v == 99 })
 	collection.Dump(idx2, ok2)
-	// 0 false
+	// 0 #int
+	// false #bool
 
 	// Example: structs
 	type User struct {
@@ -38,5 +40,6 @@ func main() {
 	})
 
 	collection.Dump(idx3, ok3)
-	// 1 true
+	// 1 #int
+	// true #bool
 }

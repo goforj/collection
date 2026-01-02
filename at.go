@@ -14,13 +14,15 @@ package collection
 //	c := collection.New([]int{10, 20, 30})
 //	v, ok := c.At(1)
 //	collection.Dump(v, ok)
-//	// 20 true
+//	// 20 #int
+//	// true #bool
 //
 // Example: out of bounds
 //
 //	v2, ok2 := c.At(10)
 //	collection.Dump(v2, ok2)
-//	// 0 false
+//	// 0 #int
+//	// false #bool
 //
 // Example: structs
 //
@@ -36,7 +38,11 @@ package collection
 //
 //	u, ok3 := users.At(0)
 //	collection.Dump(u, ok3)
-//	// {ID:1 Name:"Alice"} true
+//	// #main.User {
+//	//   +ID   => 1 #int
+//	//   +Name => "Alice" #string
+//	// }
+//	// true #bool
 func (c *Collection[T]) At(i int) (T, bool) {
 	if i < 0 || i >= len(c.items) {
 		var zero T

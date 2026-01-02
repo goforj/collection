@@ -29,7 +29,7 @@ func main() {
 		SkipLast(1). // Slicing
 		Dump() // Debugging
 
-	// []main.DeviceEvent [
+	// #[]main.DeviceEvent [
 	//  0 => #main.DeviceEvent {
 	//    +Device => "router-3" #string
 	//    +Region => "us-west" #string

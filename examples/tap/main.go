@@ -26,17 +26,33 @@ func main() {
 	// Use BOTH variables so nothing is "declared and not used"
 	collection.Dump(c1.Items())
 	collection.Dump(captured1)
-	// c1 → #[]int [2,3]
-	// captured1 → #[]int [1,2,3]
+	// #[]int [
+	//  0 => 2 #int
+	//  1 => 3 #int
+	// ]
+	// #[]int [
+	//  0 => 1 #int
+	//  1 => 2 #int
+	//  2 => 3 #int
+	// ]
 
 	// Example: integers - tap for debugging without changing flow
 	c2 := collection.New([]int{10, 20, 30}).
 		Tap(func(col *collection.Collection[int]) {
 			collection.Dump(col.Items())
+			// #[]int [
+			//  0 => 10 #int
+			//  1 => 20 #int
+			//  2 => 30 #int
+			// ]
 		}).
 		Filter(func(v int) bool { return v > 10 })
 
 	collection.Dump(c2.Items()) // ensures c2 is used
+	// #[]int [
+	//  0 => 20 #int
+	//  1 => 30 #int
+	// ]
 
 	// Example: structs - Tap with struct collection
 	type User struct {
@@ -51,7 +67,27 @@ func main() {
 
 	users2 := users.Tap(func(col *collection.Collection[User]) {
 		collection.Dump(col.Items())
+		// #[]main.User [
+		//  0 => #main.User {
+		//    +ID   => 1 #int
+		//    +Name => "Alice" #string
+		//  }
+		//  1 => #main.User {
+		//    +ID   => 2 #int
+		//    +Name => "Bob" #string
+		//  }
+		// ]
 	})
 
 	collection.Dump(users2.Items()) // ensures users2 is used
+	// #[]main.User [
+	//  0 => #main.User {
+	//    +ID   => 1 #int
+	//    +Name => "Alice" #string
+	//  }
+	//  1 => #main.User {
+	//    +ID   => 2 #int
+	//    +Name => "Bob" #string
+	//  }
+	// ]
 }

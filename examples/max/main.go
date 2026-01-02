@@ -14,7 +14,7 @@ func main() {
 
 	max1, ok1 := c.Max()
 	collection.Dump(max1, ok1)
-	// 3    #int
+	// 3 #int
 	// true #bool
 
 	// Example: floats
@@ -23,13 +23,13 @@ func main() {
 	max2, ok2 := c2.Max()
 	collection.Dump(max2, ok2)
 	// 9.200000 #float64
-	// true     #bool
+	// true #bool
 
 	// Example: empty numeric collection
 	c3 := collection.NewNumeric([]int{})
 
 	max3, ok3 := c3.Max()
 	collection.Dump(max3, ok3)
-	// 0     #int
+	// 0 #int
 	// false #bool
 }

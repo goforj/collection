@@ -68,7 +68,7 @@ func main() {
 	c3 := collection.New([]int{1, 2, 3})
 	popped4 := c3.PopN(0)
 	collection.Dump(popped4, c3.Items())
-	// <nil>
+	// []int(nil)
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int

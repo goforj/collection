@@ -15,10 +15,10 @@ func main() {
 		return v
 	})
 	collection.Dump(counts)
-	// map[int]int {
-	//   1: 1 #int
-	//   2: 2 #int
-	//   3: 3 #int
+	// #map[int]int {
+	//   1 => 1 #int
+	//   2 => 2 #int
+	//   3 => 3 #int
 	// }
 
 	// Example: strings
@@ -27,10 +27,10 @@ func main() {
 		return v
 	})
 	collection.Dump(counts2)
-	// map[string]int {
-	//   "apple":  2 #int
-	//   "banana": 2 #int
-	//   "cherry": 1 #int
+	// #map[string]int {
+	//   apple => 2 #int
+	//   banana => 2 #int
+	//   cherry => 1 #int
 	// }
 
 	// Example: structs
@@ -52,8 +52,8 @@ func main() {
 	})
 
 	collection.Dump(roleCounts)
-	// map[string]int {
-	//   "admin": 3 #int
-	//   "user":  2 #int
+	// #map[string]int {
+	//   admin => 3 #int
+	//   user => 2 #int
 	// }
 }

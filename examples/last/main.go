@@ -14,7 +14,7 @@ func main() {
 
 	v, ok := c.Last()
 	collection.Dump(v, ok)
-	// 30   #int
+	// 30 #int
 	// true #bool
 
 	// Example: strings
@@ -23,7 +23,7 @@ func main() {
 	v2, ok2 := c2.Last()
 	collection.Dump(v2, ok2)
 	// "gamma" #string
-	// true    #bool
+	// true #bool
 
 	// Example: structs
 	type User struct {
@@ -40,7 +40,7 @@ func main() {
 	u, ok3 := users.Last()
 	collection.Dump(u, ok3)
 	// #main.User {
-	//   +ID   => 3         #int
+	//   +ID   => 3 #int
 	//   +Name => "Charlie" #string
 	// }
 	// true #bool
@@ -50,6 +50,6 @@ func main() {
 
 	v3, ok4 := c3.Last()
 	collection.Dump(v3, ok4)
-	// 0     #int
+	// 0 #int
 	// false #bool
 }

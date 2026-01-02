@@ -41,7 +41,8 @@ package collection
 //
 //	out3 := c.SkipLast(10)
 //	collection.Dump(out3.Items())
-//	// #[]int []
+//	// #[]int [
+//	// ]
 //
 // Example: structs
 //
@@ -57,9 +58,13 @@ package collection
 //
 //	out4 := users.SkipLast(1)
 //	collection.Dump(out4.Items())
-//	// #[]collection.User [
-//	//   0 => {ID:1} #collection.User
-//	//   1 => {ID:2} #collection.User
+//	// #[]main.User [
+//	//  0 => #main.User {
+//	//    +ID => 1 #int
+//	//  }
+//	//  1 => #main.User {
+//	//    +ID => 2 #int
+//	//  }
 //	// ]
 func (c *Collection[T]) SkipLast(n int) *Collection[T] {
 	items := c.items

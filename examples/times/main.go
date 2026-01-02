@@ -18,10 +18,10 @@ func main() {
 	})
 	collection.Dump(cTimes1.Items())
 	// #[]int [
-	//	0 => 2  #int
-	//	1 => 4  #int
-	//	2 => 6  #int
-	//	3 => 8  #int
+	//	0 => 2 #int
+	//	1 => 4 #int
+	//	2 => 6 #int
+	//	3 => 8 #int
 	//	4 => 10 #int
 	// ]
 

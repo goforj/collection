@@ -42,8 +42,8 @@ func main() {
 	})
 
 	collection.Dump(total)
-	// #main.Stats [
+	// #main.Stats {
 	//   +Count => 3 #int
 	//   +Sum   => 60 #int
-	// ]
+	// }
 }

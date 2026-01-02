@@ -20,7 +20,7 @@ func main() {
 		return v < 3
 	})
 	collection.Dump(v, ok)
-	// 2    #int
+	// 2 #int
 	// true #bool
 
 	// Example: integers without predicate (equivalent to Last())
@@ -28,7 +28,7 @@ func main() {
 
 	v2, ok2 := c2.LastWhere(nil)
 	collection.Dump(v2, ok2)
-	// 40   #int
+	// 40 #int
 	// true #bool
 
 	// Example: strings
@@ -39,7 +39,7 @@ func main() {
 	})
 	collection.Dump(v3, ok3)
 	// "gamma" #string
-	// true    #bool
+	// true #bool
 
 	// Example: structs
 	type User struct {
@@ -59,8 +59,8 @@ func main() {
 	})
 	collection.Dump(u, ok4)
 	// #main.User {
-	//   +ID   => 3        #int
-	//   +Name => "Alex"  #string
+	//   +ID   => 3 #int
+	//   +Name => "Alex" #string
 	// }
 	// true #bool
 
@@ -71,7 +71,7 @@ func main() {
 		return v > 10
 	})
 	collection.Dump(v4, ok5)
-	// 0     #int
+	// 0 #int
 	// false #bool
 
 	// Example: empty collection
@@ -79,6 +79,6 @@ func main() {
 
 	v5, ok6 := c5.LastWhere(nil)
 	collection.Dump(v5, ok6)
-	// 0     #int
+	// 0 #int
 	// false #bool
 }

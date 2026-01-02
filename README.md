@@ -74,8 +74,6 @@ collection.
 // ]
 ```
 
-
-
 ### Performance Benchmarks
 
 > **tl;dr**: *lo* is excellent. We solve a different problem - and in chained pipelines, that difference matters.
@@ -87,6 +85,8 @@ collection.
 Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines**. Many operations are designed to **mutate the same backing slice intentionally**, allowing chained workflows to avoid intermediate allocations and unnecessary copying - while still making that behavior visible and documented.
 
 That design choice doesn't matter much for some single operations. It matters a *lot* once you start chaining and especially in hot paths.
+
+Below - A fixed ~24B allocation is the cost of the Collection wrapper (one-time per pipeline), not additional work per operation
 
 <!-- bench:embed:start -->
 
@@ -252,11 +252,21 @@ This makes transitions between unordered and ordered data visible and honest.
 
 Each method declares how it interacts with the collection:
 
-- **readonly** – reads data only, returns a derived value
-- **immutable** – returns a new collection, original unchanged
-- **mutable** – modifies the collection in place
+- **readonly** – reads data only and returns a derived value
+- **immutable** – returns a new collection; the original is unchanged
+- **mutable** – modifies the collection in place and returns the same instance
+- **terminal** – ends the fluent pipeline and returns a non-collection result
 
-Annotations describe **observable behavior**, not implementation details.
+These annotations describe **observable behavior**, not implementation details.
+
+Terminal operations do not return a Collection and cannot be chained further.
+They are designed to be allocation-free under `New()` where possible.
+
+Allocation and copying are **explicitly documented per method**.
+Some readonly or immutable operations may allocate internally when required
+(e.g. grouping, chunking, scratch copies), but never mutate the receiver.
+
+Borrowed slices, in-place mutation, and view semantics are intentional and visible.
 
 ## Runnable examples
 

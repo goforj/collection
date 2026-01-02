@@ -38,13 +38,6 @@
 - **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`)
 - **Works with any Go type**, including structs, pointers, and deeply nested composites
 
-## Why Collection?
-
-This library is ideal when:
-- you write multi-step slice pipelines
-- allocation behavior matters
-- you want fluent APIs without hidden costs
-
 ## Fluent Chaining
 
 Many methods return the collection itself, allowing for fluent method chaining.

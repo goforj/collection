@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    Fluent, Laravel-style Collections for Go - with generics, chainable pipelines, and expressive data transforms.
+    Fluent collections for Go - with generics, chainable pipelines, and expressive data transforms. Inspired by Laravel, designed to feel natural in Go.
 </p>
 
 <p align="center">

@@ -103,19 +103,19 @@ func TestShuffle_Structs(t *testing.T) {
 	})
 }
 
-func TestShuffle_DoesNotMutateOriginal(t *testing.T) {
+func TestShuffle_MutatesInPlace(t *testing.T) {
 	withDeterministicShuffle(t, 99, func() {
 		items := []int{1, 2, 3, 4}
 		c := New(items)
 
 		out := c.Shuffle()
 
-		if !reflect.DeepEqual(items, []int{1, 2, 3, 4}) {
-			t.Fatalf("expected source slice to remain unchanged")
+		if out != c {
+			t.Fatalf("Shuffle should return the same collection")
 		}
 
-		if reflect.DeepEqual(out.Items(), []int{1, 2, 3, 4}) {
-			t.Fatalf("expected shuffled output to differ from original order")
+		if reflect.DeepEqual(items, []int{1, 2, 3, 4}) {
+			t.Fatalf("expected source slice to be shuffled in place")
 		}
 	})
 }

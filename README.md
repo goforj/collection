@@ -115,17 +115,17 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Chunk** | **7.57x** | -8.0KB | -49 |
+| **Chunk** | **7.49x** | -8.0KB | -49 |
 | **Take** | ≈ | +48B | +2 |
-| **Skip** | **59.96x** | -8.2KB | ≈ |
-| **SkipLast** | **61.68x** | -8.2KB | ≈ |
-| **Zip** | **2.44x** | +48B | +2 |
-| **ZipWith** | **3.09x** | +48B | +2 |
+| **Skip** | **65.27x** | -8.2KB | ≈ |
+| **SkipLast** | **64.89x** | -8.2KB | ≈ |
+| **Zip** | **2.22x** | +48B | +2 |
+| **ZipWith** | **2.87x** | +48B | +2 |
 | **Unique** | ≈ | +24B | +1 |
 | **UniqueBy** | ≈ | +48B | +2 |
 | **Union** | ≈ | +72B | +3 |
 | **Intersect** | ≈ | +72B | +3 |
-| **Difference** | **2.27x** | -26.7KB | -29 |
+| **Difference** | **2.31x** | -26.7KB | -29 |
 | **GroupBySlice** | ≈ | +24B | +1 |
 | **CountBy** | ≈ | +24B | +1 |
 | **CountByValue** | ≈ | +24B | +1 |
@@ -135,16 +135,16 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | **2.70x** | -12.2KB | ≈ |
+| **Pipeline F→M→T→R** | **2.53x** | -12.2KB | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Map** | **2.18x** | -8.2KB | ≈ |
-| **Filter** | **1.57x** | -8.2KB | ≈ |
+| **Map** | **2.29x** | -8.2KB | ≈ |
+| **Filter** | **1.64x** | -8.2KB | ≈ |
 | **Reverse** | ≈ | +24B | +1 |
-| **Shuffle** | **1.41x** | +8.2KB | +3 |
+| **Shuffle** | **1.56x** | +24B | +1 |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
@@ -1470,16 +1470,16 @@ collection.Dump(users.Items())
 // ]
 ```
 
-### <a id="shuffle"></a>Shuffle · immutable · chainable
+### <a id="shuffle"></a>Shuffle · mutable · chainable
 
-Shuffle returns a shuffled copy of the collection.
+Shuffle shuffles the collection in place and returns the same collection.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
-out1 := c.Shuffle()
-collection.Dump(out1.Items())
+c.Shuffle()
+collection.Dump(c.Items())
 ```
 
 _Example: strings – chaining_
@@ -1507,8 +1507,8 @@ users := collection.New([]User{
 	{ID: 4},
 })
 
-out3 := users.Shuffle()
-collection.Dump(out3.Items())
+users.Shuffle()
+collection.Dump(users.Items())
 ```
 
 ### <a id="sort"></a>Sort · mutable · chainable

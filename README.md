@@ -88,6 +88,8 @@ That design choice doesn't matter much for some single operations. It matters a 
 
 Below - A fixed ~24B allocation is the cost of the Collection wrapper (one-time per pipeline), not additional work per operation
 
+The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
+
 <!-- bench:embed:start -->
 
 Full raw tables: see `BENCHMARKS.md`.

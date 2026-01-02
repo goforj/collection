@@ -25,7 +25,7 @@
   Designed to feel natural to Go developers - and luxurious to everyone else.
 </p>
 
-# Features
+## Features
 
 - **Fluent chaining** - pipeline your operations like Laravel Collections
 - **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
@@ -39,7 +39,7 @@
 - **Developer-friendly debug helpers** (`Dump()`, `Dd()`, `DumpStr()`)
 - **Works with any Go type**, including structs, pointers, and deeply nested composites
 
-# Why Collection?
+## Why Collection?
 
 This library is ideal when:
 - you write multi-step slice pipelines

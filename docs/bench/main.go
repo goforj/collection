@@ -21,7 +21,7 @@ const (
 
 	hotPathIters = 10_000
 
-	benchInner = 8
+	benchInner = 16
 )
 
 type benchResult struct {

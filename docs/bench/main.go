@@ -39,9 +39,14 @@ func main() {
 	start := time.Now()
 	only := parseOnly(*onlyFlag)
 	borrowResults := runBenches(only, benchBorrow)
-	borrowTable := renderTable(borrowResults)
+	condensed := renderCondensedTables(borrowResults)
+	rawTable := renderTable(borrowResults)
 
-	if err := updateReadme(borrowTable); err != nil {
+	if err := updateReadme(condensed); err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+	if err := updateBenchmarksFile(rawTable); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -962,6 +967,112 @@ func renderTable(results []benchResult) string {
 	return strings.TrimSpace(buf.String())
 }
 
+type benchGroup struct {
+	name string
+	ops  []string
+}
+
+func renderCondensedTables(results []benchResult) string {
+	byName := map[string]map[string]benchResult{}
+	for _, r := range results {
+		if _, ok := byName[r.name]; !ok {
+			byName[r.name] = map[string]benchResult{}
+		}
+		byName[r.name][r.impl] = r
+	}
+
+	groups := []benchGroup{
+		{
+			name: "Read-only scalar ops (wrapper overhead only)",
+			ops: []string{
+				"All",
+				"Any",
+				"None",
+				"First",
+				"Last",
+				"FirstWhere",
+				"IndexWhere",
+				"Contains",
+				"Reduce (sum)",
+				"Sum",
+				"Min",
+				"Max",
+				"Each",
+			},
+		},
+		{
+			name: "Transforming ops",
+			ops: []string{
+				"Map",
+				"Chunk",
+				"Take",
+				"Skip",
+				"SkipLast",
+				"Zip",
+				"ZipWith",
+				"Unique",
+				"UniqueBy",
+				"Union",
+				"Intersect",
+				"Difference",
+				"GroupBySlice",
+				"CountBy",
+				"CountByValue",
+				"ToMap",
+			},
+		},
+		{
+			name: "Pipelines",
+			ops: []string{
+				"Pipeline F→M→T→R",
+			},
+		},
+		{
+			name: "Mutating ops",
+			ops: []string{
+				"Filter",
+				"Reverse",
+				"Shuffle",
+			},
+		},
+	}
+
+	var buf bytes.Buffer
+	buf.WriteString("Full raw tables: see `BENCHMARKS.md`.\n\n")
+
+	for _, group := range groups {
+		rows := make([]string, 0, len(group.ops))
+		for _, name := range group.ops {
+			entry, ok := byName[name]
+			if !ok {
+				continue
+			}
+			col := entry["collection"]
+			loRes := entry["lo"]
+
+			wrapperOnly := group.name == "Read-only scalar ops (wrapper overhead only)"
+			allowBold := group.name == "Pipelines" || group.name == "Transforming ops" || group.name == "Mutating ops"
+			speed := formatSpeed(loRes.nsPerOp, col.nsPerOp, allowBold, wrapperOnly)
+			mem := formatDeltaBytes(col.bytesPerOp, loRes.bytesPerOp)
+			allocs := formatDeltaAllocs(col.allocsPerOp, loRes.allocsPerOp)
+
+			rows = append(rows, fmt.Sprintf("| **%s** | %s | %s | %s |", name, speed, mem, allocs))
+		}
+
+		if len(rows) == 0 {
+			continue
+		}
+
+		buf.WriteString(fmt.Sprintf("#### %s\n\n", group.name))
+		buf.WriteString("| Op | Speed vs lo | Memory | Allocs |\n")
+		buf.WriteString("|---:|:-----------:|:------:|:------:|\n")
+		buf.WriteString(strings.Join(rows, "\n"))
+		buf.WriteString("\n\n")
+	}
+
+	return strings.TrimSpace(buf.String())
+}
+
 func formatNs(ns float64) string {
 	switch {
 	case ns < 1:
@@ -1000,8 +1111,9 @@ func formatDurationNs(ns float64) string {
 }
 
 const (
-	wrapperEpsilon    = 0.10 // ±10% wrapper overhead tolerance
-	benchRatioNoiseNs = 50.0
+	wrapperEpsilon     = 0.10 // ±10% wrapper overhead tolerance
+	benchRatioNoiseNs  = 50.0
+	wrapperOnlyEpsilon = 0.15
 )
 
 func formatRatio(lo, col float64) string {
@@ -1021,6 +1133,29 @@ func formatRatio(lo, col float64) string {
 
 	out := fmt.Sprintf("%.2fx", ratio)
 	if ratio > 1 {
+		return fmt.Sprintf("**%s**", out)
+	}
+	return out
+}
+
+func formatSpeed(lo, col float64, allowBold bool, wrapperOnly bool) string {
+	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
+		return "≈"
+	}
+	if col == 0 {
+		return "∞"
+	}
+
+	ratio := lo / col
+	if wrapperOnly && ratio >= 1-wrapperOnlyEpsilon && ratio <= 1+wrapperOnlyEpsilon {
+		return "≈"
+	}
+	if ratio >= 1-wrapperEpsilon && ratio <= 1+wrapperEpsilon {
+		return "≈"
+	}
+
+	out := fmt.Sprintf("%.2fx", ratio)
+	if ratio > 1 && allowBold {
 		return fmt.Sprintf("**%s**", out)
 	}
 	return out
@@ -1062,6 +1197,28 @@ func formatInt(v int64) string {
 	}
 }
 
+func formatDeltaBytes(col, lo int64) string {
+	if col == lo {
+		return "≈"
+	}
+	diff := col - lo
+	if diff > 0 {
+		return fmt.Sprintf("+%s", formatBytes(diff))
+	}
+	return fmt.Sprintf("-%s", formatBytes(-diff))
+}
+
+func formatDeltaAllocs(col, lo int64) string {
+	if col == lo {
+		return "≈"
+	}
+	diff := col - lo
+	if diff > 0 {
+		return fmt.Sprintf("+%d", diff)
+	}
+	return fmt.Sprintf("%d", diff)
+}
+
 func collectionInputForMutating(src []int) []int {
 	if currentMode == benchBorrow {
 		copy(workA, src)
@@ -1074,7 +1231,7 @@ func collectionInputForMutating(src []int) []int {
 // README injection
 // ----------------------------------------------------------------------------
 
-func updateReadme(borrowTable string) error {
+func updateReadme(condensed string) error {
 	root, err := findRoot()
 	if err != nil {
 		return err
@@ -1086,7 +1243,7 @@ func updateReadme(borrowTable string) error {
 		return err
 	}
 
-	out, err := replaceSection(string(data), borrowTable)
+	out, err := replaceSection(string(data), condensed)
 	if err != nil {
 		return err
 	}
@@ -1094,7 +1251,7 @@ func updateReadme(borrowTable string) error {
 	return os.WriteFile(readmePath, []byte(out), 0o644)
 }
 
-func replaceSection(readme, borrowTable string) (string, error) {
+func replaceSection(readme, condensed string) (string, error) {
 	start := strings.Index(readme, benchStart)
 	end := strings.Index(readme, benchEnd)
 	if start == -1 || end == -1 || end < start {
@@ -1102,7 +1259,7 @@ func replaceSection(readme, borrowTable string) (string, error) {
 	}
 
 	section := readme[start+len(benchStart) : end]
-	updated, err := replaceBenchTable(section, borrowTable)
+	updated, err := replaceBenchTable(section, condensed)
 	if err != nil {
 		return "", err
 	}
@@ -1114,42 +1271,27 @@ func replaceSection(readme, borrowTable string) (string, error) {
 	return buf.String(), nil
 }
 
-func replaceBenchTable(section, borrowTable string) (string, error) {
-	lines := strings.Split(section, "\n")
-	tableStarts := []int{}
-	for i, line := range lines {
-		if strings.HasPrefix(strings.TrimSpace(line), "| Op |") {
-			tableStarts = append(tableStarts, i)
-		}
+func replaceBenchTable(section, condensed string) (string, error) {
+	trimmed := strings.TrimSpace(condensed)
+	if trimmed == "" {
+		return "", fmt.Errorf("condensed benchmark content is empty")
 	}
-	if len(tableStarts) == 0 {
-		return "", fmt.Errorf("expected benchmark table in section")
-	}
+	return "\n\n" + trimmed + "\n", nil
+}
 
-	tableEnds := make([]int, len(tableStarts))
-	for i, start := range tableStarts {
-		end := start
-		for end < len(lines) {
-			line := strings.TrimSpace(lines[end])
-			if line == "" {
-				break
-			}
-			end++
-		}
-		tableEnds[i] = end
+func updateBenchmarksFile(rawTable string) error {
+	root, err := findRoot()
+	if err != nil {
+		return err
 	}
 
-	firstStart, firstEnd := tableStarts[0], tableEnds[0]
-
+	path := filepath.Join(root, "BENCHMARKS.md")
 	var buf bytes.Buffer
-	if firstStart > 0 {
-		buf.WriteString(strings.Join(lines[:firstStart], "\n"))
-		buf.WriteString("\n")
-	}
-	buf.WriteString(strings.TrimSpace(borrowTable))
+	buf.WriteString("# Benchmarks\n\n")
+	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`.\n\n")
+	buf.WriteString(rawTable)
 	buf.WriteString("\n")
-	buf.WriteString(strings.Join(lines[firstEnd:], "\n"))
-	return buf.String(), nil
+	return os.WriteFile(path, buf.Bytes(), 0o644)
 }
 
 // ----------------------------------------------------------------------------

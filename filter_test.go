@@ -90,3 +90,29 @@ func TestFilter_Chaining(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, result.items)
 	}
 }
+
+func TestFilter_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Filter(func(v int) bool { return v%2 == 0 })
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}
+
+func TestFilter_WritesThroughSourceSlice(t *testing.T) {
+	items := []int{1, 2, 3, 4}
+	c := New(items)
+
+	c.Filter(func(v int) bool { return v%2 == 0 })
+
+	want := []int{2, 4}
+	if !reflect.DeepEqual(items[:len(want)], want) {
+		t.Fatalf("expected source prefix %v, got %v", want, items[:len(want)])
+	}
+
+	if len(c.Items()) != len(want) {
+		t.Fatalf("expected filtered length %d, got %d", len(want), len(c.Items()))
+	}
+}

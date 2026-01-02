@@ -119,3 +119,13 @@ func TestShuffle_MutatesInPlace(t *testing.T) {
 		}
 	})
 }
+
+func TestShuffle_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Shuffle()
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}

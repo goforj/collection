@@ -92,3 +92,35 @@ func TestTransform_ChainingCompatibility(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, out.items)
 	}
 }
+
+func TestTransform_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Transform(func(v int) int { return v + 1 })
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}
+
+func TestTransform_WritesThroughSourceSlice(t *testing.T) {
+	items := []int{1, 2, 3}
+	c := New(items)
+
+	c.Transform(func(v int) int { return v + 10 })
+
+	want := []int{11, 12, 13}
+	if !reflect.DeepEqual(items, want) {
+		t.Fatalf("expected source slice %v, got %v", want, items)
+	}
+}
+
+func TestTransform_LengthUnchanged(t *testing.T) {
+	c := New([]int{1, 2, 3})
+
+	c.Transform(func(v int) int { return v + 1 })
+
+	if len(c.Items()) != 3 {
+		t.Fatalf("expected length 3, got %d", len(c.Items()))
+	}
+}

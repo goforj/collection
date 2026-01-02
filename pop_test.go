@@ -94,3 +94,31 @@ func TestPopN_ZeroOrNegative(t *testing.T) {
 		t.Fatalf("PopN(-n) should not modify original")
 	}
 }
+
+func TestPop_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	v, ok := c.Pop()
+
+	if v != 0 || ok {
+		t.Fatalf("Pop() on nil should return zero-value and ok=false")
+	}
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}
+
+func TestPopN_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	popped := c.PopN(2)
+
+	if popped != nil {
+		t.Fatalf("PopN on nil should return nil")
+	}
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}

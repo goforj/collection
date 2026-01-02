@@ -96,3 +96,13 @@ func TestReverse_MutatesInPlace(t *testing.T) {
 		t.Fatalf("expected underlying slice to be mutated, got %v", items)
 	}
 }
+
+func TestReverse_PreservesNilSlice(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Reverse()
+
+	if c.Items() != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	}
+}

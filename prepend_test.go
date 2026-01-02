@@ -98,3 +98,27 @@ func TestPrepend_DoesNotMutateSourceSlice(t *testing.T) {
 		t.Fatalf("expected %v, got %v", expected, c.items)
 	}
 }
+
+func TestPrepend_NilSliceWithValues(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Prepend(1, 2)
+
+	expected := []int{1, 2}
+	if !reflect.DeepEqual(c.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, c.Items())
+	}
+}
+
+func TestPrepend_NilSliceNoValuesBecomesEmpty(t *testing.T) {
+	c := New([]int(nil))
+
+	c.Prepend()
+
+	if c.Items() == nil {
+		t.Fatalf("expected empty slice, got nil")
+	}
+	if len(c.Items()) != 0 {
+		t.Fatalf("expected empty slice, got %v", c.Items())
+	}
+}

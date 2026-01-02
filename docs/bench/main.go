@@ -73,7 +73,7 @@ func runBenches(only map[string]struct{}) []benchResult {
 		{"Chunk", benchChunkCollection, benchChunkLo},
 		{"Take", benchTakeCollection, benchTakeLo},
 		{"Contains", benchContainsCollection, benchContainsLo},
-		{"Find", benchFindCollection, benchFindLo},
+		{"FirstWhere", benchFindCollection, benchFindLo},
 		{"GroupBySlice", benchGroupByCollection, benchGroupByLo},
 		{"CountBy", benchCountByCollection, benchCountByLo},
 		{"CountByValue", benchCountByValueCollection, benchCountByValueLo},

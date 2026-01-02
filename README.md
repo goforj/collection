@@ -29,10 +29,10 @@
 
 - **Fluent chaining** - pipeline your operations like Laravel Collections
 - **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
-- **Zero dependencies** - pure Go, fast, lightweight
-- **Minimal allocations** - avoids unnecessary copies; most operations reuse the underlying slice
+- **Minimal dependencies** - small footprint (godump for debugging)
+- **Minimal allocations** - views for slice selections; in-place ops reuse backing when possible
 - **Map / Filter / Reduce** - clean functional transforms
-- **First / Last / Find / Contains** helpers
+- **First / Last / FirstWhere / IndexWhere / Contains** helpers
 - **Sort, GroupBy, Chunk**, and more
 - **Safe-by-default** - defensive copies where appropriate
 - **Built-in JSON helpers** (`ToJSON()`, `ToPrettyJSON()`)
@@ -79,43 +79,51 @@ collection.
 
 ### Performance Benchmarks
 
-[lo](https://github.com/samber/lo) is a fantastic library and a major inspiration for this project. Our focus differs: `collection` is built for fluent chaining with explicit mutability, which lets hot paths avoid intermediate allocations. That shows up most in chained pipelines and in-place operations where we can keep work on the same backing slice while still being explicit about behavior.
+> **tl;dr**: *lo* is excellent. We solve a different problem - and in chained pipelines, that difference matters.
+
+`lo` is a fantastic library and a major inspiration for this project. It is battle-tested, idiomatic, and often the right choice when you want small, standalone helpers that operate on slices in isolation.
+
+`collection` takes a different approach.
+
+Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines**. Many operations are designed to **mutate the same backing slice intentionally**, allowing chained workflows to avoid intermediate allocations and unnecessary copying - while still making that behavior visible and documented.
+
+That design choice doesn't matter much for some single operations. It matters a *lot* once you start chaining and especially in hot paths.
 
 | Op | ns/op (vs lo) | × | bytes/op (vs lo) | × | allocs/op (vs lo) |
 |---:|----------------|:--:|------------------|:--:|--------------------|
-| **All** | 232ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Any** | 232ns / 234ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Chunk** | 128ns / 1.1µs | **8.30x** | 1.3KB / 9.3KB | **7.25x less** | 1 / 51 |
-| **Contains** | 238ns / 250ns | **1.05x** | 0B / 0B | ≈ | 0 / 0 |
-| **CountBy** | 8.1µs / 8.2µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
-| **CountByValue** | 8.1µs / 8.1µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
-| **Difference** | 19.4µs / 44.5µs | **2.29x** | 82.1KB / 108.8KB | **1.33x less** | 12 / 43 |
-| **Each** | 235ns / 230ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Filter** | 647ns / 1.1µs | **1.67x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Find** | 239ns / 235ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **First** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
-| **GroupBySlice** | 8.2µs / 8.3µs | ≈ | 21.0KB / 21.0KB | ≈ | 83 / 83 |
-| **IndexWhere** | 232ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Intersect** | 11.0µs / 10.8µs | ≈ | 11.4KB / 11.4KB | ≈ | 19 / 19 |
-| **Last** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
-| **Map** | 347ns / 821ns | **2.37x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Max** | 230ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Min** | 232ns / 229ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **None** | 232ns / 232ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Pipeline F→M→T→R** | 496ns / 1.3µs | **2.62x** | 0B / 12.3KB | **∞x less** | 0 / 2 |
-| **Reduce (sum)** | 230ns / 231ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Reverse** | 216ns / 230ns | **1.06x** | 0B / 0B | ≈ | 0 / 0 |
-| **Shuffle** | 3.6µs / 5.3µs | **1.49x** | 0B / 0B | ≈ | 0 / 0 |
-| **Skip** | 0ns / 721ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **SkipLast** | 0ns / 730ns | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Sum** | 232ns / 233ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Take** | 0ns / 0ns | ∞ | 0B / 0B | ≈ | 0 / 0 |
-| **ToMap** | 7.7µs / 7.8µs | ≈ | 36.9KB / 37.0KB | ≈ | 5 / 6 |
-| **Union** | 17.4µs / 17.7µs | ≈ | 90.3KB / 90.3KB | ≈ | 11 / 10 |
-| **Unique** | 6.4µs / 6.5µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
-| **UniqueBy** | 6.9µs / 6.7µs | ≈ | 45.2KB / 45.1KB | ≈ | 7 / 6 |
-| **Zip** | 1.4µs / 3.2µs | **2.27x** | 16.4KB / 16.4KB | ≈ | 1 / 1 |
-| **ZipWith** | 1.0µs / 3.1µs | **3.07x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **All** | 945ns / 278ns | 0.29x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Any** | 812ns / 281ns | 0.35x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Chunk** | 772ns / 1.0µs | **1.35x** | 9.5KB / 9.3KB | ≈ | 2 / 51 |
+| **Contains** | 777ns / 237ns | 0.31x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **CountBy** | 8.7µs / 8.5µs | ≈ | 17.5KB / 9.4KB | 0.53x more | 12 / 11 |
+| **CountByValue** | 8.6µs / 8.4µs | ≈ | 17.5KB / 9.4KB | 0.53x more | 12 / 11 |
+| **Difference** | 20.1µs / 43.3µs | **2.16x** | 98.5KB / 108.8KB | **1.10x less** | 14 / 43 |
+| **Each** | 898ns / 281ns | 0.31x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Filter** | 1.1µs / 1.1µs | ≈ | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **First** | 653ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **FirstWhere** | 793ns / 238ns | 0.30x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **GroupBySlice** | 8.7µs / 8.4µs | ≈ | 29.2KB / 21.0KB | 0.72x more | 84 / 83 |
+| **IndexWhere** | 821ns / 287ns | 0.35x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Intersect** | 11.8µs / 10.7µs | 0.90x | 27.8KB / 11.4KB | 0.41x more | 22 / 19 |
+| **Last** | 656ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Map** | 1.5µs / 807ns | 0.52x | 16.4KB / 8.2KB | 0.50x more | 2 / 1 |
+| **Max** | 780ns / 229ns | 0.29x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Min** | 792ns / 229ns | 0.29x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **None** | 800ns / 254ns | 0.32x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Pipeline F→M→T→R** | 1.4µs / 1.4µs | ≈ | 12.3KB / 12.3KB | ≈ | 3 / 2 |
+| **Reduce (sum)** | 773ns / 231ns | 0.30x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Reverse** | 785ns / 232ns | 0.30x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Shuffle** | 4.4µs / 5.3µs | **1.21x** | 16.4KB / 0B | ∞x more | 3 / 0 |
+| **Skip** | 657ns / 696ns | **1.06x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **SkipLast** | 657ns / 703ns | **1.07x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **Sum** | 777ns / 229ns | 0.29x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Take** | 677ns / 0ns | 0.00x | 8.2KB / 0B | ∞x more | 2 / 0 |
+| **ToMap** | 8.2µs / 7.9µs | ≈ | 45.1KB / 37.0KB | 0.82x more | 6 / 6 |
+| **Union** | 18.1µs / 17.7µs | ≈ | 106.7KB / 90.3KB | 0.85x more | 13 / 10 |
+| **Unique** | 6.9µs / 6.3µs | 0.90x | 53.3KB / 45.1KB | 0.85x more | 7 / 6 |
+| **UniqueBy** | 7.2µs / 6.3µs | 0.88x | 53.4KB / 45.1KB | 0.85x more | 8 / 6 |
+| **Zip** | 2.6µs / 3.2µs | **1.24x** | 32.8KB / 16.4KB | 0.50x more | 3 / 1 |
+| **ZipWith** | 2.2µs / 3.1µs | **1.38x** | 24.6KB / 8.2KB | 0.33x more | 3 / 1 |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
@@ -128,17 +136,6 @@ collection.
 If you prefer immutable, one-off helpers - `lo` is outstanding.
 If you write **expressive, chained data pipelines** and care about hot-path performance - `collection` is built for that job.
 
-## Performance Philosophy
-
-> **tl;dr**: *lo* is excellent. We solve a different problem - and in chained pipelines, that difference matters.
-
-`lo` is a fantastic library and a major inspiration for this project. It is battle-tested, idiomatic, and often the right choice when you want small, standalone helpers that operate on slices in isolation.
-
-`collection` takes a different approach.
-
-Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines**. Many operations are designed to **mutate the same backing slice intentionally**, allowing chained workflows to avoid intermediate allocations and unnecessary copying - while still making that behavior visible and documented.
-
-That design choice doesn't matter much for some single operations. It matters a *lot* once you start chaining and especially in hot paths.
 
 ## Why chaining changes the performance story
 

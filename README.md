@@ -224,7 +224,7 @@ No hidden copies. No surprises.
 
 ## Design Principles
 
-- **Type-safe**: no reflection, no `any` leaks
+- **Type-safe**: no reflection
 - **Explicit semantics**: order, mutation, and allocation are documented
 - **Go-native**: respects generics and stdlib patterns
 - **Eager evaluation**: no lazy pipelines or hidden concurrency

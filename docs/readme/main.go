@@ -99,11 +99,11 @@ type Example struct {
 //
 
 var (
-	groupHeader    = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
-	behaviorHeader = regexp.MustCompile(`(?i)^\s*@behavior\s+(.+)$`)
+	groupHeader     = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
+	behaviorHeader  = regexp.MustCompile(`(?i)^\s*@behavior\s+(.+)$`)
 	chainableHeader = regexp.MustCompile(`(?i)^\s*@chainable\s+(.+)$`)
-	terminalHeader = regexp.MustCompile(`(?i)^\s*@terminal\s+(.+)$`)
-	exampleHeader  = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
+	terminalHeader  = regexp.MustCompile(`(?i)^\s*@terminal\s+(.+)$`)
+	exampleHeader   = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
 )
 
 func parseFuncs(root string) ([]*FuncDoc, error) {
@@ -350,7 +350,7 @@ func renderAPI(funcs []*FuncDoc) string {
 	var buf bytes.Buffer
 
 	// ---------------- Index ----------------
-	buf.WriteString("## API Index\n\n")
+	buf.WriteString("# API Index\n\n")
 	buf.WriteString("| Group | Functions |\n")
 	buf.WriteString("|------:|-----------|\n")
 

@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-469-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-470-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/collection"><img src="https://goreportcard.com/badge/github.com/goforj/collection" alt="Go Report Card"></a>
 </p>
@@ -288,7 +288,7 @@ go get github.com/goforj/collection
 
 <!-- api:embed:start -->
 
-## API Index
+# API Index
 
 | Group | Functions |
 |------:|-----------|

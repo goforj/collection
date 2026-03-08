@@ -3,8 +3,7 @@
 </p>
 
 <p align="center">
-  Fluent collections for Go. <code>collection</code> brings an expressive, fluent API to Go.  
-  Iterate, filter, transform, sort, reduce, group, and debug data with zero dependencies.
+  Fluent collections for Go. Iterate, filter, transform, sort, reduce, group, and debug data with zero dependencies.
 </p>
 
 <p align="center">

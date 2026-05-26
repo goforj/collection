@@ -116,3 +116,18 @@ func TestFilter_WritesThroughSourceSlice(t *testing.T) {
 		t.Fatalf("expected filtered length %d, got %d", len(want), len(c.Items()))
 	}
 }
+
+func TestFilter_ClearsRemovedTail(t *testing.T) {
+	a, b, cval := 1, 2, 3
+	items := []*int{&a, &b, &cval}
+	c := New(items)
+
+	c.Filter(func(v *int) bool { return *v == 2 })
+
+	if items[0] != &b {
+		t.Fatalf("expected kept value to be compacted to front")
+	}
+	if items[1] != nil || items[2] != nil {
+		t.Fatalf("expected removed tail to be cleared, got %v", items)
+	}
+}

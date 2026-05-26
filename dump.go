@@ -44,6 +44,7 @@ func (c *Collection[T]) Dump() *Collection[T] {
 // Like Laravel's dd(), this is intended for debugging and
 // should not be used in production control flow.
 // @group Debugging
+// @behavior readonly
 // @chainable false
 // @terminal true
 //
@@ -93,6 +94,7 @@ func setDumpWriter(w io.Writer) {
 
 // Dump is a convenience function that calls godump.Dump.
 // @group Debugging
+// @behavior readonly
 // @chainable false
 // @terminal true
 //

@@ -1,4 +1,4 @@
-name: Go Test
+name: Test
 
 on:
   push:
@@ -17,16 +17,51 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "stable"
+          go-version-file: go.mod
+          cache-dependency-path: |
+            go.sum
+            examples/go.sum
+            docs/bench/go.sum
 
-      - name: Install dependencies
-        run: go mod tidy
+      - name: Download dependencies
+        run: go mod download
 
-      - name: Run tests
+      - name: Check module tidiness
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
         run: go test ./... -v
 
-      - name: Run tests with coverage
-        run: go test -coverprofile=coverage.txt
+      - name: Race test
+        run: go test -race ./...
+
+      - name: Coverage
+        run: go test -coverprofile=coverage.txt ./...
+
+      - name: Audit example output
+        run: go run ./docs/examples-audit/main.go
+
+      - name: Check generated README
+        run: |
+          go run ./docs/readme/main.go
+          git diff --exit-code -- README.md
+
+      - name: Check examples module
+        working-directory: examples
+        run: go list -m all
+
+      - name: Check docs module
+        working-directory: docs
+        run: go list -m
+
+      - name: Check benchmark module
+        working-directory: docs/bench
+        run: go test ./...
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5

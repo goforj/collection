@@ -109,6 +109,21 @@ func TestPop_PreservesNilSlice(t *testing.T) {
 	}
 }
 
+func TestPop_ClearsRemovedSlot(t *testing.T) {
+	a, b := 1, 2
+	items := []*int{&a, &b}
+	c := New(items)
+
+	popped, ok := c.Pop()
+
+	if !ok || popped != &b {
+		t.Fatalf("expected to pop second pointer")
+	}
+	if items[1] != nil {
+		t.Fatalf("expected removed slot to be cleared, got %v", items[1])
+	}
+}
+
 func TestPopN_PreservesNilSlice(t *testing.T) {
 	c := New([]int(nil))
 

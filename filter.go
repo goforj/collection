@@ -60,14 +60,16 @@ package collection
 //	//   }
 //	// ]
 func (c *Collection[T]) Filter(fn func(T) bool) *Collection[T] {
+	items := c.items
 	j := 0
-	for i := 0; i < len(c.items); i++ {
-		if fn(c.items[i]) {
-			c.items[j] = c.items[i] // compact in place
+	for i := 0; i < len(items); i++ {
+		if fn(items[i]) {
+			items[j] = items[i] // compact in place
 			j++
 		}
 	}
 
-	c.items = c.items[:j] // shrink to new length
+	clear(items[j:])
+	c.items = items[:j] // shrink to new length
 	return c
 }

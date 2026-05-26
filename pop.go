@@ -76,6 +76,8 @@ func (c *Collection[T]) Pop() (T, bool) {
 	}
 
 	item := c.items[n-1]
+	var zero T
+	c.items[n-1] = zero
 	c.items = c.items[:n-1]
 	return item, true
 }

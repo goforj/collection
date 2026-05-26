@@ -48,6 +48,9 @@ func main() {
 		name := e.Name()
 		path := filepath.Join(examplesDir, name, "main.go")
 		src, err := os.ReadFile(path)
+		if errors.Is(err, os.ErrNotExist) {
+			continue
+		}
 		if err != nil {
 			fatalf("read %s: %v", path, err)
 		}
@@ -160,7 +163,8 @@ func runExample(name string, src []byte) ([]string, error) {
 		return nil, fmt.Errorf("write overlay: %w", err)
 	}
 
-	cmd := exec.Command("go", "run", "-overlay", overlayPath, "./examples/"+name)
+	cmd := exec.Command("go", "run", "-overlay", overlayPath, "./"+name)
+	cmd.Dir = "examples"
 	cmd.Env = append(os.Environ(), "NO_COLOR=1")
 
 	var stdout bytes.Buffer

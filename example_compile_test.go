@@ -32,9 +32,12 @@ func TestExamplesBuild(t *testing.T) {
 		// CAPTURE LOOP VARS
 		name := e.Name()
 		path := filepath.Join(examplesDir, name)
+		if _, err := os.Stat(filepath.Join(path, "main.go")); errors.Is(err, os.ErrNotExist) {
+			continue
+		}
 
 		t.Run(name, func(t *testing.T) {
-			t.Parallel() // 🔑 enable concurrency
+			t.Parallel()
 
 			if err := buildExampleWithoutTags(path); err != nil {
 				t.Fatalf("example %q failed to build:\n%s", name, err)
@@ -94,8 +97,9 @@ func buildExampleWithoutTags(exampleDir string) error {
 		"go", "build",
 		"-overlay", overlayPath,
 		"-o", os.DevNull,
-		"./"+exampleDir,
+		"./"+filepath.Base(exampleDir),
 	)
+	cmd.Dir = filepath.Dir(exampleDir)
 
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr

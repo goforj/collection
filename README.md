@@ -287,18 +287,18 @@ go get github.com/goforj/collection
 
 | Group | Functions |
 |------:|-----------|
-| **Access** | [Items](#items) [ItemsCopy](#itemscopy) |
-| **Aggregation** | [Avg](#avg) [Count](#count) [CountBy](#countby) [CountByValue](#countbyvalue) [Max](#max) [MaxBy](#maxby) [Median](#median) [Min](#min) [MinBy](#minby) [Mode](#mode) [Reduce](#reduce) [Sum](#sum) |
-| **Construction** | [Clone](#clone) [New](#new) [NewNumeric](#newnumeric) |
-| **Debugging** | [Dd](#dd) [Dump](#dump) [DumpStr](#dumpstr) |
-| **Grouping** | [GroupBy](#groupby) [GroupBySlice](#groupbyslice) |
-| **Maps** | [FromMap](#frommap) [ToMap](#tomap) [ToMapKV](#tomapkv) |
-| **Ordering** | [After](#after) [Before](#before) [Reverse](#reverse) [Shuffle](#shuffle) [Sort](#sort) |
-| **Querying** | [All](#all) [Any](#any) [At](#at) [Contains](#contains) [First](#first) [FirstWhere](#firstwhere) [IndexWhere](#indexwhere) [IsEmpty](#isempty) [Last](#last) [LastWhere](#lastwhere) [None](#none) |
-| **Serialization** | [ToJSON](#tojson) [ToPrettyJSON](#toprettyjson) |
-| **Set Operations** | [Difference](#difference) [Intersect](#intersect) [SymmetricDifference](#symmetricdifference) [Union](#union) [Unique](#unique) [UniqueBy](#uniqueby) [UniqueComparable](#uniquecomparable) |
-| **Slicing** | [Chunk](#chunk) [Filter](#filter) [Partition](#partition) [Pop](#pop) [PopN](#popn) [Skip](#skip) [SkipLast](#skiplast) [Take](#take) [TakeLast](#takelast) [TakeUntil](#takeuntil) [TakeUntilFn](#takeuntilfn) [Window](#window) |
-| **Transformation** | [Append](#append) [Concat](#concat) [Each](#each) [Map](#map) [MapTo](#mapto) [Merge](#merge) [Multiply](#multiply) [Pipe](#pipe) [Prepend](#prepend) [Tap](#tap) [Times](#times) [Transform](#transform) [Zip](#zip) [ZipWith](#zipwith) |
+| **Access** | [Items](#items) · [ItemsCopy](#itemscopy) |
+| **Aggregation** | [Avg](#avg) · [Count](#count) · [CountBy](#countby) · [CountByValue](#countbyvalue) · [Max](#max) · [MaxBy](#maxby) · [Median](#median) · [Min](#min) · [MinBy](#minby) · [Mode](#mode) · [Reduce](#reduce) · [Sum](#sum) |
+| **Construction** | [Clone](#clone) · [New](#new) · [NewNumeric](#newnumeric) |
+| **Debugging** | [Dd](#dd) · [Dump](#dump) · [DumpStr](#dumpstr) |
+| **Grouping** | [GroupBy](#groupby) · [GroupBySlice](#groupbyslice) |
+| **Maps** | [FromMap](#frommap) · [ToMap](#tomap) · [ToMapKV](#tomapkv) |
+| **Ordering** | [After](#after) · [Before](#before) · [Reverse](#reverse) · [Shuffle](#shuffle) · [Sort](#sort) |
+| **Querying** | [All](#all) · [Any](#any) · [At](#at) · [Contains](#contains) · [First](#first) · [FirstWhere](#firstwhere) · [IndexWhere](#indexwhere) · [IsEmpty](#isempty) · [Last](#last) · [LastWhere](#lastwhere) · [None](#none) |
+| **Serialization** | [ToJSON](#tojson) · [ToPrettyJSON](#toprettyjson) |
+| **Set Operations** | [Difference](#difference) · [Intersect](#intersect) · [SymmetricDifference](#symmetricdifference) · [Union](#union) · [Unique](#unique) · [UniqueBy](#uniqueby) · [UniqueComparable](#uniquecomparable) |
+| **Slicing** | [Chunk](#chunk) · [Filter](#filter) · [Partition](#partition) · [Pop](#pop) · [PopN](#popn) · [Skip](#skip) · [SkipLast](#skiplast) · [Take](#take) · [TakeLast](#takelast) · [TakeUntil](#takeuntil) · [TakeUntilFn](#takeuntilfn) · [Window](#window) |
+| **Transformation** | [Append](#append) · [Concat](#concat) · [Each](#each) · [Map](#map) · [MapTo](#mapto) · [Merge](#merge) · [Multiply](#multiply) · [Pipe](#pipe) · [Prepend](#prepend) · [Tap](#tap) · [Times](#times) · [Transform](#transform) · [Zip](#zip) · [ZipWith](#zipwith) |
 
 
 ## Access

@@ -4329,3 +4329,7 @@ collection.Dump(out3.Items())
 // ]
 ```
 <!-- api:embed:end -->
+
+## Development
+
+Use `make test` for the root module, `make vet` for static checks, and `make generate` to refresh the generated README API reference. The `docs` and `examples` directories are separate Go modules and can be tested from their own directories when changed.

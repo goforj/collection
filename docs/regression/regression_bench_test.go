@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	collectionv2 "github.com/goforj/collection"
-	collectionv3 "github.com/goforj/collection/v3"
+	collectionv4 "github.com/goforj/collection/v4"
 )
 
 const benchmarkSize = 1_000
@@ -22,14 +22,14 @@ func BenchmarkMutableFilterV2(b *testing.B) {
 	}
 }
 
-// BenchmarkMutableFilterV3 measures the v3 in-place filtering path with fresh input.
-func BenchmarkMutableFilterV3(b *testing.B) {
+// BenchmarkMutableFilterV4 measures the v4 in-place filtering path with fresh input.
+func BenchmarkMutableFilterV4(b *testing.B) {
 	original, work := benchmarkInputs()
 	b.ReportAllocs()
 	b.ResetTimer()
 	for b.Loop() {
 		copy(work, original)
-		result := collectionv3.New(work).Retain(keepEven)
+		result := collectionv4.New(work).Retain(keepEven)
 		runtime.KeepAlive(result)
 	}
 }
@@ -45,13 +45,13 @@ func BenchmarkCopiedFilterV2(b *testing.B) {
 	}
 }
 
-// BenchmarkCopiedFilterV3 measures v3 filtering while preserving the input.
-func BenchmarkCopiedFilterV3(b *testing.B) {
+// BenchmarkCopiedFilterV4 measures v4 filtering while preserving the input.
+func BenchmarkCopiedFilterV4(b *testing.B) {
 	original, _ := benchmarkInputs()
 	b.ReportAllocs()
 	b.ResetTimer()
 	for b.Loop() {
-		result := collectionv3.New(original).Filter(keepEven)
+		result := collectionv4.New(original).Filter(keepEven)
 		runtime.KeepAlive(result)
 	}
 }
@@ -68,14 +68,14 @@ func BenchmarkMutableTransformV2(b *testing.B) {
 	}
 }
 
-// BenchmarkMutableTransformV3 measures the v3 in-place transformation path with fresh input.
-func BenchmarkMutableTransformV3(b *testing.B) {
+// BenchmarkMutableTransformV4 measures the v4 in-place transformation path with fresh input.
+func BenchmarkMutableTransformV4(b *testing.B) {
 	original, work := benchmarkInputs()
 	b.ReportAllocs()
 	b.ResetTimer()
 	for b.Loop() {
 		copy(work, original)
-		result := collectionv3.New(work).Transform(double)
+		result := collectionv4.New(work).Transform(double)
 		runtime.KeepAlive(result)
 	}
 }
@@ -92,14 +92,14 @@ func BenchmarkMutablePipelineV2(b *testing.B) {
 	}
 }
 
-// BenchmarkMutablePipelineV3 measures the v3 in-place fluent pipeline with fresh input.
-func BenchmarkMutablePipelineV3(b *testing.B) {
+// BenchmarkMutablePipelineV4 measures the v4 in-place fluent pipeline with fresh input.
+func BenchmarkMutablePipelineV4(b *testing.B) {
 	original, work := benchmarkInputs()
 	b.ReportAllocs()
 	b.ResetTimer()
 	for b.Loop() {
 		copy(work, original)
-		result := collectionv3.New(work).Retain(keepEven).Transform(double).Take(40).Reduce(0, sum)
+		result := collectionv4.New(work).Retain(keepEven).Transform(double).Take(40).Reduce(0, sum)
 		runtime.KeepAlive(result)
 	}
 }
@@ -115,13 +115,13 @@ func BenchmarkCopiedPipelineV2(b *testing.B) {
 	}
 }
 
-// BenchmarkCopiedPipelineV3 measures a v3 pipeline that preserves its input.
-func BenchmarkCopiedPipelineV3(b *testing.B) {
+// BenchmarkCopiedPipelineV4 measures a v4 pipeline that preserves its input.
+func BenchmarkCopiedPipelineV4(b *testing.B) {
 	original, _ := benchmarkInputs()
 	b.ReportAllocs()
 	b.ResetTimer()
 	for b.Loop() {
-		result := collectionv3.New(original).Filter(keepEven).Map(double).Take(40).Reduce(0, sum)
+		result := collectionv4.New(original).Filter(keepEven).Map(double).Take(40).Reduce(0, sum)
 		runtime.KeepAlive(result)
 	}
 }
@@ -138,14 +138,14 @@ func BenchmarkShuffleV2(b *testing.B) {
 	}
 }
 
-// BenchmarkShuffleV3 measures v3 Shuffle with fresh input.
-func BenchmarkShuffleV3(b *testing.B) {
+// BenchmarkShuffleV4 measures v4 Shuffle with fresh input.
+func BenchmarkShuffleV4(b *testing.B) {
 	original, work := benchmarkInputs()
 	b.ReportAllocs()
 	b.ResetTimer()
 	for b.Loop() {
 		copy(work, original)
-		result := collectionv3.New(work).Shuffle()
+		result := collectionv4.New(work).Shuffle()
 		runtime.KeepAlive(result)
 	}
 }

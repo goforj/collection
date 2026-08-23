@@ -414,7 +414,7 @@ func writeMain(base string, fd *FuncDoc) error {
 	buf.WriteString("package main\n\n")
 
 	imports := map[string]bool{
-		"github.com/goforj/collection/v3": true,
+		"github.com/goforj/collection/v4": true,
 	}
 
 	for _, ex := range fd.Examples {
@@ -427,7 +427,7 @@ func writeMain(base string, fd *FuncDoc) error {
 	}
 
 	if len(imports) == 1 {
-		buf.WriteString("import \"github.com/goforj/collection/v3\"\n\n")
+		buf.WriteString("import \"github.com/goforj/collection/v4\"\n\n")
 	} else {
 		buf.WriteString("import (\n")
 		keys := make([]string, 0, len(imports))

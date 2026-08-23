@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-    <a href="https://pkg.go.dev/github.com/goforj/collection/v3"><img src="https://pkg.go.dev/badge/github.com/goforj/collection/v3.svg" alt="Go Reference"></a>
+    <a href="https://pkg.go.dev/github.com/goforj/collection/v4"><img src="https://pkg.go.dev/badge/github.com/goforj/collection/v4.svg" alt="Go Reference"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
     <a href="https://github.com/goforj/collection/actions"><img src="https://github.com/goforj/collection/actions/workflows/test.yml/badge.svg" alt="Go Test"></a>
     <a href="https://golang.org"><img src="https://img.shields.io/badge/go-1.27+-blue?logo=go" alt="Go version"></a>
@@ -101,7 +101,7 @@ Both libraries provide generic operations over ordinary slices. The main differe
 
 The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
 
-Matched v2/v3 regression benchmarks for mutating, copied, and pipeline workloads live in [`./docs/regression`](./docs/regression); its [`go.mod`](./docs/regression/go.mod) records the exact v2 baseline.
+Matched v2/v4 regression benchmarks for mutating, copied, and pipeline workloads live in [`./docs/regression`](./docs/regression); its [`go.mod`](./docs/regression/go.mod) records the exact v2 baseline.
 
 <!-- bench:embed:start -->
 
@@ -307,10 +307,10 @@ This helps catch example regressions as the API evolves.
 This package requires Go 1.27 or newer. Consumers that cannot upgrade their
 toolchain can remain on v2.
 
-Existing users should read [Migrating to v3](./MIGRATING_TO_V3.md) for the complete API and ownership changes.
+Existing users should read [Migrating to v4](./MIGRATING_TO_V4.md) for the complete API and ownership changes.
 
 ```bash
-go get github.com/goforj/collection/v3
+go get github.com/goforj/collection/v4
 ```
 
 <!-- api:embed:start -->

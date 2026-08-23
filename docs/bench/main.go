@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/goforj/collection/v3"
+	"github.com/goforj/collection/v4"
 	"github.com/samber/lo"
 	"github.com/samber/lo/mutable"
 )
@@ -2622,7 +2622,7 @@ func cpuModelFromProc(data []byte) string {
 // Helpers
 // ----------------------------------------------------------------------------
 
-const projectModule = "module github.com/goforj/collection/v3"
+const projectModule = "module github.com/goforj/collection/v4"
 
 // findRoot locates the project module containing the benchmark reports.
 func findRoot() (string, error) {

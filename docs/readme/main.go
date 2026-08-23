@@ -132,6 +132,7 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 	}
 
 	funcs := map[string]*FuncDoc{}
+	packageFuncs := packageFunctionNames(pkg)
 
 	for _, file := range pkg.Files {
 		for _, decl := range file.Decls {
@@ -145,7 +146,7 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 			}
 
 			fd := &FuncDoc{
-				Name:        fn.Name.Name,
+				Name:        funcDocName(fn, packageFuncs),
 				Group:       extractGroup(fn.Doc),
 				Behavior:    extractBehavior(fn.Doc),
 				Chainable:   extractChainable(fn.Doc),
@@ -171,6 +172,44 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 	}
 
 	return out, nil
+}
+
+// packageFunctionNames returns package-level function names that may collide with methods.
+func packageFunctionNames(pkg *ast.Package) map[string]bool {
+	names := make(map[string]bool)
+	for _, file := range pkg.Files {
+		for _, decl := range file.Decls {
+			fn, ok := decl.(*ast.FuncDecl)
+			if ok && fn.Recv == nil {
+				names[fn.Name.Name] = true
+			}
+		}
+	}
+	return names
+}
+
+// funcDocName qualifies a method only when a package function has the same name.
+func funcDocName(fn *ast.FuncDecl, packageFuncs map[string]bool) string {
+	if fn.Recv == nil || len(fn.Recv.List) == 0 || !packageFuncs[fn.Name.Name] {
+		return fn.Name.Name
+	}
+	receiver := fn.Recv.List[0].Type
+	for {
+		switch value := receiver.(type) {
+		case *ast.ParenExpr:
+			receiver = value.X
+		case *ast.StarExpr:
+			receiver = value.X
+		case *ast.IndexExpr:
+			receiver = value.X
+		case *ast.IndexListExpr:
+			receiver = value.X
+		case *ast.Ident:
+			return value.Name + "." + fn.Name.Name
+		default:
+			return fn.Name.Name
+		}
+	}
 }
 
 func extractGroup(group *ast.CommentGroup) string {

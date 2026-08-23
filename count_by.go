@@ -58,12 +58,7 @@ package collection
 //	//   user => 2 #int
 //	// }
 func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
-	items := c.Items()
-	result := make(map[K]int)
-	for _, v := range items {
-		result[fn(v)]++
-	}
-	return result
+	return c.CountBy(fn)
 }
 
 // CountByValue returns a map where each distinct item in the collection

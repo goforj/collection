@@ -61,5 +61,5 @@ package collection
 //	//   1 => "Bob" #string
 //	// ]
 func Pipe[T any, R any](c *Collection[T], fn func(*Collection[T]) R) R {
-	return fn(c)
+	return c.Pipe(fn)
 }

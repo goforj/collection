@@ -62,9 +62,5 @@ func ToMap[T any, K comparable, V any](
 	keyFn func(T) K,
 	valueFn func(T) V,
 ) map[K]V {
-	out := make(map[K]V, len(c.items))
-	for _, item := range c.items {
-		out[keyFn(item)] = valueFn(item)
-	}
-	return out
+	return c.ToMap(keyFn, valueFn)
 }

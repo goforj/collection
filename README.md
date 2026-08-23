@@ -10,11 +10,11 @@
     <a href="https://pkg.go.dev/github.com/goforj/collection"><img src="https://pkg.go.dev/badge/github.com/goforj/collection.svg" alt="Go Reference"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
     <a href="https://github.com/goforj/collection/actions"><img src="https://github.com/goforj/collection/actions/workflows/test.yml/badge.svg" alt="Go Test"></a>
-    <a href="https://golang.org"><img src="https://img.shields.io/badge/go-1.21+-blue?logo=go" alt="Go version"></a>
+    <a href="https://golang.org"><img src="https://img.shields.io/badge/go-1.27+-blue?logo=go" alt="Go version"></a>
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-472-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-486-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -25,6 +25,7 @@
 - **Tiny dependency footprint** - only `godump` for debugging helpers
 - **Minimal allocations** - slice views where possible; in-place ops reuse backing storage when semantics allow
 - **Map / Filter / Reduce** - clean functional transforms
+- **Generic methods** - type-changing transforms remain fluent on Go 1.27+
 - **First / Last / FirstWhere / IndexWhere / Contains** helpers
 - **Sort, GroupBy, Chunk**, and more
 - **Borrow-by-default** - no defensive copies unless you ask for them
@@ -66,6 +67,15 @@ collection.
 //    +Errors => 22 #int
 //  }
 // ]
+```
+
+Go 1.27 generic methods keep type-changing pipelines fluent:
+
+```go
+namesByLength := collection.New(users).
+    MapTo(func(user User) string { return user.Name }).
+    UniqueBy(strings.ToLower).
+    GroupBy(func(name string) int { return len(name) })
 ```
 
 ### Performance Benchmarks
@@ -276,6 +286,9 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 
 # Installation
 
+Collection requires Go 1.27 or newer. Consumers that cannot upgrade their
+toolchain can remain on the v1.3 release line.
+
 ```bash
 go get github.com/goforj/collection
 ```
@@ -287,17 +300,17 @@ go get github.com/goforj/collection
 | Group | Functions |
 |------:|-----------|
 | **Access** | [Items](#items) · [ItemsCopy](#itemscopy) |
-| **Aggregation** | [Avg](#avg) · [Count](#count) · [CountBy](#countby) · [CountByValue](#countbyvalue) · [Max](#max) · [MaxBy](#maxby) · [Median](#median) · [Min](#min) · [MinBy](#minby) · [Mode](#mode) · [Reduce](#reduce) · [Sum](#sum) |
+| **Aggregation** | [Avg](#avg) · [Collection.CountBy](#collection.countby) · [Collection.MaxBy](#collection.maxby) · [Collection.MinBy](#collection.minby) · [Count](#count) · [CountBy](#countby) · [CountByValue](#countbyvalue) · [Max](#max) · [MaxBy](#maxby) · [Median](#median) · [Min](#min) · [MinBy](#minby) · [Mode](#mode) · [Reduce](#reduce) · [Sum](#sum) |
 | **Construction** | [Clone](#clone) · [New](#new) · [NewNumeric](#newnumeric) |
-| **Debugging** | [Dd](#dd) · [Dump](#dump) · [DumpStr](#dumpstr) |
-| **Grouping** | [GroupBy](#groupby) · [GroupBySlice](#groupbyslice) |
-| **Maps** | [FromMap](#frommap) · [ToMap](#tomap) · [ToMapKV](#tomapkv) |
+| **Debugging** | [Collection.Dump](#collection.dump) · [Dd](#dd) · [Dump](#dump) · [DumpStr](#dumpstr) |
+| **Grouping** | [Collection.GroupBy](#collection.groupby) · [Collection.GroupBySlice](#collection.groupbyslice) · [GroupBy](#groupby) · [GroupBySlice](#groupbyslice) |
+| **Maps** | [Collection.ToMap](#collection.tomap) · [FromMap](#frommap) · [ToMap](#tomap) · [ToMapKV](#tomapkv) |
 | **Ordering** | [After](#after) · [Before](#before) · [Reverse](#reverse) · [Shuffle](#shuffle) · [Sort](#sort) |
 | **Querying** | [All](#all) · [Any](#any) · [At](#at) · [Contains](#contains) · [First](#first) · [FirstWhere](#firstwhere) · [IndexWhere](#indexwhere) · [IsEmpty](#isempty) · [Last](#last) · [LastWhere](#lastwhere) · [None](#none) |
 | **Serialization** | [ToJSON](#tojson) · [ToPrettyJSON](#toprettyjson) |
-| **Set Operations** | [Difference](#difference) · [Intersect](#intersect) · [SymmetricDifference](#symmetricdifference) · [Union](#union) · [Unique](#unique) · [UniqueBy](#uniqueby) · [UniqueComparable](#uniquecomparable) |
+| **Set Operations** | [Collection.UniqueBy](#collection.uniqueby) · [Difference](#difference) · [Intersect](#intersect) · [SymmetricDifference](#symmetricdifference) · [Union](#union) · [Unique](#unique) · [UniqueBy](#uniqueby) · [UniqueComparable](#uniquecomparable) |
 | **Slicing** | [Chunk](#chunk) · [Filter](#filter) · [Partition](#partition) · [Pop](#pop) · [PopN](#popn) · [Skip](#skip) · [SkipLast](#skiplast) · [Take](#take) · [TakeLast](#takelast) · [TakeUntil](#takeuntil) · [TakeUntilFn](#takeuntilfn) · [Window](#window) |
-| **Transformation** | [Append](#append) · [Concat](#concat) · [Each](#each) · [Map](#map) · [MapTo](#mapto) · [Merge](#merge) · [Multiply](#multiply) · [Pipe](#pipe) · [Prepend](#prepend) · [Tap](#tap) · [Times](#times) · [Transform](#transform) · [Zip](#zip) · [ZipWith](#zipwith) |
+| **Transformation** | [Append](#append) · [Collection.MapTo](#collection.mapto) · [Collection.Pipe](#collection.pipe) · [Collection.ZipWith](#collection.zipwith) · [Concat](#concat) · [Each](#each) · [Map](#map) · [MapTo](#mapto) · [Merge](#merge) · [Multiply](#multiply) · [Pipe](#pipe) · [Prepend](#prepend) · [Tap](#tap) · [Times](#times) · [Transform](#transform) · [Zip](#zip) · [ZipWith](#zipwith) |
 
 
 ## Access
@@ -394,6 +407,53 @@ _Example: float_
 c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
 collection.Dump(c2.Avg())
 // 2.333333 #float64
+```
+
+### <a id="collection.countby"></a>Collection.CountBy · readonly · terminal
+
+CountBy returns occurrence counts keyed by the extracted value.
+
+```go
+numbers := collection.New([]int{1, 2, 3, 5})
+counts := numbers.CountBy(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(counts)
+// #map[string]int {
+//   even => 1 #int
+//   odd => 3 #int
+// }
+```
+
+### <a id="collection.maxby"></a>Collection.MaxBy · readonly · terminal
+
+MaxBy returns the item whose extracted key is the largest.
+
+```go
+words := collection.New([]string{"pear", "fig", "banana"})
+longest, ok := words.MaxBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(longest, ok)
+// "banana" #string
+// true #bool
+```
+
+### <a id="collection.minby"></a>Collection.MinBy · readonly · terminal
+
+MinBy returns the item whose extracted key is the smallest.
+
+```go
+words := collection.New([]string{"pear", "fig", "banana"})
+shortest, ok := words.MinBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(shortest, ok)
+// "fig" #string
+// true #bool
 ```
 
 ### <a id="count"></a>Count · readonly · terminal
@@ -961,23 +1021,7 @@ NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
 
 ## Debugging
 
-### <a id="dd"></a>Dd · readonly · terminal
-
-Dd prints items then terminates execution.
-Like Laravel's dd(), this is intended for debugging and
-should not be used in production control flow.
-
-```go
-c := collection.New([]string{"a", "b"})
-c.Dd()
-// #[]string [
-//   0 => "a" #string
-//   1 => "b" #string
-// ]
-// Process finished with the exit code 1
-```
-
-### <a id="dump"></a>Dump · readonly · chainable
+### <a id="collection.dump"></a>Collection.Dump · readonly · chainable
 
 Dump prints items with godump and returns the same collection.
 This is a no-op on the collection itself and never panics.
@@ -1006,7 +1050,25 @@ collection.New([]int{1, 2, 3}).
 // ]
 ```
 
-_Example: integers_
+### <a id="dd"></a>Dd · readonly · terminal
+
+Dd prints items then terminates execution.
+Like Laravel's dd(), this is intended for debugging and
+should not be used in production control flow.
+
+```go
+c := collection.New([]string{"a", "b"})
+c.Dd()
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+// ]
+// Process finished with the exit code 1
+```
+
+### <a id="dump"></a>Dump · readonly · terminal
+
+Dump is a convenience function that calls godump.Dump.
 
 ```go
 c2 := collection.New([]int{1, 2, 3})
@@ -1035,6 +1097,52 @@ fmt.Println(s)
 ```
 
 ## Grouping
+
+### <a id="collection.groupby"></a>Collection.GroupBy · readonly · terminal
+
+GroupBy partitions this collection into collections keyed by the extracted value.
+
+```go
+numbers := collection.New([]int{1, 2, 3, 4})
+groups := numbers.GroupBy(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(groups["even"].Items(), groups["odd"].Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+// ]
+```
+
+### <a id="collection.groupbyslice"></a>Collection.GroupBySlice · readonly · terminal
+
+GroupBySlice partitions this collection into slices keyed by the extracted value.
+
+```go
+numbers := collection.New([]int{1, 2, 3, 4})
+groups := numbers.GroupBySlice(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(groups["even"], groups["odd"])
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+// ]
+```
 
 ### <a id="groupby"></a>GroupBy · readonly · terminal
 
@@ -1181,6 +1289,23 @@ collection.Dump(groups2["user"])
 ```
 
 ## Maps
+
+### <a id="collection.tomap"></a>Collection.ToMap · readonly · terminal
+
+ToMap reduces this collection into a map using the provided key and value functions.
+
+```go
+words := collection.New([]string{"go", "forj"})
+lengths := words.ToMap(
+	func(word string) string { return word },
+	func(word string) int { return len(word) },
+)
+collection.Dump(lengths)
+// #map[string]int {
+//   forj => 4 #int
+//   go => 2 #int
+// }
+```
 
 ### <a id="frommap"></a>FromMap · immutable · chainable
 
@@ -2162,6 +2287,22 @@ fmt.Println(out1)
 ```
 
 ## Set Operations
+
+### <a id="collection.uniqueby"></a>Collection.UniqueBy · immutable · chainable
+
+UniqueBy returns a collection containing the first item for each extracted key.
+
+```go
+words := collection.New([]string{"go", "up", "forj", "code"})
+unique := words.UniqueBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(unique.Items())
+// #[]string [
+//   0 => "go" #string
+//   1 => "forj" #string
+// ]
+```
 
 ### <a id="difference"></a>Difference · immutable · chainable
 
@@ -3474,6 +3615,61 @@ users.Append(
 //    +ID   => 4 #int
 //    +Name => "Dave" #string
 //  }
+// ]
+```
+
+### <a id="collection.mapto"></a>Collection.MapTo · immutable · chainable
+
+MapTo maps this collection to a collection with a different element type.
+
+```go
+numbers := collection.New([]int{1, 2, 3, 4})
+labels := numbers.MapTo(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(labels.Items())
+// #[]string [
+//   0 => "odd" #string
+//   1 => "even" #string
+//   2 => "odd" #string
+//   3 => "even" #string
+// ]
+```
+
+### <a id="collection.pipe"></a>Collection.Pipe · readonly · terminal
+
+Pipe passes this collection to fn and returns fn's result.
+
+```go
+numbers := collection.New([]int{1, 2, 3})
+total := numbers.Pipe(func(values *collection.Collection[int]) int {
+	sum := 0
+	for _, value := range values.Items() {
+		sum += value
+	}
+	return sum
+})
+collection.Dump(total)
+// 6 #int
+```
+
+### <a id="collection.zipwith"></a>Collection.ZipWith · immutable · chainable
+
+ZipWith combines this collection with another collection using fn up to the shorter length.
+
+```go
+left := collection.New([]int{1, 2, 3})
+right := collection.New([]int{10, 20})
+sums := left.ZipWith(right, func(a, b int) int {
+	return a + b
+})
+collection.Dump(sums.Items())
+// #[]int [
+//   0 => 11 #int
+//   1 => 22 #int
 // ]
 ```
 

@@ -47,13 +47,14 @@ func run() error {
 	}
 
 	funcs := map[string]*FuncDoc{}
+	packageFuncs := packageFunctionNames(pkg)
 
 	for filename, file := range pkg.Files {
 		if strings.Contains(filename, "_test.go") {
 			continue
 		}
 
-		for name, fd := range extractFuncDocs(fset, filename, file) {
+		for name, fd := range extractFuncDocs(fset, filename, file, packageFuncs) {
 			if existing, ok := funcs[name]; ok {
 				existing.Examples = append(existing.Examples, fd.Examples...)
 			} else {
@@ -131,6 +132,7 @@ func extractFuncDocs(
 	fset *token.FileSet,
 	filename string,
 	file *ast.File,
+	packageFuncs map[string]bool,
 ) map[string]*FuncDoc {
 
 	out := map[string]*FuncDoc{}
@@ -141,7 +143,7 @@ func extractFuncDocs(
 			continue
 		}
 
-		name := fn.Name.Name
+		name := funcDocName(fn, packageFuncs)
 
 		out[name] = &FuncDoc{
 			Name:        name,
@@ -152,6 +154,44 @@ func extractFuncDocs(
 	}
 
 	return out
+}
+
+// packageFunctionNames returns package-level function names that may collide with methods.
+func packageFunctionNames(pkg *ast.Package) map[string]bool {
+	names := make(map[string]bool)
+	for _, file := range pkg.Files {
+		for _, decl := range file.Decls {
+			fn, ok := decl.(*ast.FuncDecl)
+			if ok && fn.Recv == nil {
+				names[fn.Name.Name] = true
+			}
+		}
+	}
+	return names
+}
+
+// funcDocName qualifies a method only when a package function has the same name.
+func funcDocName(fn *ast.FuncDecl, packageFuncs map[string]bool) string {
+	if fn.Recv == nil || len(fn.Recv.List) == 0 || !packageFuncs[fn.Name.Name] {
+		return fn.Name.Name
+	}
+	receiver := fn.Recv.List[0].Type
+	for {
+		switch value := receiver.(type) {
+		case *ast.ParenExpr:
+			receiver = value.X
+		case *ast.StarExpr:
+			receiver = value.X
+		case *ast.IndexExpr:
+			receiver = value.X
+		case *ast.IndexListExpr:
+			receiver = value.X
+		case *ast.Ident:
+			return value.Name + "." + fn.Name.Name
+		default:
+			return fn.Name.Name
+		}
+	}
 }
 
 func extractGroup(group *ast.CommentGroup) string {
@@ -283,7 +323,8 @@ func writeMain(base string, fd *FuncDoc) error {
 		return nil
 	}
 
-	dir := filepath.Join(base, strings.ToLower(fd.Name))
+	dirName := strings.ReplaceAll(strings.ToLower(fd.Name), ".", "-")
+	dir := filepath.Join(base, dirName)
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return err
 	}

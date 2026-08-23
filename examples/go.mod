@@ -1,6 +1,6 @@
 module github.com/goforj/collection/examples
 
-go 1.24.4
+go 1.27.0
 
 replace github.com/goforj/collection => ..
 

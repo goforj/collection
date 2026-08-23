@@ -1,0 +1,24 @@
+//go:build ignore
+// +build ignore
+
+package main
+
+import "github.com/goforj/collection"
+
+func main() {
+	// CountBy returns occurrence counts keyed by the extracted value.
+
+	// Example: count integers by parity
+	numbers := collection.New([]int{1, 2, 3, 5})
+	counts := numbers.CountBy(func(number int) string {
+		if number%2 == 0 {
+			return "even"
+		}
+		return "odd"
+	})
+	collection.Dump(counts)
+	// #map[string]int {
+	//   even => 1 #int
+	//   odd => 3 #int
+	// }
+}

@@ -1,0 +1,19 @@
+//go:build ignore
+// +build ignore
+
+package main
+
+import "github.com/goforj/collection"
+
+func main() {
+	// MaxBy returns the item whose extracted key is the largest.
+
+	// Example: longest string
+	words := collection.New([]string{"pear", "fig", "banana"})
+	longest, ok := words.MaxBy(func(word string) int {
+		return len(word)
+	})
+	collection.Dump(longest, ok)
+	// "banana" #string
+	// true #bool
+}

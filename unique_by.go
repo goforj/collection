@@ -62,23 +62,5 @@ package collection
 //	//   2 => 2 #int
 //	// ]
 func UniqueBy[T any, K comparable](c *Collection[T], keyFn func(T) K) *Collection[T] {
-	items := c.items
-	n := len(items)
-	if n == 0 {
-		return New([]T{})
-	}
-
-	seen := make(map[K]struct{}, n)
-	out := make([]T, 0, n)
-
-	for _, v := range items {
-		k := keyFn(v)
-		if _, ok := seen[k]; ok {
-			continue
-		}
-		seen[k] = struct{}{}
-		out = append(out, v)
-	}
-
-	return New(out)
+	return c.UniqueBy(keyFn)
 }

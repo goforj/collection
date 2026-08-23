@@ -6,8 +6,6 @@ package collection
 // @chainable true
 // @terminal false
 //
-// This cannot be a method because methods can't introduce a new type parameter R.
-//
 // Example: integers - extract parity label
 //
 //	nums := collection.New([]int{1, 2, 3, 4})
@@ -60,10 +58,5 @@ package collection
 //	//   1 => "Bob" #string
 //	// ]
 func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
-	items := c.Items()
-	out := make([]R, len(items))
-	for i, v := range items {
-		out[i] = fn(v)
-	}
-	return New(out)
+	return c.MapTo(fn)
 }

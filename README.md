@@ -169,35 +169,17 @@ If you prefer immutable, one-off helpers - `lo` is outstanding.
 If you write **expressive, chained data pipelines** and care about hot-path performance - `collection` is built for that job.
 
 
-## Choosing pure or in-place pipelines
+## Allocation and mutation are explicit
 
-Most functional helpers (including `lo`) operate like this:
+Version 3 has one Go-native, slice-backed representation. Every `Slice` supports
+`len`, indexing, slicing, and `range`; each operation documents how it treats the
+backing array.
 
-```
-input -> Map -> new slice -> Filter -> new slice -> Take -> slice view
-```
-
-That model is simple and safe. Transforming stages such as `Map` and `Filter`
-typically allocate; `Subset`, used here for `Take`, returns a view.
-
-Version 3 gives the same pure behavior through fluent generic methods. Hot paths
-can opt into the explicitly named in-place operations instead:
-
-```
-input -> Retain (compact in place) -> Transform (in place) -> Take (slice view)
-```
-
-The representation stays Go-native throughout: every `Slice` supports `len`,
-indexing, slicing, and `range`. `Map` and `Filter` allocate independent results.
-`Transform` mutates elements in place, while `Retain` compacts and clears the
-existing backing array; its shortened return value must be captured. `Concat`
-and `Prepend` always return independent results. `Sort`, `Reverse`, and
-`Shuffle` mutate elements in place.
-
-- Pure operations make ownership easy to reason about
-- In-place operations avoid allocations when the caller owns the input
-- Capped views prevent append from overwriting elements beyond the view
-- `Clone` makes an intentional ownership boundary before mutation
+- `Map`, `Filter`, `Concat`, and `Prepend` return independent results
+- `Retain` and `Transform` mutate in place; the shortened result from `Retain` must be captured
+- `Sort`, `Reverse`, and `Shuffle` mutate elements in place
+- View-producing slicing operations return capacity-capped views
+- `Clone` creates an intentional ownership boundary before mutation
 
 The benchmark tables compare equivalent pure operations separately from
 `Retain` and `Transform`. `Chunk`, `Skip`, and `SkipLast` are ownership

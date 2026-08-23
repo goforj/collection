@@ -319,16 +319,16 @@ go get github.com/goforj/collection/v4
 
 | Group | Functions and methods |
 |------:|-----------------------|
-| **Aggregation** | [Avg](#avg) - [CountBy](#countby) - [CountByValue](#countbyvalue) - [Max](#max) - [MaxBy](#maxby) - [Median](#median) - [Min](#min) - [MinBy](#minby) - [Mode](#mode) - [Reduce](#reduce) - [Sum](#sum) |
-| **Construction** | [Clone](#clone) - [New](#new) |
-| **Debugging** | [Dd](#dd) - [Dump](#dump) - [DumpStr](#dumpstr) - [Slice.Dump](#slice.dump) |
+| **Aggregation** | [Avg](#avg) · [CountBy](#countby) · [CountByValue](#countbyvalue) · [Max](#max) · [MaxBy](#maxby) · [Median](#median) · [Min](#min) · [MinBy](#minby) · [Mode](#mode) · [Reduce](#reduce) · [Sum](#sum) |
+| **Construction** | [Clone](#clone) · [New](#new) |
+| **Debugging** | [Dd](#dd) · [Dump](#dump) · [DumpStr](#dumpstr) · [Slice.Dump](#slice.dump) |
 | **Grouping** | [GroupBy](#groupby) |
-| **Maps** | [FromMap](#frommap) - [ToMap](#tomap) |
-| **Ordering** | [After](#after) - [Reverse](#reverse) - [Shuffle](#shuffle) - [Sort](#sort) |
-| **Querying** | [All](#all) - [Any](#any) - [At](#at) - [First](#first) - [FirstWhere](#firstwhere) - [IndexWhere](#indexwhere) - [Last](#last) - [LastWhere](#lastwhere) - [None](#none) |
-| **Set Operations** | [Difference](#difference) - [Intersect](#intersect) - [SymmetricDifference](#symmetricdifference) - [Union](#union) - [Unique](#unique) - [UniqueBy](#uniqueby) - [UniqueComparable](#uniquecomparable) |
-| **Slicing** | [Chunk](#chunk) - [Filter](#filter) - [Partition](#partition) - [Retain](#retain) - [Skip](#skip) - [SkipLast](#skiplast) - [Take](#take) - [TakeLast](#takelast) - [TakeUntil](#takeuntil) - [Window](#window) |
-| **Transformation** | [Concat](#concat) - [Each](#each) - [Map](#map) - [Multiply](#multiply) - [Prepend](#prepend) - [Tap](#tap) - [Times](#times) - [Transform](#transform) - [Zip](#zip) - [ZipWith](#zipwith) |
+| **Maps** | [FromMap](#frommap) · [ToMap](#tomap) |
+| **Ordering** | [After](#after) · [Reverse](#reverse) · [Shuffle](#shuffle) · [Sort](#sort) |
+| **Querying** | [All](#all) · [Any](#any) · [At](#at) · [First](#first) · [FirstWhere](#firstwhere) · [IndexWhere](#indexwhere) · [Last](#last) · [LastWhere](#lastwhere) · [None](#none) |
+| **Set Operations** | [Difference](#difference) · [Intersect](#intersect) · [SymmetricDifference](#symmetricdifference) · [Union](#union) · [Unique](#unique) · [UniqueBy](#uniqueby) · [UniqueComparable](#uniquecomparable) |
+| **Slicing** | [Chunk](#chunk) · [Filter](#filter) · [Partition](#partition) · [Retain](#retain) · [Skip](#skip) · [SkipLast](#skiplast) · [Take](#take) · [TakeLast](#takelast) · [TakeUntil](#takeuntil) · [Window](#window) |
+| **Transformation** | [Concat](#concat) · [Each](#each) · [Map](#map) · [Multiply](#multiply) · [Prepend](#prepend) · [Tap](#tap) · [Times](#times) · [Transform](#transform) · [Zip](#zip) · [ZipWith](#zipwith) |
 
 
 ## Aggregation

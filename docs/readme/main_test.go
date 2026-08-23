@@ -79,9 +79,15 @@ func TestExtractDescriptionKeepsPostMetadataProse(t *testing.T) {
 // TestRenderAPIIndexLabelsMethods verifies that the index describes both
 // package functions and methods.
 func TestRenderAPIIndexLabelsMethods(t *testing.T) {
-	got := renderAPI([]*FuncDoc{{Name: "Clone", Group: "Construction"}})
+	got := renderAPI([]*FuncDoc{
+		{Name: "New", Group: "Construction"},
+		{Name: "Clone", Group: "Construction"},
+	})
 	if !strings.Contains(got, "| Group | Functions and methods |") {
 		t.Fatalf("renderAPI() index heading missing functions and methods: %q", got)
+	}
+	if !strings.Contains(got, "[Clone](#clone) · [New](#new)") {
+		t.Fatalf("renderAPI() index does not separate sibling links with a middle dot: %q", got)
 	}
 }
 

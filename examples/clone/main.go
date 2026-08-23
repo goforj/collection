@@ -5,12 +5,10 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Clone returns a copy of the collection.
-	// @chainable true
-	// @terminal false
 	//
 	// The returned collection has its own backing slice, so subsequent mutations
 	// do not affect the original collection.
@@ -22,7 +20,7 @@ func main() {
 	c := collection.New([]int{1, 2, 3})
 	clone := c.Clone()
 
-	clone = clone.Append(4)
+	clone.Transform(func(value int) int { return value * 10 })
 
 	collection.Dump(c)
 	// #[]int [
@@ -33,20 +31,19 @@ func main() {
 
 	collection.Dump(clone)
 	// #[]int [
-	//   0 => 1 #int
-	//   1 => 2 #int
-	//   2 => 3 #int
-	//   3 => 4 #int
+	//   0 => 10 #int
+	//   1 => 20 #int
+	//   2 => 30 #int
 	// ]
 
 	// Example: branching pipelines
 	base := collection.New([]int{1, 2, 3, 4, 5})
 
-	evens := base.Clone().Filter(func(v int) bool {
+	evens := base.Clone().Retain(func(v int) bool {
 		return v%2 == 0
 	})
 
-	odds := base.Clone().Filter(func(v int) bool {
+	odds := base.Clone().Retain(func(v int) bool {
 		return v%2 != 0
 	})
 

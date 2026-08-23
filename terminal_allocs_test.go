@@ -1,6 +1,9 @@
 package collection
 
-import "testing"
+import (
+	"slices"
+	"testing"
+)
 
 var (
 	allocCollection Slice[int]
@@ -76,11 +79,11 @@ func allocMax() {
 }
 
 func allocContains() {
-	allocBool = Contains(allocCollection, 4)
+	allocBool = slices.Contains(allocCollection, 4)
 }
 
 func allocIsEmpty() {
-	allocBool = allocCollection.IsEmpty()
+	allocBool = len(allocCollection) == 0
 }
 
 func TestTerminalOps_ZeroAlloc(t *testing.T) {

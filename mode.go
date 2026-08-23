@@ -8,7 +8,7 @@ package collection
 // @chainable false
 // @terminal true
 //
-// Example: integers – single mode
+// Example: integers - single mode
 //
 //	values := []int{1, 2, 2, 3}
 //	mode := collection.Mode(values)
@@ -17,7 +17,7 @@ package collection
 //	//   0 => 2 #int
 //	// ]
 //
-// Example: integers – tie for mode
+// Example: integers - tie for mode
 //
 //	values2 := []int{1, 2, 1, 2}
 //	mode2 := collection.Mode(values2)

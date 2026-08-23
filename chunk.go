@@ -14,7 +14,6 @@ package collection
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 //	collection.Dump(c)
-//
 //	// #[][]int [
 //	//  0 => #[]int [
 //	//    0 => 1 #int
@@ -45,8 +44,6 @@ package collection
 //
 //	userChunks := collection.New(users).Chunk(2)
 //	collection.Dump(userChunks)
-//
-//	// Dump output will show [][]User grouped in size-2 chunks, e.g.:
 //	// #[][]main.User [
 //	//  0 => #[]main.User [
 //	//    0 => #main.User {
@@ -75,15 +72,18 @@ func (c Slice[T]) Chunk(size int) [][]T {
 	}
 
 	n := len(c)
-	chunks := make([][]T, 0, (n+size-1)/size)
+	count := n / size
+	if n%size != 0 {
+		count++
+	}
+	chunks := make([][]T, 0, count)
 
 	for i := 0; i < n; i += size {
 		end := i + size
 		if end > n {
 			end = n
 		}
-		// ZERO ALLOC — slice header only
-		chunks = append(chunks, c[i:end])
+		chunks = append(chunks, c[i:end:end])
 	}
 
 	return chunks

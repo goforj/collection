@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Skip returns a new collection with the first n items skipped.

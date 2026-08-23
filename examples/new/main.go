@@ -7,7 +7,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/goforj/collection"
+	"github.com/goforj/collection/v3"
 )
 
 func main() {

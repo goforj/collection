@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Any returns true if at least one item satisfies fn.

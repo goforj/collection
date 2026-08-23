@@ -5,54 +5,20 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
-	// ToMap reduces a collection into a map using the provided key and value
-	// selector functions.
+	// ToMap reduces this collection into a map using the provided key and value functions.
 
-	// Example: basic usage
-	users := []string{"alice", "bob", "carol"}
-
-	out := collection.ToMap(
-		collection.New(users),
-		func(name string) string { return name },
-		func(name string) int { return len(name) },
+	// Example: index words by their value
+	words := collection.New([]string{"go", "forj"})
+	lengths := words.ToMap(
+		func(word string) string { return word },
+		func(word string) int { return len(word) },
 	)
-
-	collection.Dump(out)
+	collection.Dump(lengths)
 	// #map[string]int {
-	//  alice => 5 #int
-	//  bob => 3 #int
-	//  carol => 5 #int
-	// }
-
-	// Example: re-keying structs
-	type User struct {
-		ID   int
-		Name string
-	}
-
-	users2 := []User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	}
-
-	byID := collection.ToMap(
-		collection.New(users2),
-		func(u User) int { return u.ID },
-		func(u User) User { return u },
-	)
-
-	collection.Dump(byID)
-	// #map[int]main.User {
-	//  1 => #main.User {
-	//    +ID   => 1 #int
-	//    +Name => "Alice" #string
-	//  }
-	//  2 => #main.User {
-	//    +ID   => 2 #int
-	//    +Name => "Bob" #string
-	//  }
+	//   forj => 4 #int
+	//   go => 2 #int
 	// }
 }

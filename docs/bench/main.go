@@ -7,13 +7,15 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"sort"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/goforj/collection"
+	"github.com/goforj/collection/v3"
 	"github.com/samber/lo"
+	"github.com/samber/lo/mutable"
 )
 
 const (
@@ -108,8 +110,10 @@ func runBenches(only map[string]struct{}, mode benchMode) []benchResult {
 		{"IndexWhere", collectionBenchmark(benchIndexWhereCollectionBorrow, benchIndexWhereCollectionCopy), benchIndexWhereLo},
 		{"Each", collectionBenchmark(benchEachCollectionBorrow, benchEachCollectionCopy), benchEachLo},
 		{"Map", collectionBenchmark(benchMapCollectionBorrow, benchMapCollectionCopy), benchMapLo},
+		{"Transform", collectionBenchmark(benchTransformCollectionBorrow, benchTransformCollectionCopy), benchTransformLo},
 		{"Reduce (sum)", collectionBenchmark(benchReduceCollectionBorrow, benchReduceCollectionCopy), benchReduceLo},
 		{"Filter", collectionBenchmark(benchFilterCollectionBorrow, benchFilterCollectionCopy), benchFilterLo},
+		{"Retain", collectionBenchmark(benchRetainCollectionBorrow, benchRetainCollectionCopy), benchRetainLo},
 		{"Chunk", collectionBenchmark(benchChunkCollectionBorrow, benchChunkCollectionCopy), benchChunkLo},
 		{"Take", collectionBenchmark(benchTakeCollectionBorrow, benchTakeCollectionCopy), benchTakeLo},
 		{"Contains", collectionBenchmark(benchContainsCollectionBorrow, benchContainsCollectionCopy), benchContainsLo},
@@ -219,6 +223,7 @@ const (
 var (
 	benchInts       []int
 	benchIntsDup    []int
+	benchRetainInts []int
 	unionLeft       []int
 	unionRight      []int
 	intersectLeft   []int
@@ -239,6 +244,11 @@ func init() {
 	benchIntsDup = make([]int, benchSize)
 	for i := 0; i < benchSize; i++ {
 		benchIntsDup[i] = i % 128
+	}
+
+	benchRetainInts = make([]int, benchSize)
+	for i := 0; i < benchSize; i++ {
+		benchRetainInts[i] = i % 2
 	}
 
 	// overlapping ranges to exercise set ops
@@ -290,10 +300,7 @@ func benchPipelineLoHelper(input []int) int {
 func benchPipelineCollectionBorrow(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchPipelineCollectionBorrowHelper(input)
+		result := benchPipelineCollectionBorrowHelper(benchInts)
 		_ = result
 	}
 }
@@ -302,10 +309,7 @@ func benchPipelineCollectionBorrow(b *testing.B) {
 func benchPipelineCollectionCopy(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchPipelineCollectionCopyHelper(input)
+		result := benchPipelineCollectionCopyHelper(benchInts)
 		_ = result
 	}
 }
@@ -701,10 +705,7 @@ func benchMapLoHelper(input []int) []int {
 func benchMapCollectionBorrow(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchMapCollectionBorrowHelper(input)
+		result := benchMapCollectionBorrowHelper(benchInts)
 		_ = result
 	}
 }
@@ -713,10 +714,7 @@ func benchMapCollectionBorrow(b *testing.B) {
 func benchMapCollectionCopy(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchMapCollectionCopyHelper(input)
+		result := benchMapCollectionCopyHelper(benchInts)
 		_ = result
 	}
 }
@@ -726,6 +724,57 @@ func benchMapLo(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
 		result := benchMapLoHelper(benchInts)
+		_ = result
+	}
+}
+
+// benchTransformCollectionBorrowHelper executes Transform with the CollectionBorrow implementation.
+//
+//go:noinline
+func benchTransformCollectionBorrowHelper(input []int) collection.Slice[int] {
+	return collection.New(input).Transform(func(v int) int { return v * 3 })
+}
+
+// benchTransformCollectionCopyHelper executes Transform with the CollectionCopy implementation.
+//
+//go:noinline
+func benchTransformCollectionCopyHelper(input []int) collection.Slice[int] {
+	return collection.New(input).Clone().Transform(func(v int) int { return v * 3 })
+}
+
+// benchTransformLoHelper executes Transform with lo's mutable implementation.
+//
+//go:noinline
+func benchTransformLoHelper(input []int) []int {
+	mutable.Map(input, func(v int) int { return v * 3 })
+	return input
+}
+
+// benchTransformCollectionBorrow measures Transform with the CollectionBorrow implementation.
+func benchTransformCollectionBorrow(b *testing.B) {
+	copy(workA, benchInts)
+	b.ResetTimer()
+	for b.Loop() {
+		result := benchTransformCollectionBorrowHelper(workA)
+		_ = result
+	}
+}
+
+// benchTransformCollectionCopy measures Transform with the CollectionCopy implementation.
+func benchTransformCollectionCopy(b *testing.B) {
+	b.ResetTimer()
+	for b.Loop() {
+		result := benchTransformCollectionCopyHelper(benchInts)
+		_ = result
+	}
+}
+
+// benchTransformLo measures Transform with lo's mutable implementation.
+func benchTransformLo(b *testing.B) {
+	copy(workB, benchInts)
+	b.ResetTimer()
+	for b.Loop() {
+		result := benchTransformLoHelper(workB)
 		_ = result
 	}
 }
@@ -803,10 +852,7 @@ func benchFilterLoHelper(input []int) []int {
 func benchFilterCollectionBorrow(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchFilterCollectionBorrowHelper(input)
+		result := benchFilterCollectionBorrowHelper(benchInts)
 		_ = result
 	}
 }
@@ -815,10 +861,7 @@ func benchFilterCollectionBorrow(b *testing.B) {
 func benchFilterCollectionCopy(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchFilterCollectionCopyHelper(input)
+		result := benchFilterCollectionCopyHelper(benchInts)
 		_ = result
 	}
 }
@@ -828,6 +871,58 @@ func benchFilterLo(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
 		result := benchFilterLoHelper(benchInts)
+		_ = result
+	}
+}
+
+// benchRetainCollectionBorrowHelper executes Retain with the CollectionBorrow implementation.
+//
+//go:noinline
+func benchRetainCollectionBorrowHelper(input []int) collection.Slice[int] {
+	return collection.New(input).Retain(func(v int) bool { return v != 0 })
+}
+
+// benchRetainCollectionCopyHelper executes Retain with the CollectionCopy implementation.
+//
+//go:noinline
+func benchRetainCollectionCopyHelper(input []int) collection.Slice[int] {
+	return collection.New(input).Clone().Retain(func(v int) bool { return v != 0 })
+}
+
+// benchRetainLoHelper executes Retain with lo's mutable implementation.
+//
+//go:noinline
+func benchRetainLoHelper(input []int) []int {
+	result := mutable.Filter(input, func(v int) bool { return v != 0 })
+	clear(input[len(result):])
+	return result
+}
+
+// benchRetainCollectionBorrow measures Retain with the CollectionBorrow implementation.
+func benchRetainCollectionBorrow(b *testing.B) {
+	copy(workA, benchRetainInts)
+	b.ResetTimer()
+	for b.Loop() {
+		result := benchRetainCollectionBorrowHelper(workA)
+		_ = result
+	}
+}
+
+// benchRetainCollectionCopy measures Retain with the CollectionCopy implementation.
+func benchRetainCollectionCopy(b *testing.B) {
+	b.ResetTimer()
+	for b.Loop() {
+		result := benchRetainCollectionCopyHelper(benchRetainInts)
+		_ = result
+	}
+}
+
+// benchRetainLo measures Retain with lo's mutable implementation.
+func benchRetainLo(b *testing.B) {
+	copy(workB, benchRetainInts)
+	b.ResetTimer()
+	for b.Loop() {
+		result := benchRetainLoHelper(workB)
 		_ = result
 	}
 }
@@ -932,14 +1027,14 @@ func benchTakeLo(b *testing.B) {
 //
 //go:noinline
 func benchContainsCollectionBorrowHelper(input []int) bool {
-	return collection.Contains(collection.New(input), benchSize-1)
+	return slices.Contains(collection.New(input), benchSize-1)
 }
 
 // benchContainsCollectionCopyHelper executes Contains with the CollectionCopy implementation.
 //
 //go:noinline
 func benchContainsCollectionCopyHelper(input []int) bool {
-	return collection.Contains(collection.New(input).Clone(), benchSize-1)
+	return slices.Contains(collection.New(input).Clone(), benchSize-1)
 }
 
 // benchContainsLoHelper executes Contains with the Lo implementation.
@@ -1036,14 +1131,14 @@ func benchFindLo(b *testing.B) {
 // benchGroupByCollectionBorrowHelper executes GroupBy with the CollectionBorrow implementation.
 //
 //go:noinline
-func benchGroupByCollectionBorrowHelper(input []int) map[int]collection.Slice[int] {
+func benchGroupByCollectionBorrowHelper(input []int) map[int][]int {
 	return collection.New(input).GroupBy(func(v int) int { return v % benchGroupByMod })
 }
 
 // benchGroupByCollectionCopyHelper executes GroupBy with the CollectionCopy implementation.
 //
 //go:noinline
-func benchGroupByCollectionCopyHelper(input []int) map[int]collection.Slice[int] {
+func benchGroupByCollectionCopyHelper(input []int) map[int][]int {
 	return collection.New(input).Clone().GroupBy(func(v int) int { return v % benchGroupByMod })
 }
 
@@ -1085,14 +1180,14 @@ func benchGroupByLo(b *testing.B) {
 //
 //go:noinline
 func benchCountByCollectionBorrowHelper(input []int) map[int]int {
-	return collection.CountBy(collection.New(input), func(v int) int { return v })
+	return collection.New(input).CountBy(func(v int) int { return v })
 }
 
 // benchCountByCollectionCopyHelper executes CountBy with the CollectionCopy implementation.
 //
 //go:noinline
 func benchCountByCollectionCopyHelper(input []int) map[int]int {
-	return collection.CountBy(collection.New(input).Clone(), func(v int) int { return v })
+	return collection.New(input).Clone().CountBy(func(v int) int { return v })
 }
 
 // benchCountByLoHelper executes CountBy with the Lo implementation.
@@ -1296,12 +1391,10 @@ func benchReverseLoHelper(input []int) []int {
 
 // benchReverseCollectionBorrow measures Reverse with the CollectionBorrow implementation.
 func benchReverseCollectionBorrow(b *testing.B) {
+	copy(workA, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchReverseCollectionBorrowHelper(input)
+		result := benchReverseCollectionBorrowHelper(workA)
 		_ = result
 	}
 }
@@ -1310,21 +1403,16 @@ func benchReverseCollectionBorrow(b *testing.B) {
 func benchReverseCollectionCopy(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchReverseCollectionCopyHelper(input)
+		result := benchReverseCollectionCopyHelper(benchInts)
 		_ = result
 	}
 }
 
 // benchReverseLo measures Reverse with the Lo implementation.
 func benchReverseLo(b *testing.B) {
+	copy(workB, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		copy(workB, benchInts)
-		b.StartTimer()
 		result := benchReverseLoHelper(workB)
 		_ = result
 	}
@@ -1353,12 +1441,10 @@ func benchShuffleLoHelper(input []int) []int {
 
 // benchShuffleCollectionBorrow measures Shuffle with the CollectionBorrow implementation.
 func benchShuffleCollectionBorrow(b *testing.B) {
+	copy(workA, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchShuffleCollectionBorrowHelper(input)
+		result := benchShuffleCollectionBorrowHelper(workA)
 		_ = result
 	}
 }
@@ -1367,21 +1453,16 @@ func benchShuffleCollectionBorrow(b *testing.B) {
 func benchShuffleCollectionCopy(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		input := collectionInputForMutating(benchInts)
-		b.StartTimer()
-		result := benchShuffleCollectionCopyHelper(input)
+		result := benchShuffleCollectionCopyHelper(benchInts)
 		_ = result
 	}
 }
 
 // benchShuffleLo measures Shuffle with the Lo implementation.
 func benchShuffleLo(b *testing.B) {
+	copy(workB, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
-		b.StopTimer()
-		copy(workB, benchInts)
-		b.StartTimer()
 		result := benchShuffleLoHelper(workB)
 		_ = result
 	}
@@ -1390,15 +1471,15 @@ func benchShuffleLo(b *testing.B) {
 // benchZipCollectionBorrowHelper executes Zip with the CollectionBorrow implementation.
 //
 //go:noinline
-func benchZipCollectionBorrowHelper(left, right []int) collection.Slice[collection.Tuple[int, int]] {
-	return collection.Zip(collection.New(left), collection.New(right))
+func benchZipCollectionBorrowHelper(left, right []int) []collection.Pair[int, int] {
+	return collection.New(left).Zip(right)
 }
 
 // benchZipCollectionCopyHelper executes Zip with the CollectionCopy implementation.
 //
 //go:noinline
-func benchZipCollectionCopyHelper(left, right []int) collection.Slice[collection.Tuple[int, int]] {
-	return collection.Zip(collection.New(left).Clone(), collection.New(right).Clone())
+func benchZipCollectionCopyHelper(left, right []int) []collection.Pair[int, int] {
+	return collection.New(left).Clone().Zip(collection.New(right).Clone())
 }
 
 // benchZipLoHelper executes Zip with the Lo implementation.
@@ -1439,14 +1520,14 @@ func benchZipLo(b *testing.B) {
 //
 //go:noinline
 func benchZipWithCollectionBorrowHelper(left, right []int) collection.Slice[int] {
-	return collection.ZipWith(collection.New(left), collection.New(right), func(a, b int) int { return a + b })
+	return collection.New(left).ZipWith(right, func(a, b int) int { return a + b })
 }
 
 // benchZipWithCollectionCopyHelper executes ZipWith with the CollectionCopy implementation.
 //
 //go:noinline
 func benchZipWithCollectionCopyHelper(left, right []int) collection.Slice[int] {
-	return collection.ZipWith(collection.New(left).Clone(), collection.New(right).Clone(), func(a, b int) int { return a + b })
+	return collection.New(left).Clone().ZipWith(collection.New(right).Clone(), func(a, b int) int { return a + b })
 }
 
 // benchZipWithLoHelper executes ZipWith with the Lo implementation.
@@ -1535,14 +1616,14 @@ func benchUniqueLo(b *testing.B) {
 //
 //go:noinline
 func benchUniqueByCollectionBorrowHelper(input []int) collection.Slice[int] {
-	return collection.UniqueBy(collection.New(input), func(v int) int { return v })
+	return collection.New(input).UniqueBy(func(v int) int { return v })
 }
 
 // benchUniqueByCollectionCopyHelper executes UniqueBy with the CollectionCopy implementation.
 //
 //go:noinline
 func benchUniqueByCollectionCopyHelper(input []int) collection.Slice[int] {
-	return collection.UniqueBy(collection.New(input).Clone(), func(v int) int { return v })
+	return collection.New(input).Clone().UniqueBy(func(v int) int { return v })
 }
 
 // benchUniqueByLoHelper executes UniqueBy with the Lo implementation.
@@ -1727,14 +1808,14 @@ func benchDifferenceLo(b *testing.B) {
 //
 //go:noinline
 func benchToMapCollectionBorrowHelper(input []int) map[int]int {
-	return collection.ToMap(collection.New(input), func(v int) int { return v }, func(v int) int { return v })
+	return collection.New(input).ToMap(func(v int) int { return v }, func(v int) int { return v })
 }
 
 // benchToMapCollectionCopyHelper executes ToMap with the CollectionCopy implementation.
 //
 //go:noinline
 func benchToMapCollectionCopyHelper(input []int) map[int]int {
-	return collection.ToMap(collection.New(input).Clone(), func(v int) int { return v }, func(v int) int { return v })
+	return collection.New(input).Clone().ToMap(func(v int) int { return v }, func(v int) int { return v })
 }
 
 // benchToMapLoHelper executes ToMap with the Lo implementation.
@@ -2017,6 +2098,7 @@ func renderCondensedTables(results []benchResult, mode benchMode) string {
 			ops: []string{
 				"Chunk",
 				"Filter",
+				"Map",
 				"Take",
 				"Skip",
 				"SkipLast",
@@ -2042,9 +2124,10 @@ func renderCondensedTables(results []benchResult, mode benchMode) string {
 		{
 			name: "Mutating ops",
 			ops: []string{
-				"Map",
+				"Retain",
 				"Reverse",
 				"Shuffle",
+				"Transform",
 			},
 		},
 	}
@@ -2287,15 +2370,6 @@ func formatDeltaAllocs(col, lo int64) string {
 	return fmt.Sprintf("%d", diff)
 }
 
-// collectionInputForMutating restores scratch input outside the timed operation.
-func collectionInputForMutating(src []int) []int {
-	if currentMode == benchBorrow {
-		copy(workA, src)
-		return workA
-	}
-	return src
-}
-
 // ----------------------------------------------------------------------------
 // README injection
 // ----------------------------------------------------------------------------
@@ -2361,7 +2435,7 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	path := filepath.Join(root, "BENCHMARKS.md")
 	var buf bytes.Buffer
 	buf.WriteString("# Benchmarks\n\n")
-	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d samples at %s each. Mutable-input restoration is outside timed regions.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration)
+	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d samples at %s each. Mutable scratch initialization is outside timed regions.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration)
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
 	buf.WriteString(rawBorrowTable)
 	buf.WriteString("\n\n")
@@ -2375,7 +2449,7 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 // Helpers
 // ----------------------------------------------------------------------------
 
-const projectModule = "module github.com/goforj/collection"
+const projectModule = "module github.com/goforj/collection/v3"
 
 // findRoot locates the project module containing the benchmark reports.
 func findRoot() (string, error) {

@@ -6,27 +6,28 @@
 package main
 
 import (
-	"github.com/goforj/collection"
+	"fmt"
+	"github.com/goforj/collection/v3"
 	"strings"
 )
 
 func main() {
 	// Filter keeps only the elements for which fn returns true.
 	//
-	// Filter compacts and clears c's backing storage in place. Callers must capture
-	// the returned Slice because the receiver's slice header cannot be shortened by
-	// a value receiver.
+	// Filter allocates a new Slice and leaves c and its backing storage unchanged.
 
 	// Example: integers
-	c := collection.New([]int{1, 2, 3, 4})
-	c = c.Filter(func(v int) bool {
+	source := collection.New([]int{1, 2, 3, 4})
+	filtered := source.Filter(func(v int) bool {
 		return v%2 == 0
 	})
-	collection.Dump(c)
+	collection.Dump(filtered)
 	// #[]int [
 	//   0 => 2 #int
 	//   1 => 4 #int
 	// ]
+	fmt.Println(source[0])
+	// 1
 
 	// Example: strings
 	c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})

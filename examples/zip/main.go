@@ -5,58 +5,26 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
-	// Zip combines two collections element-wise into a collection of tuples.
+	// Zip combines this collection with values element-wise into pairs.
 	// The resulting length is the smaller of the two inputs.
 
 	// Example: integers and strings
 	nums := collection.New([]int{1, 2, 3})
-	words := collection.New([]string{"one", "two"})
+	words := []string{"one", "two"}
 
-	out := collection.Zip(nums, words)
+	out := nums.Zip(words)
 	collection.Dump(out)
-	// #[]collection.Tuple[int,string] [
-	//   0 => #collection.Tuple[int,string] {
+	// #[]collection.Pair[int,string] [
+	//   0 => #collection.Pair[int,string] {
 	//     +First  => 1 #int
 	//     +Second => "one" #string
 	//   }
-	//   1 => #collection.Tuple[int,string] {
+	//   1 => #collection.Pair[int,string] {
 	//     +First  => 2 #int
 	//     +Second => "two" #string
-	//   }
-	// ]
-
-	// Example: structs
-	type User struct {
-		ID   int
-		Name string
-	}
-
-	users := collection.New([]User{
-		{ID: 1, Name: "Alice"},
-		{ID: 2, Name: "Bob"},
-	})
-
-	roles := collection.New([]string{"admin", "user", "extra"})
-
-	out2 := collection.Zip(users, roles)
-	collection.Dump(out2)
-	// #[]collection.Tuple[main.User·1,string] [
-	//   0 => #collection.Tuple[main.User·1,string] {
-	//     +First  => #main.User {
-	//       +ID   => 1 #int
-	//       +Name => "Alice" #string
-	//     }
-	//     +Second => "admin" #string
-	//   }
-	//   1 => #collection.Tuple[main.User·1,string] {
-	//     +First  => #main.User {
-	//       +ID   => 2 #int
-	//       +Name => "Bob" #string
-	//     }
-	//     +Second => "user" #string
 	//   }
 	// ]
 }

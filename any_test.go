@@ -87,13 +87,13 @@ func TestAny_Structs(t *testing.T) {
 
 func TestAny_NoMutation(t *testing.T) {
 	c := New([]int{1, 2, 3})
-	original := append([]int{}, c.Items()...)
+	original := append([]int{}, c...)
 
 	_ = c.Any(func(v int) bool { return v == 2 })
 
-	for i := range c.Items() {
-		if c.Items()[i] != original[i] {
-			t.Fatalf("Any mutated the underlying slice: %v vs %v", c.Items(), original)
+	for i := range c {
+		if c[i] != original[i] {
+			t.Fatalf("Any mutated the underlying slice: %v vs %v", c, original)
 		}
 	}
 }

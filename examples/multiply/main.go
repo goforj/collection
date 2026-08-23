@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Multiply creates `n` copies of all items in the collection

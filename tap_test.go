@@ -14,8 +14,8 @@ func TestTap_InvokesCallback(t *testing.T) {
 		called = true
 
 		// verify the collection we received is correct
-		if !reflect.DeepEqual(col.Items(), c.Items()) {
-			t.Fatalf("Tap received incorrect items: %v vs %v", col.Items(), c.Items())
+		if !reflect.DeepEqual(col, c) {
+			t.Fatalf("Tap received incorrect items: %v vs %v", col, c)
 		}
 	})
 
@@ -24,8 +24,8 @@ func TestTap_InvokesCallback(t *testing.T) {
 	}
 
 	// Tap must return the original collection unchanged
-	if !reflect.DeepEqual(out.Items(), c.Items()) {
-		t.Fatalf("Tap returned a modified collection: %v vs %v", out.Items(), c.Items())
+	if !reflect.DeepEqual(out, c) {
+		t.Fatalf("Tap returned a modified collection: %v vs %v", out, c)
 	}
 }
 
@@ -35,7 +35,7 @@ func TestTap_Chainability(t *testing.T) {
 	out := New([]int{3, 1, 2}).
 		Sort(func(a, b int) bool { return a < b }). // → [1,2,3]
 		Tap(func(col Slice[int]) {
-			captured = append([]int(nil), col.Items()...) // snapshot
+			captured = append([]int(nil), col...) // snapshot
 		}).
 		Filter(func(v int) bool { return v >= 2 }) // → [2,3]
 
@@ -43,8 +43,8 @@ func TestTap_Chainability(t *testing.T) {
 		t.Fatalf("Tap did not receive correct snapshot: %v", captured)
 	}
 
-	if !reflect.DeepEqual(out.Items(), []int{2, 3}) {
-		t.Fatalf("chain after Tap incorrect: %v", out.Items())
+	if !reflect.DeepEqual(out, Slice[int]{2, 3}) {
+		t.Fatalf("chain after Tap incorrect: %v", out)
 	}
 }
 
@@ -57,13 +57,13 @@ func TestTap_NoMutation(t *testing.T) {
 	})
 
 	// ensure original slice unchanged
-	if !reflect.DeepEqual(c.Items(), orig) {
-		t.Fatalf("Tap mutated original collection: %v", c.Items())
+	if !reflect.DeepEqual(c, Slice[int](orig)) {
+		t.Fatalf("Tap mutated original collection: %v", c)
 	}
 
 	// ensure returned collection equals input
-	if !reflect.DeepEqual(c2.Items(), orig) {
-		t.Fatalf("Tap returned modified collection: %v", c2.Items())
+	if !reflect.DeepEqual(c2, Slice[int](orig)) {
+		t.Fatalf("Tap returned modified collection: %v", c2)
 	}
 }
 
@@ -75,8 +75,8 @@ func TestTap_Empty(t *testing.T) {
 	out := c.Tap(func(col Slice[int]) {
 		called = true
 
-		if len(col.Items()) != 0 {
-			t.Fatalf("expected empty slice in Tap, got %v", col.Items())
+		if len(col) != 0 {
+			t.Fatalf("expected empty slice in Tap, got %v", col)
 		}
 	})
 
@@ -84,8 +84,8 @@ func TestTap_Empty(t *testing.T) {
 		t.Fatalf("Tap callback not executed for empty collection")
 	}
 
-	if len(out.Items()) != 0 {
-		t.Fatalf("expected empty output, got %v", out.Items())
+	if len(out) != 0 {
+		t.Fatalf("expected empty output, got %v", out)
 	}
 }
 
@@ -103,14 +103,14 @@ func TestTap_WithStructs(t *testing.T) {
 	var captured []User
 
 	out := c.Tap(func(col Slice[User]) {
-		captured = col.Items()
+		captured = col
 	})
 
-	if !reflect.DeepEqual(captured, c.Items()) {
+	if !reflect.DeepEqual(captured, []User(c)) {
 		t.Fatalf("Tap did not receive correct struct slice: %v", captured)
 	}
 
-	if !reflect.DeepEqual(out.Items(), c.Items()) {
-		t.Fatalf("Tap returned modified struct collection: %v", out.Items())
+	if !reflect.DeepEqual(out, c) {
+		t.Fatalf("Tap returned modified struct collection: %v", out)
 	}
 }

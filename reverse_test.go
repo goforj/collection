@@ -10,9 +10,9 @@ func TestReverse_Integers(t *testing.T) {
 
 	c.Reverse()
 
-	expect := []int{4, 3, 2, 1}
-	if !reflect.DeepEqual(c.Items(), expect) {
-		t.Fatalf("expected %v, got %v", expect, c.Items())
+	expect := Slice[int]{4, 3, 2, 1}
+	if !reflect.DeepEqual(c, expect) {
+		t.Fatalf("expected %v, got %v", expect, c)
 	}
 }
 
@@ -21,9 +21,9 @@ func TestReverse_OddLength(t *testing.T) {
 
 	c.Reverse()
 
-	expect := []int{3, 2, 1}
-	if !reflect.DeepEqual(c.Items(), expect) {
-		t.Fatalf("expected %v, got %v", expect, c.Items())
+	expect := Slice[int]{3, 2, 1}
+	if !reflect.DeepEqual(c, expect) {
+		t.Fatalf("expected %v, got %v", expect, c)
 	}
 }
 
@@ -32,8 +32,8 @@ func TestReverse_Empty(t *testing.T) {
 
 	c.Reverse()
 
-	if len(c.Items()) != 0 {
-		t.Fatalf("expected empty slice, got %v", c.Items())
+	if len(c) != 0 {
+		t.Fatalf("expected empty slice, got %v", c)
 	}
 }
 
@@ -42,9 +42,9 @@ func TestReverse_SingleElement(t *testing.T) {
 
 	c.Reverse()
 
-	expect := []int{42}
-	if !reflect.DeepEqual(c.Items(), expect) {
-		t.Fatalf("expected %v, got %v", expect, c.Items())
+	expect := Slice[int]{42}
+	if !reflect.DeepEqual(c, expect) {
+		t.Fatalf("expected %v, got %v", expect, c)
 	}
 }
 
@@ -61,24 +61,22 @@ func TestReverse_Structs(t *testing.T) {
 
 	c.Reverse()
 
-	expect := []User{
+	expect := Slice[User]{
 		{ID: 3},
 		{ID: 2},
 		{ID: 1},
 	}
 
-	if !reflect.DeepEqual(c.Items(), expect) {
-		t.Fatalf("expected %+v, got %+v", expect, c.Items())
+	if !reflect.DeepEqual(c, expect) {
+		t.Fatalf("expected %+v, got %+v", expect, c)
 	}
 }
 
 func TestReverse_Chainable(t *testing.T) {
-	out := New([]int{1, 2, 3}).
-		Reverse().
-		Append(4).
-		Items()
+	out := New([]int{1, 2, 3}).Reverse()
+	out = append(out, 4)
 
-	expect := []int{3, 2, 1, 4}
+	expect := Slice[int]{3, 2, 1, 4}
 	if !reflect.DeepEqual(out, expect) {
 		t.Fatalf("expected %v, got %v", expect, out)
 	}
@@ -102,7 +100,7 @@ func TestReverse_PreservesNilSlice(t *testing.T) {
 
 	c.Reverse()
 
-	if c.Items() != nil {
-		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	if c != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c)
 	}
 }

@@ -52,3 +52,13 @@ func TestReduce_OrderIsLeftToRight(t *testing.T) {
 		t.Fatalf(`expected "abc" (left-to-right accumulation), got %q`, out)
 	}
 }
+
+func TestReduce_UsesDifferentAccumulatorType(t *testing.T) {
+	values := New([]int{1, 2, 3})
+	result := values.Reduce("", func(acc string, value int) string {
+		return acc + string(rune('0'+value))
+	})
+	if result != "123" {
+		t.Fatalf("Reduce result = %q, want %q", result, "123")
+	}
+}

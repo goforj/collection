@@ -1,19 +1,16 @@
 package collection
 
-// Take returns a new collection containing the first `n` items when n > 0,
-// or the last `|n|` items when n < 0.
-// @chainable true
-// @terminal false
+// Take returns a capacity-capped view containing the first n items.
 //
 // If n exceeds the collection length, the entire collection is returned.
 // If n == 0, an empty collection is returned.
-//
-// Mirrors Laravel's take() semantics.
 //
 // NOTE: returns a view (shares backing array). Use Clone() to detach.
 //
 // @group Slicing
 // @behavior immutable
+// @chainable true
+// @terminal false
 // Example: integers - take first 3
 //
 //	c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
@@ -23,16 +20,6 @@ package collection
 //	//	0 => 0 #int
 //	//	1 => 1 #int
 //	//	2 => 2 #int
-//	// ]
-//
-// Example: integers - take last 2 (negative n)
-//
-//	c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
-//	out2 := c2.Take(-2)
-//	collection.Dump(out2)
-//	// #[]int [
-//	//	0 => 4 #int
-//	//	1 => 5 #int
 //	// ]
 //
 // Example: integers - n exceeds length → whole collection
@@ -55,26 +42,12 @@ package collection
 func (c Slice[T]) Take(n int) Slice[T] {
 	length := len(c)
 
-	// Empty or zero → empty collection
-	if n == 0 || length == 0 {
-		return New([]T{})
+	if n <= 0 || length == 0 {
+		return New(c[:0:0])
 	}
 
-	// Positive → take from start
-	if n > 0 {
-		if n >= length {
-			// no need to allocate; just reuse original
-			return New(c)
-		}
-		return New(c[:n])
-	}
-
-	// Negative → take from end
-	n = -n
 	if n >= length {
-		return New(c)
+		return New(c[:length:length])
 	}
-
-	start := length - n
-	return New(c[start:])
+	return New(c[:n:n])
 }

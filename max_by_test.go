@@ -14,7 +14,7 @@ func TestMaxBy_Structs(t *testing.T) {
 		{name: "carol", score: 18},
 	})
 
-	maxPlayer, ok := MaxBy(c, func(p player) int {
+	maxPlayer, ok := c.MaxBy(func(p player) int {
 		return p.score
 	})
 
@@ -30,7 +30,7 @@ func TestMaxBy_Structs(t *testing.T) {
 func TestMaxBy_StringsByLength(t *testing.T) {
 	c := New([]string{"go", "collection", "rocks"})
 
-	maxVal, ok := MaxBy(c, func(s string) int {
+	maxVal, ok := c.MaxBy(func(s string) int {
 		return len(s)
 	})
 
@@ -46,7 +46,7 @@ func TestMaxBy_StringsByLength(t *testing.T) {
 func TestMaxBy_Empty(t *testing.T) {
 	c := New([]int{})
 
-	maxVal, ok := MaxBy(c, func(v int) int {
+	maxVal, ok := c.MaxBy(func(v int) int {
 		return v
 	})
 
@@ -62,7 +62,7 @@ func TestMaxBy_Empty(t *testing.T) {
 func TestMaxBy_TiesReturnFirst(t *testing.T) {
 	c := New([]int{1, 3, 2, 3})
 
-	maxVal, ok := MaxBy(c, func(v int) int {
+	maxVal, ok := c.MaxBy(func(v int) int {
 		return v
 	})
 

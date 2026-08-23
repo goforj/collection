@@ -3,8 +3,8 @@ package collection
 // Slice is a named slice with fluent collection operations.
 //
 // Because Slice is slice-backed, Go's built-in len, index, and range operations
-// work directly on it. New borrows the supplied slice; use Clone or ItemsCopy
-// when subsequent mutations must not share its backing array.
+// work directly on it. New borrows the supplied slice; use Clone when
+// subsequent mutations must not share its backing array.
 type Slice[T any] []T
 
 // Number is a constraint that permits any numeric type.
@@ -14,10 +14,10 @@ type Number interface {
 		~float32 | ~float64
 }
 
-// Pair represents a key/value pair, typically originating from a map.
-type Pair[K comparable, V any] struct {
-	Key   K
-	Value V
+// Pair is an ordered pair of values, used by FromMap and Zip.
+type Pair[A any, B any] struct {
+	First  A
+	Second B
 }
 
 // New creates a Slice from items and borrows their backing array.
@@ -42,35 +42,4 @@ type Pair[K comparable, V any] struct {
 //	// 60
 func New[T any](items []T) Slice[T] {
 	return Slice[T](items)
-}
-
-// Items returns the backing slice as []T.
-// @group Access
-// @behavior readonly
-// @chainable false
-// @terminal true
-//
-// Items remains temporarily as a migration aid. New code can pass, index, range
-// over, and call len on Slice directly without converting it first.
-//
-// Example: migration comparison
-//
-//	values := collection.New([]int{10, 20, 30})
-//	fmt.Println([]int(values))
-//	// [10 20 30]
-//	fmt.Println(values.Items())
-//	// [10 20 30]
-func (s Slice[T]) Items() []T {
-	return []T(s)
-}
-
-// ItemsCopy returns a copy of the slice's items.
-// @group Access
-// @behavior immutable
-// @chainable false
-// @terminal true
-func (s Slice[T]) ItemsCopy() []T {
-	out := make([]T, len(s))
-	copy(out, s)
-	return out
 }

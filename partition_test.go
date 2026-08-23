@@ -2,69 +2,36 @@ package collection
 
 import "testing"
 
-func TestPartition_Ints(t *testing.T) {
-	c := New([]int{1, 2, 3, 4, 5})
-
-	evens, odds := c.Partition(func(n int) bool {
-		return n%2 == 0
-	})
-
-	if got := evens.Items(); !slicesEqual(got, []int{2, 4}) {
-		t.Fatalf("evens mismatch, got %v", got)
-	}
-	if got := odds.Items(); !slicesEqual(got, []int{1, 3, 5}) {
-		t.Fatalf("odds mismatch, got %v", got)
+func TestPartition(t *testing.T) {
+	values := New([]int{1, 2, 3, 4, 5})
+	left, right := values.Partition(func(value int) bool { return value%2 == 0 })
+	if !slicesEqual(left, []int{2, 4}) || !slicesEqual(right, []int{1, 3, 5}) {
+		t.Fatalf("Partition() = %v, %v", left, right)
 	}
 }
 
-func TestPartition_Strings(t *testing.T) {
-	c := New([]string{"go", "gopher", "rust", "ruby"})
-
-	goWords, other := c.Partition(func(s string) bool {
-		return len(s) >= 4
-	})
-
-	if got := goWords.Items(); !slicesEqual(got, []string{"gopher", "rust", "ruby"}) {
-		t.Fatalf("first partition mismatch, got %v", got)
+func TestPartitionStringsAndStructs(t *testing.T) {
+	words := New([]string{"go", "gopher", "rust", "ruby"})
+	long, short := words.Partition(func(word string) bool { return len(word) >= 4 })
+	if !slicesEqual(long, []string{"gopher", "rust", "ruby"}) || !slicesEqual(short, []string{"go"}) {
+		t.Fatalf("Partition() = %v, %v", long, short)
 	}
-	if got := other.Items(); !slicesEqual(got, []string{"go"}) {
-		t.Fatalf("second partition mismatch, got %v", got)
+	type user struct{ active bool }
+	active, inactive := New([]user{{true}, {false}, {true}}).Partition(func(value user) bool { return value.active })
+	if len(active) != 2 || len(inactive) != 1 || !active[0].active || inactive[0].active {
+		t.Fatalf("Partition() = %v, %v", active, inactive)
 	}
 }
 
-func TestPartition_Structs(t *testing.T) {
-	type user struct {
-		name   string
-		active bool
+func TestPartitionEmptyAndIndependent(t *testing.T) {
+	left, right := New([]int{}).Partition(func(int) bool { return true })
+	if left == nil || right == nil || len(left) != 0 || len(right) != 0 {
+		t.Fatalf("Partition(empty) = %v, %v, want non-nil empties", left, right)
 	}
-
-	c := New([]user{
-		{name: "alice", active: true},
-		{name: "bob", active: false},
-		{name: "carol", active: true},
-	})
-
-	active, inactive := c.Partition(func(u user) bool {
-		return u.active
-	})
-
-	expActive := []user{{name: "alice", active: true}, {name: "carol", active: true}}
-	expInactive := []user{{name: "bob", active: false}}
-
-	if got := active.Items(); !slicesEqual(got, expActive) {
-		t.Fatalf("active mismatch, got %v", got)
-	}
-	if got := inactive.Items(); !slicesEqual(got, expInactive) {
-		t.Fatalf("inactive mismatch, got %v", got)
-	}
-}
-
-func TestPartition_Empty(t *testing.T) {
-	c := New([]int{})
-
-	left, right := c.Partition(func(n int) bool { return n > 0 })
-
-	if len(left.Items()) != 0 || len(right.Items()) != 0 {
-		t.Fatalf("expected both empty, got %v and %v", left.Items(), right.Items())
+	items := []int{1, 2}
+	left, right = New(items).Partition(func(value int) bool { return value%2 == 0 })
+	left[0], right[0] = 20, 10
+	if items[0] != 1 || items[1] != 2 {
+		t.Fatalf("Partition() shared backing storage with source: %v", items)
 	}
 }

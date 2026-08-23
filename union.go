@@ -69,7 +69,7 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func Union[T comparable](a, b Slice[T]) Slice[T] {
+func Union[S1 ~[]T, S2 ~[]T, T comparable](a S1, b S2) Slice[T] {
 	out := make([]T, 0, len(a)+len(b))
 	seen := make(map[T]struct{}, len(a)+len(b))
 

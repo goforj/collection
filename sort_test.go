@@ -12,10 +12,10 @@ func TestSort_IntsAscending(t *testing.T) {
 		return a < b
 	})
 
-	expected := []int{1, 2, 3, 4, 5}
+	expected := Slice[int]{1, 2, 3, 4, 5}
 
-	if !reflect.DeepEqual(sorted.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, sorted.Items())
+	if !reflect.DeepEqual(sorted, expected) {
+		t.Fatalf("expected %v, got %v", expected, sorted)
 	}
 
 }
@@ -27,10 +27,10 @@ func TestSort_IntsDescending(t *testing.T) {
 		return a > b
 	})
 
-	expected := []int{5, 4, 3, 2, 1}
+	expected := Slice[int]{5, 4, 3, 2, 1}
 
-	if !reflect.DeepEqual(sorted.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, sorted.Items())
+	if !reflect.DeepEqual(sorted, expected) {
+		t.Fatalf("expected %v, got %v", expected, sorted)
 	}
 }
 
@@ -51,42 +51,14 @@ func TestSort_StructsByField(t *testing.T) {
 		return a.Age < b.Age
 	})
 
-	expected := []User{
+	expected := Slice[User]{
 		{2, 25, "Chris"},
 		{3, 30, "Van"},
 		{1, 40, "Shawn"},
 	}
 
-	if !reflect.DeepEqual(sorted.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, sorted.Items())
-	}
-}
-
-func TestSort_StableWhenEqual(t *testing.T) {
-	type Item struct {
-		ID    int
-		Value int
-	}
-
-	// Value ties: 1, 1, 1 — original order must be preserved (Go sort.Slice is stable)
-	c := New([]Item{
-		{1, 10},
-		{2, 10},
-		{3, 10},
-	})
-
-	sorted := c.Sort(func(a, b Item) bool {
-		return a.Value < b.Value
-	})
-
-	expected := []Item{
-		{1, 10},
-		{2, 10},
-		{3, 10},
-	}
-
-	if !reflect.DeepEqual(sorted.Items(), expected) {
-		t.Fatalf("expected stable ordering %v, got %v", expected, sorted.Items())
+	if !reflect.DeepEqual(sorted, expected) {
+		t.Fatalf("expected %v, got %v", expected, sorted)
 	}
 }
 
@@ -95,8 +67,8 @@ func TestSort_EmptyCollection(t *testing.T) {
 
 	sorted := c.Sort(func(a, b int) bool { return a < b })
 
-	if len(sorted.Items()) != 0 {
-		t.Fatalf("expected empty slice, got %v", sorted.Items())
+	if len(sorted) != 0 {
+		t.Fatalf("expected empty slice, got %v", sorted)
 	}
 }
 
@@ -105,10 +77,10 @@ func TestSort_SingleElement(t *testing.T) {
 
 	sorted := c.Sort(func(a, b int) bool { return a < b })
 
-	expected := []int{42}
+	expected := Slice[int]{42}
 
-	if !reflect.DeepEqual(sorted.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, sorted.Items())
+	if !reflect.DeepEqual(sorted, expected) {
+		t.Fatalf("expected %v, got %v", expected, sorted)
 	}
 }
 
@@ -117,8 +89,8 @@ func TestSort_PreservesNilSlice(t *testing.T) {
 
 	c.Sort(func(a, b int) bool { return a < b })
 
-	if c.Items() != nil {
-		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
+	if c != nil {
+		t.Fatalf("expected nil slice to remain nil, got %v", c)
 	}
 }
 
@@ -139,7 +111,7 @@ func TestSort_LengthUnchanged(t *testing.T) {
 
 	c.Sort(func(a, b int) bool { return a < b })
 
-	if len(c.Items()) != 3 {
-		t.Fatalf("expected length 3, got %d", len(c.Items()))
+	if len(c) != 3 {
+		t.Fatalf("expected length 3, got %d", len(c))
 	}
 }

@@ -1,19 +1,6 @@
 package collection
 
-import (
-	"math/rand"
-	"time"
-)
-
-// shuffleRand is the RNG used by Shuffle.
-// It is overridden in tests for deterministic behavior.
-var shuffleRand = rand.New(rand.NewSource(time.Now().UnixNano()))
-
-// setShuffleRand allows tests to inject a deterministic RNG.
-// Not exported — production code should not touch this.
-func setShuffleRand(r *rand.Rand) {
-	shuffleRand = r
-}
+import "math/rand/v2"
 
 // Shuffle shuffles the collection in place and returns the same collection.
 // @group Ordering
@@ -23,22 +10,21 @@ func setShuffleRand(r *rand.Rand) {
 //
 // This operation mutates the receiver's backing slice.
 //
-// The shuffle uses an internal random source. Tests may override
-// this source to achieve deterministic behavior.
-//
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
 //	c.Shuffle()
-//	collection.Dump(c)
+//	fmt.Println(len(c), collection.Sum(c))
+//	// 5 15
 //
-// Example: strings – chaining
+// Example: strings - chaining
 //
 //	out2 := collection.New([]string{"a", "b", "c"}).
 //		Shuffle().
-//		Append("d")
+//		Concat([]string{"d"})
 //
-//	collection.Dump(out2)
+//	fmt.Println(len(out2))
+//	// 4
 //
 // Example: structs
 //
@@ -54,13 +40,13 @@ func setShuffleRand(r *rand.Rand) {
 //	})
 //
 //	users.Shuffle()
-//	collection.Dump(users)
+//	fmt.Println(len(users))
+//	// 4
 func (c Slice[T]) Shuffle() Slice[T] {
 	n := len(c)
 
-	// Fisher–Yates shuffle (in place)
 	for i := n - 1; i > 0; i-- {
-		j := shuffleRand.Intn(i + 1)
+		j := rand.IntN(i + 1)
 		c[i], c[j] = c[j], c[i]
 	}
 

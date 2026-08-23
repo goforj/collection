@@ -5,19 +5,19 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// None returns true if fn returns false for every item in the collection.
 	// If the collection is empty, None returns true.
 
-	// Example: integers – none even
+	// Example: integers - none even
 	c := collection.New([]int{1, 3, 5})
 	noneEven := c.None(func(v int) bool { return v%2 == 0 })
 	collection.Dump(noneEven)
 	// true #bool
 
-	// Example: integers – some even
+	// Example: integers - some even
 	c2 := collection.New([]int{1, 2, 3})
 	noneEven2 := c2.None(func(v int) bool { return v%2 == 0 })
 	collection.Dump(noneEven2)

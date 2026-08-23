@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// IndexWhere returns the index of the first item in the collection

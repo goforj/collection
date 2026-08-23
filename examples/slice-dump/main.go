@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Dump prints items with godump and returns the same collection.

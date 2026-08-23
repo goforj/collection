@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Window returns overlapping (or stepped) windows of the collection.
@@ -14,7 +14,7 @@ func main() {
 
 	// Example: integers - step 1
 	nums := collection.New([]int{1, 2, 3, 4, 5})
-	win := collection.Window(nums, 3, 1)
+	win := nums.Window(3, 1)
 	collection.Dump(win)
 	// #[][]int [
 	//   0 => #[]int [
@@ -36,7 +36,7 @@ func main() {
 
 	// Example: strings - step 2
 	words := collection.New([]string{"a", "b", "c", "d", "e"})
-	win2 := collection.Window(words, 2, 2)
+	win2 := words.Window(2, 2)
 	collection.Dump(win2)
 	// #[][]string [
 	//   0 => #[]string [
@@ -62,7 +62,7 @@ func main() {
 		{X: 3, Y: 9},
 	})
 
-	win3 := collection.Window(points, 2, 1)
+	win3 := points.Window(2, 1)
 	collection.Dump(win3)
 	// #[][]main.Point [
 	//   0 => #[]main.Point [

@@ -32,8 +32,16 @@ func TestExamplesBuild(t *testing.T) {
 		// CAPTURE LOOP VARS
 		name := e.Name()
 		path := filepath.Join(examplesDir, name)
-		if _, err := os.Stat(filepath.Join(path, "main.go")); errors.Is(err, os.ErrNotExist) {
+		mainFile := filepath.Join(path, "main.go")
+		if _, err := os.Stat(mainFile); errors.Is(err, os.ErrNotExist) {
 			continue
+		}
+		src, err := os.ReadFile(mainFile)
+		if err != nil {
+			t.Fatalf("read example %q: %v", name, err)
+		}
+		if !bytes.Contains(src, []byte("github.com/goforj/collection/v3")) {
+			t.Fatalf("example %q does not import the v3 module path", name)
 		}
 
 		t.Run(name, func(t *testing.T) {

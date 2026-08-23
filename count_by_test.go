@@ -29,7 +29,7 @@ func TestCountBy_Callback(t *testing.T) {
 		"carlos@gmail.com",
 	})
 
-	counted := CountBy(emails, func(email string) string {
+	counted := emails.CountBy(func(email string) string {
 		return email[strings.LastIndex(email, "@")+1:]
 	})
 

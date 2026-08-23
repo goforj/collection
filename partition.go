@@ -75,9 +75,9 @@ package collection
 //	//     +Active => false #bool
 //	//   }
 //	// ]
-func (c Slice[T]) Partition(fn func(T) bool) (Slice[T], Slice[T]) {
+func (c Slice[T]) Partition(fn func(T) bool) ([]T, []T) {
 	if len(c) == 0 {
-		return New([]T{}), New([]T{})
+		return []T{}, []T{}
 	}
 
 	// Pre-size to total length; each partition will shrink to its own length.
@@ -92,5 +92,5 @@ func (c Slice[T]) Partition(fn func(T) bool) (Slice[T], Slice[T]) {
 		}
 	}
 
-	return New(left), New(right)
+	return left, right
 }

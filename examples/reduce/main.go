@@ -5,11 +5,11 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Reduce collapses the collection into a single accumulated value.
-	// The accumulator has the same type T as the collection's elements.
+	// The accumulator may have a different type R from the collection's elements.
 
 	// Example: integers - sum
 	sum := collection.New([]int{1, 2, 3}).Reduce(0, func(acc, n int) int {

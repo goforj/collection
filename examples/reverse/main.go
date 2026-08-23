@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Reverse reverses the order of items in the collection in place
@@ -22,10 +22,10 @@ func main() {
 	//   3 => 1 #int
 	// ]
 
-	// Example: strings – chaining
+	// Example: strings - chaining
 	out := collection.New([]string{"a", "b", "c"}).
 		Reverse().
-		Append("d")
+		Concat([]string{"d"})
 
 	collection.Dump(out)
 	// #[]string [

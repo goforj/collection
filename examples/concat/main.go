@@ -7,11 +7,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/goforj/collection"
+	"github.com/goforj/collection/v3"
 )
 
 func main() {
-	// Concat appends values to c, using c's spare capacity when it is available.
+	// Concat returns an independent collection containing c followed by values.
 
 	// Example: strings
 	c := collection.New([]string{"John Doe"})
@@ -19,7 +19,6 @@ func main() {
 		Concat([]string{"Jane Doe"}).
 		Concat([]string{"Johnny Doe"})
 	collection.Dump(concatenated)
-
 	// #[]string [
 	//  0 => "John Doe" #string
 	//  1 => "Jane Doe" #string

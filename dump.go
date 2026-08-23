@@ -36,7 +36,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 //	//   1 => 3 #int
 //	// ]
 func (c Slice[T]) Dump() Slice[T] {
-	godump.Dump(c.Items())
+	godump.Dump(c)
 	return c
 }
 
@@ -60,7 +60,7 @@ func (c Slice[T]) Dump() Slice[T] {
 //	// ]
 //	// Process finished with the exit code 1
 func (c Slice[T]) Dd() {
-	exitFunc(c.Items())
+	exitFunc(c)
 }
 
 // DumpStr returns the pretty-printed dump of the items as a string,
@@ -81,13 +81,13 @@ func (c Slice[T]) Dd() {
 //	//   1 => 20 #int
 //	// ]
 func (c Slice[T]) DumpStr() string {
-	return godump.DumpStr(c.Items())
+	return godump.DumpStr(c)
 }
 
 var dumpWriter io.Writer = os.Stdout
 
 // setDumpWriter allows tests to redirect dump output.
-// Not exported — production code never needs this.
+// Not exported - production code never needs this.
 func setDumpWriter(w io.Writer) {
 	dumpWriter = w
 }

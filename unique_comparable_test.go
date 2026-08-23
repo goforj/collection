@@ -8,7 +8,7 @@ func TestUniqueComparable_Ints(t *testing.T) {
 	out := UniqueComparable(c)
 
 	exp := []int{1, 2, 3, 4, 5}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -19,7 +19,7 @@ func TestUniqueComparable_Strings(t *testing.T) {
 	out := UniqueComparable(c)
 
 	exp := []string{"a", "b", "c"}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -29,7 +29,7 @@ func TestUniqueComparable_Empty(t *testing.T) {
 
 	out := UniqueComparable(c)
 
-	if len(out.Items()) != 0 {
-		t.Fatalf("expected empty result, got %v", out.Items())
+	if len(out) != 0 {
+		t.Fatalf("expected empty result, got %v", out)
 	}
 }

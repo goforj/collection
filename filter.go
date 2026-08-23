@@ -2,24 +2,24 @@ package collection
 
 // Filter keeps only the elements for which fn returns true.
 //
-// Filter compacts and clears c's backing storage in place. Callers must capture
-// the returned Slice because the receiver's slice header cannot be shortened by
-// a value receiver.
+// Filter allocates a new Slice and leaves c and its backing storage unchanged.
 // @group Slicing
-// @behavior mutable
+// @behavior immutable
 // @chainable true
 // @terminal false
 // Example: integers
 //
-//	c := collection.New([]int{1, 2, 3, 4})
-//	c = c.Filter(func(v int) bool {
+//	source := collection.New([]int{1, 2, 3, 4})
+//	filtered := source.Filter(func(v int) bool {
 //		return v%2 == 0
 //	})
-//	collection.Dump(c)
+//	collection.Dump(filtered)
 //	// #[]int [
 //	//   0 => 2 #int
 //	//   1 => 4 #int
 //	// ]
+//	fmt.Println(source[0])
+//	// 1
 //
 // Example: strings
 //
@@ -63,15 +63,11 @@ package collection
 //	//   }
 //	// ]
 func (c Slice[T]) Filter(fn func(T) bool) Slice[T] {
-	items := c
-	j := 0
-	for i := 0; i < len(items); i++ {
-		if fn(items[i]) {
-			items[j] = items[i]
-			j++
+	out := make([]T, 0, len(c))
+	for _, item := range c {
+		if fn(item) {
+			out = append(out, item)
 		}
 	}
-
-	clear(items[j:])
-	return items[:j]
+	return New(out)
 }

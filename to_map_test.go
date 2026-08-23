@@ -8,8 +8,7 @@ import (
 func TestToMap_Basic(t *testing.T) {
 	users := []string{"alice", "bob", "carol"}
 
-	out := ToMap(
-		New(users),
+	out := New(users).ToMap(
 		func(name string) string { return name },
 		func(name string) int { return len(name) },
 	)
@@ -36,8 +35,7 @@ func TestToMap_RekeyStructs(t *testing.T) {
 		{ID: 2, Name: "Bob"},
 	}
 
-	out := ToMap(
-		New(users),
+	out := New(users).ToMap(
 		func(u User) int { return u.ID },
 		func(u User) User { return u },
 	)
@@ -55,8 +53,7 @@ func TestToMap_RekeyStructs(t *testing.T) {
 func TestToMap_KeyCollision_LastWins(t *testing.T) {
 	values := []int{1, 2, 3, 4}
 
-	out := ToMap(
-		New(values),
+	out := New(values).ToMap(
 		func(v int) string { return "key" },
 		func(v int) int { return v },
 	)
@@ -71,8 +68,7 @@ func TestToMap_KeyCollision_LastWins(t *testing.T) {
 }
 
 func TestToMap_EmptyCollection(t *testing.T) {
-	out := ToMap(
-		New([]int{}),
+	out := New([]int{}).ToMap(
 		func(v int) int { return v },
 		func(v int) int { return v },
 	)
@@ -86,22 +82,20 @@ func TestToMap_DoesNotMutateCollection(t *testing.T) {
 	items := []int{1, 2, 3}
 	c := New(items)
 
-	_ = ToMap(
-		c,
+	_ = c.ToMap(
 		func(v int) int { return v },
 		func(v int) int { return v },
 	)
 
-	if !reflect.DeepEqual(c.Items(), items) {
-		t.Fatalf("collection was mutated: expected %v, got %v", items, c.Items())
+	if !reflect.DeepEqual(c, Slice[int](items)) {
+		t.Fatalf("collection was mutated: expected %v, got %v", items, c)
 	}
 }
 
 func TestToMap_MapLengthMatchesUniqueKeys(t *testing.T) {
 	items := []int{1, 2, 3, 4, 5}
 
-	out := ToMap(
-		New(items),
+	out := New(items).ToMap(
 		func(v int) int { return v % 2 }, // keys: 1,0
 		func(v int) int { return v },
 	)

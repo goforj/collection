@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Chunk splits the collection into chunks of the given size.
@@ -14,7 +14,6 @@ func main() {
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
 	collection.Dump(c)
-
 	// #[][]int [
 	//  0 => #[]int [
 	//    0 => 1 #int
@@ -44,8 +43,6 @@ func main() {
 
 	userChunks := collection.New(users).Chunk(2)
 	collection.Dump(userChunks)
-
-	// Dump output will show [][]User grouped in size-2 chunks, e.g.:
 	// #[][]main.User [
 	//  0 => #[]main.User [
 	//    0 => #main.User {

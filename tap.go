@@ -3,12 +3,12 @@ package collection
 // Tap invokes fn with the Slice value for side effects such as logging,
 // debugging, or inspection, then returns the Slice to allow chaining.
 // @group Transformation
-// @behavior immutable
+// @behavior mutable
 // @chainable true
 // @terminal false
 //
-// Tap does NOT modify the collection itself; it simply exposes the current state
-// during a fluent chain.
+// The callback receives a borrowed Slice and may mutate its elements. Use Clone
+// before Tap when the original backing array must remain isolated.
 //
 // Example: integers - capture intermediate state during a chain
 //

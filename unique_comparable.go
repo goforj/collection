@@ -31,7 +31,7 @@ package collection
 //	//   1 => "a" #string
 //	//   2 => "B" #string
 //	// ]
-func UniqueComparable[T comparable](c Slice[T]) Slice[T] {
+func UniqueComparable[S ~[]T, T comparable](c S) Slice[T] {
 	n := len(c)
 	if n == 0 {
 		return New([]T{})

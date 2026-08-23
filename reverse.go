@@ -21,11 +21,11 @@ package collection
 //	//   3 => 1 #int
 //	// ]
 //
-// Example: strings – chaining
+// Example: strings - chaining
 //
 //	out := collection.New([]string{"a", "b", "c"}).
 //		Reverse().
-//		Append("d")
+//		Concat([]string{"d"})
 //
 //	collection.Dump(out)
 //	// #[]string [

@@ -28,8 +28,8 @@ func (c Slice[T]) After(pred func(T) bool) Slice[T] {
 
 	// If no match found → empty collection
 	if idx == -1 || idx+1 >= len(c) {
-		return New(c[:0])
+		return New(c[:0:0])
 	}
 
-	return New(c[idx+1:])
+	return New(c[idx+1 : len(c) : len(c)])
 }

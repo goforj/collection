@@ -10,8 +10,8 @@ func TestPrepend_Basic(t *testing.T) {
 
 	out := c.Prepend(1, 2)
 
-	expected := []int{1, 2, 3, 4}
-	if !reflect.DeepEqual(out.Items(), expected) || !reflect.DeepEqual(c.Items(), []int{3, 4}) {
+	expected := Slice[int]{1, 2, 3, 4}
+	if !reflect.DeepEqual(out, expected) || !reflect.DeepEqual(c, Slice[int]{3, 4}) {
 		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
@@ -21,8 +21,8 @@ func TestPrepend_EmptyCollection(t *testing.T) {
 
 	out := c.Prepend(1, 2, 3)
 
-	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.Items(), expected) || len(c) != 0 {
+	expected := Slice[int]{1, 2, 3}
+	if !reflect.DeepEqual(out, expected) || len(c) != 0 {
 		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
@@ -32,8 +32,8 @@ func TestPrepend_NoValues(t *testing.T) {
 
 	out := c.Prepend() // no-op
 
-	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.Items(), expected) || !reflect.DeepEqual(c.Items(), expected) {
+	expected := Slice[int]{1, 2, 3}
+	if !reflect.DeepEqual(out, expected) || !reflect.DeepEqual(c, expected) {
 		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
@@ -51,14 +51,14 @@ func TestPrepend_Structs(t *testing.T) {
 
 	out := c.Prepend(User{1, "Chris"}, User{2, "Matt"})
 
-	expected := []User{
+	expected := Slice[User]{
 		{1, "Chris"},
 		{2, "Matt"},
 		{3, "Shawn"},
 		{4, "Van"},
 	}
 
-	if !reflect.DeepEqual(out.Items(), expected) || len(c) != 2 {
+	if !reflect.DeepEqual(out, expected) || len(c) != 2 {
 		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
@@ -73,8 +73,8 @@ func TestPrepend_DoesNotMutateSourceSlice(t *testing.T) {
 		t.Fatalf("Prepend mutated source slice: %v", orig)
 	}
 
-	expected := []int{5, 7, 10, 20, 30}
-	if !reflect.DeepEqual(out.Items(), expected) || !reflect.DeepEqual(c.Items(), orig) {
+	expected := Slice[int]{5, 7, 10, 20, 30}
+	if !reflect.DeepEqual(out, expected) || !reflect.DeepEqual(c, Slice[int](orig)) {
 		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
@@ -84,8 +84,8 @@ func TestPrepend_NilSliceWithValues(t *testing.T) {
 
 	out := c.Prepend(1, 2)
 
-	expected := []int{1, 2}
-	if !reflect.DeepEqual(out.Items(), expected) || c != nil {
+	expected := Slice[int]{1, 2}
+	if !reflect.DeepEqual(out, expected) || c != nil {
 		t.Fatalf("result=%v source=%v", out, c)
 	}
 }

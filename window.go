@@ -4,16 +4,16 @@ package collection
 // Each window is a slice of length size; iteration advances by step (default 1 if step <= 0).
 // Windows that are shorter than size are omitted.
 // @group Slicing
-// @behavior allocates
-// @chainable true
-// @terminal false
+// @behavior readonly
+// @chainable false
+// @terminal true
 //
 // NOTE: windows share the backing array with the source collection.
 //
 // Example: integers - step 1
 //
 //	nums := collection.New([]int{1, 2, 3, 4, 5})
-//	win := collection.Window(nums, 3, 1)
+//	win := nums.Window(3, 1)
 //	collection.Dump(win)
 //	// #[][]int [
 //	//   0 => #[]int [
@@ -36,7 +36,7 @@ package collection
 // Example: strings - step 2
 //
 //	words := collection.New([]string{"a", "b", "c", "d", "e"})
-//	win2 := collection.Window(words, 2, 2)
+//	win2 := words.Window(2, 2)
 //	collection.Dump(win2)
 //	// #[][]string [
 //	//   0 => #[]string [
@@ -63,7 +63,7 @@ package collection
 //		{X: 3, Y: 9},
 //	})
 //
-//	win3 := collection.Window(points, 2, 1)
+//	win3 := points.Window(2, 1)
 //	collection.Dump(win3)
 //	// #[][]main.Point [
 //	//   0 => #[]main.Point [
@@ -97,9 +97,9 @@ package collection
 //	//     }
 //	//   ]
 //	// ]
-func Window[T any](c Slice[T], size int, step int) Slice[[]T] {
+func (c Slice[T]) Window(size int, step int) [][]T {
 	if size <= 0 {
-		return New([][]T(nil))
+		return nil
 	}
 
 	if step <= 0 {
@@ -108,16 +108,20 @@ func Window[T any](c Slice[T], size int, step int) Slice[[]T] {
 
 	n := len(c)
 	if n < size {
-		return New([][]T(nil))
+		return nil
 	}
 
-	// Compute number of windows.
-	count := 1 + (n-size)/step
+	lastStart := n - size
+	count := 1 + lastStart/step
 	out := make([][]T, 0, count)
 
-	for i := 0; i+size <= n; i += step {
-		out = append(out, c[i:i+size])
+	for i := 0; i <= lastStart; {
+		out = append(out, c[i:i+size:i+size])
+		if step > lastStart-i {
+			break
+		}
+		i += step
 	}
 
-	return New(out)
+	return out
 }

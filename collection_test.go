@@ -22,10 +22,10 @@ func TestFluentChainWithStructs(t *testing.T) {
 		Filter(func(u User) bool { return u.Age >= 35 }).
 		Sort(func(a, b User) bool { return a.Age < b.Age })
 
-	// Type change happens at the edge using MapTo.
-	names := MapTo(filteredAndSorted, func(u User) string {
+	// Type changes are supported directly by Map.
+	names := filteredAndSorted.Map(func(u User) string {
 		return u.Name
-	}).Items()
+	})
 
 	if len(names) != 2 {
 		t.Fatalf("expected 2 names, got %d (%v)", len(names), names)
@@ -38,7 +38,7 @@ func TestFluentChainWithStructs(t *testing.T) {
 func TestUnique(t *testing.T) {
 	nums := New([]int{1, 2, 2, 3, 3, 3, 4})
 
-	unique := nums.Unique(func(a, b int) bool { return a == b }).Items()
+	unique := nums.Unique(func(a, b int) bool { return a == b })
 
 	if len(unique) != 4 {
 		t.Fatalf("expected 4 unique items, got %d (%v)", len(unique), unique)

@@ -5,18 +5,13 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
-	// Take returns a new collection containing the first `n` items when n > 0,
-	// or the last `|n|` items when n < 0.
-	// @chainable true
-	// @terminal false
+	// Take returns a capacity-capped view containing the first n items.
 	//
 	// If n exceeds the collection length, the entire collection is returned.
 	// If n == 0, an empty collection is returned.
-	//
-	// Mirrors Laravel's take() semantics.
 	//
 	// NOTE: returns a view (shares backing array). Use Clone() to detach.
 
@@ -28,15 +23,6 @@ func main() {
 	//	0 => 0 #int
 	//	1 => 1 #int
 	//	2 => 2 #int
-	// ]
-
-	// Example: integers - take last 2 (negative n)
-	c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
-	out2 := c2.Take(-2)
-	collection.Dump(out2)
-	// #[]int [
-	//	0 => 4 #int
-	//	1 => 5 #int
 	// ]
 
 	// Example: integers - n exceeds length → whole collection

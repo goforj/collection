@@ -5,14 +5,14 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
 	// Mode returns the most frequent numeric value or values in a slice.
 	// If multiple values tie for highest frequency, all are returned
 	// in first-seen order.
 
-	// Example: integers – single mode
+	// Example: integers - single mode
 	values := []int{1, 2, 2, 3}
 	mode := collection.Mode(values)
 	collection.Dump(mode)
@@ -20,7 +20,7 @@ func main() {
 	//   0 => 2 #int
 	// ]
 
-	// Example: integers – tie for mode
+	// Example: integers - tie for mode
 	values2 := []int{1, 2, 1, 2}
 	mode2 := collection.Mode(values2)
 	collection.Dump(mode2)

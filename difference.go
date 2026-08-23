@@ -61,7 +61,7 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func Difference[T comparable](a, b Slice[T]) Slice[T] {
+func Difference[S1 ~[]T, S2 ~[]T, T comparable](a S1, b S2) Slice[T] {
 	if len(a) == 0 {
 		return New([]T{})
 	}

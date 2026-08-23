@@ -5,93 +5,33 @@ import (
 	"testing"
 )
 
-func TestTake_Positive(t *testing.T) {
-	c := New([]int{0, 1, 2, 3, 4, 5})
-
-	out := c.Take(3)
-
-	expected := []int{0, 1, 2}
-	if !reflect.DeepEqual(out.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, out.Items())
+func TestTake(t *testing.T) {
+	tests := []struct {
+		n    int
+		want Slice[int]
+	}{
+		{3, []int{0, 1, 2}}, {-2, []int{}}, {0, []int{}}, {10, []int{0, 1, 2, 3, 4, 5}},
+	}
+	for _, test := range tests {
+		got := New([]int{0, 1, 2, 3, 4, 5}).Take(test.n)
+		if !reflect.DeepEqual(got, test.want) {
+			t.Fatalf("Take(%d) = %v, want %v", test.n, got, test.want)
+		}
 	}
 }
 
-func TestTake_Negative(t *testing.T) {
-	c := New([]int{0, 1, 2, 3, 4, 5})
-
-	out := c.Take(-2)
-
-	expected := []int{4, 5}
-	if !reflect.DeepEqual(out.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, out.Items())
+func TestTakeEmptyStructsAndCappedView(t *testing.T) {
+	if got := New([]int{}).Take(5); len(got) != 0 {
+		t.Fatalf("Take() = %v, want empty", got)
 	}
-}
-
-func TestTake_Zero(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	out := c.Take(0)
-
-	if len(out.Items()) != 0 {
-		t.Fatalf("expected empty result, got %v", out.Items())
+	type user struct{ id int }
+	if got := New([]user{{1}, {2}, {3}, {4}}).Take(2); !reflect.DeepEqual(got, Slice[user]{{1}, {2}}) {
+		t.Fatalf("Take() = %v", got)
 	}
-}
-
-func TestTake_PositiveOvershoot(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	out := c.Take(10)
-
-	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.Items(), expected) {
-		t.Fatalf("expected full slice %v, got %v", expected, out.Items())
-	}
-}
-
-func TestTake_NegativeOvershoot(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	out := c.Take(-10)
-
-	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.Items(), expected) {
-		t.Fatalf("expected full slice %v, got %v", expected, out.Items())
-	}
-}
-
-func TestTake_EmptyCollection(t *testing.T) {
-	c := New([]int{})
-
-	out := c.Take(5)
-	if len(out.Items()) != 0 {
-		t.Fatalf("expected empty result, got %v", out.Items())
-	}
-}
-
-func TestTake_Structs(t *testing.T) {
-	type User struct {
-		ID int
-	}
-
-	c := New([]User{
-		{1}, {2}, {3}, {4},
-	})
-
-	out := c.Take(-2)
-
-	expected := []User{{3}, {4}}
-	if !reflect.DeepEqual(out.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, out.Items())
-	}
-}
-
-func TestTake_NoMutation(t *testing.T) {
-	c := New([]int{1, 2, 3, 4})
-	orig := append([]int{}, c.Items()...)
-
-	_ = c.Take(2)
-
-	if !reflect.DeepEqual(c.Items(), orig) {
-		t.Fatalf("Take mutated original collection: %v", c.Items())
+	items := []int{1, 2, 3, 4}
+	got := New(items).Take(2)
+	got[0] = 99
+	if items[0] != 99 || cap(got) != len(got) {
+		t.Fatalf("Take() did not return a capped view: %v cap %d", got, cap(got))
 	}
 }

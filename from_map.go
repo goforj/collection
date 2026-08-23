@@ -21,22 +21,21 @@ package collection
 //
 //	c := collection.FromMap(m)
 //	c.Sort(func(a, b collection.Pair[string, int]) bool {
-//		return a.Key < b.Key
+//		return a.First < b.First
 //	})
 //	collection.Dump(c)
-//
 //	// #[]collection.Pair[string,int] [
 //	//   0 => #collection.Pair[string,int] {
-//	//     +Key   => "a" #string
-//	//     +Value => 1 #int
+//	//     +First  => "a" #string
+//	//     +Second => 1 #int
 //	//   }
 //	//   1 => #collection.Pair[string,int] {
-//	//     +Key   => "b" #string
-//	//     +Value => 2 #int
+//	//     +First  => "b" #string
+//	//     +Second => 2 #int
 //	//   }
 //	//   2 => #collection.Pair[string,int] {
-//	//     +Key   => "c" #string
-//	//     +Value => 3 #int
+//	//     +First  => "c" #string
+//	//     +Second => 3 #int
 //	//   }
 //	// ]
 //
@@ -56,53 +55,35 @@ package collection
 //	out := collection.
 //		FromMap(configs).
 //		Filter(func(p collection.Pair[string, Config]) bool {
-//			return p.Value.Enabled
+//			return p.Second.Enabled
 //		}).
 //		Sort(func(a, b collection.Pair[string, Config]) bool {
-//			return a.Key < b.Key
+//			return a.First < b.First
 //		})
 //
 //	collection.Dump(out)
-//
 //	// #[]collection.Pair[string,main.Config·1] [
 //	//   0 => #collection.Pair[string,main.Config·1] {
-//	//     +Key       => "router-1" #string
-//	//     +Value     => #main.Config {
+//	//     +First     => "router-1" #string
+//	//     +Second    => #main.Config {
 //	//       +Enabled => true #bool
 //	//       +Timeout => 30 #int
 //	//     }
 //	//   }
 //	//   1 => #collection.Pair[string,main.Config·1] {
-//	//     +Key       => "router-3" #string
-//	//     +Value     => #main.Config {
+//	//     +First     => "router-3" #string
+//	//     +Second    => #main.Config {
 //	//       +Enabled => true #bool
 //	//       +Timeout => 45 #int
 //	//     }
 //	//   }
 //	// ]
-//
-// Example: map → collection → map
-//
-//	users := map[string]int{
-//		"alice": 1,
-//		"bob":   2,
-//	}
-//
-//	c2 := collection.FromMap(users)
-//	out2 := collection.ToMapKV(c2)
-//
-//	collection.Dump(out2)
-//
-//	// #map[string]int {
-//	//   alice => 1 #int
-//	//   bob => 2 #int
-//	// }
 func FromMap[K comparable, V any](m map[K]V) Slice[Pair[K, V]] {
 	items := make([]Pair[K, V], 0, len(m))
 	for k, v := range m {
 		items = append(items, Pair[K, V]{
-			Key:   k,
-			Value: v,
+			First:  k,
+			Second: v,
 		})
 	}
 	return New(items)

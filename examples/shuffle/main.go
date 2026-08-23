@@ -5,7 +5,10 @@
 
 package main
 
-import "github.com/goforj/collection"
+import (
+	"fmt"
+	"github.com/goforj/collection/v3"
+)
 
 func main() {
 	// Shuffle shuffles the collection in place and returns the same collection.
@@ -13,14 +16,16 @@ func main() {
 	// Example: integers
 	c := collection.New([]int{1, 2, 3, 4, 5})
 	c.Shuffle()
-	collection.Dump(c)
+	fmt.Println(len(c), collection.Sum(c))
+	// 5 15
 
-	// Example: strings – chaining
+	// Example: strings - chaining
 	out2 := collection.New([]string{"a", "b", "c"}).
 		Shuffle().
-		Append("d")
+		Concat([]string{"d"})
 
-	collection.Dump(out2)
+	fmt.Println(len(out2))
+	// 4
 
 	// Example: structs
 	type User struct {
@@ -35,5 +40,6 @@ func main() {
 	})
 
 	users.Shuffle()
-	collection.Dump(users)
+	fmt.Println(len(users))
+	// 4
 }

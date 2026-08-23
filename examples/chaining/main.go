@@ -3,7 +3,7 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 type DeviceEvent struct {
 	Device string
@@ -20,14 +20,14 @@ func main() {
 
 	// Fluent slice pipeline
 	collection.
-		New(events). // Construction
-		Shuffle(). // Ordering
-		Filter(func(e DeviceEvent) bool { return e.Errors > 5 }). // Slicing
+		New(events).                                                      // Construction
+		Shuffle().                                                        // Ordering
+		Filter(func(e DeviceEvent) bool { return e.Errors > 5 }).         // Slicing
 		Sort(func(a, b DeviceEvent) bool { return a.Errors > b.Errors }). // Ordering
-		Take(5). // Slicing
-		TakeUntilFn(func(e DeviceEvent) bool { return e.Errors < 10 }). // Slicing (stop when predicate becomes true)
-		SkipLast(1). // Slicing
-		Dump() // Debugging
+		Take(5).                                                          // Slicing
+		TakeUntil(func(e DeviceEvent) bool { return e.Errors < 10 }).     // Slicing (stop when predicate becomes true)
+		SkipLast(1).                                                      // Slicing
+		Dump()                                                            // Debugging
 
 	// #[]main.DeviceEvent [
 	//  0 => #main.DeviceEvent {

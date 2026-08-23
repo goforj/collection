@@ -8,25 +8,22 @@ import (
 func TestGroupBy_Basic(t *testing.T) {
 	values := []int{1, 2, 3, 4, 5}
 
-	groups := GroupBy(
-		New(values),
-		func(v int) string {
-			if v%2 == 0 {
-				return "even"
-			}
-			return "odd"
-		},
-	)
-	var _ map[string]Slice[int] = groups
+	groups := New(values).GroupBy(func(v int) string {
+		if v%2 == 0 {
+			return "even"
+		}
+		return "odd"
+	})
+	var _ map[string][]int = groups
 
-	if !reflect.DeepEqual(groups["even"], Slice[int]{2, 4}) {
+	if !reflect.DeepEqual(groups["even"], []int{2, 4}) {
 		t.Fatalf("even group incorrect: %v", groups["even"])
 	}
 
-	if !reflect.DeepEqual(groups["odd"], Slice[int]{1, 3, 5}) {
+	if !reflect.DeepEqual(groups["odd"], []int{1, 3, 5}) {
 		t.Fatalf("odd group incorrect: %v", groups["odd"])
 	}
-	filtered := groups["odd"].Filter(func(value int) bool { return value > 1 })
+	filtered := New(groups["odd"]).Filter(func(value int) bool { return value > 1 })
 	if !reflect.DeepEqual(filtered, Slice[int]{3, 5}) {
 		t.Fatalf("fluent group Filter result = %v", filtered)
 	}
@@ -44,10 +41,7 @@ func TestGroupBy_Structs(t *testing.T) {
 		{ID: 3, Role: "admin"},
 	}
 
-	groups := GroupBy(
-		New(users),
-		func(u User) string { return u.Role },
-	)
+	groups := New(users).GroupBy(func(u User) string { return u.Role })
 
 	expectAdmin := Slice[User]{
 		{ID: 1, Role: "admin"},
@@ -58,20 +52,17 @@ func TestGroupBy_Structs(t *testing.T) {
 		{ID: 2, Role: "user"},
 	}
 
-	if !reflect.DeepEqual(groups["admin"], expectAdmin) {
+	if !reflect.DeepEqual(groups["admin"], []User(expectAdmin)) {
 		t.Fatalf("admin group incorrect: %v", groups["admin"])
 	}
 
-	if !reflect.DeepEqual(groups["user"], expectUser) {
+	if !reflect.DeepEqual(groups["user"], []User(expectUser)) {
 		t.Fatalf("user group incorrect: %v", groups["user"])
 	}
 }
 
 func TestGroupBy_EmptyCollection(t *testing.T) {
-	groups := GroupBy(
-		New([]int{}),
-		func(v int) int { return v },
-	)
+	groups := New([]int{}).GroupBy(func(v int) int { return v })
 
 	if len(groups) != 0 {
 		t.Fatalf("expected empty groups, got %v", groups)
@@ -82,12 +73,9 @@ func TestGroupBy_DoesNotMutateSource(t *testing.T) {
 	items := []int{1, 2, 3}
 	c := New(items)
 
-	_ = GroupBy(
-		c,
-		func(v int) int { return v },
-	)
+	_ = c.GroupBy(func(v int) int { return v })
 
-	if !reflect.DeepEqual(c.Items(), items) {
+	if !reflect.DeepEqual(c, Slice[int](items)) {
 		t.Fatalf("source collection was mutated")
 	}
 }

@@ -1,6 +1,7 @@
 package collection
 
-// MapTo maps this Slice to a Slice with a different element type.
+// Map maps this Slice to a newly allocated Slice with a potentially different
+// element type.
 // @group Transformation
 // @behavior immutable
 // @chainable true
@@ -9,7 +10,7 @@ package collection
 // Example: map integers to labels
 //
 //	numbers := collection.New([]int{1, 2, 3, 4})
-//	labels := numbers.MapTo(func(number int) string {
+//	labels := numbers.Map(func(number int) string {
 //		if number%2 == 0 {
 //			return "even"
 //		}
@@ -22,10 +23,11 @@ package collection
 //	//   2 => "odd" #string
 //	//   3 => "even" #string
 //	// ]
-func (c Slice[T]) MapTo[R any](fn func(T) R) Slice[R] {
-	items := c.Items()
-	out := make([]R, len(items))
-	for i, value := range items {
+//	fmt.Println(numbers[0])
+//	// 1
+func (c Slice[T]) Map[R any](fn func(T) R) Slice[R] {
+	out := make([]R, len(c))
+	for i, value := range c {
 		out[i] = fn(value)
 	}
 	return New(out)
@@ -123,8 +125,8 @@ func (c Slice[T]) ToMap[K comparable, V any](keyFn func(T) K, valueFn func(T) V)
 	return out
 }
 
-// GroupBy partitions this Slice into directly slice-backed Slice values keyed by
-// the extracted value. Each group retains Slice's fluent methods.
+// GroupBy partitions this Slice into independent built-in slices keyed by the
+// extracted value.
 // @group Grouping
 // @behavior readonly
 // @chainable false
@@ -152,12 +154,12 @@ func (c Slice[T]) ToMap[K comparable, V any](keyFn func(T) K, valueFn func(T) V)
 //	// 2
 //	fmt.Println(groups["odd"][0])
 //	// 1
-//	collection.Dump(groups["even"].Take(1))
+//	collection.Dump(groups["even"][:1])
 //	// #[]int [
 //	//   0 => 2 #int
 //	// ]
-func (c Slice[T]) GroupBy[K comparable](keyFn func(T) K) map[K]Slice[T] {
-	out := make(map[K]Slice[T])
+func (c Slice[T]) GroupBy[K comparable](keyFn func(T) K) map[K][]T {
+	out := make(map[K][]T)
 	for _, item := range c {
 		key := keyFn(item)
 		out[key] = append(out[key], item)
@@ -187,7 +189,7 @@ func (c Slice[T]) GroupBy[K comparable](keyFn func(T) K) map[K]Slice[T] {
 //	// }
 func (c Slice[T]) CountBy[K comparable](keyFn func(T) K) map[K]int {
 	result := make(map[K]int)
-	for _, item := range c.Items() {
+	for _, item := range c {
 		result[keyFn(item)]++
 	}
 	return result
@@ -229,29 +231,7 @@ func (c Slice[T]) UniqueBy[K comparable](keyFn func(T) K) Slice[T] {
 	return New(out)
 }
 
-// Pipe passes this Slice value to fn and returns fn's result.
-// @group Transformation
-// @behavior readonly
-// @chainable false
-// @terminal true
-//
-// Example: sum a collection
-//
-//	numbers := collection.New([]int{1, 2, 3})
-//	total := numbers.Pipe(func(values collection.Slice[int]) int {
-//		sum := 0
-//		for _, value := range values {
-//			sum += value
-//		}
-//		return sum
-//	})
-//	collection.Dump(total)
-//	// 6 #int
-func (c Slice[T]) Pipe[R any](fn func(Slice[T]) R) R {
-	return fn(c)
-}
-
-// ZipWith combines this collection with another collection using fn up to the shorter length.
+// ZipWith combines this collection with a slice using fn up to the shorter length.
 // @group Transformation
 // @behavior immutable
 // @chainable true
@@ -269,7 +249,7 @@ func (c Slice[T]) Pipe[R any](fn func(Slice[T]) R) R {
 //	//   0 => 11 #int
 //	//   1 => 22 #int
 //	// ]
-func (c Slice[T]) ZipWith[U, R any](other Slice[U], fn func(T, U) R) Slice[R] {
+func (c Slice[T]) ZipWith[U, R any](other []U, fn func(T, U) R) Slice[R] {
 	length := len(c)
 	if len(other) < length {
 		length = len(other)

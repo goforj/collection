@@ -67,7 +67,7 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func Intersect[T comparable](a, b Slice[T]) Slice[T] {
+func Intersect[S1 ~[]T, S2 ~[]T, T comparable](a S1, b S2) Slice[T] {
 	if len(a) == 0 || len(b) == 0 {
 		return New([]T{})
 	}

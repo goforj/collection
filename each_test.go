@@ -23,7 +23,7 @@ func TestEach_ReturnsSameCollection(t *testing.T) {
 
 	out := c.Each(func(v int) {})
 
-	if !reflect.DeepEqual(out.Items(), c.Items()) {
+	if !reflect.DeepEqual(out, c) {
 		t.Fatalf("Each result = %v, want %v", out, c)
 	}
 }
@@ -43,7 +43,7 @@ func TestEach_Chaining(t *testing.T) {
 		t.Fatalf("Each did not see all items: %v", seen)
 	}
 
-	if !reflect.DeepEqual(out.Items(), []int{2, 4, 6}) {
-		t.Fatalf("Map after Each returned wrong result: %v", out.Items())
+	if !reflect.DeepEqual(out, Slice[int]{2, 4, 6}) {
+		t.Fatalf("Map after Each returned wrong result: %v", out)
 	}
 }

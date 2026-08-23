@@ -405,7 +405,7 @@ func renderAPI(funcs []*FuncDoc) string {
 
 		buf.WriteString(fmt.Sprintf("| **%s** | %s |\n",
 			group,
-			strings.Join(links, " · "),
+			strings.Join(links, " - "),
 		))
 	}
 
@@ -420,13 +420,13 @@ func renderAPI(funcs []*FuncDoc) string {
 
 			header := fn.Name
 			if fn.Behavior != "" {
-				header += " · " + fn.Behavior
+				header += " - " + fn.Behavior
 			}
 			if fn.Chainable == "true" {
-				header += " · chainable"
+				header += " - chainable"
 			}
 			if fn.Terminal == "true" {
-				header += " · terminal"
+				header += " - terminal"
 			}
 
 			buf.WriteString(fmt.Sprintf("### <a id=\"%s\"></a>%s\n\n", anchor, header))

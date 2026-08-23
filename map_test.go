@@ -2,109 +2,38 @@ package collection
 
 import (
 	"reflect"
+	"strconv"
 	"testing"
 )
 
-func TestMap_Ints(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	mapped := c.Map(func(v int) int {
-		return v * 10
-	})
-
-	expected := []int{10, 20, 30}
-
-	if !reflect.DeepEqual(mapped.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, mapped.Items())
-	}
-
-	if !reflect.DeepEqual(mapped.Items(), c.Items()) {
-		t.Fatalf("Map result = %v, want %v", mapped, c)
-	}
-
-	if !reflect.DeepEqual(c.Items(), expected) {
-		t.Fatalf("Map should mutate original collection")
-	}
-}
-
-func TestMap_Structs(t *testing.T) {
-	type User struct {
-		ID   int
-		Name string
-	}
-
-	c := New([]User{
-		{1, "Chris"},
-		{2, "Van"},
-	})
-
-	mapped := c.Map(func(u User) User {
-		u.Name = u.Name + "!"
-		return u
-	})
-
-	expected := []User{
-		{1, "Chris!"},
-		{2, "Van!"},
-	}
-
-	if !reflect.DeepEqual(mapped.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, mapped.Items())
-	}
-
-	if !reflect.DeepEqual(mapped.Items(), c.Items()) {
-		t.Fatalf("Map result = %v, want %v", mapped, c)
-	}
-
-	if !reflect.DeepEqual(c.Items(), expected) {
-		t.Fatalf("Map should mutate original collection")
-	}
-}
-
-func TestMap_Empty(t *testing.T) {
-	c := New([]int{})
-
-	mapped := c.Map(func(v int) int {
-		return v * 2
-	})
-
-	if len(mapped.Items()) != 0 {
-		t.Fatalf("expected empty slice, got %v", mapped.Items())
-	}
-
-	if !reflect.DeepEqual(mapped.Items(), c.Items()) {
-		t.Fatalf("Map result = %v, want %v", mapped, c)
-	}
-}
-
-func TestMap_PreservesNilSlice(t *testing.T) {
-	c := New([]int(nil))
-
-	c.Map(func(v int) int { return v * 2 })
-
-	if c.Items() != nil {
-		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
-	}
-}
-
-func TestMap_WritesThroughSourceSlice(t *testing.T) {
+func TestMap_MapsToDifferentElementTypeWithoutMutatingSource(t *testing.T) {
 	items := []int{1, 2, 3}
-	c := New(items)
-
-	c.Map(func(v int) int { return v * 2 })
-
-	want := []int{2, 4, 6}
-	if !reflect.DeepEqual(items, want) {
-		t.Fatalf("expected source slice %v, got %v", want, items)
+	values := New(items)
+	mapped := values.Map(strconv.Itoa)
+	want := Slice[string]{"1", "2", "3"}
+	if !reflect.DeepEqual(mapped, want) {
+		t.Fatalf("Map result = %v, want %v", mapped, want)
+	}
+	wantSource := []int{1, 2, 3}
+	if !reflect.DeepEqual(items, wantSource) {
+		t.Fatalf("Map mutated source = %v, want %v", items, wantSource)
 	}
 }
 
-func TestMap_LengthUnchanged(t *testing.T) {
-	c := New([]int{1, 2, 3})
+func TestMap_AllocatesForSameElementType(t *testing.T) {
+	values := New([]int{1, 2, 3})
+	mapped := values.Map(func(value int) int { return value * 2 })
+	mapped[0] = 99
+	want := Slice[int]{1, 2, 3}
+	if !reflect.DeepEqual(values, want) {
+		t.Fatalf("source = %v, want %v", values, want)
+	}
+}
 
-	c.Map(func(v int) int { return v + 1 })
-
-	if len(c.Items()) != 3 {
-		t.Fatalf("expected length 3, got %d", len(c.Items()))
+func TestMap_EmptySliceAllocatesAnEmptyResult(t *testing.T) {
+	values := New([]int(nil))
+	mapped := values.Map(strconv.Itoa)
+	if mapped == nil || len(mapped) != 0 {
+		t.Fatalf("Map(nil) = %#v, want allocated empty Slice", mapped)
 	}
 }

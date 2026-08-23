@@ -63,7 +63,7 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func SymmetricDifference[T comparable](a, b Slice[T]) Slice[T] {
+func SymmetricDifference[S1 ~[]T, S2 ~[]T, T comparable](a S1, b S2) Slice[T] {
 	out := make([]T, 0, len(a)+len(b))
 	seenOut := make(map[T]struct{}, len(a)+len(b))
 

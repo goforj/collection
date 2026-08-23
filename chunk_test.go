@@ -5,102 +5,42 @@ import (
 	"testing"
 )
 
-func TestChunk_EvenChunks(t *testing.T) {
-	c := New([]int{1, 2, 3, 4})
-
-	chunks := c.Chunk(2)
-
-	expected := [][]int{
-		{1, 2},
-		{3, 4},
+func TestChunk(t *testing.T) {
+	tests := []struct {
+		name string
+		in   Slice[int]
+		size int
+		want [][]int
+	}{
+		{"even", New([]int{1, 2, 3, 4}), 2, [][]int{{1, 2}, {3, 4}}},
+		{"uneven", New([]int{1, 2, 3, 4, 5}), 2, [][]int{{1, 2}, {3, 4}, {5}}},
+		{"larger than collection", New([]int{1, 2, 3}), 10, [][]int{{1, 2, 3}}},
+		{"size one", New([]int{1, 2, 3}), 1, [][]int{{1}, {2}, {3}}},
+		{"empty", New([]int{}), 3, [][]int{}},
 	}
-
-	if !reflect.DeepEqual(chunks, expected) {
-		t.Fatalf("expected %v, got %v", expected, chunks)
-	}
-}
-
-func TestChunk_UnevenChunks(t *testing.T) {
-	c := New([]int{1, 2, 3, 4, 5})
-
-	chunks := c.Chunk(2)
-
-	expected := [][]int{
-		{1, 2},
-		{3, 4},
-		{5},
-	}
-
-	if !reflect.DeepEqual(chunks, expected) {
-		t.Fatalf("expected %v, got %v", expected, chunks)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := test.in.Chunk(test.size); !reflect.DeepEqual(got, test.want) {
+				t.Fatalf("Chunk(%d) = %v, want %v", test.size, got, test.want)
+			}
+		})
 	}
 }
 
-func TestChunk_SizeLargerThanCollection(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	chunks := c.Chunk(10)
-
-	expected := [][]int{
-		{1, 2, 3},
-	}
-
-	if !reflect.DeepEqual(chunks, expected) {
-		t.Fatalf("expected %v, got %v", expected, chunks)
+func TestChunkInvalidSize(t *testing.T) {
+	values := New([]int{1, 2, 3})
+	for _, size := range []int{0, -5} {
+		if got := values.Chunk(size); got != nil {
+			t.Fatalf("Chunk(%d) = %v, want nil", size, got)
+		}
 	}
 }
 
-func TestChunk_SizeOne(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	chunks := c.Chunk(1)
-
-	expected := [][]int{
-		{1},
-		{2},
-		{3},
-	}
-
-	if !reflect.DeepEqual(chunks, expected) {
-		t.Fatalf("expected %v, got %v", expected, chunks)
-	}
-}
-
-func TestChunk_EmptyCollection(t *testing.T) {
-	c := New([]int{})
-
-	chunks := c.Chunk(3)
-
-	// Should return an empty slice, not nil.
-	if chunks == nil {
-		t.Fatalf("expected empty slice, got nil")
-	}
-
-	if len(chunks) != 0 {
-		t.Fatalf("expected 0 chunks, got %d", len(chunks))
-	}
-}
-
-func TestChunk_InvalidSize(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	chunks := c.Chunk(0)
-
-	if chunks != nil {
-		t.Fatalf("expected nil for size <= 0, got %v", chunks)
-	}
-
-	chunks = c.Chunk(-5)
-	if chunks != nil {
-		t.Fatalf("expected nil for size <= 0, got %v", chunks)
-	}
-}
-
-func TestChunk_ReturnsViews(t *testing.T) {
-	c := New([]int{1, 2, 3, 4})
-	chunks := c.Chunk(2)
-	chunks[1][0] = 9
-	if c[2] != 9 {
-		t.Fatalf("chunk mutation did not reach source: %v", c)
+func TestChunkReturnsCappedViews(t *testing.T) {
+	items := []int{1, 2, 3, 4, 5}
+	chunks := New(items).Chunk(2)
+	chunks[1][0] = 99
+	if items[2] != 99 || cap(chunks[0]) != len(chunks[0]) || cap(chunks[2]) != len(chunks[2]) {
+		t.Fatalf("Chunk() did not return capped source views: chunks %v, source %v", chunks, items)
 	}
 }

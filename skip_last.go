@@ -71,12 +71,12 @@ func (c Slice[T]) SkipLast(n int) Slice[T] {
 	l := len(items)
 
 	if n <= 0 {
-		return New(items)
+		return New(items[:l:l])
 	}
 
 	if n >= l {
-		return New(items[:0])
+		return New(items[:0:0])
 	}
 
-	return New(items[:l-n])
+	return New(items[: l-n : l-n])
 }

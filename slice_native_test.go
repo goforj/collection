@@ -38,17 +38,3 @@ func TestSliceZeroValueAndAliasing(t *testing.T) {
 		t.Fatalf("New did not preserve backing-slice aliasing: %v", items)
 	}
 }
-
-func TestSlicePointerMethodsRequireAddressableValue(t *testing.T) {
-	values := New([]int{1, 2})
-	item, ok := values.Pop()
-	if item != 2 || !ok || !reflect.DeepEqual(values.Items(), []int{1}) {
-		t.Fatalf("Pop result = (%d, %v), remaining %v", item, ok, values)
-	}
-
-	pop := (*Slice[int]).Pop
-	item, ok = pop(&values)
-	if item != 1 || !ok || len(values) != 0 {
-		t.Fatalf("pointer method expression result = (%d, %v), remaining %v", item, ok, values)
-	}
-}

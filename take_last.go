@@ -1,11 +1,9 @@
 package collection
 
-// TakeLast returns a new collection containing the last n items.
+// TakeLast returns a capacity-capped view containing the last n items.
 // If n is less than or equal to zero, TakeLast returns an empty collection.
 // If n is greater than or equal to the collection length, TakeLast returns
 // the full collection.
-// @chainable true
-// @terminal false
 //
 // This operation performs no element allocations; it re-slices the
 // underlying slice.
@@ -13,6 +11,8 @@ package collection
 // NOTE: returns a view (shares backing array). Use Clone() to detach.
 // @group Slicing
 // @behavior immutable
+// @chainable true
+// @terminal false
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
@@ -66,12 +66,12 @@ func (c Slice[T]) TakeLast(n int) Slice[T] {
 	l := len(items)
 
 	if n <= 0 {
-		return New(items[:0])
+		return New(items[:0:0])
 	}
 
 	if n >= l {
-		return New(items)
+		return New(items[:l:l])
 	}
 
-	return New(items[l-n:])
+	return New(items[l-n : l : l])
 }

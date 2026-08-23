@@ -5,15 +5,13 @@
 
 package main
 
-import "github.com/goforj/collection"
+import "github.com/goforj/collection/v3"
 
 func main() {
-	// TakeLast returns a new collection containing the last n items.
+	// TakeLast returns a capacity-capped view containing the last n items.
 	// If n is less than or equal to zero, TakeLast returns an empty collection.
 	// If n is greater than or equal to the collection length, TakeLast returns
 	// the full collection.
-	// @chainable true
-	// @terminal false
 	//
 	// This operation performs no element allocations; it re-slices the
 	// underlying slice.

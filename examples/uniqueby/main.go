@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection/v3"
+import "github.com/goforj/collection/v4"
 
 func main() {
 	// UniqueBy returns a collection containing the first item for each extracted key.

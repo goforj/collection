@@ -1,10 +1,10 @@
-# Migrating to v3
+# Migrating to v4
 
-Version 3 makes collections ordinary, named slices. The release also removes helpers that duplicate Go built-ins or the standard library, and gives mutating operations explicit names.
+Version 4 makes collections ordinary, named slices. The release also removes helpers that duplicate Go built-ins or the standard library, and gives mutating operations explicit names.
 
 ## Module path
 
-Version 3 uses the semantic import version suffix `/v3`. Update both `go.mod` and imports.
+Version 4 uses the semantic import version suffix `/v4`. Update both `go.mod` and imports.
 
 ### Before
 
@@ -19,11 +19,11 @@ import "github.com/goforj/collection"
 ### After
 
 ```go
-require github.com/goforj/collection/v3 v3.0.0
+require github.com/goforj/collection/v4 v4.0.0
 ```
 
 ```go
-import "github.com/goforj/collection/v3"
+import "github.com/goforj/collection/v4"
 ```
 
 ## Slice-backed collections
@@ -881,7 +881,7 @@ values.Tap(func(current collection.Slice[int]) {
 
 ### Concat is always pure
 
-`Concat` accepts one or more slices and always allocates independent backing storage for its result. Capture the result because v3 no longer mutates the receiver.
+`Concat` accepts one or more slices and always allocates independent backing storage for its result. Capture the result because v4 no longer mutates the receiver.
 
 ### Before
 

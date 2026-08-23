@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection/v3"
+import "github.com/goforj/collection/v4"
 
 func main() {
 	// Reduce collapses the collection into a single accumulated value.

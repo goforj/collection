@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection/v3"
+import "github.com/goforj/collection/v4"
 
 func main() {
 	// Tap invokes fn with the Slice value for side effects such as logging,

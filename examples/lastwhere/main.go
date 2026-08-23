@@ -6,7 +6,7 @@
 package main
 
 import (
-	"github.com/goforj/collection/v3"
+	"github.com/goforj/collection/v4"
 	"strings"
 )
 

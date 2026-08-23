@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection/v3"
+import "github.com/goforj/collection/v4"
 
 func main() {
 	// ToMap reduces this collection into a map using the provided key and value functions.

@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goforj/collection/v3"
+import "github.com/goforj/collection/v4"
 
 func main() {
 	// MinBy returns the item whose extracted key is the smallest.

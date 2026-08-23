@@ -40,8 +40,8 @@ func TestExamplesBuild(t *testing.T) {
 		if err != nil {
 			t.Fatalf("read example %q: %v", name, err)
 		}
-		if !bytes.Contains(src, []byte("github.com/goforj/collection/v3")) {
-			t.Fatalf("example %q does not import the v3 module path", name)
+		if !bytes.Contains(src, []byte("github.com/goforj/collection/v4")) {
+			t.Fatalf("example %q does not import the v4 module path", name)
 		}
 
 		t.Run(name, func(t *testing.T) {

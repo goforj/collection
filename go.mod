@@ -1,4 +1,4 @@
-module github.com/goforj/collection/v3
+module github.com/goforj/collection/v4
 
 go 1.27.0
 

@@ -36,11 +36,14 @@ func TestFormatUncertainTiming(t *testing.T) {
 
 // TestFormatRatioUsesConservativeCategories avoids publishing build-sensitive multipliers.
 func TestFormatRatioUsesConservativeCategories(t *testing.T) {
-	if got := formatRatio(200, 100); got != "**faster**" {
+	if got := formatRatio(200, 100); got != "**2.0x faster**" {
 		t.Fatalf("formatRatio(faster) = %q", got)
 	}
-	if got := formatRatio(100, 200); got != "slower" {
+	if got := formatRatio(100, 200); got != "2.0x slower" {
 		t.Fatalf("formatRatio(slower) = %q", got)
+	}
+	if got := formatRatio(0, 100); got != "∞x slower" {
+		t.Fatalf("formatRatio(zero baseline) = %q", got)
 	}
 }
 
@@ -54,7 +57,7 @@ func TestFormatRatioDoesNotHideSubFloorDifferences(t *testing.T) {
 // TestScalarSummaryUsesDocumentedTolerance verifies the condensed scalar table's wider noise band.
 func TestScalarSummaryUsesDocumentedTolerance(t *testing.T) {
 	raw := formatBenchmarkRatio("All", benchBorrow, 112, 100, false)
-	if raw != "**faster**" {
+	if raw != "**1.1x faster**" {
 		t.Fatalf("raw timing classification = %q", raw)
 	}
 	summary := formatBenchmarkSpeed("All", benchBorrow, 112, 100, false, false, true)

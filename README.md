@@ -127,8 +127,8 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Take** | below floor | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **faster** | ≈ | ≈ |
-| **ZipWith** | **faster** | ≈ | ≈ |
+| **Zip** | **2.1x faster** | ≈ | ≈ |
+| **ZipWith** | **3.1x faster** | ≈ | ≈ |
 | **Unique** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
 | **Union** | ≈ | ≈ | ≈ |
@@ -150,8 +150,8 @@ Full raw tables: see `BENCHMARKS.md`.
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
 | **Retain** | ≈ | ≈ | ≈ |
-| **Reverse** | ≈ | ≈ | ≈ |
-| **Shuffle** | **faster** | ≈ | ≈ |
+| **Reverse** | inconclusive | ≈ | ≈ |
+| **Shuffle** | **3.7x faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->
 
@@ -160,7 +160,7 @@ Full raw tables: see `BENCHMARKS.md`.
 - In **Speed/Timing**, **≈** means the median is inside ±10% (±15% in the condensed read-only scalar table)
 - **below floor** means both timings are under 50 ns, so no relative conclusion is drawn
 - **inconclusive** means the median is outside that band but paired samples did not consistently establish the difference
-- **faster** and **slower** are conservative direction labels; exact ns/op values are machine- and build-specific
+- **Nx faster/slower** is the ratio of the displayed medians and appears only when all paired samples establish the same direction; exact values remain machine- and build-specific
 - In **Memory/Allocs**, **≈** means both implementations produced the same measured result
 - **same loop** means both implementations compile to the same machine loop, so binary-placement skew is not presented as a library difference
 - Explicit memory deltas show allocation differences for equivalent work; ownership and API trade-offs are labeled separately

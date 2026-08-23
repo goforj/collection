@@ -2299,9 +2299,12 @@ func formatRatio(lo, col float64) string {
 	}
 
 	if ratio > 1 {
-		return "**faster**"
+		return fmt.Sprintf("**%.1fx faster**", ratio)
 	}
-	return "slower"
+	if ratio == 0 {
+		return "∞x slower"
+	}
+	return fmt.Sprintf("%.1fx slower", 1/ratio)
 }
 
 // formatBenchmarkRatio avoids presenting view creation as a faster equivalent copy.
@@ -2337,12 +2340,15 @@ func formatSpeed(lo, col float64, allowBold bool, scalarOnly bool) string {
 	}
 
 	if ratio > 1 && allowBold {
-		return "**faster**"
+		return fmt.Sprintf("**%.1fx faster**", ratio)
 	}
 	if ratio > 1 {
-		return "faster"
+		return fmt.Sprintf("%.1fx faster", ratio)
 	}
-	return "slower"
+	if ratio == 0 {
+		return "∞x slower"
+	}
+	return fmt.Sprintf("%.1fx slower", 1/ratio)
 }
 
 // formatBenchmarkSpeed marks borrowed views as a semantic trade-off.

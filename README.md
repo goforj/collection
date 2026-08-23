@@ -122,13 +122,13 @@ Full raw tables: see `BENCHMARKS.md`.
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
 | **Chunk** | view trade-off | ownership trade-off | ownership trade-off |
-| **Filter** | 0.89x | ≈ | ≈ |
+| **Filter** | ≈ | ≈ | ≈ |
 | **Map** | ≈ | ≈ | ≈ |
 | **Take** | ≈ | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **1.56x** | ≈ | ≈ |
-| **ZipWith** | **3.10x** | ≈ | ≈ |
+| **Zip** | **2.54x** | ≈ | ≈ |
+| **ZipWith** | **3.36x** | ≈ | ≈ |
 | **Unique** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
 | **Union** | ≈ | ≈ | ≈ |
@@ -143,15 +143,15 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | 0.88x | ≈ | ≈ |
+| **Pipeline F→M→T→R** | ≈ | ≈ | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | 0.89x | ≈ | ≈ |
+| **Retain** | ≈ | ≈ | ≈ |
 | **Reverse** | ≈ | ≈ | ≈ |
-| **Shuffle** | **3.63x** | ≈ | ≈ |
+| **Shuffle** | **3.71x** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->
 
@@ -685,8 +685,10 @@ collection.Dump(total3)
 
 Clone returns a copy of the collection.
 
-The returned collection has its own backing slice, so subsequent mutations
-do not affect the original collection.
+The returned collection has its own backing slice, so element assignments and
+slice operations on the clone do not affect the original collection. Clone is
+shallow: pointers, maps, slices, and other references stored in elements remain
+shared.
 
 Clone is intended to be used when branching a pipeline while preserving
 the original collection.

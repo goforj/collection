@@ -86,7 +86,7 @@ consume(values)
 
 ### ItemsCopy is removed
 
-Use `Clone` to get an independent `Slice`, or `slices.Clone` when the result should be a built-in slice.
+Use `Clone` to get an independent `Slice`. Convert that clone explicitly when the result must have the built-in slice type; the explicit clone also preserves v2's non-nil empty result.
 
 ### Before
 
@@ -97,7 +97,7 @@ copy := values.ItemsCopy()
 ### After
 
 ```go
-copy := slices.Clone(values)
+copy := []int(values.Clone())
 ```
 
 ### NumericCollection is removed
@@ -859,7 +859,7 @@ total := sum(values)
 
 ### Tap receives a Slice value
 
-The callback now receives the borrowed `Slice` value instead of a `Collection` pointer. Element changes inside the callback remain visible through the shared backing array.
+The callback now receives the borrowed `Slice` value instead of a `Collection` pointer. Element changes inside the callback remain visible through the shared backing array. Slice-header changes are callback-local, so shortening or extending `current` does not change the length returned by `Tap`; perform header-changing operations such as `Retain` outside the callback and capture their result.
 
 ### Before
 

@@ -22,7 +22,7 @@ const (
 	benchStart = "<!-- bench:embed:start -->"
 	benchEnd   = "<!-- bench:embed:end -->"
 
-	benchSamples        = 5
+	benchSamples        = 7
 	benchSampleDuration = 100 * time.Millisecond
 )
 
@@ -32,6 +32,7 @@ type benchResult struct {
 	bytesPerOp  int64
 	allocsPerOp int64
 	impl        string
+	uncertain   bool
 }
 
 // main runs both ownership modes and updates the benchmark reports.
@@ -139,18 +140,15 @@ func runBenches(only map[string]struct{}, mode benchMode) []benchResult {
 	}
 
 	var results []benchResult
-	for _, c := range cases {
+	for caseIndex, c := range cases {
 		if len(only) > 0 {
 			if _, ok := only[strings.ToLower(c.name)]; !ok {
 				continue
 			}
 		}
 
-		results = append(
-			results,
-			measure(c.name, "collection", c.col),
-			measure(c.name, "lo", c.lo),
-		)
+		collectionResult, loResult := measurePair(c.name, c.col, c.lo, caseIndex%2 == 0)
+		results = append(results, collectionResult, loResult)
 	}
 	return results
 }
@@ -168,29 +166,87 @@ func parseOnly(raw string) map[string]struct{} {
 	return only
 }
 
-// measure returns median timing and allocation statistics across benchmark samples.
-func measure(name, impl string, fn func(*testing.B)) benchResult {
-	nsPerOpSamples := make([]float64, 0, benchSamples)
-	bytesPerOpSamples := make([]int64, 0, benchSamples)
-	allocsPerOpSamples := make([]int64, 0, benchSamples)
-	for range benchSamples {
-		res := testing.Benchmark(func(b *testing.B) {
-			b.ReportAllocs()
-			fn(b)
-		})
-
-		nsPerOpSamples = append(nsPerOpSamples, float64(res.T)/float64(res.N))
-		bytesPerOpSamples = append(bytesPerOpSamples, res.AllocedBytesPerOp())
-		allocsPerOpSamples = append(allocsPerOpSamples, res.AllocsPerOp())
+// measurePair alternates implementations and returns paired median measurements.
+func measurePair(name string, collectionFn, loFn func(*testing.B), collectionFirst bool) (benchResult, benchResult) {
+	collectionSamples := make([]benchmarkMeasurement, 0, benchSamples)
+	loSamples := make([]benchmarkMeasurement, 0, benchSamples)
+	ratios := make([]float64, 0, benchSamples)
+	for sampleIndex := range benchSamples {
+		var collectionSample, loSample benchmarkMeasurement
+		if (sampleIndex%2 == 0) == collectionFirst {
+			collectionSample = measureOnce(collectionFn)
+			loSample = measureOnce(loFn)
+		} else {
+			loSample = measureOnce(loFn)
+			collectionSample = measureOnce(collectionFn)
+		}
+		collectionSamples = append(collectionSamples, collectionSample)
+		loSamples = append(loSamples, loSample)
+		ratios = append(ratios, loSample.nsPerOp/collectionSample.nsPerOp)
 	}
 
+	uncertain := ratioIsUncertain(ratios)
+	return summarizeMeasurements(name, "collection", collectionSamples, uncertain),
+		summarizeMeasurements(name, "lo", loSamples, uncertain)
+}
+
+// benchmarkMeasurement holds one timing and allocation sample.
+type benchmarkMeasurement struct {
+	nsPerOp     float64
+	bytesPerOp  int64
+	allocsPerOp int64
+}
+
+// measureOnce collects one benchmark sample.
+func measureOnce(fn func(*testing.B)) benchmarkMeasurement {
+	result := testing.Benchmark(func(b *testing.B) {
+		b.ReportAllocs()
+		fn(b)
+	})
+	return benchmarkMeasurement{
+		nsPerOp:     float64(result.T) / float64(result.N),
+		bytesPerOp:  result.AllocedBytesPerOp(),
+		allocsPerOp: result.AllocsPerOp(),
+	}
+}
+
+// summarizeMeasurements returns median values for one implementation.
+func summarizeMeasurements(name, impl string, samples []benchmarkMeasurement, uncertain bool) benchResult {
+	nsPerOpSamples := make([]float64, 0, len(samples))
+	bytesPerOpSamples := make([]int64, 0, len(samples))
+	allocsPerOpSamples := make([]int64, 0, len(samples))
+	for _, sample := range samples {
+		nsPerOpSamples = append(nsPerOpSamples, sample.nsPerOp)
+		bytesPerOpSamples = append(bytesPerOpSamples, sample.bytesPerOp)
+		allocsPerOpSamples = append(allocsPerOpSamples, sample.allocsPerOp)
+	}
 	return benchResult{
 		name:        name,
 		impl:        impl,
 		nsPerOp:     medianFloat64(nsPerOpSamples),
 		bytesPerOp:  medianInt64(bytesPerOpSamples),
 		allocsPerOp: medianInt64(allocsPerOpSamples),
+		uncertain:   uncertain,
 	}
+}
+
+// ratioIsUncertain reports whether paired samples cross the equivalence boundary or disagree on direction.
+func ratioIsUncertain(ratios []float64) bool {
+	direction := 0
+	for _, ratio := range ratios {
+		if ratio >= 1-equivalentEpsilon && ratio <= 1+equivalentEpsilon {
+			return true
+		}
+		currentDirection := 1
+		if ratio < 1-equivalentEpsilon {
+			currentDirection = -1
+		}
+		if direction != 0 && currentDirection != direction {
+			return true
+		}
+		direction = currentDirection
+	}
+	return false
 }
 
 // medianFloat64 returns the middle sample after sorting a copy of values.
@@ -2035,7 +2091,7 @@ func renderTable(results []benchResult, mode benchMode) string {
 			formatNs(col.nsPerOp),
 			formatNs(loRes.nsPerOp),
 		)
-		ratioCell := formatBenchmarkRatio(name, mode, loRes.nsPerOp, col.nsPerOp)
+		ratioCell := formatBenchmarkRatio(name, mode, loRes.nsPerOp, col.nsPerOp, col.uncertain || loRes.uncertain)
 
 		bytesCell := fmt.Sprintf(
 			"%s / %s",
@@ -2154,7 +2210,7 @@ func renderCondensedTables(results []benchResult, mode benchMode) string {
 
 			scalarOnly := group.name == "Read-only scalar ops"
 			allowBold := group.name == "Pipelines" || group.name == "Transforming ops" || group.name == "Mutating ops"
-			speed := formatBenchmarkSpeed(name, mode, loRes.nsPerOp, col.nsPerOp, allowBold, scalarOnly)
+			speed := formatBenchmarkSpeed(name, mode, loRes.nsPerOp, col.nsPerOp, col.uncertain || loRes.uncertain, allowBold, scalarOnly)
 			mem := formatDeltaBytes(col.bytesPerOp, loRes.bytesPerOp)
 			allocs := formatDeltaAllocs(col.allocsPerOp, loRes.allocsPerOp)
 			if isDifferentWorkBenchmark(name) {
@@ -2251,12 +2307,15 @@ func formatRatio(lo, col float64) string {
 
 // formatBenchmarkRatio avoids presenting view creation as a faster equivalent copy.
 // formatBenchmarkRatio applies benchmark-specific timing comparison rules.
-func formatBenchmarkRatio(name string, mode benchMode, lo, col float64) string {
+func formatBenchmarkRatio(name string, mode benchMode, lo, col float64, uncertain bool) string {
 	if mode == benchBorrow && isViewBenchmark(name) {
 		return "view trade-off"
 	}
 	if mode == benchBorrow && isCodeEquivalentBenchmark(name) {
 		return "same loop"
+	}
+	if uncertain {
+		return "≈"
 	}
 	return formatRatio(lo, col)
 }
@@ -2287,12 +2346,15 @@ func formatSpeed(lo, col float64, allowBold bool, scalarOnly bool) string {
 
 // formatBenchmarkSpeed marks borrowed views as a semantic trade-off.
 // formatBenchmarkSpeed applies benchmark-specific speed presentation rules.
-func formatBenchmarkSpeed(name string, mode benchMode, lo, col float64, allowBold bool, scalarOnly bool) string {
+func formatBenchmarkSpeed(name string, mode benchMode, lo, col float64, uncertain, allowBold, scalarOnly bool) string {
 	if mode == benchBorrow && isViewBenchmark(name) {
 		return "view trade-off"
 	}
 	if mode == benchBorrow && isCodeEquivalentBenchmark(name) {
 		return "same loop"
+	}
+	if uncertain {
+		return "≈"
 	}
 	return formatSpeed(lo, col, allowBold, scalarOnly)
 }
@@ -2446,7 +2508,7 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	path := filepath.Join(root, "BENCHMARKS.md")
 	var buf bytes.Buffer
 	buf.WriteString("# Benchmarks\n\n")
-	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d samples at %s each. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration)
+	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d paired samples at %s each, alternating implementation order. Timing differences are shown only when every pair falls outside the ±%.0f%% equivalence band in the same direction. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration, equivalentEpsilon*100)
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
 	buf.WriteString("FirstWhere compiles to the same scan loop in both implementations. Its ratio is labeled `same loop` because binary placement can dominate the timing of such a small function in this in-process harness.\n\n")
 	buf.WriteString(rawBorrowTable)

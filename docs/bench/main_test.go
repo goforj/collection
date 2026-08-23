@@ -23,3 +23,23 @@ func TestRatioIsUncertain(t *testing.T) {
 		})
 	}
 }
+
+// TestFormatUncertainTiming distinguishes equivalent medians from unstable differences.
+func TestFormatUncertainTiming(t *testing.T) {
+	if got := formatUncertainTiming(102, 100, equivalentEpsilon); got != "≈" {
+		t.Fatalf("formatUncertainTiming(equivalent) = %q", got)
+	}
+	if got := formatUncertainTiming(118, 100, equivalentEpsilon); got != "inconclusive" {
+		t.Fatalf("formatUncertainTiming(inconsistent) = %q", got)
+	}
+}
+
+// TestFormatRatioUsesConservativeCategories avoids publishing build-sensitive multipliers.
+func TestFormatRatioUsesConservativeCategories(t *testing.T) {
+	if got := formatRatio(200, 100); got != "**faster**" {
+		t.Fatalf("formatRatio(faster) = %q", got)
+	}
+	if got := formatRatio(100, 200); got != "slower" {
+		t.Fatalf("formatRatio(slower) = %q", got)
+	}
+}

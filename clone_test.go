@@ -35,8 +35,27 @@ func TestClone_EmptyCollection(t *testing.T) {
 	c := New([]int{})
 	clone := c.Clone()
 
+	if clone == nil {
+		t.Fatal("Clone of an empty slice should be non-nil")
+	}
 	if len(clone) != 0 {
 		t.Fatalf("expected empty clone, got %v", clone)
+	}
+
+	var nilSlice Slice[int]
+	nilClone := nilSlice.Clone()
+	if nilClone == nil {
+		t.Fatal("Clone of a nil slice should be non-nil")
+	}
+}
+
+func TestClone_ShallowCopySharesReferencedData(t *testing.T) {
+	original := New([]map[string]int{{"count": 1}})
+	clone := original.Clone()
+
+	clone[0]["count"] = 2
+	if original[0]["count"] != 2 {
+		t.Fatal("Clone should retain references stored in elements")
 	}
 }
 

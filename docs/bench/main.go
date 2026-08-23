@@ -2073,7 +2073,7 @@ func renderTable(results []benchResult, mode benchMode) string {
 	}
 
 	var buf bytes.Buffer
-	buf.WriteString("| Op | ns/op (vs lo) | × (faster) | bytes/op (vs lo) | × (less memory) | allocs/op (vs lo) |\n")
+	buf.WriteString("| Op | ns/op (vs lo) | Timing | bytes/op (vs lo) | × (less memory) | allocs/op (vs lo) |\n")
 	buf.WriteString("|---:|----------------|:--:|------------------|:--:|--------------------|\n")
 
 	names := make([]string, 0, len(byName))
@@ -2298,11 +2298,10 @@ func formatRatio(lo, col float64) string {
 		return "≈"
 	}
 
-	out := fmt.Sprintf("%.2fx", ratio)
 	if ratio > 1 {
-		return fmt.Sprintf("**%s**", out)
+		return "**faster**"
 	}
-	return out
+	return "slower"
 }
 
 // formatBenchmarkRatio avoids presenting view creation as a faster equivalent copy.
@@ -2315,7 +2314,7 @@ func formatBenchmarkRatio(name string, mode benchMode, lo, col float64, uncertai
 		return "same loop"
 	}
 	if uncertain {
-		return "≈"
+		return formatUncertainTiming(lo, col, equivalentEpsilon)
 	}
 	return formatRatio(lo, col)
 }
@@ -2337,11 +2336,13 @@ func formatSpeed(lo, col float64, allowBold bool, scalarOnly bool) string {
 		return "≈"
 	}
 
-	out := fmt.Sprintf("%.2fx", ratio)
 	if ratio > 1 && allowBold {
-		return fmt.Sprintf("**%s**", out)
+		return "**faster**"
 	}
-	return out
+	if ratio > 1 {
+		return "faster"
+	}
+	return "slower"
 }
 
 // formatBenchmarkSpeed marks borrowed views as a semantic trade-off.
@@ -2354,9 +2355,28 @@ func formatBenchmarkSpeed(name string, mode benchMode, lo, col float64, uncertai
 		return "same loop"
 	}
 	if uncertain {
-		return "≈"
+		epsilon := equivalentEpsilon
+		if scalarOnly {
+			epsilon = scalarOnlyEpsilon
+		}
+		return formatUncertainTiming(lo, col, epsilon)
 	}
 	return formatSpeed(lo, col, allowBold, scalarOnly)
+}
+
+// formatUncertainTiming distinguishes equivalent medians from inconsistent samples.
+func formatUncertainTiming(lo, col, epsilon float64) string {
+	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
+		return "≈"
+	}
+	if col == 0 {
+		return "inconclusive"
+	}
+	ratio := lo / col
+	if ratio >= 1-epsilon && ratio <= 1+epsilon {
+		return "≈"
+	}
+	return "inconclusive"
 }
 
 // isCodeEquivalentBenchmark reports operations whose compared implementations compile to the same loop.
@@ -2508,7 +2528,7 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	path := filepath.Join(root, "BENCHMARKS.md")
 	var buf bytes.Buffer
 	buf.WriteString("# Benchmarks\n\n")
-	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d paired samples at %s each, alternating implementation order. Timing differences are shown only when every pair falls outside the ±%.0f%% equivalence band in the same direction. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration, equivalentEpsilon*100)
+	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d paired samples at %s each, alternating implementation order. Timing differences are shown only when every pair falls outside the ±%.0f%% equivalence band in the same direction. Medians inside the band are labeled `≈`; medians outside it without consistent paired evidence are labeled `inconclusive`. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration, equivalentEpsilon*100)
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
 	buf.WriteString("FirstWhere compiles to the same scan loop in both implementations. Its ratio is labeled `same loop` because binary placement can dominate the timing of such a small function in this in-process harness.\n\n")
 	buf.WriteString(rawBorrowTable)

@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-357-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-358-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -127,8 +127,8 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Take** | ≈ | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **2.54x** | ≈ | ≈ |
-| **ZipWith** | **3.36x** | ≈ | ≈ |
+| **Zip** | **faster** | ≈ | ≈ |
+| **ZipWith** | **faster** | ≈ | ≈ |
 | **Unique** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
 | **Union** | ≈ | ≈ | ≈ |
@@ -151,13 +151,15 @@ Full raw tables: see `BENCHMARKS.md`.
 |---:|:-----------:|:------:|:------:|
 | **Retain** | ≈ | ≈ | ≈ |
 | **Reverse** | ≈ | ≈ | ≈ |
-| **Shuffle** | **3.71x** | ≈ | ≈ |
+| **Shuffle** | **faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
 
-- **≈** means the two libraries are effectively equivalent
+- **≈** means the median timing is inside the benchmark's equivalence band
+- **inconclusive** means the median is outside that band but paired samples did not consistently establish the difference
+- **faster** and **slower** are conservative direction labels; exact ns/op values are machine- and build-specific
 - **same loop** means both implementations compile to the same machine loop, so binary-placement skew is not presented as a library difference
 - Explicit memory deltas show allocation differences for equivalent work; ownership and API trade-offs are labeled separately
 - Single-operation helpers are expected to be close when they perform equivalent work

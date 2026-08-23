@@ -36,7 +36,7 @@ type benchResult struct {
 	uncertain   bool
 }
 
-// main runs both ownership modes and updates the benchmark reports.
+// main runs the equivalent-work comparisons and updates the benchmark reports.
 func main() {
 	onlyFlag := flag.String("only", "", "Run only benchmarks matching the name (comma-separated, case-insensitive)")
 	flag.Parse()
@@ -44,7 +44,6 @@ func main() {
 	start := time.Now()
 	only := parseOnly(*onlyFlag)
 	borrowResults := runBenches(only, benchBorrow)
-	copyResults := runBenches(only, benchCopy)
 	condensed := renderCondensedTables(borrowResults, benchBorrow)
 	rawBorrow := renderTable(borrowResults, benchBorrow)
 
@@ -52,7 +51,7 @@ func main() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	if err := updateBenchmarksFile(rawBorrow, renderTable(copyResults, benchCopy)); err != nil {
+	if err := updateBenchmarksFile(rawBorrow); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -2526,8 +2525,8 @@ func replaceBenchTable(section, condensed string) (string, error) {
 	return "\n\n" + trimmed + "\n", nil
 }
 
-// updateBenchmarksFile writes detailed borrow and copy results to the benchmark report.
-func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
+// updateBenchmarksFile writes detailed equivalent-work results to the benchmark report.
+func updateBenchmarksFile(rawBorrowTable string) error {
 	root, err := findRoot()
 	if err != nil {
 		return err
@@ -2541,9 +2540,6 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
 	buf.WriteString("FirstWhere compiles to the same scan loop in both implementations. Its ratio is labeled `same loop` because binary placement can dominate the timing of such a small function in this in-process harness.\n\n")
 	buf.WriteString(rawBorrowTable)
-	buf.WriteString("\n\n")
-	buf.WriteString("Raw results for `collection.New().Clone()` (explicit copy) vs `lo`. This section includes collection's explicit input-copy cost.\n\n")
-	buf.WriteString(rawCopyTable)
 	buf.WriteString("\n")
 	return os.WriteFile(path, buf.Bytes(), 0o644)
 }

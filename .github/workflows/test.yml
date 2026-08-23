@@ -54,7 +54,9 @@ jobs:
 
       - name: Check examples module
         working-directory: examples
-        run: go list -m all
+        run: |
+          go list -m all
+          go test ./...
 
       - name: Check docs module
         working-directory: docs

@@ -1,4 +1,4 @@
-package collection
+package examples
 
 import (
 	"bytes"
@@ -14,10 +14,11 @@ import (
 
 var errGoBuildFailed = errors.New("go build failed")
 
+// TestExamplesBuild verifies that every generated example compiles without its ignore build tag.
 func TestExamplesBuild(t *testing.T) {
 	t.Parallel()
 
-	examplesDir := "examples"
+	examplesDir := "."
 
 	entries, err := os.ReadDir(examplesDir)
 	if err != nil {
@@ -29,7 +30,6 @@ func TestExamplesBuild(t *testing.T) {
 			continue
 		}
 
-		// CAPTURE LOOP VARS
 		name := e.Name()
 		path := filepath.Join(examplesDir, name)
 		mainFile := filepath.Join(path, "main.go")
@@ -54,6 +54,7 @@ func TestExamplesBuild(t *testing.T) {
 	}
 }
 
+// abs resolves paths because Go overlay replacements require absolute filenames.
 func abs(p string) string {
 	a, err := filepath.Abs(p)
 	if err != nil {
@@ -62,6 +63,7 @@ func abs(p string) string {
 	return a
 }
 
+// buildExampleWithoutTags compiles an ignored generated example through a temporary overlay.
 func buildExampleWithoutTags(exampleDir string) error {
 	orig := filepath.Join(exampleDir, "main.go")
 
@@ -119,6 +121,7 @@ func buildExampleWithoutTags(exampleDir string) error {
 	return nil
 }
 
+// stripBuildTags removes the leading constraints that keep generated commands out of normal builds.
 func stripBuildTags(src []byte) []byte {
 	lines := strings.Split(string(src), "\n")
 

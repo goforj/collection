@@ -90,7 +90,7 @@ fmt.Println(len(regionsByPrefix))
 
 ### Performance Benchmarks
 
-Equivalent operations are benchmarked against `lo`, with ownership and API differences labeled separately. The summary uses `collection.New`, which borrows its input; the [full results](./BENCHMARKS.md) also include explicit `Clone` costs.
+Equivalent operations are benchmarked against `lo`, with ownership and API differences labeled separately. Both the summary and [full results](./BENCHMARKS.md) use `collection.New`, which borrows its input.
 
 <details>
 <summary>Benchmark tables and methodology</summary>
@@ -135,11 +135,11 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Take** | below floor | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **2.5x faster** | ≈ | ≈ |
-| **ZipWith** | **3.1x faster** | ≈ | ≈ |
+| **Zip** | inconclusive | ≈ | ≈ |
+| **ZipWith** | **2.9x faster** | ≈ | ≈ |
 | **UniqueComparable** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
-| **Union** | ≈ | ≈ | ≈ |
+| **Union** | inconclusive | ≈ | ≈ |
 | **Intersect** | ≈ | ≈ | ≈ |
 | **Difference** | different work | API trade-off | API trade-off |
 | **GroupBy** | ≈ | ≈ | ≈ |
@@ -157,8 +157,8 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | inconclusive | ≈ | ≈ |
-| **Reverse** | ≈ | ≈ | ≈ |
+| **Retain** | 1.6x slower | ≈ | ≈ |
+| **Reverse** | **1.1x faster** | ≈ | ≈ |
 | **Shuffle** | **3.7x faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->

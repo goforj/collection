@@ -2285,7 +2285,7 @@ const (
 // formatRatio compares lo timing with collection timing.
 func formatRatio(lo, col float64) string {
 	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
-		return "≈"
+		return "below floor"
 	}
 	if col == 0 {
 		return "∞"
@@ -2322,7 +2322,7 @@ func formatBenchmarkRatio(name string, mode benchMode, lo, col float64, uncertai
 // formatSpeed renders the relative speed between lo and collection.
 func formatSpeed(lo, col float64, allowBold bool, scalarOnly bool) string {
 	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
-		return "≈"
+		return "below floor"
 	}
 	if col == 0 {
 		return "∞"
@@ -2367,7 +2367,7 @@ func formatBenchmarkSpeed(name string, mode benchMode, lo, col float64, uncertai
 // formatUncertainTiming distinguishes equivalent medians from inconsistent samples.
 func formatUncertainTiming(lo, col, epsilon float64) string {
 	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
-		return "≈"
+		return "below floor"
 	}
 	if col == 0 {
 		return "inconclusive"
@@ -2528,7 +2528,7 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	path := filepath.Join(root, "BENCHMARKS.md")
 	var buf bytes.Buffer
 	buf.WriteString("# Benchmarks\n\n")
-	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d paired samples at %s each, alternating implementation order. Timing differences are shown only when every pair falls outside the ±%.0f%% raw equivalence band in the same direction. The condensed read-only scalar table uses a ±%.0f%% band. Both tables label timings `≈` when both implementations are below %.0fns, where ratios amplify sub-nanosecond noise. Medians outside the applicable band without consistent paired evidence are labeled `inconclusive`. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration, equivalentEpsilon*100, scalarOnlyEpsilon*100, benchRatioNoiseNs)
+	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d paired samples at %s each, alternating implementation order. Timing differences are shown only when every pair falls outside the ±%.0f%% raw equivalence band in the same direction. The condensed read-only scalar table uses a ±%.0f%% band. Both tables label results `below floor` when both timings are below %.0fns rather than drawing a relative conclusion from sub-nanosecond deltas. Medians outside the applicable band without consistent paired evidence are labeled `inconclusive`. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration, equivalentEpsilon*100, scalarOnlyEpsilon*100, benchRatioNoiseNs)
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
 	buf.WriteString("FirstWhere compiles to the same scan loop in both implementations. Its ratio is labeled `same loop` because binary placement can dominate the timing of such a small function in this in-process harness.\n\n")
 	buf.WriteString(rawBorrowTable)

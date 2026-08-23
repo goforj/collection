@@ -106,8 +106,8 @@ Full raw tables: see `BENCHMARKS.md`.
 | **All** | ≈ | ≈ | ≈ |
 | **Any** | ≈ | ≈ | ≈ |
 | **None** | ≈ | ≈ | ≈ |
-| **First** | ≈ | ≈ | ≈ |
-| **Last** | ≈ | ≈ | ≈ |
+| **First** | below floor | ≈ | ≈ |
+| **Last** | below floor | ≈ | ≈ |
 | **FirstWhere** | same loop | ≈ | ≈ |
 | **IndexWhere** | ≈ | ≈ | ≈ |
 | **Contains** | ≈ | ≈ | ≈ |
@@ -124,7 +124,7 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Chunk** | view trade-off | ownership trade-off | ownership trade-off |
 | **Filter** | ≈ | ≈ | ≈ |
 | **Map** | ≈ | ≈ | ≈ |
-| **Take** | ≈ | ≈ | ≈ |
+| **Take** | below floor | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
 | **Zip** | **faster** | ≈ | ≈ |
@@ -149,7 +149,7 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | inconclusive | ≈ | ≈ |
+| **Retain** | ≈ | ≈ | ≈ |
 | **Reverse** | ≈ | ≈ | ≈ |
 | **Shuffle** | **faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
@@ -157,7 +157,8 @@ Full raw tables: see `BENCHMARKS.md`.
 
 ## How to read the benchmarks
 
-- In **Speed/Timing**, **≈** means the median is inside ±10% (±15% in the condensed read-only scalar table), or both timings are below the 50 ns reporting floor
+- In **Speed/Timing**, **≈** means the median is inside ±10% (±15% in the condensed read-only scalar table)
+- **below floor** means both timings are under 50 ns, so no relative conclusion is drawn
 - **inconclusive** means the median is outside that band but paired samples did not consistently establish the difference
 - **faster** and **slower** are conservative direction labels; exact ns/op values are machine- and build-specific
 - In **Memory/Allocs**, **≈** means both implementations produced the same measured result

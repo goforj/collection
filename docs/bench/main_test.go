@@ -44,6 +44,13 @@ func TestFormatRatioUsesConservativeCategories(t *testing.T) {
 	}
 }
 
+// TestFormatRatioDoesNotHideSubFloorDifferences avoids claiming equivalence below the reporting floor.
+func TestFormatRatioDoesNotHideSubFloorDifferences(t *testing.T) {
+	if got := formatRatio(49, 1); got != "below floor" {
+		t.Fatalf("formatRatio(sub-floor difference) = %q", got)
+	}
+}
+
 // TestScalarSummaryUsesDocumentedTolerance verifies the condensed scalar table's wider noise band.
 func TestScalarSummaryUsesDocumentedTolerance(t *testing.T) {
 	raw := formatBenchmarkRatio("All", benchBorrow, 112, 100, false)

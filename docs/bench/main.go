@@ -2288,7 +2288,7 @@ func formatRatio(lo, col float64) string {
 		return "below floor"
 	}
 	if col == 0 {
-		return "∞"
+		return "**∞x faster**"
 	}
 
 	ratio := lo / col
@@ -2328,7 +2328,10 @@ func formatSpeed(lo, col float64, allowBold bool, scalarOnly bool) string {
 		return "below floor"
 	}
 	if col == 0 {
-		return "∞"
+		if allowBold {
+			return "**∞x faster**"
+		}
+		return "∞x faster"
 	}
 
 	ratio := lo / col
@@ -2410,7 +2413,7 @@ func isDifferentWorkBenchmark(name string) bool {
 // formatRatioBytes compares lo allocation size with collection allocation size.
 func formatRatioBytes(lo, col int64) string {
 	switch {
-	case lo == 0 && col == 0:
+	case lo == col:
 		return "≈"
 	case col == 0:
 		return "**∞x less**"
@@ -2419,10 +2422,6 @@ func formatRatioBytes(lo, col int64) string {
 	}
 
 	ratio := float64(lo) / float64(col)
-	if ratio >= 0.90 && ratio <= 1.10 {
-		return "≈"
-	}
-
 	out := fmt.Sprintf("%.2fx", ratio)
 	if ratio > 1 {
 		return fmt.Sprintf("**%s less**", out)

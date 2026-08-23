@@ -45,6 +45,15 @@ func TestFormatRatioUsesConservativeCategories(t *testing.T) {
 	if got := formatRatio(0, 100); got != "∞x slower" {
 		t.Fatalf("formatRatio(zero baseline) = %q", got)
 	}
+	if got := formatRatio(100, 0); got != "**∞x faster**" {
+		t.Fatalf("formatRatio(zero collection) = %q", got)
+	}
+	if got := formatSpeed(100, 0, false, false); got != "∞x faster" {
+		t.Fatalf("formatSpeed(zero collection) = %q", got)
+	}
+	if got := formatSpeed(100, 0, true, false); got != "**∞x faster**" {
+		t.Fatalf("formatSpeed(zero collection, bold) = %q", got)
+	}
 }
 
 // TestFormatRatioDoesNotHideSubFloorDifferences avoids claiming equivalence below the reporting floor.
@@ -73,5 +82,8 @@ func TestFormatRatioBytesUsesCorrectDirection(t *testing.T) {
 	}
 	if got := formatRatioBytes(200, 100); got != "**2.00x less**" {
 		t.Fatalf("formatRatioBytes(less) = %q", got)
+	}
+	if got := formatRatioBytes(100, 105); got != "1.05x more" {
+		t.Fatalf("formatRatioBytes(nearby values) = %q", got)
 	}
 }

@@ -123,12 +123,12 @@ Full raw tables: see `BENCHMARKS.md`.
 |---:|:-----------:|:------:|:------:|
 | **Chunk** | view trade-off | ownership trade-off | ownership trade-off |
 | **Filter** | ≈ | ≈ | ≈ |
-| **Map** | inconclusive | ≈ | ≈ |
+| **Map** | ≈ | ≈ | ≈ |
 | **Take** | below floor | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **2.2x faster** | ≈ | ≈ |
-| **ZipWith** | **3.0x faster** | ≈ | ≈ |
+| **Zip** | **2.3x faster** | ≈ | ≈ |
+| **ZipWith** | **2.8x faster** | ≈ | ≈ |
 | **Unique** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
 | **Union** | ≈ | ≈ | ≈ |
@@ -143,14 +143,14 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | inconclusive | ≈ | ≈ |
+| **Pipeline F→M→T→R** | ≈ | ≈ | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
 | **Retain** | ≈ | ≈ | ≈ |
-| **Reverse** | **1.1x faster** | ≈ | ≈ |
+| **Reverse** | inconclusive | ≈ | ≈ |
 | **Shuffle** | **3.7x faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->

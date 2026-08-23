@@ -13,8 +13,7 @@ func main() {
 	// should not be used in production control flow.
 
 	// Example: strings
-	c := collection.New([]string{"a", "b"})
-	c.Dd()
+	collection.New([]string{"a", "b"}).Dd()
 	// #[]string [
 	//   0 => "a" #string
 	//   1 => "b" #string

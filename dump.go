@@ -18,8 +18,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 //
 // Example: integers
 //
-//	c := collection.New([]int{1, 2, 3})
-//	c.Dump()
+//	collection.New([]int{1, 2, 3}).Dump()
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -52,8 +51,7 @@ func (c Slice[T]) Dump() Slice[T] {
 //
 // Example: strings
 //
-//	c := collection.New([]string{"a", "b"})
-//	c.Dd()
+//	collection.New([]string{"a", "b"}).Dd()
 //	// #[]string [
 //	//   0 => "a" #string
 //	//   1 => "b" #string
@@ -73,9 +71,7 @@ func (c Slice[T]) Dd() {
 //
 // Example: integers
 //
-//	c := collection.New([]int{10, 20})
-//	s := c.DumpStr()
-//	fmt.Println(s)
+//	fmt.Println(collection.New([]int{10, 20}).DumpStr())
 //	// #[]int [
 //	//   0 => 10 #int
 //	//   1 => 20 #int

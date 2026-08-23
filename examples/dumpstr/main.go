@@ -16,9 +16,7 @@ func main() {
 	// Useful for logging, snapshot testing, and non-interactive debugging.
 
 	// Example: integers
-	c := collection.New([]int{10, 20})
-	s := c.DumpStr()
-	fmt.Println(s)
+	fmt.Println(collection.New([]int{10, 20}).DumpStr())
 	// #[]int [
 	//   0 => 10 #int
 	//   1 => 20 #int

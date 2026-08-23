@@ -766,8 +766,7 @@ Like Laravel's dd(), this is intended for debugging and
 should not be used in production control flow.
 
 ```go
-c := collection.New([]string{"a", "b"})
-c.Dd()
+collection.New([]string{"a", "b"}).Dd()
 // #[]string [
 //   0 => "a" #string
 //   1 => "b" #string
@@ -795,9 +794,7 @@ without printing or exiting.
 Useful for logging, snapshot testing, and non-interactive debugging.
 
 ```go
-c := collection.New([]int{10, 20})
-s := c.DumpStr()
-fmt.Println(s)
+fmt.Println(collection.New([]int{10, 20}).DumpStr())
 // #[]int [
 //   0 => 10 #int
 //   1 => 20 #int
@@ -812,8 +809,7 @@ This is a no-op on the collection itself and never panics.
 _Example: integers_
 
 ```go
-c := collection.New([]int{1, 2, 3})
-c.Dump()
+collection.New([]int{1, 2, 3}).Dump()
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -970,8 +966,7 @@ After returns all items after the first element for which pred returns true.
 If no element matches, an empty collection is returned.
 
 ```go
-c := collection.New([]int{1, 2, 3, 4, 5})
-c.After(func(v int) bool { return v == 3 }).Dump()
+collection.New([]int{1, 2, 3, 4, 5}).After(func(v int) bool { return v == 3 }).Dump()
 // #[]int [
 //  0 => 4 #int
 //  1 => 5 #int

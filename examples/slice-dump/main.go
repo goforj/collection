@@ -12,8 +12,7 @@ func main() {
 	// This is a no-op on the collection itself and never panics.
 
 	// Example: integers
-	c := collection.New([]int{1, 2, 3})
-	c.Dump()
+	collection.New([]int{1, 2, 3}).Dump()
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int

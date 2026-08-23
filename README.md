@@ -81,6 +81,11 @@ namesByLength := collection.New(users).
 
 ### Performance Benchmarks
 
+Equivalent operations are benchmarked against `lo`, with ownership and API differences labeled separately. The summary uses `collection.New`, which borrows its input; the [full results](./BENCHMARKS.md) also include explicit `Clone` costs.
+
+<details>
+<summary>Benchmark tables and methodology</summary>
+
 `lo` is a fantastic library and a major inspiration for this project. It is battle-tested, idiomatic, and often the right choice when you want small, standalone helpers that operate on slices in isolation.
 
 `collection` takes a different approach.
@@ -153,7 +158,7 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->
 
-## How to read the benchmarks
+#### How to read the benchmarks
 
 - In **Speed/Timing**, **≈** means the median is inside ±10% (±15% in the condensed read-only scalar table)
 - **below floor** means both timings are under 50 ns, so no relative conclusion is drawn
@@ -168,6 +173,7 @@ Full raw tables: see `BENCHMARKS.md`.
 If you prefer immutable, one-off helpers - `lo` is outstanding.
 If you write **expressive, chained data pipelines** and care about hot-path performance - `collection` is built for that job.
 
+</details>
 
 ## Allocation and mutation are explicit
 

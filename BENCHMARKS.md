@@ -1,77 +1,81 @@
 # Benchmarks
 
-Raw results for `collection.New` (borrowed) vs `lo`.
+Methodology: go1.27.0 on linux/arm64, GOMAXPROCS=1; median of 5 samples at 100ms each. Mutable-input restoration is outside timed regions.
+
+Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.
 
 | Op | ns/op (vs lo) | × (faster) | bytes/op (vs lo) | × (less memory) | allocs/op (vs lo) |
 |---:|----------------|:--:|------------------|:--:|--------------------|
-| **All** | 269ns / 267ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Any** | 269ns / 270ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Chunk** | 970ns / 3.5µs | **3.62x** | 1.3KB / 9.3KB | **7.25x less** | 1 / 51 |
-| **Contains** | 265ns / 263ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **CountBy** | 8.1µs / 8.2µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
-| **CountByValue** | 8.0µs / 8.0µs | ≈ | 9.4KB / 9.4KB | ≈ | 11 / 11 |
-| **Difference** | 30.3µs / 58.1µs | **1.92x** | 82.1KB / 108.8KB | **1.33x less** | 11 / 40 |
-| **Each** | 267ns / 265ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Filter** | 615ns / 2.3µs | **3.70x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **First** | <1ns / <1ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **FirstWhere** | 263ns / 264ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **GroupBy** | 11.7µs / 11.3µs | ≈ | 21.0KB / 21.0KB | ≈ | 83 / 83 |
-| **IndexWhere** | 271ns / 268ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Intersect** | 13.0µs / 12.2µs | ≈ | 11.4KB / 11.3KB | ≈ | 19 / 16 |
-| **Last** | <1ns / <1ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Map** | 348ns / 1.8µs | **5.17x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Max** | 262ns / 256ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Min** | 261ns / 262ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **None** | 270ns / 267ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Pipeline F→M→T→R** | 540ns / 3.1µs | **5.66x** | 0B / 12.3KB | **∞x less** | 0 / 2 |
-| **Reduce (sum)** | 264ns / 265ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Reverse** | 210ns / 227ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Shuffle** | 3.8µs / 5.4µs | **1.43x** | 0B / 0B | ≈ | 0 / 0 |
-| **Skip** | <1ns / 1.6µs | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **SkipLast** | <1ns / 1.4µs | ∞ | 0B / 8.2KB | **∞x less** | 0 / 1 |
-| **Sum** | 262ns / 262ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **Take** | 1ns / <1ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
-| **ToMap** | 11.5µs / 12.2µs | ≈ | 36.9KB / 37.0KB | ≈ | 5 / 6 |
-| **Union** | 27.3µs / 29.6µs | ≈ | 90.3KB / 90.3KB | ≈ | 10 / 10 |
-| **Unique** | 11.8µs / 11.7µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
-| **UniqueBy** | 11.8µs / 11.8µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
-| **Zip** | 2.0µs / 4.7µs | **2.30x** | 16.4KB / 16.4KB | ≈ | 1 / 1 |
-| **ZipWith** | 1.4µs / 4.0µs | **2.81x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **All** | 265.6ns / 265.7ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Any** | 267.0ns / 266.3ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Chunk** | 202.3ns / 1.5µs | view trade-off | 1.3KB / 9.3KB | ownership trade-off | ownership trade-off |
+| **Contains** | 266.9ns / 266.7ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **CountBy** | 22.4µs / 22.3µs | ≈ | 9.5KB / 9.5KB | ≈ | 13 / 13 |
+| **CountByValue** | 22.3µs / 22.5µs | ≈ | 9.5KB / 9.5KB | ≈ | 13 / 13 |
+| **Difference** | different work | API trade-off | different work | API trade-off | API trade-off |
+| **Each** | 265.0ns / 520.5ns | **1.96x** | 0B / 0B | ≈ | 0 / 0 |
+| **Filter** | 513.4ns / 1.2µs | **2.35x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **First** | 1.8ns / 1.8ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **FirstWhere** | 267.4ns / 267.9ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **GroupBy** | 9.1µs / 9.1µs | ≈ | 21.4KB / 21.4KB | ≈ | 85 / 85 |
+| **IndexWhere** | 267.8ns / 267.4ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Intersect** | 12.2µs / 12.1µs | ≈ | 11.3KB / 11.3KB | ≈ | 16 / 16 |
+| **Last** | 1.8ns / 1.8ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Map** | 276.0ns / 707.1ns | **2.56x** | 0B / 8.2KB | **∞x less** | 0 / 1 |
+| **Max** | 511.5ns / 520.9ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Min** | 511.6ns / 520.9ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **None** | 266.9ns / 267.0ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Pipeline F→M→T→R** | 490.2ns / 1.4µs | **2.78x** | 0B / 12.3KB | **∞x less** | 0 / 2 |
+| **Reduce (sum)** | 265.0ns / 265.0ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Reverse** | 152.2ns / 176.6ns | **1.16x** | 0B / 0B | ≈ | 0 / 0 |
+| **Shuffle** | 3.6µs / 5.3µs | **1.48x** | 0B / 0B | ≈ | 0 / 0 |
+| **Skip** | 1.8ns / 541.0ns | view trade-off | 0B / 8.2KB | ownership trade-off | ownership trade-off |
+| **SkipLast** | 1.8ns / 544.8ns | view trade-off | 0B / 8.2KB | ownership trade-off | ownership trade-off |
+| **Sum** | 265.4ns / 265.3ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **Take** | 2.0ns / 1.9ns | ≈ | 0B / 0B | ≈ | 0 / 0 |
+| **ToMap** | 15.3µs / 17.8µs | **1.16x** | 37.0KB / 37.0KB | ≈ | 6 / 6 |
+| **Union** | 15.8µs / 18.0µs | **1.14x** | 90.3KB / 90.3KB | ≈ | 10 / 10 |
+| **Unique** | 5.9µs / 6.1µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
+| **UniqueBy** | 6.1µs / 6.0µs | ≈ | 45.1KB / 45.1KB | ≈ | 6 / 6 |
+| **Zip** | 916.5ns / 3.3µs | **3.63x** | 16.4KB / 16.4KB | ≈ | 1 / 1 |
+| **ZipWith** | 710.1ns / 3.5µs | **4.96x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
 
-Raw results for `collection.New().Clone()` (explicit copy) vs `lo`.
+Chunk, Skip, and SkipLast return collection views while lo returns copied slices. Their rows describe ownership and allocation trade-offs, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.
+
+Raw results for `collection.New().Clone()` (explicit copy) vs `lo`. This section includes collection's explicit input-copy cost.
 
 | Op | ns/op (vs lo) | × (faster) | bytes/op (vs lo) | × (less memory) | allocs/op (vs lo) |
 |---:|----------------|:--:|------------------|:--:|--------------------|
-| **All** | 1.5µs / 262ns | 0.17x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Any** | 1.5µs / 263ns | 0.17x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Chunk** | 2.0µs / 3.3µs | **1.69x** | 9.5KB / 9.3KB | ≈ | 2 / 51 |
-| **Contains** | 1.5µs / 263ns | 0.18x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **CountBy** | 9.9µs / 8.2µs | 0.82x | 17.5KB / 9.4KB | 0.53x more | 12 / 11 |
-| **CountByValue** | 9.6µs / 8.0µs | 0.83x | 17.5KB / 9.4KB | 0.53x more | 12 / 11 |
-| **Difference** | 32.3µs / 57.0µs | **1.77x** | 98.5KB / 108.8KB | **1.10x less** | 13 / 40 |
-| **Each** | 1.5µs / 257ns | 0.17x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Filter** | 1.8µs / 1.9µs | ≈ | 8.2KB / 8.2KB | ≈ | 1 / 1 |
-| **First** | 1.3µs / <1ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **FirstWhere** | 1.5µs / 262ns | 0.17x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **GroupBy** | 13.0µs / 11.8µs | ≈ | 29.2KB / 21.0KB | 0.72x more | 84 / 83 |
-| **IndexWhere** | 1.5µs / 262ns | 0.18x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Intersect** | 15.5µs / 12.5µs | 0.81x | 27.8KB / 11.3KB | 0.41x more | 21 / 16 |
-| **Last** | 1.6µs / <1ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Map** | 1.6µs / 1.5µs | 0.90x | 8.2KB / 8.2KB | ≈ | 1 / 1 |
-| **Max** | 1.6µs / 255ns | 0.16x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Min** | 1.6µs / 254ns | 0.16x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **None** | 1.5µs / 261ns | 0.18x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Pipeline F→M→T→R** | 2.0µs / 2.4µs | **1.17x** | 8.2KB / 12.3KB | **1.50x less** | 1 / 2 |
-| **Reduce (sum)** | 1.5µs / 255ns | 0.17x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Reverse** | 1.4µs / 226ns | 0.16x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Shuffle** | 5.0µs / 5.4µs | ≈ | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Skip** | 1.4µs / 1.4µs | ≈ | 8.2KB / 8.2KB | ≈ | 1 / 1 |
-| **SkipLast** | 1.3µs / 1.3µs | ≈ | 8.2KB / 8.2KB | ≈ | 1 / 1 |
-| **Sum** | 1.5µs / 253ns | 0.17x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **Take** | 1.4µs / <1ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
-| **ToMap** | 13.2µs / 11.5µs | 0.87x | 45.1KB / 37.0KB | 0.82x more | 6 / 6 |
-| **Union** | 29.8µs / 30.7µs | ≈ | 106.7KB / 90.3KB | 0.85x more | 12 / 10 |
-| **Unique** | 12.7µs / 12.1µs | ≈ | 53.3KB / 45.1KB | 0.85x more | 7 / 6 |
-| **UniqueBy** | 12.9µs / 11.8µs | ≈ | 53.3KB / 45.1KB | 0.85x more | 7 / 6 |
-| **Zip** | 4.7µs / 4.6µs | ≈ | 32.8KB / 16.4KB | 0.50x more | 3 / 1 |
-| **ZipWith** | 4.0µs / 4.1µs | ≈ | 24.6KB / 8.2KB | 0.33x more | 3 / 1 |
+| **All** | 786.7ns / 266.3ns | 0.34x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Any** | 786.5ns / 267.3ns | 0.34x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Chunk** | 688.3ns / 1.5µs | **2.25x** | 9.5KB / 9.3KB | ≈ | 2 / 51 |
+| **Contains** | 788.5ns / 266.8ns | 0.34x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **CountBy** | 23.1µs / 22.4µs | ≈ | 17.7KB / 9.5KB | 0.54x more | 14 / 13 |
+| **CountByValue** | 23.0µs / 22.4µs | ≈ | 17.7KB / 9.5KB | 0.54x more | 14 / 13 |
+| **Difference** | different work | API trade-off | different work | API trade-off | API trade-off |
+| **Each** | 805.9ns / 521.7ns | 0.65x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Filter** | 1.1µs / 1.2µs | **1.15x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **First** | 542.8ns / 1.8ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **FirstWhere** | 785.2ns / 267.4ns | 0.34x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **GroupBy** | 9.7µs / 9.1µs | ≈ | 29.5KB / 21.4KB | 0.72x more | 86 / 85 |
+| **IndexWhere** | 786.4ns / 268.7ns | 0.34x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Intersect** | 13.4µs / 12.0µs | 0.90x | 27.7KB / 11.3KB | 0.41x more | 18 / 16 |
+| **Last** | 542.5ns / 1.9ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Map** | 794.9ns / 709.2ns | 0.89x | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **Max** | 986.1ns / 519.8ns | 0.53x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Min** | 984.6ns / 520.3ns | 0.53x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **None** | 788.8ns / 266.3ns | 0.34x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Pipeline F→M→T→R** | 1.3µs / 1.4µs | ≈ | 8.2KB / 12.3KB | **1.50x less** | 1 / 2 |
+| **Reduce (sum)** | 803.0ns / 265.4ns | 0.33x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Reverse** | 672.4ns / 177.4ns | 0.26x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Shuffle** | 4.3µs / 5.3µs | **1.25x** | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Skip** | 478.2ns / 540.8ns | **1.13x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **SkipLast** | 479.5ns / 544.0ns | **1.13x** | 8.2KB / 8.2KB | ≈ | 1 / 1 |
+| **Sum** | 746.5ns / 263.9ns | 0.35x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **Take** | 480.0ns / 1.9ns | 0.00x | 8.2KB / 0B | ∞x more | 1 / 0 |
+| **ToMap** | 15.9µs / 17.6µs | **1.11x** | 45.2KB / 37.0KB | 0.82x more | 7 / 6 |
+| **Union** | 17.6µs / 18.3µs | ≈ | 106.7KB / 90.3KB | 0.85x more | 12 / 10 |
+| **Unique** | 6.7µs / 6.1µs | ≈ | 53.3KB / 45.1KB | 0.85x more | 7 / 6 |
+| **UniqueBy** | 7.0µs / 6.1µs | 0.87x | 53.3KB / 45.1KB | 0.85x more | 7 / 6 |
+| **Zip** | 2.0µs / 3.3µs | **1.67x** | 32.8KB / 16.4KB | 0.50x more | 3 / 1 |
+| **ZipWith** | 1.8µs / 3.5µs | **1.95x** | 24.6KB / 8.2KB | 0.33x more | 3 / 1 |

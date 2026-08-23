@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 package main
 
 import (
@@ -10,6 +7,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -474,28 +472,41 @@ func replaceAPISection(readme, api string) (string, error) {
 	return out.String(), nil
 }
 
+// countTests runs the test suite and counts its structured test events.
 func countTests(root string) (int, error) {
 	cmd := exec.Command("go", "test", "./...", "-run", "Test", "-count=1", "-json")
 	cmd.Dir = root
 
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &out
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
 
-	if err := cmd.Run(); err != nil {
-		return 0, fmt.Errorf("go test -json: %w\n%s", err, out.String())
+	runErr := cmd.Run()
+	return countTestOutput(stdout.Bytes(), stderr.Bytes(), runErr)
+}
+
+// countTestOutput parses only the JSON stream written to stdout because the Go
+// command may emit dependency download diagnostics to stderr on a fresh cache.
+func countTestOutput(stdout, stderr []byte, runErr error) (int, error) {
+	if runErr != nil {
+		return 0, fmt.Errorf("go test -json: %w\nstdout:\n%s\nstderr:\n%s", runErr, stdout, stderr)
 	}
 
 	var total int
-	dec := json.NewDecoder(bytes.NewReader(out.Bytes()))
+	dec := json.NewDecoder(bytes.NewReader(stdout))
 
-	for dec.More() {
+	for {
 		var event struct {
 			Action string `json:"Action"`
 			Test   string `json:"Test"`
 		}
-		if err := dec.Decode(&event); err != nil {
-			return 0, err
+		err := dec.Decode(&event)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return 0, fmt.Errorf("decode go test JSON: %w\nstdout:\n%s\nstderr:\n%s", err, stdout, stderr)
 		}
 		if event.Action == "run" && event.Test != "" {
 			total++

@@ -58,7 +58,11 @@ jobs:
 
       - name: Check docs module
         working-directory: docs
-        run: go list -m
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+          go vet ./...
+          go test ./...
 
       - name: Check benchmark module
         working-directory: docs/bench

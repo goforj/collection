@@ -65,3 +65,13 @@ func TestScalarSummaryUsesDocumentedTolerance(t *testing.T) {
 		t.Fatalf("scalar summary classification = %q", summary)
 	}
 }
+
+// TestFormatRatioBytesUsesCorrectDirection reports collection memory relative to lo.
+func TestFormatRatioBytesUsesCorrectDirection(t *testing.T) {
+	if got := formatRatioBytes(100, 200); got != "2.00x more" {
+		t.Fatalf("formatRatioBytes(more) = %q", got)
+	}
+	if got := formatRatioBytes(200, 100); got != "**2.00x less**" {
+		t.Fatalf("formatRatioBytes(less) = %q", got)
+	}
+}

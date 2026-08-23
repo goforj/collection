@@ -2427,7 +2427,7 @@ func formatRatioBytes(lo, col int64) string {
 	if ratio > 1 {
 		return fmt.Sprintf("**%s less**", out)
 	}
-	return fmt.Sprintf("%s more", out)
+	return fmt.Sprintf("%.2fx more", 1/ratio)
 }
 
 // formatInt renders an integer with thousands separators.

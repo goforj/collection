@@ -34,8 +34,8 @@ package collection
 //	all := empty.All(func(v int) bool { return v > 0 })
 //	collection.Dump(all)
 //	// true #bool
-func (c *Collection[T]) All(fn func(T) bool) bool {
-	for _, v := range c.items {
+func (c Slice[T]) All(fn func(T) bool) bool {
+	for _, v := range c {
 		if !fn(v) {
 			return false
 		}

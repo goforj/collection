@@ -52,6 +52,6 @@ package collection
 //	collection.Dump(maxVal, ok)
 //	// 0 #int
 //	// false #bool
-func MaxBy[T any, K Number | ~string](c *Collection[T], keyFn func(T) K) (T, bool) {
+func MaxBy[T any, K Number | ~string](c Slice[T], keyFn func(T) K) (T, bool) {
 	return c.MaxBy(keyFn)
 }

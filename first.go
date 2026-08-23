@@ -52,9 +52,9 @@ package collection
 //	collection.Dump(v3, ok4)
 //	// 0 #int
 //	// false #bool
-func (c *Collection[T]) First() (value T, ok bool) {
-	if len(c.items) == 0 {
+func (c Slice[T]) First() (value T, ok bool) {
+	if len(c) == 0 {
 		return value, false
 	}
-	return c.items[0], true
+	return c[0], true
 }

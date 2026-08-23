@@ -1,7 +1,7 @@
 package collection
 
-// Max returns the largest numeric item in the collection.
-// The second return value is false if the collection is empty.
+// Max returns the largest item in a numeric slice.
+// The second return value is false if the slice is empty.
 // @group Aggregation
 // @behavior readonly
 // @chainable false
@@ -9,39 +9,39 @@ package collection
 //
 // Example: integers
 //
-//	c := collection.NewNumeric([]int{3, 1, 2})
+//	values := []int{3, 1, 2}
 //
-//	max1, ok1 := c.Max()
+//	max1, ok1 := collection.Max(values)
 //	collection.Dump(max1, ok1)
 //	// 3 #int
 //	// true #bool
 //
 // Example: floats
 //
-//	c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
+//	values2 := []float64{1.5, 9.2, 4.4}
 //
-//	max2, ok2 := c2.Max()
+//	max2, ok2 := collection.Max(values2)
 //	collection.Dump(max2, ok2)
 //	// 9.200000 #float64
 //	// true #bool
 //
-// Example: empty numeric collection
+// Example: empty numeric slice
 //
-//	c3 := collection.NewNumeric([]int{})
+//	empty := []int{}
 //
-//	max3, ok3 := c3.Max()
+//	max3, ok3 := collection.Max(empty)
 //	collection.Dump(max3, ok3)
 //	// 0 #int
 //	// false #bool
-func (c *NumericCollection[T]) Max() (T, bool) {
+func Max[S ~[]T, T Number](s S) (T, bool) {
 	var zero T
 
-	if len(c.items) == 0 {
+	if len(s) == 0 {
 		return zero, false
 	}
 
-	val := c.items[0]
-	for _, v := range c.items[1:] {
+	val := s[0]
+	for _, v := range s[1:] {
 		if v > val {
 			val = v
 		}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"os/exec"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -61,8 +62,8 @@ func TestDump_ReturnsSameCollection(t *testing.T) {
 	c := New([]int{1, 2, 3})
 	out := c.Dump()
 
-	if out != c {
-		t.Fatalf("Dump() should return the same collection")
+	if !reflect.DeepEqual(out.Items(), c.Items()) {
+		t.Fatalf("Dump() result = %v, want %v", out, c)
 	}
 }
 

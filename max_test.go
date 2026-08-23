@@ -3,8 +3,8 @@ package collection
 import "testing"
 
 func TestMax_Ints(t *testing.T) {
-	c := NewNumeric([]int{3, 1, 2})
-	val, ok := c.Max()
+	c := []int{3, 1, 2}
+	val, ok := Max(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true, got false")
@@ -16,8 +16,8 @@ func TestMax_Ints(t *testing.T) {
 }
 
 func TestMax_Floats(t *testing.T) {
-	c := NewNumeric([]float64{3.5, 1.1, 2.2})
-	val, ok := c.Max()
+	c := []float64{3.5, 1.1, 2.2}
+	val, ok := Max(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true, got false")
@@ -29,8 +29,8 @@ func TestMax_Floats(t *testing.T) {
 }
 
 func TestMax_Empty(t *testing.T) {
-	c := NewNumeric([]uint{})
-	val, ok := c.Max()
+	c := []uint{}
+	val, ok := Max(c)
 
 	if ok {
 		t.Fatalf("expected ok=false for empty collection")
@@ -42,8 +42,8 @@ func TestMax_Empty(t *testing.T) {
 }
 
 func TestMax_SingleValue(t *testing.T) {
-	c := NewNumeric([]int{42})
-	val, ok := c.Max()
+	c := []int{42}
+	val, ok := Max(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true")
@@ -57,8 +57,8 @@ func TestMax_SingleValue(t *testing.T) {
 func TestMax_BranchUpdate(t *testing.T) {
 	// Here the first item is NOT the max.
 	// This forces the branch (v > max) to execute.
-	c := NewNumeric([]int{1, 9, 3})
-	max, ok := c.Max()
+	c := []int{1, 9, 3}
+	max, ok := Max(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true")

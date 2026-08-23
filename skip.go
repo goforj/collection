@@ -18,7 +18,7 @@ package collection
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
 //	out := c.Skip(2)
-//	collection.Dump(out.Items())
+//	collection.Dump(out)
 //	// #[]int [
 //	//   0 => 3 #int
 //	//   1 => 4 #int
@@ -28,7 +28,7 @@ package collection
 // Example: skip none
 //
 //	out2 := c.Skip(0)
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -40,7 +40,7 @@ package collection
 // Example: skip all
 //
 //	out3 := c.Skip(10)
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]int [
 //	// ]
 //
@@ -57,7 +57,7 @@ package collection
 //	})
 //
 //	out4 := users.Skip(1)
-//	collection.Dump(out4.Items())
+//	collection.Dump(out4)
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID => 2 #int
@@ -66,8 +66,8 @@ package collection
 //	//    +ID => 3 #int
 //	//  }
 //	// ]
-func (c *Collection[T]) Skip(n int) *Collection[T] {
-	items := c.items
+func (c Slice[T]) Skip(n int) Slice[T] {
+	items := c
 	l := len(items)
 
 	if n <= 0 {

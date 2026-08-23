@@ -58,7 +58,7 @@ package collection
 //	//  }
 //	// }
 func ToMap[T any, K comparable, V any](
-	c *Collection[T],
+	c Slice[T],
 	keyFn func(T) K,
 	valueFn func(T) V,
 ) map[K]V {

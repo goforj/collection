@@ -23,7 +23,7 @@ package collection
 //	c.Sort(func(a, b collection.Pair[string, int]) bool {
 //		return a.Key < b.Key
 //	})
-//	collection.Dump(c.Items())
+//	collection.Dump(c)
 //
 //	// #[]collection.Pair[string,int] [
 //	//   0 => #collection.Pair[string,int] {
@@ -48,9 +48,9 @@ package collection
 //	}
 //
 //	configs := map[string]Config{
-//		"router-1": {Enabled: true,  Timeout: 30},
+//		"router-1": {Enabled: true, Timeout: 30},
 //		"router-2": {Enabled: false, Timeout: 10},
-//		"router-3": {Enabled: true,  Timeout: 45},
+//		"router-3": {Enabled: true, Timeout: 45},
 //	}
 //
 //	out := collection.
@@ -60,8 +60,7 @@ package collection
 //		}).
 //		Sort(func(a, b collection.Pair[string, Config]) bool {
 //			return a.Key < b.Key
-//		}).
-//		Items()
+//		})
 //
 //	collection.Dump(out)
 //
@@ -98,7 +97,7 @@ package collection
 //	//   alice => 1 #int
 //	//   bob => 2 #int
 //	// }
-func FromMap[K comparable, V any](m map[K]V) *Collection[Pair[K, V]] {
+func FromMap[K comparable, V any](m map[K]V) Slice[Pair[K, V]] {
 	items := make([]Pair[K, V], 0, len(m))
 	for k, v := range m {
 		items = append(items, Pair[K, V]{

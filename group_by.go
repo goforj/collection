@@ -1,7 +1,7 @@
 package collection
 
-// GroupBy partitions the collection into groups keyed by the value
-// returned from keyFn.
+// GroupBy partitions the Slice into directly slice-backed Slice values keyed by
+// the value returned from keyFn. Each group retains Slice's fluent methods.
 // @group Grouping
 // @behavior readonly
 // @chainable false
@@ -26,12 +26,12 @@ package collection
 //		},
 //	)
 //
-//	collection.Dump(groups["even"].Items())
+//	collection.Dump(groups["even"])
 //	// #[]int [
 //	//  0 => 2 #int
 //	//  1 => 4 #int
 //	// ]
-//	collection.Dump(groups["odd"].Items())
+//	collection.Dump(groups["odd"])
 //	// #[]int [
 //	//  0 => 1 #int
 //	//  1 => 3 #int
@@ -40,23 +40,23 @@ package collection
 //
 // Example: grouping structs by field
 //
-//		type User struct {
-//			ID   int
-//			Role string
-//		}
+//	type User struct {
+//		ID   int
+//		Role string
+//	}
 //
-//		users := []User{
-//			{ID: 1, Role: "admin"},
-//			{ID: 2, Role: "user"},
-//			{ID: 3, Role: "admin"},
-//		}
+//	users := []User{
+//		{ID: 1, Role: "admin"},
+//		{ID: 2, Role: "user"},
+//		{ID: 3, Role: "admin"},
+//	}
 //
-//		groups2 := collection.GroupBy(
-//			collection.New(users),
-//			func(u User) string { return u.Role },
-//		)
+//	groups2 := collection.GroupBy(
+//		collection.New(users),
+//		func(u User) string { return u.Role },
+//	)
 //
-//	collection.Dump(groups2["admin"].Items())
+//	collection.Dump(groups2["admin"])
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID   => 1 #int
@@ -67,7 +67,7 @@ package collection
 //	//    +Role => "admin" #string
 //	//  }
 //	// ]
-//	collection.Dump(groups2["user"].Items())
+//	collection.Dump(groups2["user"])
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID   => 2 #int
@@ -75,8 +75,8 @@ package collection
 //	//  }
 //	// ]
 func GroupBy[T any, K comparable](
-	c *Collection[T],
+	c Slice[T],
 	keyFn func(T) K,
-) map[K]*Collection[T] {
+) map[K]Slice[T] {
 	return c.GroupBy(keyFn)
 }

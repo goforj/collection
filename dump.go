@@ -35,7 +35,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 //	//   0 => 2 #int
 //	//   1 => 3 #int
 //	// ]
-func (c *Collection[T]) Dump() *Collection[T] {
+func (c Slice[T]) Dump() Slice[T] {
 	godump.Dump(c.Items())
 	return c
 }
@@ -59,7 +59,7 @@ func (c *Collection[T]) Dump() *Collection[T] {
 //	//   1 => "b" #string
 //	// ]
 //	// Process finished with the exit code 1
-func (c *Collection[T]) Dd() {
+func (c Slice[T]) Dd() {
 	exitFunc(c.Items())
 }
 
@@ -80,7 +80,7 @@ func (c *Collection[T]) Dd() {
 //	//   0 => 10 #int
 //	//   1 => 20 #int
 //	// ]
-func (c *Collection[T]) DumpStr() string {
+func (c Slice[T]) DumpStr() string {
 	return godump.DumpStr(c.Items())
 }
 
@@ -101,7 +101,7 @@ func setDumpWriter(w io.Writer) {
 // Example: integers
 //
 //	c2 := collection.New([]int{1, 2, 3})
-//	collection.Dump(c2.Items())
+//	collection.Dump(c2)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int

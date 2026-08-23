@@ -11,8 +11,8 @@ func TestTake_Positive(t *testing.T) {
 	out := c.Take(3)
 
 	expected := []int{0, 1, 2}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
@@ -22,8 +22,8 @@ func TestTake_Negative(t *testing.T) {
 	out := c.Take(-2)
 
 	expected := []int{4, 5}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
@@ -32,8 +32,8 @@ func TestTake_Zero(t *testing.T) {
 
 	out := c.Take(0)
 
-	if len(out.items) != 0 {
-		t.Fatalf("expected empty result, got %v", out.items)
+	if len(out.Items()) != 0 {
+		t.Fatalf("expected empty result, got %v", out.Items())
 	}
 }
 
@@ -43,8 +43,8 @@ func TestTake_PositiveOvershoot(t *testing.T) {
 	out := c.Take(10)
 
 	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected full slice %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected full slice %v, got %v", expected, out.Items())
 	}
 }
 
@@ -54,8 +54,8 @@ func TestTake_NegativeOvershoot(t *testing.T) {
 	out := c.Take(-10)
 
 	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected full slice %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected full slice %v, got %v", expected, out.Items())
 	}
 }
 
@@ -63,8 +63,8 @@ func TestTake_EmptyCollection(t *testing.T) {
 	c := New([]int{})
 
 	out := c.Take(5)
-	if len(out.items) != 0 {
-		t.Fatalf("expected empty result, got %v", out.items)
+	if len(out.Items()) != 0 {
+		t.Fatalf("expected empty result, got %v", out.Items())
 	}
 }
 
@@ -80,18 +80,18 @@ func TestTake_Structs(t *testing.T) {
 	out := c.Take(-2)
 
 	expected := []User{{3}, {4}}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
 func TestTake_NoMutation(t *testing.T) {
 	c := New([]int{1, 2, 3, 4})
-	orig := append([]int{}, c.items...)
+	orig := append([]int{}, c.Items()...)
 
 	_ = c.Take(2)
 
-	if !reflect.DeepEqual(c.items, orig) {
-		t.Fatalf("Take mutated original collection: %v", c.items)
+	if !reflect.DeepEqual(c.Items(), orig) {
+		t.Fatalf("Take mutated original collection: %v", c.Items())
 	}
 }

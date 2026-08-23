@@ -1,6 +1,6 @@
 package collection
 
-// Pipe passes the entire collection into the given function
+// Pipe passes the entire Slice value into the given function
 // and returns the function's result.
 // @group Transformation
 // @behavior readonly
@@ -12,9 +12,9 @@ package collection
 // Example: integers – computing a sum
 //
 //	c := collection.New([]int{1, 2, 3})
-//	sum := collection.Pipe(c, func(col *collection.Collection[int]) int {
+//	sum := collection.Pipe(c, func(col collection.Slice[int]) int {
 //		total := 0
-//		for _, v := range col.Items() {
+//		for _, v := range col {
 //			total += v
 //		}
 //		return total
@@ -25,9 +25,9 @@ package collection
 // Example: strings – joining values
 //
 //	c2 := collection.New([]string{"a", "b", "c"})
-//	joined := collection.Pipe(c2, func(col *collection.Collection[string]) string {
+//	joined := collection.Pipe(c2, func(col collection.Slice[string]) string {
 //		out := ""
-//		for _, v := range col.Items() {
+//		for _, v := range col {
 //			out += v
 //		}
 //		return out
@@ -47,9 +47,9 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	names := collection.Pipe(users, func(col *collection.Collection[User]) []string {
-//		result := make([]string, 0, len(col.Items()))
-//		for _, u := range col.Items() {
+//	names := collection.Pipe(users, func(col collection.Slice[User]) []string {
+//		result := make([]string, 0, len(col))
+//		for _, u := range col {
 //			result = append(result, u.Name)
 //		}
 //		return result
@@ -60,6 +60,6 @@ package collection
 //	//   0 => "Alice" #string
 //	//   1 => "Bob" #string
 //	// ]
-func Pipe[T any, R any](c *Collection[T], fn func(*Collection[T]) R) R {
+func Pipe[T any, R any](c Slice[T], fn func(Slice[T]) R) R {
 	return c.Pipe(fn)
 }

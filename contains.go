@@ -21,8 +21,8 @@ package collection
 //	hasBanana := collection.Contains(c2, "banana")
 //	collection.Dump(hasBanana)
 //	// true #bool
-func Contains[T comparable](c *Collection[T], value T) bool {
-	for _, v := range c.items {
+func Contains[T comparable](c Slice[T], value T) bool {
+	for _, v := range c {
 		if v == value {
 			return true
 		}

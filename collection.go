@@ -1,9 +1,11 @@
 package collection
 
-// Collection is a strongly-typed, fluent wrapper around a slice of T.
-type Collection[T any] struct {
-	items []T
-}
+// Slice is a named slice with fluent collection operations.
+//
+// Because Slice is slice-backed, Go's built-in len, index, and range operations
+// work directly on it. New borrows the supplied slice; use Clone or ItemsCopy
+// when subsequent mutations must not share its backing array.
+type Slice[T any] []T
 
 // Number is a constraint that permits any numeric type.
 type Number interface {
@@ -13,121 +15,62 @@ type Number interface {
 }
 
 // Pair represents a key/value pair, typically originating from a map.
-//
-// Pair is used to explicitly materialize unordered map data into an
-// ordered collection workflow.
 type Pair[K comparable, V any] struct {
 	Key   K
 	Value V
 }
 
-// New creates a new Collection from the provided slice and borrows it.
+// New creates a Slice from items and borrows their backing array.
 // @group Construction
 // @behavior immutable
 // @chainable true
 // @terminal false
 //
-// The returned Collection is a lightweight, strongly-typed wrapper
-// around the slice, enabling fluent, chainable operations such as
-// filtering, mapping, reducing, sorting, and more.
-func New[T any](items []T) *Collection[T] {
-	return &Collection[T]{items: items}
-}
-
-// NumericCollection is a Collection specialized for numeric types.
-type NumericCollection[T Number] struct {
-	*Collection[T]
-}
-
-// NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
-// @group Construction
-// @behavior immutable
-// @chainable true
-// @terminal false
-func NewNumeric[T Number](items []T) *NumericCollection[T] {
-	return &NumericCollection[T]{
-		Collection: &Collection[T]{items: items},
-	}
-}
-
-// Items returns the backing slice of items.
-// @group Access
-// @behavior readonly
-// @chainable false
-// @terminal true
+// Example: native slice operations
 //
-// Items shares the backing array with the collection. Mutating the returned
-// slice will mutate the collection.
+//	values := collection.New([]int{10, 20, 30})
+//	fmt.Println(len(values))
+//	// 3
+//	fmt.Println(values[1])
+//	// 20
 //
-// Example: integers
-//
-//	c := collection.New([]int{1, 2, 3})
-//	items := c.Items()
-//	collection.Dump(items)
-//	// #[]int [
-//	//   0 => 1 #int
-//	//   1 => 2 #int
-//	//   2 => 3 #int
-//	// ]
-//
-// Example: strings
-//
-//	c2 := collection.New([]string{"apple", "banana"})
-//	items2 := c2.Items()
-//	collection.Dump(items2)
-//	// #[]string [
-//	//   0 => "apple" #string
-//	//   1 => "banana" #string
-//	// ]
-//
-// Example: structs
-//
-//	type User struct {
-//		ID   int
-//		Name string
+//	total := 0
+//	for _, value := range values {
+//		total += value
 //	}
-//
-//	users := collection.New([]User{
-//		{ID: 1, Name: "Alice"},
-//		{ID: 2, Name: "Bob"},
-//	})
-//
-//	out := users.Items()
-//	collection.Dump(out)
-//	// #[]main.User [
-//	//   0 => #main.User {
-//	//     +ID   => 1 #int
-//	//     +Name => "Alice" #string
-//	//   }
-//	//   1 => #main.User {
-//	//     +ID   => 2 #int
-//	//     +Name => "Bob" #string
-//	//   }
-//	// ]
-func (c *Collection[T]) Items() []T {
-	return c.items
+//	fmt.Println(total)
+//	// 60
+func New[T any](items []T) Slice[T] {
+	return Slice[T](items)
 }
 
-// ItemsCopy returns a copy of the collection's items.
+// Items returns the backing slice as []T.
 // @group Access
 // @behavior readonly
 // @chainable false
 // @terminal true
 //
-// ItemsCopy allocates a new slice.
+// Items remains temporarily as a migration aid. New code can pass, index, range
+// over, and call len on Slice directly without converting it first.
 //
-// Example: integers
+// Example: migration comparison
 //
-//	c := collection.New([]int{1, 2, 3})
-//	items := c.ItemsCopy()
-//	collection.Dump(items)
-//	// #[]int [
-//	//   0 => 1 #int
-//	//   1 => 2 #int
-//	//   2 => 3 #int
-//	// ]
-func (c *Collection[T]) ItemsCopy() []T {
-	out := make([]T, len(c.items))
-	copy(out, c.items)
+//	values := collection.New([]int{10, 20, 30})
+//	fmt.Println([]int(values))
+//	// [10 20 30]
+//	fmt.Println(values.Items())
+//	// [10 20 30]
+func (s Slice[T]) Items() []T {
+	return []T(s)
+}
+
+// ItemsCopy returns a copy of the slice's items.
+// @group Access
+// @behavior immutable
+// @chainable false
+// @terminal true
+func (s Slice[T]) ItemsCopy() []T {
+	out := make([]T, len(s))
+	copy(out, s)
 	return out
 }

@@ -15,7 +15,7 @@ package collection
 //
 //	c1 := collection.New([]int{1, 2, 3, 4, 5})
 //	out1 := c1.Before(func(v int) bool { return v >= 3 })
-//	collection.Dump(out1.Items())
+//	collection.Dump(out1)
 //	// #[]int [
 //	//  0 => 1 #int
 //	//  1 => 2 #int
@@ -25,7 +25,7 @@ package collection
 //
 //	c2 := collection.New([]int{10, 20, 30})
 //	out2 := c2.Before(func(v int) bool { return v == 99 })
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]int [
 //	//  0 => 10 #int
 //	//  1 => 20 #int
@@ -47,7 +47,7 @@ package collection
 //	})
 //
 //	out3 := c3.Before(func(u User) bool { return u.Admin })
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +Name  => "Alice" #string
@@ -58,14 +58,14 @@ package collection
 //	//    +Admin => false #bool
 //	//  }
 //	// ]
-func (c *Collection[T]) Before(pred func(T) bool) *Collection[T] {
-	idx := len(c.items)
-	for i, v := range c.items {
+func (c Slice[T]) Before(pred func(T) bool) Slice[T] {
+	idx := len(c)
+	for i, v := range c {
 		if pred(v) {
 			idx = i
 			break
 		}
 	}
 
-	return New(c.items[:idx])
+	return New(c[:idx])
 }

@@ -17,9 +17,9 @@ package collection
 //	//  0 => 4 #int
 //	//  1 => 5 #int
 //	// ]
-func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
+func (c Slice[T]) After(pred func(T) bool) Slice[T] {
 	idx := -1
-	for i, v := range c.items {
+	for i, v := range c {
 		if pred(v) {
 			idx = i
 			break
@@ -27,9 +27,9 @@ func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
 	}
 
 	// If no match found → empty collection
-	if idx == -1 || idx+1 >= len(c.items) {
-		return New(c.items[:0])
+	if idx == -1 || idx+1 >= len(c) {
+		return New(c[:0])
 	}
 
-	return New(c.items[idx+1:])
+	return New(c[idx+1:])
 }

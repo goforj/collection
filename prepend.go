@@ -1,19 +1,18 @@
 package collection
 
-// Prepend adds the given values to the beginning of the collection.
+// Prepend returns an independently backed Slice containing values followed by c.
 // @group Transformation
-// @behavior mutable
+// @behavior immutable
 // @chainable true
 // @terminal false
 //
-// This method mutates the collection in place and returns the same instance.
-// It allocates a new backing slice to insert the values at the front.
+// It allocates exactly enough storage for the result and leaves c unchanged.
 //
 // Example: integers
 //
 //	c := collection.New([]int{3, 4})
-//	c.Prepend(1, 2)
-//	collection.Dump(c.Items())
+//	result := c.Prepend(1, 2)
+//	collection.Dump(result)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -24,8 +23,8 @@ package collection
 // Example: strings
 //
 //	letters := collection.New([]string{"c", "d"})
-//	letters.Prepend("a", "b")
-//	collection.Dump(letters.Items())
+//	result2 := letters.Prepend("a", "b")
+//	collection.Dump(result2)
 //	// #[]string [
 //	//   0 => "a" #string
 //	//   1 => "b" #string
@@ -44,8 +43,8 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	users.Prepend(User{ID: 1, Name: "Alice"})
-//	collection.Dump(users.Items())
+//	result3 := users.Prepend(User{ID: 1, Name: "Alice"})
+//	collection.Dump(result3)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -60,8 +59,8 @@ package collection
 // Example: integers - Prepending into an empty collection
 //
 //	empty := collection.New([]int{})
-//	empty.Prepend(9, 8)
-//	collection.Dump(empty.Items())
+//	result4 := empty.Prepend(9, 8)
+//	collection.Dump(result4)
 //	// #[]int [
 //	//   0 => 9 #int
 //	//   1 => 8 #int
@@ -70,16 +69,15 @@ package collection
 // Example: integers - Prepending no values → no change
 //
 //	c2 := collection.New([]int{1, 2})
-//	c2.Prepend()
-//	collection.Dump(c2.Items())
+//	result5 := c2.Prepend()
+//	collection.Dump(result5)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
 //	// ]
-func (c *Collection[T]) Prepend(values ...T) *Collection[T] {
-	out := make([]T, 0, len(c.items)+len(values))
+func (c Slice[T]) Prepend(values ...T) Slice[T] {
+	out := make([]T, 0, len(c)+len(values))
 	out = append(out, values...)
-	out = append(out, c.items...)
-	c.items = out
-	return c
+	out = append(out, c...)
+	return out
 }

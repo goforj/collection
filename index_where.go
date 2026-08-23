@@ -46,8 +46,8 @@ package collection
 //	collection.Dump(idx3, ok3)
 //	// 1 #int
 //	// true #bool
-func (c *Collection[T]) IndexWhere(fn func(T) bool) (int, bool) {
-	for i, v := range c.items {
+func (c Slice[T]) IndexWhere(fn func(T) bool) (int, bool) {
+	for i, v := range c {
 		if fn(v) {
 			return i, true
 		}

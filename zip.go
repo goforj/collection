@@ -13,7 +13,7 @@ package collection
 //	words := collection.New([]string{"one", "two"})
 //
 //	out := collection.Zip(nums, words)
-//	collection.Dump(out.Items())
+//	collection.Dump(out)
 //	// #[]collection.Tuple[int,string] [
 //	//   0 => #collection.Tuple[int,string] {
 //	//     +First  => 1 #int
@@ -40,7 +40,7 @@ package collection
 //	roles := collection.New([]string{"admin", "user", "extra"})
 //
 //	out2 := collection.Zip(users, roles)
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]collection.Tuple[main.User·1,string] [
 //	//   0 => #collection.Tuple[main.User·1,string] {
 //	//     +First  => #main.User {
@@ -57,15 +57,15 @@ package collection
 //	//     +Second => "user" #string
 //	//   }
 //	// ]
-func Zip[A any, B any](a *Collection[A], b *Collection[B]) *Collection[Tuple[A, B]] {
-	n := len(a.items)
-	if len(b.items) < n {
-		n = len(b.items)
+func Zip[A any, B any](a Slice[A], b Slice[B]) Slice[Tuple[A, B]] {
+	n := len(a)
+	if len(b) < n {
+		n = len(b)
 	}
 
 	out := make([]Tuple[A, B], n)
 	for i := 0; i < n; i++ {
-		out[i] = Tuple[A, B]{First: a.items[i], Second: b.items[i]}
+		out[i] = Tuple[A, B]{First: a[i], Second: b[i]}
 	}
 
 	return New(out)
@@ -87,7 +87,7 @@ func Zip[A any, B any](a *Collection[A], b *Collection[B]) *Collection[Tuple[A, 
 //		return x + y
 //	})
 //
-//	collection.Dump(out.Items())
+//	collection.Dump(out)
 //	// #[]int [
 //	//   0 => 11 #int
 //	//   1 => 22 #int
@@ -102,7 +102,7 @@ func Zip[A any, B any](a *Collection[A], b *Collection[B]) *Collection[Tuple[A, 
 //		return name + ":" + role
 //	})
 //
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]string [
 //	//   0 => "alice:admin" #string
 //	//   1 => "bob:user" #string
@@ -125,20 +125,20 @@ func Zip[A any, B any](a *Collection[A], b *Collection[B]) *Collection[Tuple[A, 
 //		return u.Name + " -> " + r.Title
 //	})
 //
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]string [
 //	//   0 => "Alice -> admin" #string
 //	// ]
-func ZipWith[A any, B any, R any](a *Collection[A], b *Collection[B], fn func(A, B) R) *Collection[R] {
+func ZipWith[A any, B any, R any](a Slice[A], b Slice[B], fn func(A, B) R) Slice[R] {
 	// This compatibility path stays direct because generic-method delegation exceeds the compiler's inline budget for this loop.
-	length := len(a.items)
-	if len(b.items) < length {
-		length = len(b.items)
+	length := len(a)
+	if len(b) < length {
+		length = len(b)
 	}
 
 	out := make([]R, length)
 	for i := 0; i < length; i++ {
-		out[i] = fn(a.items[i], b.items[i])
+		out[i] = fn(a[i], b[i])
 	}
 	return New(out)
 }

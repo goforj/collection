@@ -14,12 +14,12 @@ func TestMap_Ints(t *testing.T) {
 
 	expected := []int{10, 20, 30}
 
-	if !reflect.DeepEqual(mapped.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, mapped.items)
+	if !reflect.DeepEqual(mapped.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, mapped.Items())
 	}
 
-	if mapped != c {
-		t.Fatalf("Map should return the same collection")
+	if !reflect.DeepEqual(mapped.Items(), c.Items()) {
+		t.Fatalf("Map result = %v, want %v", mapped, c)
 	}
 
 	if !reflect.DeepEqual(c.Items(), expected) {
@@ -48,12 +48,12 @@ func TestMap_Structs(t *testing.T) {
 		{2, "Van!"},
 	}
 
-	if !reflect.DeepEqual(mapped.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, mapped.items)
+	if !reflect.DeepEqual(mapped.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, mapped.Items())
 	}
 
-	if mapped != c {
-		t.Fatalf("Map should return the same collection")
+	if !reflect.DeepEqual(mapped.Items(), c.Items()) {
+		t.Fatalf("Map result = %v, want %v", mapped, c)
 	}
 
 	if !reflect.DeepEqual(c.Items(), expected) {
@@ -68,12 +68,12 @@ func TestMap_Empty(t *testing.T) {
 		return v * 2
 	})
 
-	if len(mapped.items) != 0 {
-		t.Fatalf("expected empty slice, got %v", mapped.items)
+	if len(mapped.Items()) != 0 {
+		t.Fatalf("expected empty slice, got %v", mapped.Items())
 	}
 
-	if mapped != c {
-		t.Fatalf("Map should return the same collection")
+	if !reflect.DeepEqual(mapped.Items(), c.Items()) {
+		t.Fatalf("Map result = %v, want %v", mapped, c)
 	}
 }
 

@@ -1,6 +1,6 @@
 package collection
 
-// Mode returns the most frequent numeric value(s) in the collection.
+// Mode returns the most frequent numeric value or values in a slice.
 // If multiple values tie for highest frequency, all are returned
 // in first-seen order.
 // @group Aggregation
@@ -10,8 +10,8 @@ package collection
 //
 // Example: integers – single mode
 //
-//	c := collection.NewNumeric([]int{1, 2, 2, 3})
-//	mode := c.Mode()
+//	values := []int{1, 2, 2, 3}
+//	mode := collection.Mode(values)
 //	collection.Dump(mode)
 //	// #[]int [
 //	//   0 => 2 #int
@@ -19,8 +19,8 @@ package collection
 //
 // Example: integers – tie for mode
 //
-//	c2 := collection.NewNumeric([]int{1, 2, 1, 2})
-//	mode2 := c2.Mode()
+//	values2 := []int{1, 2, 1, 2}
+//	mode2 := collection.Mode(values2)
 //	collection.Dump(mode2)
 //	// #[]int [
 //	//   0 => 1 #int
@@ -29,8 +29,8 @@ package collection
 //
 // Example: floats
 //
-//	c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
-//	mode3 := c3.Mode()
+//	values3 := []float64{1.1, 2.2, 1.1, 3.3}
+//	mode3 := collection.Mode(values3)
 //	collection.Dump(mode3)
 //	// #[]float64 [
 //	//   0 => 1.100000 #float64
@@ -38,12 +38,11 @@ package collection
 //
 // Example: integers - empty collection
 //
-//	empty := collection.NewNumeric([]int{})
-//	mode4 := empty.Mode()
+//	empty := []int{}
+//	mode4 := collection.Mode(empty)
 //	collection.Dump(mode4)
 //	// []int(nil)
-func (c *NumericCollection[T]) Mode() []T {
-	items := c.items
+func Mode[S ~[]T, T Number](items S) []T {
 	n := len(items)
 	if n == 0 {
 		return nil

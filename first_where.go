@@ -27,8 +27,8 @@ package collection
 //	collection.Dump(v, ok)
 //	// 0 #int
 //	// false #bool
-func (c *Collection[T]) FirstWhere(fn func(T) bool) (value T, ok bool) {
-	for _, v := range c.items {
+func (c Slice[T]) FirstWhere(fn func(T) bool) (value T, ok bool) {
+	for _, v := range c {
 		if fn(v) {
 			return v, true
 		}

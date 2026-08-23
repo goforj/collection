@@ -1,6 +1,7 @@
 package collection
 
-// Append returns a new collection with the given values appended.
+// Append returns an independently backed Slice containing c followed by values.
+// It allocates exactly enough storage for the result and leaves c unchanged.
 // @group Transformation
 // @behavior immutable
 // @chainable true
@@ -51,9 +52,9 @@ package collection
 //	//    +Name => "Dave" #string
 //	//  }
 //	// ]
-func (c *Collection[T]) Append(values ...T) *Collection[T] {
-	out := make([]T, 0, len(c.items)+len(values))
-	out = append(out, c.items...)
+func (c Slice[T]) Append(values ...T) Slice[T] {
+	out := make([]T, 0, len(c)+len(values))
+	out = append(out, c...)
 	out = append(out, values...)
 	return New(out)
 }

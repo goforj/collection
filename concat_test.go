@@ -11,8 +11,8 @@ func TestConcat_Slice(t *testing.T) {
 	out := c.Concat([]string{"Jane Doe"})
 
 	expected := []string{"John Doe", "Jane Doe"}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
@@ -24,8 +24,8 @@ func TestConcat_Chained(t *testing.T) {
 		Concat([]string{"Johnny Doe"})
 
 	expected := []string{"John Doe", "Jane Doe", "Johnny Doe"}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
@@ -36,8 +36,8 @@ func TestConcat_WithOtherCollection(t *testing.T) {
 	out := c1.Concat(c2.Items())
 
 	expected := []int{1, 2, 3, 4}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
@@ -47,8 +47,8 @@ func TestConcat_EmptyCurrent(t *testing.T) {
 	out := c.Concat([]int{5, 6})
 
 	expected := []int{5, 6}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
@@ -58,8 +58,8 @@ func TestConcat_EmptyValues(t *testing.T) {
 	out := c.Concat([]int{})
 
 	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
@@ -69,17 +69,25 @@ func TestConcat_EmptyBoth(t *testing.T) {
 	out := c.Concat([]int{})
 
 	expected := []int{}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected empty slice, got %v", out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected empty slice, got %v", out.Items())
 	}
 }
 
-func TestConcat_NoMutation(t *testing.T) {
-	origData := []int{1, 2, 3}
-	c := New(origData)
-
-	// perform concat
-	_ = c.Concat([]int{4, 5})
+func TestConcat_ReusesSpareCapacity(t *testing.T) {
+	backing := make([]int, 2, 5)
+	backing[0], backing[1] = 1, 2
+	c := New(backing)
+	out := c.Concat([]int{3, 4})
+	if !reflect.DeepEqual(out.Items(), []int{1, 2, 3, 4}) {
+		t.Fatalf("result = %v", out)
+	}
+	if &out[0] != &c[0] || !reflect.DeepEqual(c.Items(), []int{1, 2}) {
+		t.Fatalf("spare-capacity Concat did not retain source backing/header: source=%v result=%v", c, out)
+	}
+	if !reflect.DeepEqual(backing[:4], []int{1, 2, 3, 4}) {
+		t.Fatalf("Concat did not write appended values into spare capacity: %v", backing[:4])
+	}
 }
 
 func TestConcat_DifferentTypes(t *testing.T) {
@@ -92,28 +100,23 @@ func TestConcat_DifferentTypes(t *testing.T) {
 	out := c.Concat([]User{{"Van"}, {"Shawn"}})
 
 	expected := []User{{"Chris"}, {"Van"}, {"Shawn"}}
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 
-func TestConcat_NoAllocationWhenCapacityAllows(t *testing.T) {
-	c := &Collection[int]{items: make([]int, 2, 10)}
-	c.items[0], c.items[1] = 1, 2
-
-	beforePtr := &c.items[0]
-
-	c.Concat([]int{3, 4, 5})
-
-	afterPtr := &c.items[0]
-
-	if beforePtr != afterPtr {
-		t.Fatalf("Concat allocated new backing array when it should not have")
+func TestConcat_FullCapacityReturnsIndependentSlice(t *testing.T) {
+	c := Slice[int]{1, 2}
+	out := c.Concat([]int{3, 4, 5})
+	if !reflect.DeepEqual(out.Items(), []int{1, 2, 3, 4, 5}) || !reflect.DeepEqual(c.Items(), []int{1, 2}) {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
-
-	expected := []int{1, 2, 3, 4, 5}
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	if &out[0] == &c[0] {
+		t.Fatalf("full-capacity Concat reused source backing")
+	}
+	out[0] = 99
+	if c[0] != 1 {
+		t.Fatalf("Concat result aliases source")
 	}
 }
 
@@ -130,10 +133,10 @@ func TestConcat_PreservesNilSliceWhenEmptyValues(t *testing.T) {
 func TestConcat_NilSliceWithValues(t *testing.T) {
 	c := New([]int(nil))
 
-	c.Concat([]int{1, 2})
+	out := c.Concat([]int{1, 2})
 
 	expected := []int{1, 2}
-	if !reflect.DeepEqual(c.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, c.Items())
+	if !reflect.DeepEqual(out.Items(), expected) || c != nil {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
 }

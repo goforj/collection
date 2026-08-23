@@ -12,7 +12,7 @@ package collection
 //	extra := []int{3, 4}
 //	// Merge the extra slice into the ints collection
 //	merged1 := ints.Merge(extra)
-//	collection.Dump(merged1.Items())
+//	collection.Dump(merged1)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -26,7 +26,7 @@ package collection
 //	more := collection.New([]string{"c", "d"})
 //
 //	merged2 := strs.Merge(more)
-//	collection.Dump(merged2.Items())
+//	collection.Dump(merged2)
 //	// #[]string [
 //	//   0 => "a" #string
 //	//   1 => "b" #string
@@ -52,7 +52,7 @@ package collection
 //	}
 //
 //	merged3 := users.Merge(moreUsers)
-//	collection.Dump(merged3.Items())
+//	collection.Dump(merged3)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -71,13 +71,13 @@ package collection
 //	//     +Name => "Dave" #string
 //	//   }
 //	// ]
-func (c *Collection[T]) Merge(other any) *Collection[T] {
+func (c Slice[T]) Merge(other any) Slice[T] {
 	switch v := other.(type) {
 	case []T:
 		return c.mergeSlice(v)
 
-	case *Collection[T]:
-		return c.mergeSlice(v.items)
+	case Slice[T]:
+		return c.mergeSlice(v)
 
 	case map[string]T:
 		return c.mergeMap(v)
@@ -94,10 +94,10 @@ Given a slice ([]T), values are appended to the end of the current items.
 
 This function is immutable and returns a new collection.
 */
-func (c *Collection[T]) mergeSlice(values []T) *Collection[T] {
-	out := make([]T, len(c.items)+len(values))
-	copy(out, c.items)
-	copy(out[len(c.items):], values)
+func (c Slice[T]) mergeSlice(values []T) Slice[T] {
+	out := make([]T, len(c)+len(values))
+	copy(out, c)
+	copy(out[len(c):], values)
 	return New(out)
 }
 
@@ -115,13 +115,13 @@ behavior when working with associative arrays.
 
 This function is immutable.
 */
-func (c *Collection[T]) mergeMap(values map[string]T) *Collection[T] {
+func (c Slice[T]) mergeMap(values map[string]T) Slice[T] {
 	// Precalculate how many values will be appended.
 	// Numeric keys <= len(out) overwrite, others append.
 	appendCount := 0
 	for k := range values {
 		if idx, ok := fastParseInt(k); ok {
-			if idx < 0 || idx >= len(c.items) {
+			if idx < 0 || idx >= len(c) {
 				appendCount++
 			}
 		} else {
@@ -130,9 +130,9 @@ func (c *Collection[T]) mergeMap(values map[string]T) *Collection[T] {
 	}
 
 	// Pre-size output slice for NO reallocs.
-	outLen := len(c.items)
+	outLen := len(c)
 	out := make([]T, outLen, outLen+appendCount)
-	copy(out, c.items)
+	copy(out, c)
 
 	// Apply merge semantics.
 	for k, v := range values {

@@ -14,7 +14,7 @@ package collection
 //	b := collection.New([]int{3, 4, 4, 5})
 //
 //	out := collection.SymmetricDifference(a, b)
-//	collection.Dump(out.Items())
+//	collection.Dump(out)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -28,7 +28,7 @@ package collection
 //	right := collection.New([]string{"banana", "date"})
 //
 //	out2 := collection.SymmetricDifference(left, right)
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]string [
 //	//   0 => "apple" #string
 //	//   1 => "date" #string
@@ -52,7 +52,7 @@ package collection
 //	})
 //
 //	out3 := collection.SymmetricDifference(groupA, groupB)
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -63,21 +63,21 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func SymmetricDifference[T comparable](a, b *Collection[T]) *Collection[T] {
-	out := make([]T, 0, len(a.items)+len(b.items))
-	seenOut := make(map[T]struct{}, len(a.items)+len(b.items))
+func SymmetricDifference[T comparable](a, b Slice[T]) Slice[T] {
+	out := make([]T, 0, len(a)+len(b))
+	seenOut := make(map[T]struct{}, len(a)+len(b))
 
-	setA := make(map[T]struct{}, len(a.items))
-	for _, v := range a.items {
+	setA := make(map[T]struct{}, len(a))
+	for _, v := range a {
 		setA[v] = struct{}{}
 	}
 
-	setB := make(map[T]struct{}, len(b.items))
-	for _, v := range b.items {
+	setB := make(map[T]struct{}, len(b))
+	for _, v := range b {
 		setB[v] = struct{}{}
 	}
 
-	for _, v := range a.items {
+	for _, v := range a {
 		if _, inB := setB[v]; inB {
 			continue
 		}
@@ -88,7 +88,7 @@ func SymmetricDifference[T comparable](a, b *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	for _, v := range b.items {
+	for _, v := range b {
 		if _, inA := setA[v]; inA {
 			continue
 		}

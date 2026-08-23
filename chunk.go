@@ -69,12 +69,12 @@ package collection
 //	//    }
 //	//  ]
 //	//]
-func (c *Collection[T]) Chunk(size int) [][]T {
+func (c Slice[T]) Chunk(size int) [][]T {
 	if size <= 0 {
 		return nil
 	}
 
-	n := len(c.items)
+	n := len(c)
 	chunks := make([][]T, 0, (n+size-1)/size)
 
 	for i := 0; i < n; i += size {
@@ -83,7 +83,7 @@ func (c *Collection[T]) Chunk(size int) [][]T {
 			end = n
 		}
 		// ZERO ALLOC — slice header only
-		chunks = append(chunks, c.items[i:end])
+		chunks = append(chunks, c[i:end])
 	}
 
 	return chunks

@@ -52,6 +52,6 @@ package collection
 //	collection.Dump(minVal, ok)
 //	// 0 #int
 //	// false #bool
-func MinBy[T any, K Number | ~string](c *Collection[T], keyFn func(T) K) (T, bool) {
+func MinBy[T any, K Number | ~string](c Slice[T], keyFn func(T) K) (T, bool) {
 	return c.MinBy(keyFn)
 }

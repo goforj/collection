@@ -97,8 +97,8 @@ func TestFirstWhere_NoMutation(t *testing.T) {
 	_, _ = c.FirstWhere(func(v int) bool { return v == 2 })
 
 	// ensure original was not mutated
-	if !reflect.DeepEqual(c.items, []int{1, 2, 3}) {
-		t.Fatalf("original collection was mutated: %v", c.items)
+	if !reflect.DeepEqual(c.Items(), []int{1, 2, 3}) {
+		t.Fatalf("original collection was mutated: %v", c.Items())
 	}
 }
 

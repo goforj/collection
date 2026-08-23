@@ -14,8 +14,8 @@ func TestTransform_Ints(t *testing.T) {
 
 	expected := []int{2, 4, 6, 8, 10}
 
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	if !reflect.DeepEqual(c.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, c.Items())
 	}
 }
 
@@ -42,8 +42,8 @@ func TestTransform_Structs(t *testing.T) {
 		{3, "Shawn!"},
 	}
 
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	if !reflect.DeepEqual(c.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, c.Items())
 	}
 }
 
@@ -54,29 +54,29 @@ func TestTransform_Empty(t *testing.T) {
 		return v * 10
 	})
 
-	if len(c.items) != 0 {
-		t.Fatalf("expected empty slice, got %v", c.items)
+	if len(c.Items()) != 0 {
+		t.Fatalf("expected empty slice, got %v", c.Items())
 	}
 }
 
 func TestTransform_MutationInPlace(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	originalPtr := &c.items[0] // memory address check
+	originalPtr := &c.Items()[0] // memory address check
 
 	c.Transform(func(v int) int {
 		return v + 1
 	})
 
 	// If transform is truly in-place, slice capacity and identity stay same
-	if originalPtr != &c.items[0] {
+	if originalPtr != &c.Items()[0] {
 		t.Fatalf("Transform should mutate in place, but underlying slice changed")
 	}
 
 	expected := []int{2, 3, 4}
 
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	if !reflect.DeepEqual(c.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, c.Items())
 	}
 }
 
@@ -88,8 +88,8 @@ func TestTransform_ChainingCompatibility(t *testing.T) {
 
 	expected := []int{4, 6}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, out.Items())
 	}
 }
 

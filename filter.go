@@ -1,7 +1,10 @@
 package collection
 
 // Filter keeps only the elements for which fn returns true.
-// This method mutates the collection in place and returns the same instance.
+//
+// Filter compacts and clears c's backing storage in place. Callers must capture
+// the returned Slice because the receiver's slice header cannot be shortened by
+// a value receiver.
 // @group Slicing
 // @behavior mutable
 // @chainable true
@@ -9,10 +12,10 @@ package collection
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4})
-//	c.Filter(func(v int) bool {
+//	c = c.Filter(func(v int) bool {
 //		return v%2 == 0
 //	})
-//	collection.Dump(c.Items())
+//	collection.Dump(c)
 //	// #[]int [
 //	//   0 => 2 #int
 //	//   1 => 4 #int
@@ -21,10 +24,10 @@ package collection
 // Example: strings
 //
 //	c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
-//	c2.Filter(func(v string) bool {
+//	c2 = c2.Filter(func(v string) bool {
 //		return strings.HasPrefix(v, "a")
 //	})
-//	collection.Dump(c2.Items())
+//	collection.Dump(c2)
 //	// #[]string [
 //	//   0 => "apple" #string
 //	//   1 => "avocado" #string
@@ -44,11 +47,11 @@ package collection
 //		{ID: 4, Name: "Carol"},
 //	})
 //
-//	users.Filter(func(u User) bool {
+//	users = users.Filter(func(u User) bool {
 //		return strings.HasPrefix(u.Name, "A")
 //	})
 //
-//	collection.Dump(users.Items())
+//	collection.Dump(users)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -59,17 +62,16 @@ package collection
 //	//     +Name => "Andrew" #string
 //	//   }
 //	// ]
-func (c *Collection[T]) Filter(fn func(T) bool) *Collection[T] {
-	items := c.items
+func (c Slice[T]) Filter(fn func(T) bool) Slice[T] {
+	items := c
 	j := 0
 	for i := 0; i < len(items); i++ {
 		if fn(items[i]) {
-			items[j] = items[i] // compact in place
+			items[j] = items[i]
 			j++
 		}
 	}
 
 	clear(items[j:])
-	c.items = items[:j] // shrink to new length
-	return c
+	return items[:j]
 }

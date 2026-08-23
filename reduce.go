@@ -50,9 +50,9 @@ package collection
 //	//   +Count => 3 #int
 //	//   +Sum   => 60 #int
 //	// }
-func (c *Collection[T]) Reduce(initial T, fn func(T, T) T) T {
+func (c Slice[T]) Reduce(initial T, fn func(T, T) T) T {
 	acc := initial
-	for _, v := range c.items {
+	for _, v := range c {
 		acc = fn(acc, v)
 	}
 	return acc

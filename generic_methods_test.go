@@ -22,11 +22,10 @@ func TestGenericMethodsMatchCompatibilityFunctions(t *testing.T) {
 	functionMax, functionMaxOK := MaxBy(values, keyFn)
 	assertPairEqual(t, "MaxBy", methodMax, methodMaxOK, functionMax, functionMaxOK)
 	assertEqual(t, "ToMap", values.ToMap(strconv.Itoa, func(value int) int { return value }), ToMap(values, strconv.Itoa, func(value int) int { return value }))
-	assertEqual(t, "GroupBy", collectionItems(values.GroupBy(keyFn)), collectionItems(GroupBy(values, keyFn)))
-	assertEqual(t, "GroupBySlice", values.GroupBySlice(keyFn), GroupBySlice(values, keyFn))
+	assertEqual(t, "GroupBy", values.GroupBy(keyFn), GroupBy(values, keyFn))
 	assertEqual(t, "CountBy", values.CountBy(keyFn), CountBy(values, keyFn))
 	assertEqual(t, "UniqueBy", values.UniqueBy(keyFn).Items(), UniqueBy(values, keyFn).Items())
-	assertEqual(t, "Pipe", values.Pipe(func(c *Collection[int]) int { return len(c.Items()) }), Pipe(values, func(c *Collection[int]) int { return len(c.Items()) }))
+	assertEqual(t, "Pipe", values.Pipe(func(c Slice[int]) int { return len(c.Items()) }), Pipe(values, func(c Slice[int]) int { return len(c.Items()) }))
 	assertEqual(t, "ZipWith", values.ZipWith(other, func(value int, label string) string { return strconv.Itoa(value) + label }).Items(), ZipWith(values, other, func(value int, label string) string { return strconv.Itoa(value) + label }).Items())
 }
 
@@ -36,7 +35,7 @@ func TestGenericMethodValuesAndExpressions(t *testing.T) {
 
 	values := New([]int{1, 2, 3})
 	methodValue := values.MapTo[strconv.NumError]
-	methodExpression := (*Collection[int]).MapTo[string]
+	methodExpression := (Slice[int]).MapTo[string]
 
 	errors := methodValue(func(value int) strconv.NumError {
 		return strconv.NumError{Func: strconv.Itoa(value)}
@@ -49,16 +48,16 @@ func TestGenericMethodValuesAndExpressions(t *testing.T) {
 	assertEqual(t, "method expression", strings.Items(), []string{"1", "2", "3"})
 }
 
-// TestGenericMethodsPreserveNilReceiverBehavior verifies compatibility at the edge of the existing pointer-based API.
-func TestGenericMethodsPreserveNilReceiverBehavior(t *testing.T) {
+// TestGenericMethodsSupportZeroValue verifies value-slice methods accept a nil zero value.
+func TestGenericMethodsSupportZeroValue(t *testing.T) {
 	t.Parallel()
 
-	var values *Collection[int]
-	assertPanics(t, "method", func() { values.MapTo(strconv.Itoa) })
-	assertPanics(t, "function", func() { MapTo(values, strconv.Itoa) })
+	var values Slice[int]
+	assertEqual(t, "method", values.MapTo(strconv.Itoa), Slice[string]{})
+	assertEqual(t, "function", MapTo(values, strconv.Itoa), Slice[string]{})
 
-	methodSawNil := values.Pipe(func(c *Collection[int]) bool { return c == nil })
-	functionSawNil := Pipe(values, func(c *Collection[int]) bool { return c == nil })
+	methodSawNil := values.Pipe(func(c Slice[int]) bool { return c == nil })
+	functionSawNil := Pipe(values, func(c Slice[int]) bool { return c == nil })
 	if !methodSawNil || !functionSawNil {
 		t.Fatalf("Pipe nil receiver parity = (%v, %v), want both true", methodSawNil, functionSawNil)
 	}
@@ -81,21 +80,10 @@ func assertPairEqual[T comparable](t *testing.T, name string, got T, gotOK bool,
 }
 
 // collectionItems converts grouped collections into slices for stable comparison.
-func collectionItems[K comparable, V any](groups map[K]*Collection[V]) map[K][]V {
+func collectionItems[K comparable, V any](groups map[K]Slice[V]) map[K][]V {
 	items := make(map[K][]V, len(groups))
 	for key, group := range groups {
 		items[key] = group.Items()
 	}
 	return items
-}
-
-// assertPanics verifies an operation retains its established panic behavior.
-func assertPanics(t *testing.T, name string, fn func()) {
-	t.Helper()
-	defer func() {
-		if recover() == nil {
-			t.Fatalf("%s call did not panic", name)
-		}
-	}()
-	fn()
 }

@@ -95,3 +95,12 @@ func TestChunk_InvalidSize(t *testing.T) {
 		t.Fatalf("expected nil for size <= 0, got %v", chunks)
 	}
 }
+
+func TestChunk_ReturnsViews(t *testing.T) {
+	c := New([]int{1, 2, 3, 4})
+	chunks := c.Chunk(2)
+	chunks[1][0] = 9
+	if c[2] != 9 {
+		t.Fatalf("chunk mutation did not reach source: %v", c)
+	}
+}

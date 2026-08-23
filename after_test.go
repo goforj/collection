@@ -118,3 +118,12 @@ func TestAfter_DoesNotMutateOriginal(t *testing.T) {
 		}
 	}
 }
+
+func TestAfter_ReturnsView(t *testing.T) {
+	nums := New([]int{1, 2, 3, 4})
+	after := nums.After(func(value int) bool { return value == 2 })
+	after[0] = 9
+	if nums[2] != 9 {
+		t.Fatalf("After mutation did not reach source: %v", nums)
+	}
+}

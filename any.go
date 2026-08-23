@@ -11,8 +11,8 @@ package collection
 //	has := c.Any(func(v int) bool { return v%2 == 0 }) // true
 //	collection.Dump(has)
 //	// true #bool
-func (c *Collection[T]) Any(fn func(T) bool) bool {
-	for _, v := range c.items {
+func (c Slice[T]) Any(fn func(T) bool) bool {
+	for _, v := range c {
 		if fn(v) {
 			return true
 		}

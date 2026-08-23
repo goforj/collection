@@ -14,8 +14,8 @@ func TestFilter_Ints(t *testing.T) {
 
 	expected := []int{2, 4}
 
-	if !reflect.DeepEqual(filtered.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, filtered.items)
+	if !reflect.DeepEqual(filtered.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, filtered.Items())
 	}
 }
 
@@ -24,8 +24,8 @@ func TestFilter_NoneMatch(t *testing.T) {
 
 	filtered := c.Filter(func(v int) bool { return v > 100 })
 
-	if len(filtered.items) != 0 {
-		t.Fatalf("expected empty result, got %v", filtered.items)
+	if len(filtered.Items()) != 0 {
+		t.Fatalf("expected empty result, got %v", filtered.Items())
 	}
 }
 
@@ -36,8 +36,8 @@ func TestFilter_AllMatch(t *testing.T) {
 
 	expected := []int{1, 2, 3}
 
-	if !reflect.DeepEqual(filtered.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, filtered.items)
+	if !reflect.DeepEqual(filtered.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, filtered.Items())
 	}
 }
 
@@ -62,8 +62,8 @@ func TestFilter_Structs(t *testing.T) {
 		{3, "Shawn"},
 	}
 
-	if !reflect.DeepEqual(filtered.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, filtered.items)
+	if !reflect.DeepEqual(filtered.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, filtered.Items())
 	}
 }
 
@@ -72,8 +72,8 @@ func TestFilter_EmptyInput(t *testing.T) {
 
 	filtered := c.Filter(func(v int) bool { return v%2 == 0 })
 
-	if len(filtered.items) != 0 {
-		t.Fatalf("expected empty slice, got %v", filtered.items)
+	if len(filtered.Items()) != 0 {
+		t.Fatalf("expected empty slice, got %v", filtered.Items())
 	}
 }
 
@@ -86,8 +86,8 @@ func TestFilter_Chaining(t *testing.T) {
 
 	expected := []int{3, 5}
 
-	if !reflect.DeepEqual(result.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, result.items)
+	if !reflect.DeepEqual(result.Items(), expected) {
+		t.Fatalf("expected %v, got %v", expected, result.Items())
 	}
 }
 
@@ -101,33 +101,47 @@ func TestFilter_PreservesNilSlice(t *testing.T) {
 	}
 }
 
-func TestFilter_WritesThroughSourceSlice(t *testing.T) {
+func TestFilter_CompactsSourceAndRequiresReturnedHeader(t *testing.T) {
 	items := []int{1, 2, 3, 4}
 	c := New(items)
 
-	c.Filter(func(v int) bool { return v%2 == 0 })
+	out := c.Filter(func(v int) bool { return v%2 == 0 })
 
 	want := []int{2, 4}
-	if !reflect.DeepEqual(items[:len(want)], want) {
-		t.Fatalf("expected source prefix %v, got %v", want, items[:len(want)])
+	if !reflect.DeepEqual(out.Items(), want) {
+		t.Fatalf("expected result %v, got %v", want, out)
 	}
 
-	if len(c.Items()) != len(want) {
-		t.Fatalf("expected filtered length %d, got %d", len(want), len(c.Items()))
+	if !reflect.DeepEqual(items, []int{2, 4, 0, 0}) {
+		t.Fatalf("Filter did not compact and clear input storage: %v", items)
+	}
+	if len(c) != 4 {
+		t.Fatalf("ignored result changed source header length to %d", len(c))
+	}
+	if len(out) != 2 {
+		t.Fatalf("returned header length = %d, want 2", len(out))
 	}
 }
 
-func TestFilter_ClearsRemovedTail(t *testing.T) {
+func TestFilter_ClearsDiscardedReferences(t *testing.T) {
 	a, b, cval := 1, 2, 3
 	items := []*int{&a, &b, &cval}
 	c := New(items)
 
-	c.Filter(func(v *int) bool { return *v == 2 })
-
-	if items[0] != &b {
-		t.Fatalf("expected kept value to be compacted to front")
+	out := c.Filter(func(v *int) bool { return *v == 2 })
+	if len(out) != 1 || out[0] != &b || items[1] != nil || items[2] != nil {
+		t.Fatalf("result=%v source=%v", out, items)
 	}
-	if items[1] != nil || items[2] != nil {
-		t.Fatalf("expected removed tail to be cleared, got %v", items)
+}
+
+func TestFilter_ZeroAllocs(t *testing.T) {
+	items := []int{1, 2, 3, 4}
+	c := New(items)
+	allocs := testing.AllocsPerRun(1000, func() {
+		copy(c, []int{1, 2, 3, 4})
+		_ = c.Filter(func(v int) bool { return v%2 == 0 })
+	})
+	if allocs != 0 {
+		t.Fatalf("Filter allocations = %v, want 0", allocs)
 	}
 }

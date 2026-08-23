@@ -43,10 +43,10 @@ package collection
 //	//   +Name => "Alice" #string
 //	// }
 //	// true #bool
-func (c *Collection[T]) At(i int) (T, bool) {
-	if i < 0 || i >= len(c.items) {
+func (c Slice[T]) At(i int) (T, bool) {
+	if i < 0 || i >= len(c) {
 		var zero T
 		return zero, false
 	}
-	return c.items[i], true
+	return c[i], true
 }

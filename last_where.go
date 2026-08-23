@@ -82,16 +82,16 @@ package collection
 //	collection.Dump(v5, ok6)
 //	// 0 #int
 //	// false #bool
-func (c *Collection[T]) LastWhere(fn func(T, int) bool) (value T, ok bool) {
-	if len(c.items) == 0 {
+func (c Slice[T]) LastWhere(fn func(T, int) bool) (value T, ok bool) {
+	if len(c) == 0 {
 		return value, false
 	}
 	if fn == nil {
-		return c.items[len(c.items)-1], true
+		return c[len(c)-1], true
 	}
-	for i := len(c.items) - 1; i >= 0; i-- {
-		if fn(c.items[i], i) {
-			return c.items[i], true
+	for i := len(c) - 1; i >= 0; i-- {
+		if fn(c[i], i) {
+			return c[i], true
 		}
 	}
 	return value, false

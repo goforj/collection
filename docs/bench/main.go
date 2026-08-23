@@ -68,8 +68,8 @@ const (
 )
 
 var (
-	ctorInts       func([]int) *collection.Collection[int]
-	ctorNumericInt func([]int) *collection.NumericCollection[int]
+	ctorInts       func([]int) collection.Slice[int]
+	ctorNumericInt func([]int) []int
 	currentMode    benchMode
 )
 
@@ -77,16 +77,17 @@ func setBenchMode(mode benchMode) {
 	currentMode = mode
 	switch mode {
 	case benchCopy:
-		ctorInts = func(items []int) *collection.Collection[int] {
+		ctorInts = func(items []int) collection.Slice[int] {
 			return collection.New(items).Clone()
 		}
-		ctorNumericInt = func(items []int) *collection.NumericCollection[int] {
-			base := collection.NewNumeric(items)
-			return &collection.NumericCollection[int]{Collection: base.Collection.Clone()}
+		ctorNumericInt = func(items []int) []int {
+			out := make([]int, len(items))
+			copy(out, items)
+			return out
 		}
 	default:
 		ctorInts = collection.New[int]
-		ctorNumericInt = collection.NewNumeric[int]
+		ctorNumericInt = func(items []int) []int { return items }
 	}
 }
 
@@ -112,7 +113,7 @@ func runBenches(only map[string]struct{}, mode benchMode) []benchResult {
 		{"Take", benchTakeCollection, benchTakeLo},
 		{"Contains", benchContainsCollection, benchContainsLo},
 		{"FirstWhere", benchFindCollection, benchFindLo},
-		{"GroupBySlice", benchGroupByCollection, benchGroupByLo},
+		{"GroupBy", benchGroupByCollection, benchGroupByLo},
 		{"CountBy", benchCountByCollection, benchCountByLo},
 		{"CountByValue", benchCountByValueCollection, benchCountByValueLo},
 		{"Skip", benchSkipCollection, benchSkipLo},
@@ -488,7 +489,7 @@ func benchFindLo(b *testing.B) {
 func benchGroupByCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = collection.GroupBySlice(ctorInts(benchInts), func(v int) int { return v % benchGroupByMod })
+		_ = ctorInts(benchInts).GroupBy(func(v int) int { return v % benchGroupByMod })
 
 	}
 }
@@ -736,7 +737,7 @@ func benchToMapLo(b *testing.B) {
 func benchSumCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = ctorNumericInt(benchInts).Sum()
+		_ = collection.Sum(ctorNumericInt(benchInts))
 
 	}
 }
@@ -752,7 +753,7 @@ func benchSumLo(b *testing.B) {
 func benchMinCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = ctorNumericInt(benchInts).Min()
+		_, _ = collection.Min(ctorNumericInt(benchInts))
 
 	}
 }
@@ -768,7 +769,7 @@ func benchMinLo(b *testing.B) {
 func benchMaxCollection(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = ctorNumericInt(benchInts).Max()
+		_, _ = collection.Max(ctorNumericInt(benchInts))
 
 	}
 }
@@ -846,7 +847,7 @@ type benchGroup struct {
 func renderCondensedTables(results []benchResult) string {
 	groups := []benchGroup{
 		{
-			name: "Read-only scalar ops (wrapper overhead only)",
+			name: "Read-only scalar ops",
 			ops: []string{
 				"All",
 				"Any",
@@ -867,6 +868,7 @@ func renderCondensedTables(results []benchResult) string {
 			name: "Transforming ops",
 			ops: []string{
 				"Chunk",
+				"Filter",
 				"Take",
 				"Skip",
 				"SkipLast",
@@ -877,7 +879,7 @@ func renderCondensedTables(results []benchResult) string {
 				"Union",
 				"Intersect",
 				"Difference",
-				"GroupBySlice",
+				"GroupBy",
 				"CountBy",
 				"CountByValue",
 				"ToMap",
@@ -893,7 +895,6 @@ func renderCondensedTables(results []benchResult) string {
 			name: "Mutating ops",
 			ops: []string{
 				"Map",
-				"Filter",
 				"Reverse",
 				"Shuffle",
 			},
@@ -920,9 +921,9 @@ func renderCondensedTables(results []benchResult) string {
 			col := entry["collection"]
 			loRes := entry["lo"]
 
-			wrapperOnly := group.name == "Read-only scalar ops (wrapper overhead only)"
+			scalarOnly := group.name == "Read-only scalar ops"
 			allowBold := group.name == "Pipelines" || group.name == "Transforming ops" || group.name == "Mutating ops"
-			speed := formatSpeed(loRes.nsPerOp, col.nsPerOp, allowBold, wrapperOnly)
+			speed := formatSpeed(loRes.nsPerOp, col.nsPerOp, allowBold, scalarOnly)
 			mem := formatDeltaBytes(col.bytesPerOp, loRes.bytesPerOp)
 			allocs := formatDeltaAllocs(col.allocsPerOp, loRes.allocsPerOp)
 
@@ -981,9 +982,9 @@ func formatDurationNs(ns float64) string {
 }
 
 const (
-	wrapperEpsilon     = 0.10 // ±10% wrapper overhead tolerance
-	benchRatioNoiseNs  = 50.0
-	wrapperOnlyEpsilon = 0.15
+	equivalentEpsilon = 0.10 // ±10% equivalence tolerance
+	benchRatioNoiseNs = 50.0
+	scalarOnlyEpsilon = 0.15
 )
 
 func formatRatio(lo, col float64) string {
@@ -996,8 +997,8 @@ func formatRatio(lo, col float64) string {
 
 	ratio := lo / col
 
-	// Treat small deltas as equivalent (wrapper overhead, measurement noise)
-	if ratio >= 1-wrapperEpsilon && ratio <= 1+wrapperEpsilon {
+	// Treat small deltas as equivalent measurement noise.
+	if ratio >= 1-equivalentEpsilon && ratio <= 1+equivalentEpsilon {
 		return "≈"
 	}
 
@@ -1008,7 +1009,7 @@ func formatRatio(lo, col float64) string {
 	return out
 }
 
-func formatSpeed(lo, col float64, allowBold bool, wrapperOnly bool) string {
+func formatSpeed(lo, col float64, allowBold bool, scalarOnly bool) string {
 	if lo < benchRatioNoiseNs && col < benchRatioNoiseNs {
 		return "≈"
 	}
@@ -1017,10 +1018,10 @@ func formatSpeed(lo, col float64, allowBold bool, wrapperOnly bool) string {
 	}
 
 	ratio := lo / col
-	if wrapperOnly && ratio >= 1-wrapperOnlyEpsilon && ratio <= 1+wrapperOnlyEpsilon {
+	if scalarOnly && ratio >= 1-scalarOnlyEpsilon && ratio <= 1+scalarOnlyEpsilon {
 		return "≈"
 	}
-	if ratio >= 1-wrapperEpsilon && ratio <= 1+wrapperEpsilon {
+	if ratio >= 1-equivalentEpsilon && ratio <= 1+equivalentEpsilon {
 		return "≈"
 	}
 

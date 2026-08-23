@@ -1,6 +1,6 @@
 package collection
 
-// MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
+// MapTo maps a Slice[T] to a Slice[R] using fn(T) R.
 // @group Transformation
 // @behavior immutable
 // @chainable true
@@ -15,7 +15,7 @@ package collection
 //		}
 //		return "odd"
 //	})
-//	collection.Dump(parity.Items())
+//	collection.Dump(parity)
 //	// #[]string [
 //	//   0 => "odd" #string
 //	//   1 => "even" #string
@@ -29,7 +29,7 @@ package collection
 //	lengths := collection.MapTo(words, func(s string) int {
 //		return len(s)
 //	})
-//	collection.Dump(lengths.Items())
+//	collection.Dump(lengths)
 //	// #[]int [
 //	//   0 => 2 #int
 //	//   1 => 4 #int
@@ -52,11 +52,11 @@ package collection
 //		return u.Name
 //	})
 //
-//	collection.Dump(names.Items())
+//	collection.Dump(names)
 //	// #[]string [
 //	//   0 => "Alice" #string
 //	//   1 => "Bob" #string
 //	// ]
-func MapTo[T any, R any](c *Collection[T], fn func(T) R) *Collection[R] {
+func MapTo[T any, R any](c Slice[T], fn func(T) R) Slice[R] {
 	return c.MapTo(fn)
 }

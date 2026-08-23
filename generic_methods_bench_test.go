@@ -26,16 +26,16 @@ func BenchmarkGenericMethodParity(b *testing.B) {
 		}
 	})
 
-	b.Run("GroupBySlice/Function", func(b *testing.B) {
+	b.Run("GroupBy/Function", func(b *testing.B) {
 		b.ReportAllocs()
 		for range b.N {
-			genericMethodBenchmarkResult = GroupBySlice(values, keyFn)
+			genericMethodBenchmarkResult = GroupBy(values, keyFn)
 		}
 	})
-	b.Run("GroupBySlice/Method", func(b *testing.B) {
+	b.Run("GroupBy/Method", func(b *testing.B) {
 		b.ReportAllocs()
 		for range b.N {
-			genericMethodBenchmarkResult = values.GroupBySlice(keyFn)
+			genericMethodBenchmarkResult = values.GroupBy(keyFn)
 		}
 	})
 

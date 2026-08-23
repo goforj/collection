@@ -37,9 +37,9 @@ package collection
 //	}
 //
 //	configs := map[string]Config{
-//		"router-1": {Enabled: true,  Timeout: 30},
+//		"router-1": {Enabled: true, Timeout: 30},
 //		"router-2": {Enabled: false, Timeout: 10},
-//		"router-3": {Enabled: true,  Timeout: 45},
+//		"router-3": {Enabled: true, Timeout: 45},
 //	}
 //
 //	c2 := collection.
@@ -62,9 +62,9 @@ package collection
 //	//    +Timeout => 45 #int
 //	//  }
 //	// }
-func ToMapKV[K comparable, V any](c *Collection[Pair[K, V]]) map[K]V {
-	out := make(map[K]V, len(c.items))
-	for _, p := range c.items {
+func ToMapKV[K comparable, V any](c Slice[Pair[K, V]]) map[K]V {
+	out := make(map[K]V, len(c))
+	for _, p := range c {
 		out[p.Key] = p.Value
 	}
 	return out

@@ -57,7 +57,7 @@ package collection
 //	//   admin => 3 #int
 //	//   user => 2 #int
 //	// }
-func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
+func CountBy[T any, K comparable](c Slice[T], fn func(T) K) map[K]int {
 	return c.CountBy(fn)
 }
 
@@ -110,7 +110,7 @@ func CountBy[T any, K comparable](c *Collection[T], fn func(T) K) map[K]int {
 //	//  {1 1} => 2 #int
 //	//  {2 2} => 1 #int
 //	// }
-func CountByValue[T comparable](c *Collection[T]) map[T]int {
+func CountByValue[T comparable](c Slice[T]) map[T]int {
 	items := c.Items()
 	result := make(map[T]int)
 

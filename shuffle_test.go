@@ -110,8 +110,8 @@ func TestShuffle_MutatesInPlace(t *testing.T) {
 
 		out := c.Shuffle()
 
-		if out != c {
-			t.Fatalf("Shuffle should return the same collection")
+		if !reflect.DeepEqual(out.Items(), c.Items()) {
+			t.Fatalf("Shuffle result = %v, want %v", out, c)
 		}
 
 		if reflect.DeepEqual(items, []int{1, 2, 3, 4}) {

@@ -82,7 +82,7 @@ func TestToJSON_Structs(t *testing.T) {
 	if err := json.Unmarshal([]byte(jsonStr), &out); err != nil {
 		t.Fatalf("invalid JSON: %v", err)
 	}
-	if !reflect.DeepEqual(out, c.items) {
+	if !reflect.DeepEqual(out, c.Items()) {
 		t.Fatalf("decoded JSON mismatch: %v", out)
 	}
 }
@@ -169,22 +169,22 @@ func TestToPrettyJSON_Empty(t *testing.T) {
 
 func TestToJSON_NoMutation(t *testing.T) {
 	c := New([]int{1, 2, 3})
-	orig := append([]int{}, c.items...) // make copy
+	orig := append([]int{}, c.Items()...) // make copy
 
 	_, _ = c.ToJSON()
 
-	if !reflect.DeepEqual(c.items, orig) {
+	if !reflect.DeepEqual(c.Items(), orig) {
 		t.Fatalf("collection mutated by ToJSON")
 	}
 }
 
 func TestToPrettyJSON_NoMutation(t *testing.T) {
 	c := New([]int{10, 20})
-	orig := append([]int{}, c.items...)
+	orig := append([]int{}, c.Items()...)
 
 	_, _ = c.ToPrettyJSON()
 
-	if !reflect.DeepEqual(c.items, orig) {
+	if !reflect.DeepEqual(c.Items(), orig) {
 		t.Fatalf("collection mutated by ToPrettyJSON")
 	}
 }

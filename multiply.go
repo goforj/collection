@@ -10,8 +10,7 @@ package collection
 // Example: integers
 //
 //	ints := collection.New([]int{1, 2})
-//	out := ints.Multiply(3)
-//	collection.Dump(out)
+//	collection.Dump(ints.Multiply(3))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -24,8 +23,7 @@ package collection
 // Example: strings
 //
 //	strs := collection.New([]string{"a", "b"})
-//	out2 := strs.Multiply(2)
-//	collection.Dump(out2)
+//	collection.Dump(strs.Multiply(2))
 //	// #[]string [
 //	//   0 => "a" #string
 //	//   1 => "b" #string
@@ -40,8 +38,7 @@ package collection
 //	}
 //
 //	users := collection.New([]User{{Name: "Alice"}, {Name: "Bob"}})
-//	out3 := users.Multiply(2)
-//	collection.Dump(out3)
+//	collection.Dump(users.Multiply(2))
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +Name => "Alice" #string
@@ -59,8 +56,7 @@ package collection
 //
 // Example: multiplying by zero or negative returns empty
 //
-//	none := ints.Multiply(0)
-//	collection.Dump(none)
+//	collection.Dump(ints.Multiply(0))
 //	// #[]int [
 //	// ]
 func (c Slice[T]) Multiply(n int) Slice[T] {

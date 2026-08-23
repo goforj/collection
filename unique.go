@@ -13,8 +13,7 @@ package collection
 // Example: integers
 //
 //	c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
-//	out1 := c1.Unique(func(a, b int) bool { return a == b })
-//	collection.Dump(out1)
+//	collection.Dump(c1.Unique(func(a, b int) bool { return a == b }))
 //	// #[]int [
 //	//	0 => 1 #int
 //	//	1 => 2 #int

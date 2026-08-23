@@ -15,8 +15,7 @@ func main() {
 	a := collection.New([]int{1, 2, 2, 3, 4})
 	b := collection.New([]int{2, 4, 4, 5})
 
-	out := collection.Intersect(a, b)
-	collection.Dump(out)
+	collection.Dump(collection.Intersect(a, b))
 	// #[]int [
 	//   0 => 2 #int
 	//   1 => 4 #int
@@ -27,8 +26,7 @@ func main() {
 	left := collection.New([]string{"apple", "banana", "cherry"})
 	right := collection.New([]string{"banana", "date", "cherry", "banana"})
 
-	out2 := collection.Intersect(left, right)
-	collection.Dump(out2)
+	collection.Dump(collection.Intersect(left, right))
 	// #[]string [
 	//   0 => "banana" #string
 	//   1 => "cherry" #string
@@ -53,8 +51,7 @@ func main() {
 		{ID: 4, Name: "Dave"},
 	})
 
-	out3 := collection.Intersect(groupA, groupB)
-	collection.Dump(out3)
+	collection.Dump(collection.Intersect(groupA, groupB))
 	// #[]main.User [
 	//   0 => #main.User {
 	//     +ID   => 2 #int

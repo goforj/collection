@@ -13,8 +13,7 @@ package collection
 //	a := collection.New([]int{1, 2, 3, 3})
 //	b := collection.New([]int{3, 4, 4, 5})
 //
-//	out := collection.SymmetricDifference(a, b)
-//	collection.Dump(out)
+//	collection.Dump(collection.SymmetricDifference(a, b))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -27,8 +26,7 @@ package collection
 //	left := collection.New([]string{"apple", "banana"})
 //	right := collection.New([]string{"banana", "date"})
 //
-//	out2 := collection.SymmetricDifference(left, right)
-//	collection.Dump(out2)
+//	collection.Dump(collection.SymmetricDifference(left, right))
 //	// #[]string [
 //	//   0 => "apple" #string
 //	//   1 => "date" #string
@@ -51,8 +49,7 @@ package collection
 //		{ID: 3, Name: "Carol"},
 //	})
 //
-//	out3 := collection.SymmetricDifference(groupA, groupB)
-//	collection.Dump(out3)
+//	collection.Dump(collection.SymmetricDifference(groupA, groupB))
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int

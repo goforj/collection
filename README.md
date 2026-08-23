@@ -1566,8 +1566,7 @@ _Example: integers_
 a := collection.New([]int{1, 2, 2, 3, 4})
 b := collection.New([]int{2, 4})
 
-out := collection.Difference(a, b)
-collection.Dump(out)
+collection.Dump(collection.Difference(a, b))
 // #[]int [
 //   0 => 1 #int
 //   1 => 3 #int
@@ -1580,8 +1579,7 @@ _Example: strings_
 left := collection.New([]string{"apple", "banana", "cherry"})
 right := collection.New([]string{"banana"})
 
-out2 := collection.Difference(left, right)
-collection.Dump(out2)
+collection.Dump(collection.Difference(left, right))
 // #[]string [
 //   0 => "apple" #string
 //   1 => "cherry" #string
@@ -1606,8 +1604,7 @@ groupB := collection.New([]User{
 	{ID: 2, Name: "Bob"},
 })
 
-out3 := collection.Difference(groupA, groupB)
-collection.Dump(out3)
+collection.Dump(collection.Difference(groupA, groupB))
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -1631,8 +1628,7 @@ _Example: integers_
 a := collection.New([]int{1, 2, 2, 3, 4})
 b := collection.New([]int{2, 4, 4, 5})
 
-out := collection.Intersect(a, b)
-collection.Dump(out)
+collection.Dump(collection.Intersect(a, b))
 // #[]int [
 //   0 => 2 #int
 //   1 => 4 #int
@@ -1646,8 +1642,7 @@ _Example: strings_
 left := collection.New([]string{"apple", "banana", "cherry"})
 right := collection.New([]string{"banana", "date", "cherry", "banana"})
 
-out2 := collection.Intersect(left, right)
-collection.Dump(out2)
+collection.Dump(collection.Intersect(left, right))
 // #[]string [
 //   0 => "banana" #string
 //   1 => "cherry" #string
@@ -1675,8 +1670,7 @@ groupB := collection.New([]User{
 	{ID: 4, Name: "Dave"},
 })
 
-out3 := collection.Intersect(groupA, groupB)
-collection.Dump(out3)
+collection.Dump(collection.Intersect(groupA, groupB))
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 2 #int
@@ -1701,8 +1695,7 @@ _Example: integers_
 a := collection.New([]int{1, 2, 3, 3})
 b := collection.New([]int{3, 4, 4, 5})
 
-out := collection.SymmetricDifference(a, b)
-collection.Dump(out)
+collection.Dump(collection.SymmetricDifference(a, b))
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -1717,8 +1710,7 @@ _Example: strings_
 left := collection.New([]string{"apple", "banana"})
 right := collection.New([]string{"banana", "date"})
 
-out2 := collection.SymmetricDifference(left, right)
-collection.Dump(out2)
+collection.Dump(collection.SymmetricDifference(left, right))
 // #[]string [
 //   0 => "apple" #string
 //   1 => "date" #string
@@ -1743,8 +1735,7 @@ groupB := collection.New([]User{
 	{ID: 3, Name: "Carol"},
 })
 
-out3 := collection.SymmetricDifference(groupA, groupB)
-collection.Dump(out3)
+collection.Dump(collection.SymmetricDifference(groupA, groupB))
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -1769,8 +1760,7 @@ _Example: integers_
 a := collection.New([]int{1, 2, 2, 3})
 b := collection.New([]int{3, 4, 4, 5})
 
-out := collection.Union(a, b)
-collection.Dump(out)
+collection.Dump(collection.Union(a, b))
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -1786,8 +1776,7 @@ _Example: strings_
 left := collection.New([]string{"apple", "banana"})
 right := collection.New([]string{"banana", "date"})
 
-out2 := collection.Union(left, right)
-collection.Dump(out2)
+collection.Dump(collection.Union(left, right))
 // #[]string [
 //   0 => "apple" #string
 //   1 => "banana" #string
@@ -1813,8 +1802,7 @@ groupB := collection.New([]User{
 	{ID: 3, Name: "Carol"},
 })
 
-out3 := collection.Union(groupA, groupB)
-collection.Dump(out3)
+collection.Dump(collection.Union(groupA, groupB))
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -1841,8 +1829,7 @@ _Example: integers_
 
 ```go
 c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
-out1 := c1.Unique(func(a, b int) bool { return a == b })
-collection.Dump(out1)
+collection.Dump(c1.Unique(func(a, b int) bool { return a == b }))
 // #[]int [
 //	0 => 1 #int
 //	1 => 2 #int
@@ -2688,8 +2675,7 @@ _Example: integers_
 
 ```go
 ints := collection.New([]int{1, 2})
-out := ints.Multiply(3)
-collection.Dump(out)
+collection.Dump(ints.Multiply(3))
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -2704,8 +2690,7 @@ _Example: strings_
 
 ```go
 strs := collection.New([]string{"a", "b"})
-out2 := strs.Multiply(2)
-collection.Dump(out2)
+collection.Dump(strs.Multiply(2))
 // #[]string [
 //   0 => "a" #string
 //   1 => "b" #string
@@ -2722,8 +2707,7 @@ type User struct {
 }
 
 users := collection.New([]User{{Name: "Alice"}, {Name: "Bob"}})
-out3 := users.Multiply(2)
-collection.Dump(out3)
+collection.Dump(users.Multiply(2))
 // #[]main.User [
 //   0 => #main.User {
 //     +Name => "Alice" #string
@@ -2743,8 +2727,7 @@ collection.Dump(out3)
 _Example: multiplying by zero or negative returns empty_
 
 ```go
-none := ints.Multiply(0)
-collection.Dump(none)
+collection.Dump(ints.Multiply(0))
 // #[]int [
 // ]
 ```

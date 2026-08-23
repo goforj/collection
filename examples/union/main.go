@@ -16,8 +16,7 @@ func main() {
 	a := collection.New([]int{1, 2, 2, 3})
 	b := collection.New([]int{3, 4, 4, 5})
 
-	out := collection.Union(a, b)
-	collection.Dump(out)
+	collection.Dump(collection.Union(a, b))
 	// #[]int [
 	//   0 => 1 #int
 	//   1 => 2 #int
@@ -30,8 +29,7 @@ func main() {
 	left := collection.New([]string{"apple", "banana"})
 	right := collection.New([]string{"banana", "date"})
 
-	out2 := collection.Union(left, right)
-	collection.Dump(out2)
+	collection.Dump(collection.Union(left, right))
 	// #[]string [
 	//   0 => "apple" #string
 	//   1 => "banana" #string
@@ -54,8 +52,7 @@ func main() {
 		{ID: 3, Name: "Carol"},
 	})
 
-	out3 := collection.Union(groupA, groupB)
-	collection.Dump(out3)
+	collection.Dump(collection.Union(groupA, groupB))
 	// #[]main.User [
 	//   0 => #main.User {
 	//     +ID   => 1 #int

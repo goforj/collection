@@ -13,8 +13,7 @@ package collection
 //	a := collection.New([]int{1, 2, 2, 3, 4})
 //	b := collection.New([]int{2, 4})
 //
-//	out := collection.Difference(a, b)
-//	collection.Dump(out)
+//	collection.Dump(collection.Difference(a, b))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 3 #int
@@ -25,8 +24,7 @@ package collection
 //	left := collection.New([]string{"apple", "banana", "cherry"})
 //	right := collection.New([]string{"banana"})
 //
-//	out2 := collection.Difference(left, right)
-//	collection.Dump(out2)
+//	collection.Dump(collection.Difference(left, right))
 //	// #[]string [
 //	//   0 => "apple" #string
 //	//   1 => "cherry" #string
@@ -49,8 +47,7 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	out3 := collection.Difference(groupA, groupB)
-//	collection.Dump(out3)
+//	collection.Dump(collection.Difference(groupA, groupB))
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int

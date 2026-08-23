@@ -149,7 +149,7 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | ≈ | ≈ | ≈ |
+| **Retain** | inconclusive | ≈ | ≈ |
 | **Reverse** | ≈ | ≈ | ≈ |
 | **Shuffle** | **faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
@@ -157,9 +157,10 @@ Full raw tables: see `BENCHMARKS.md`.
 
 ## How to read the benchmarks
 
-- **≈** means the median timing is inside the benchmark's equivalence band
+- In **Speed/Timing**, **≈** means the median is inside ±10% (±15% in the condensed read-only scalar table), or both timings are below the 50 ns reporting floor
 - **inconclusive** means the median is outside that band but paired samples did not consistently establish the difference
 - **faster** and **slower** are conservative direction labels; exact ns/op values are machine- and build-specific
+- In **Memory/Allocs**, **≈** means both implementations produced the same measured result
 - **same loop** means both implementations compile to the same machine loop, so binary-placement skew is not presented as a library difference
 - Explicit memory deltas show allocation differences for equivalent work; ownership and API trade-offs are labeled separately
 - Single-operation helpers are expected to be close when they perform equivalent work

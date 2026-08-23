@@ -43,3 +43,15 @@ func TestFormatRatioUsesConservativeCategories(t *testing.T) {
 		t.Fatalf("formatRatio(slower) = %q", got)
 	}
 }
+
+// TestScalarSummaryUsesDocumentedTolerance verifies the condensed scalar table's wider noise band.
+func TestScalarSummaryUsesDocumentedTolerance(t *testing.T) {
+	raw := formatBenchmarkRatio("All", benchBorrow, 112, 100, false)
+	if raw != "**faster**" {
+		t.Fatalf("raw timing classification = %q", raw)
+	}
+	summary := formatBenchmarkSpeed("All", benchBorrow, 112, 100, false, false, true)
+	if summary != "≈" {
+		t.Fatalf("scalar summary classification = %q", summary)
+	}
+}

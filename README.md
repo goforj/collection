@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-358-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-296-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 

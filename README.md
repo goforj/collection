@@ -81,8 +81,6 @@ namesByLength := collection.New(users).
 
 ### Performance Benchmarks
 
-> **tl;dr**: *lo* is excellent. We solve a different problem - and in chained pipelines, that difference matters.
-
 `lo` is a fantastic library and a major inspiration for this project. It is battle-tested, idiomatic, and often the right choice when you want small, standalone helpers that operate on slices in isolation.
 
 `collection` takes a different approach.

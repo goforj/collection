@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-476-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-486-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -413,13 +413,48 @@ collection.Dump(c2.Avg())
 
 CountBy returns occurrence counts keyed by the extracted value.
 
+```go
+numbers := collection.New([]int{1, 2, 3, 5})
+counts := numbers.CountBy(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(counts)
+// #map[string]int {
+//   even => 1 #int
+//   odd => 3 #int
+// }
+```
+
 ### <a id="collection.maxby"></a>Collection.MaxBy · readonly · terminal
 
 MaxBy returns the item whose extracted key is the largest.
 
+```go
+words := collection.New([]string{"pear", "fig", "banana"})
+longest, ok := words.MaxBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(longest, ok)
+// "banana" #string
+// true #bool
+```
+
 ### <a id="collection.minby"></a>Collection.MinBy · readonly · terminal
 
 MinBy returns the item whose extracted key is the smallest.
+
+```go
+words := collection.New([]string{"pear", "fig", "banana"})
+shortest, ok := words.MinBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(shortest, ok)
+// "fig" #string
+// true #bool
+```
 
 ### <a id="count"></a>Count · readonly · terminal
 
@@ -1067,9 +1102,47 @@ fmt.Println(s)
 
 GroupBy partitions this collection into collections keyed by the extracted value.
 
+```go
+numbers := collection.New([]int{1, 2, 3, 4})
+groups := numbers.GroupBy(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(groups["even"].Items(), groups["odd"].Items())
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+// ]
+```
+
 ### <a id="collection.groupbyslice"></a>Collection.GroupBySlice · readonly · terminal
 
 GroupBySlice partitions this collection into slices keyed by the extracted value.
+
+```go
+numbers := collection.New([]int{1, 2, 3, 4})
+groups := numbers.GroupBySlice(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(groups["even"], groups["odd"])
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+// ]
+```
 
 ### <a id="groupby"></a>GroupBy · readonly · terminal
 
@@ -1220,6 +1293,19 @@ collection.Dump(groups2["user"])
 ### <a id="collection.tomap"></a>Collection.ToMap · readonly · terminal
 
 ToMap reduces this collection into a map using the provided key and value functions.
+
+```go
+words := collection.New([]string{"go", "forj"})
+lengths := words.ToMap(
+	func(word string) string { return word },
+	func(word string) int { return len(word) },
+)
+collection.Dump(lengths)
+// #map[string]int {
+//   forj => 4 #int
+//   go => 2 #int
+// }
+```
 
 ### <a id="frommap"></a>FromMap · immutable · chainable
 
@@ -2205,6 +2291,18 @@ fmt.Println(out1)
 ### <a id="collection.uniqueby"></a>Collection.UniqueBy · immutable · chainable
 
 UniqueBy returns a collection containing the first item for each extracted key.
+
+```go
+words := collection.New([]string{"go", "up", "forj", "code"})
+unique := words.UniqueBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(unique.Items())
+// #[]string [
+//   0 => "go" #string
+//   1 => "forj" #string
+// ]
+```
 
 ### <a id="difference"></a>Difference · immutable · chainable
 
@@ -3524,13 +3622,56 @@ users.Append(
 
 MapTo maps this collection to a collection with a different element type.
 
+```go
+numbers := collection.New([]int{1, 2, 3, 4})
+labels := numbers.MapTo(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(labels.Items())
+// #[]string [
+//   0 => "odd" #string
+//   1 => "even" #string
+//   2 => "odd" #string
+//   3 => "even" #string
+// ]
+```
+
 ### <a id="collection.pipe"></a>Collection.Pipe · readonly · terminal
 
 Pipe passes this collection to fn and returns fn's result.
 
+```go
+numbers := collection.New([]int{1, 2, 3})
+total := numbers.Pipe(func(values *collection.Collection[int]) int {
+	sum := 0
+	for _, value := range values.Items() {
+		sum += value
+	}
+	return sum
+})
+collection.Dump(total)
+// 6 #int
+```
+
 ### <a id="collection.zipwith"></a>Collection.ZipWith · immutable · chainable
 
 ZipWith combines this collection with another collection using fn up to the shorter length.
+
+```go
+left := collection.New([]int{1, 2, 3})
+right := collection.New([]int{10, 20})
+sums := left.ZipWith(right, func(a, b int) int {
+	return a + b
+})
+collection.Dump(sums.Items())
+// #[]int [
+//   0 => 11 #int
+//   1 => 22 #int
+// ]
+```
 
 ### <a id="concat"></a>Concat · mutable · chainable
 

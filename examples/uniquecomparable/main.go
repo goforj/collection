@@ -10,7 +10,8 @@ import "github.com/goforj/collection/v3"
 func main() {
 	// UniqueComparable returns a new collection with duplicate comparable items removed.
 	// The first occurrence of each value is kept, and order is preserved.
-	// This is a faster, allocation-friendly path for comparable types.
+	// It uses a map to track seen values, so it has expected linear time and allocates
+	// storage for both the map and the result.
 
 	// Example: integers
 	collection.Dump(collection.UniqueComparable([]int{1, 2, 2, 3, 4, 4, 5}))

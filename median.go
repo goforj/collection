@@ -4,13 +4,15 @@ import "sort"
 
 // Median returns the statistical median of a numeric slice as float64.
 // It returns (0, false) if the slice is empty.
+// Median copies the input before sorting, so it allocates O(n) storage and does
+// not mutate the input slice.
 // @group Aggregation
 // @behavior readonly
 // @chainable false
 // @terminal true
 //
-// Odd count  → middle value
-// Even count → average of the two middle values
+// - Odd count: middle value.
+// - Even count: average of the two middle values.
 //
 // Example: integers - odd number of items
 //

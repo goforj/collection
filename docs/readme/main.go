@@ -256,12 +256,15 @@ func extractDescription(group *ast.CommentGroup) string {
 	for _, c := range group.List {
 		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
 
-		if exampleHeader.MatchString(line) ||
-			groupHeader.MatchString(line) ||
+		if exampleHeader.MatchString(line) {
+			break
+		}
+
+		if groupHeader.MatchString(line) ||
 			behaviorHeader.MatchString(line) ||
 			chainableHeader.MatchString(line) ||
 			terminalHeader.MatchString(line) {
-			break
+			continue
 		}
 
 		if len(lines) == 0 && line == "" {
@@ -388,8 +391,8 @@ func renderAPI(funcs []*FuncDoc) string {
 
 	// ---------------- Index ----------------
 	buf.WriteString("# API Index\n\n")
-	buf.WriteString("| Group | Functions |\n")
-	buf.WriteString("|------:|-----------|\n")
+	buf.WriteString("| Group | Functions and methods |\n")
+	buf.WriteString("|------:|-----------------------|\n")
 
 	for _, group := range groupNames {
 		sort.Slice(byGroup[group], func(i, j int) bool {

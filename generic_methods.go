@@ -100,6 +100,7 @@ func (c Slice[T]) MaxBy[K Number | ~string](keyFn func(T) K) (T, bool) {
 }
 
 // ToMap reduces this collection into a map using the provided key and value functions.
+// If multiple items produce the same key, the value derived from the last item wins.
 // @group Maps
 // @behavior readonly
 // @chainable false

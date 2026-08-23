@@ -8,7 +8,8 @@ package collection
 // @chainable false
 // @terminal true
 //
-// NOTE: windows share the backing array with the source collection.
+// Window allocates the outer result slice. Each window is a capacity-capped view
+// that shares the backing array with the source collection.
 //
 // Example: integers - step 1
 //

@@ -2,7 +2,8 @@ package collection
 
 // UniqueComparable returns a new collection with duplicate comparable items removed.
 // The first occurrence of each value is kept, and order is preserved.
-// This is a faster, allocation-friendly path for comparable types.
+// It uses a map to track seen values, so it has expected linear time and allocates
+// storage for both the map and the result.
 // @group Set Operations
 // @behavior immutable
 // @chainable true

@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
 	"slices"
 	"sort"
 	"strings"
@@ -117,7 +118,7 @@ func runBenches(only map[string]struct{}, mode benchMode) []benchResult {
 		{"Retain", collectionBenchmark(benchRetainCollectionBorrow, benchRetainCollectionCopy), benchRetainLo},
 		{"Chunk", collectionBenchmark(benchChunkCollectionBorrow, benchChunkCollectionCopy), benchChunkLo},
 		{"Take", collectionBenchmark(benchTakeCollectionBorrow, benchTakeCollectionCopy), benchTakeLo},
-		{"Contains", collectionBenchmark(benchContainsCollectionBorrow, benchContainsCollectionCopy), benchContainsLo},
+		{"slices.Contains", collectionBenchmark(benchContainsCollectionBorrow, benchContainsCollectionCopy), benchContainsLo},
 		{"FirstWhere", collectionBenchmark(benchFindCollectionBorrow, benchFindCollectionCopy), benchFindLo},
 		{"GroupBy", collectionBenchmark(benchGroupByCollectionBorrow, benchGroupByCollectionCopy), benchGroupByLo},
 		{"CountBy", collectionBenchmark(benchCountByCollectionBorrow, benchCountByCollectionCopy), benchCountByLo},
@@ -128,7 +129,7 @@ func runBenches(only map[string]struct{}, mode benchMode) []benchResult {
 		{"Shuffle", collectionBenchmark(benchShuffleCollectionBorrow, benchShuffleCollectionCopy), benchShuffleLo},
 		{"Zip", collectionBenchmark(benchZipCollectionBorrow, benchZipCollectionCopy), benchZipLo},
 		{"ZipWith", collectionBenchmark(benchZipWithCollectionBorrow, benchZipWithCollectionCopy), benchZipWithLo},
-		{"Unique", collectionBenchmark(benchUniqueCollectionBorrow, benchUniqueCollectionCopy), benchUniqueLo},
+		{"UniqueComparable", collectionBenchmark(benchUniqueComparableCollectionBorrow, benchUniqueComparableCollectionCopy), benchUniqueComparableLo},
 		{"UniqueBy", collectionBenchmark(benchUniqueByCollectionBorrow, benchUniqueByCollectionCopy), benchUniqueByLo},
 		{"Union", collectionBenchmark(benchUnionCollectionBorrow, benchUnionCollectionCopy), benchUnionLo},
 		{"Intersect", collectionBenchmark(benchIntersectCollectionBorrow, benchIntersectCollectionCopy), benchIntersectLo},
@@ -1438,11 +1439,12 @@ func benchReverseCollectionCopyHelper(input []int) collection.Slice[int] {
 	return collection.New(input).Clone().Reverse()
 }
 
-// benchReverseLoHelper executes Reverse with the Lo implementation.
+// benchReverseLoHelper executes Reverse with lo's supported mutable implementation.
 //
 //go:noinline
 func benchReverseLoHelper(input []int) []int {
-	return lo.Reverse(input)
+	mutable.Reverse(input)
+	return input
 }
 
 // benchReverseCollectionBorrow measures Reverse with the CollectionBorrow implementation.
@@ -1488,11 +1490,12 @@ func benchShuffleCollectionCopyHelper(input []int) collection.Slice[int] {
 	return collection.New(input).Clone().Shuffle()
 }
 
-// benchShuffleLoHelper executes Shuffle with the Lo implementation.
+// benchShuffleLoHelper executes Shuffle with lo's supported mutable implementation.
 //
 //go:noinline
 func benchShuffleLoHelper(input []int) []int {
-	return lo.Shuffle(input)
+	mutable.Shuffle(input)
+	return input
 }
 
 // benchShuffleCollectionBorrow measures Shuffle with the CollectionBorrow implementation.
@@ -1620,50 +1623,50 @@ func benchZipWithLo(b *testing.B) {
 	}
 }
 
-// benchUniqueCollectionBorrowHelper executes Unique with the CollectionBorrow implementation.
+// benchUniqueComparableCollectionBorrowHelper executes UniqueComparable with the CollectionBorrow implementation.
 //
 //go:noinline
-func benchUniqueCollectionBorrowHelper(input []int) collection.Slice[int] {
+func benchUniqueComparableCollectionBorrowHelper(input []int) collection.Slice[int] {
 	return collection.UniqueComparable(collection.New(input))
 }
 
-// benchUniqueCollectionCopyHelper executes Unique with the CollectionCopy implementation.
+// benchUniqueComparableCollectionCopyHelper executes UniqueComparable with the CollectionCopy implementation.
 //
 //go:noinline
-func benchUniqueCollectionCopyHelper(input []int) collection.Slice[int] {
+func benchUniqueComparableCollectionCopyHelper(input []int) collection.Slice[int] {
 	return collection.UniqueComparable(collection.New(input).Clone())
 }
 
-// benchUniqueLoHelper executes Unique with the Lo implementation.
+// benchUniqueComparableLoHelper executes UniqueComparable with the Lo implementation.
 //
 //go:noinline
-func benchUniqueLoHelper(input []int) []int {
+func benchUniqueComparableLoHelper(input []int) []int {
 	return lo.Uniq(input)
 }
 
-// benchUniqueCollectionBorrow measures Unique with the CollectionBorrow implementation.
-func benchUniqueCollectionBorrow(b *testing.B) {
+// benchUniqueComparableCollectionBorrow measures UniqueComparable with the CollectionBorrow implementation.
+func benchUniqueComparableCollectionBorrow(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		result := benchUniqueCollectionBorrowHelper(benchIntsDup)
+		result := benchUniqueComparableCollectionBorrowHelper(benchIntsDup)
 		_ = result
 	}
 }
 
-// benchUniqueCollectionCopy measures Unique with the CollectionCopy implementation.
-func benchUniqueCollectionCopy(b *testing.B) {
+// benchUniqueComparableCollectionCopy measures UniqueComparable with the CollectionCopy implementation.
+func benchUniqueComparableCollectionCopy(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		result := benchUniqueCollectionCopyHelper(benchIntsDup)
+		result := benchUniqueComparableCollectionCopyHelper(benchIntsDup)
 		_ = result
 	}
 }
 
-// benchUniqueLo measures Unique with the Lo implementation.
-func benchUniqueLo(b *testing.B) {
+// benchUniqueComparableLo measures UniqueComparable with the Lo implementation.
+func benchUniqueComparableLo(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
-		result := benchUniqueLoHelper(benchIntsDup)
+		result := benchUniqueComparableLoHelper(benchIntsDup)
 		_ = result
 	}
 }
@@ -2141,7 +2144,7 @@ func renderCondensedTables(results []benchResult, mode benchMode) string {
 				"Last",
 				"FirstWhere",
 				"IndexWhere",
-				"Contains",
+				"slices.Contains",
 				"Reduce (sum)",
 				"Sum",
 				"Min",
@@ -2160,7 +2163,7 @@ func renderCondensedTables(results []benchResult, mode benchMode) string {
 				"SkipLast",
 				"Zip",
 				"ZipWith",
-				"Unique",
+				"UniqueComparable",
 				"UniqueBy",
 				"Union",
 				"Intersect",
@@ -2533,7 +2536,8 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	path := filepath.Join(root, "BENCHMARKS.md")
 	var buf bytes.Buffer
 	buf.WriteString("# Benchmarks\n\n")
-	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d paired samples at %s each, alternating implementation order. Timing differences are shown only when every pair falls outside the ±%.0f%% raw equivalence band in the same direction. The condensed read-only scalar table uses a ±%.0f%% band. Both tables label results `below floor` when both timings are below %.0fns rather than drawing a relative conclusion from sub-nanosecond deltas. Medians outside the applicable band without consistent paired evidence are labeled `inconclusive`. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration, equivalentEpsilon*100, scalarOnlyEpsilon*100, benchRatioNoiseNs)
+	buf.WriteString(benchmarkMethodology())
+	buf.WriteString("\n\n")
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
 	buf.WriteString("FirstWhere compiles to the same scan loop in both implementations. Its ratio is labeled `same loop` because binary placement can dominate the timing of such a small function in this in-process harness.\n\n")
 	buf.WriteString(rawBorrowTable)
@@ -2542,6 +2546,76 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	buf.WriteString(rawCopyTable)
 	buf.WriteString("\n")
 	return os.WriteFile(path, buf.Bytes(), 0o644)
+}
+
+const loModulePath = "github.com/samber/lo"
+
+// benchmarkMethodology reports the runtime and pinned comparator used for a generated result.
+func benchmarkMethodology() string {
+	return formatBenchmarkMethodology(runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), pinnedDependencyVersion(loModulePath), cpuModel())
+}
+
+// formatBenchmarkMethodology formats provenance and the measurement rules for generated reports.
+func formatBenchmarkMethodology(goVersion, goos, goarch string, maxProcs int, loVersion, cpu string) string {
+	host := fmt.Sprintf("%s on %s/%s", goVersion, goos, goarch)
+	if cpu != "" {
+		host += fmt.Sprintf(", CPU=%s", cpu)
+	}
+	return fmt.Sprintf("Methodology: %s, GOMAXPROCS=%d, lo=%s; median of %d paired samples at %s each, alternating implementation order. Timing differences are shown only when every pair falls outside the ±%.0f%% raw equivalence band in the same direction. The condensed read-only scalar table uses a ±%.0f%% band. Both tables label results `below floor` when both timings are below %.0fns rather than drawing a relative conclusion from sub-nanosecond deltas. Medians outside the applicable band without consistent paired evidence are labeled `inconclusive`. Mutable borrowed inputs are restored inside every timed iteration for both implementations.", host, maxProcs, loVersion, benchSamples, benchSampleDuration, equivalentEpsilon*100, scalarOnlyEpsilon*100, benchRatioNoiseNs)
+}
+
+// pinnedDependencyVersion returns the version embedded by the Go toolchain for a direct benchmark dependency.
+func pinnedDependencyVersion(path string) string {
+	buildInfo, ok := debug.ReadBuildInfo()
+	if ok {
+		for _, dependency := range buildInfo.Deps {
+			if dependency.Path == path {
+				return dependency.Version
+			}
+		}
+	}
+	panic(fmt.Sprintf("benchmark dependency %q is missing from build information", path))
+}
+
+// cpuModel returns the Linux CPU model when the kernel exposes it in procfs.
+func cpuModel() string {
+	data, err := os.ReadFile("/proc/cpuinfo")
+	if err != nil {
+		return ""
+	}
+	return cpuModelFromProc(data)
+}
+
+// cpuModelFromProc extracts a CPU model from Linux procfs data.
+func cpuModelFromProc(data []byte) string {
+	var implementer string
+	var part string
+	var architecture string
+
+	for _, line := range strings.Split(string(data), "\n") {
+		key, value, ok := strings.Cut(line, ":")
+		if !ok {
+			continue
+		}
+		key = strings.TrimSpace(key)
+		value = strings.TrimSpace(value)
+		switch key {
+		case "model name", "Hardware":
+			if value != "" {
+				return value
+			}
+		case "CPU implementer":
+			implementer = value
+		case "CPU part":
+			part = value
+		case "CPU architecture":
+			architecture = value
+		}
+	}
+	if implementer != "" || part != "" || architecture != "" {
+		return fmt.Sprintf("implementer=%s, part=%s, architecture=%s", implementer, part, architecture)
+	}
+	return ""
 }
 
 // ----------------------------------------------------------------------------

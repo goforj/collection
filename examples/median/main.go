@@ -10,6 +10,8 @@ import "github.com/goforj/collection/v3"
 func main() {
 	// Median returns the statistical median of a numeric slice as float64.
 	// It returns (0, false) if the slice is empty.
+	// Median copies the input before sorting, so it allocates O(n) storage and does
+	// not mutate the input slice.
 
 	// Example: integers - odd number of items
 	values := []int{3, 1, 2}

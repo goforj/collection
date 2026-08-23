@@ -9,7 +9,8 @@ package collection
 //
 // If size <= 0, nil is returned.
 //
-// NOTE: chunks share the backing array with the source collection.
+// Chunk allocates the outer result slice. Each chunk is a capacity-capped view
+// that shares the backing array with the source collection.
 // Example: integers
 //
 //	collection.Dump(collection.New([]int{1, 2, 3, 4, 5}).Chunk(2))

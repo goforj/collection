@@ -9,6 +9,7 @@ import "github.com/goforj/collection/v3"
 
 func main() {
 	// ToMap reduces this collection into a map using the provided key and value functions.
+	// If multiple items produce the same key, the value derived from the last item wins.
 
 	// Example: index words by their value
 	words := collection.New([]string{"go", "forj"})

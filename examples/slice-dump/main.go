@@ -9,7 +9,7 @@ import "github.com/goforj/collection/v3"
 
 func main() {
 	// Dump prints items with godump and returns the same collection.
-	// This is a no-op on the collection itself and never panics.
+	// This is a no-op on the collection itself.
 
 	// Example: integers
 	collection.New([]int{1, 2, 3}).Dump()

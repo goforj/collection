@@ -2,6 +2,9 @@ package main
 
 import (
 	"errors"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"strings"
 	"testing"
 )
@@ -48,4 +51,51 @@ func TestCountTestOutputReportsMalformedStream(t *testing.T) {
 			t.Fatalf("count test output error = %q, want %q", err, want)
 		}
 	}
+}
+
+// TestExtractDescriptionKeepsPostMetadataProse verifies that metadata can
+// appear before a function's ownership contract without hiding that contract.
+func TestExtractDescriptionKeepsPostMetadataProse(t *testing.T) {
+	group := commentGroup(t, `// Clone returns an independent copy of the collection.
+// @group Construction
+// @behavior immutable
+// @chainable true
+// @terminal false
+//
+// The returned Slice owns a new backing array, while its elements remain shallow copies.
+//
+// Use Clone when later mutations must not be shared with the original collection.
+//
+// Example: clone integers
+//
+// 	cloned := values.Clone()`)
+
+	const want = "Clone returns an independent copy of the collection.\n\nThe returned Slice owns a new backing array, while its elements remain shallow copies.\n\nUse Clone when later mutations must not be shared with the original collection."
+	if got := extractDescription(group); got != want {
+		t.Fatalf("extractDescription() = %q, want %q", got, want)
+	}
+}
+
+// TestRenderAPIIndexLabelsMethods verifies that the index describes both
+// package functions and methods.
+func TestRenderAPIIndexLabelsMethods(t *testing.T) {
+	got := renderAPI([]*FuncDoc{{Name: "Clone", Group: "Construction"}})
+	if !strings.Contains(got, "| Group | Functions and methods |") {
+		t.Fatalf("renderAPI() index heading missing functions and methods: %q", got)
+	}
+}
+
+// commentGroup parses source so tests exercise the same AST representation as
+// the README generator.
+func commentGroup(t *testing.T, source string) *ast.CommentGroup {
+	t.Helper()
+
+	file, err := parser.ParseFile(token.NewFileSet(), "doc.go", source+"\npackage test", parser.ParseComments)
+	if err != nil {
+		t.Fatalf("parse comment group: %v", err)
+	}
+	if len(file.Comments) != 1 {
+		t.Fatalf("comment groups = %d, want 1", len(file.Comments))
+	}
+	return file.Comments[0]
 }

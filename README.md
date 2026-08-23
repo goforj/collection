@@ -21,10 +21,10 @@
 ## Features
 
 - **Fluent chaining** - pipeline your operations like Laravel Collections
-- **Fully generic** (`Slice[T]`) - no reflection, no `interface{}`
+- **Fully generic** (`Slice[T]`) - the public collection API uses typed generic signatures; debugging helpers accept arbitrary values for inspection
 - **Tiny dependency footprint** - only `godump` for debugging helpers
 - **Go-native slice access** - use `len`, indexing, `range`, and ordinary slice conversions directly
-- **Explicit allocation behavior** - slice views and independent results are documented per operation
+- **Explicit ownership behavior** - slice views, independent results, and in-place mutations are documented per operation
 - **Map / Filter / Reduce** - clean functional transforms
 - **Generic methods** - type-changing transforms remain fluent on Go 1.27+
 - **First / Last / FirstWhere / IndexWhere** helpers
@@ -48,21 +48,28 @@ events := []DeviceEvent{
     {Device: "router-1", Region: "us-east", Errors: 3},
     {Device: "router-2", Region: "us-east", Errors: 15},
     {Device: "router-3", Region: "us-west", Errors: 22},
+    {Device: "router-4", Region: "us-west", Errors: 9},
+    {Device: "router-5", Region: "eu-west", Errors: 7},
 }
 
-// Fluent slice pipeline
+// Clone creates a top-level ownership boundary before the mutable stages.
 collection.
     New(events). // Construction
-    Shuffle(). // Ordering
-    Filter(func(e DeviceEvent) bool { return e.Errors > 5 }). // Slicing
+    Clone(). // Construction
+    Retain(func(e DeviceEvent) bool { return e.Errors > 5 }). // Mutation
     Sort(func(a, b DeviceEvent) bool { return a.Errors > b.Errors }). // Ordering
-    Take(5). // Slicing
-    TakeUntil(func(e DeviceEvent) bool { return e.Errors < 10 }). // Slicing (stop when predicate becomes true)
-    SkipLast(1). // Slicing
+    Take(3). // Slicing
+    TakeUntil(func(e DeviceEvent) bool { return e.Errors <= 9 }). // Slicing (stop when predicate becomes true)
+    Reverse(). // Ordering
     Dump() // Debugging
 
 // #[]main.DeviceEvent [
 //  0 => #main.DeviceEvent {
+//    +Device => "router-2" #string
+//    +Region => "us-east" #string
+//    +Errors => 15 #int
+//  }
+//  1 => #main.DeviceEvent {
 //    +Device => "router-3" #string
 //    +Region => "us-west" #string
 //    +Errors => 22 #int
@@ -73,10 +80,12 @@ collection.
 Go 1.27 generic methods keep type-changing pipelines fluent:
 
 ```go
-namesByLength := collection.New(users).
-    Map(func(user User) string { return user.Name }).
-    UniqueBy(strings.ToLower).
-    GroupBy(func(name string) int { return len(name) })
+regionsByPrefix := collection.New(events).
+    Map(func(event DeviceEvent) string { return event.Region }).
+    UniqueBy(func(region string) string { return region }).
+    GroupBy(func(region string) string { return region[:2] })
+fmt.Println(len(regionsByPrefix))
+// 2
 ```
 
 ### Performance Benchmarks
@@ -92,7 +101,7 @@ Both libraries provide generic operations over ordinary slices. The main differe
 
 The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
 
-Matched v2/v3 regression benchmarks for mutating, copied, and pipeline workloads live in [`./docs/regression`](./docs/regression).
+Matched v2/v3 regression benchmarks for mutating, copied, and pipeline workloads live in [`./docs/regression`](./docs/regression); its [`go.mod`](./docs/regression/go.mod) records the exact v2 baseline.
 
 <!-- bench:embed:start -->
 
@@ -109,7 +118,7 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Last** | below floor | ≈ | ≈ |
 | **FirstWhere** | same loop | ≈ | ≈ |
 | **IndexWhere** | ≈ | ≈ | ≈ |
-| **Contains** | ≈ | ≈ | ≈ |
+| **slices.Contains** | ≈ | ≈ | ≈ |
 | **Reduce (sum)** | ≈ | ≈ | ≈ |
 | **Sum** | ≈ | ≈ | ≈ |
 | **Min** | ≈ | ≈ | ≈ |
@@ -126,9 +135,9 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Take** | below floor | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **2.3x faster** | ≈ | ≈ |
-| **ZipWith** | **2.8x faster** | ≈ | ≈ |
-| **Unique** | ≈ | ≈ | ≈ |
+| **Zip** | **2.5x faster** | ≈ | ≈ |
+| **ZipWith** | **3.1x faster** | ≈ | ≈ |
+| **UniqueComparable** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
 | **Union** | ≈ | ≈ | ≈ |
 | **Intersect** | ≈ | ≈ | ≈ |
@@ -148,8 +157,8 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | ≈ | ≈ | ≈ |
-| **Reverse** | inconclusive | ≈ | ≈ |
+| **Retain** | inconclusive | ≈ | ≈ |
+| **Reverse** | ≈ | ≈ | ≈ |
 | **Shuffle** | **3.7x faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->
@@ -190,14 +199,14 @@ copied slices.
 Fluent pipelines don't mean you're locked into mutation.
 
 `New` borrows slices by default. Use `Clone()` before an in-place operation when
-the original data must remain unchanged.
+the original slice's element slots or order must remain unchanged.
 
-When you want to branch a pipeline or preserve the original data, `Clone()` creates a shallow copy of the collection so subsequent operations are isolated and predictable.
+When you want to branch a pipeline or preserve the original data, `Clone()` creates a shallow copy of the top-level slice. Subsequent operations that replace, reorder, or overwrite collection entries are isolated; `Clone()` does not deep-copy element values or values they reference.
 
 ```go
 events := collection.New(deviceEvents)
 
-// Fast alerting path: cheap filters, early exit
+// In-place alert filtering with a bounded result
 alerts := events.
     Clone().
     Retain(func(e DeviceEvent) bool { return e.Severity >= Critical }).
@@ -205,18 +214,17 @@ alerts := events.
 
 // Deeper analysis path: heavier work, full ordering
 report := events.
-    Clone().
     Filter(func(e DeviceEvent) bool { return e.Region == "us-east" }).
     Sort(func(a, b DeviceEvent) bool { return a.Timestamp.Before(b.Timestamp) })
 ```
 
 This makes divergence points explicit and intentional.
 
-No hidden copies. No surprises.
+Copying and mutation behavior is documented per operation.
 
 ## Design Principles
 
-- **Type-safe**: no reflection
+- **Type-safe**: the collection API uses typed generic signatures; debugging helpers are the exception for arbitrary-value inspection
 - **Explicit semantics**: order, mutation, and allocation are documented
 - **Go-native**: respects generics and stdlib patterns
 - **Eager evaluation**: no lazy pipelines or hidden concurrency
@@ -236,16 +244,16 @@ Maps are unordered in Go. This library does not pretend otherwise.
 
 Instead, map interaction is explicit and intentional:
 
-- `FromMap` materializes key/value pairs into an ordered workflow
+- `FromMap` materializes key/value pairs into a collection; its initial order is unspecified, so sort when a particular order matters
 - `ToMap` reduces collections back into maps explicitly
 
-This makes transitions between unordered and ordered data visible and honest.
+This makes map materialization visible and leaves deterministic ordering to an explicit `Sort`.
 
 ## Behavior semantics
 
-Each method declares how it interacts with the collection:
+Each exported function and method declares how it interacts with the collection:
 
-- **readonly** - reads data only and returns a derived value
+- **readonly** - does not directly mutate the receiver's backing array; callbacks and debugging helpers can still have side effects
 - **immutable** - returns a value without mutating the receiver; individual method docs state whether it allocates or returns a view
 - **mutable** - may modify elements in the receiver's backing array
 - **terminal** - ends the fluent pipeline and returns a non-collection result
@@ -255,7 +263,7 @@ These annotations describe **observable behavior**, not implementation details.
 Terminal operations do not return a `Slice` and cannot be chained further.
 They are designed to be allocation-free under `New()` where possible.
 
-Allocation and copying are **explicitly documented per method**.
+Ownership and copying are **explicitly documented per operation**.
 Some readonly or immutable operations may allocate internally when required
 (e.g. grouping, chunking, scratch copies), but never mutate the receiver.
 
@@ -286,13 +294,13 @@ no collection-specific lazy wrapper is required.
 
 ## Runnable examples
 
-Every function has a corresponding runnable example under [`./examples`](./examples).
+Every exported function and method has a corresponding runnable example under [`./examples`](./examples).
 
-These examples are **generated directly from the documentation blocks** of each function, ensuring the docs and code never drift. These are the same examples you see here in the README and GoDoc.
+The checked-in examples are generated from GoDoc comments when the documentation is refreshed; they are intended to stay aligned with the README and GoDoc.
 
-An automated test executes **every example** to verify it builds and runs successfully.  
+Automated checks build and execute the checked-in examples, then compare their output with the documentation.
 
-This guarantees all examples are valid, up-to-date, and remain functional as the API evolves.
+This helps catch example regressions as the API evolves.
 
 # Installation
 
@@ -309,8 +317,8 @@ go get github.com/goforj/collection/v3
 
 # API Index
 
-| Group | Functions |
-|------:|-----------|
+| Group | Functions and methods |
+|------:|-----------------------|
 | **Aggregation** | [Avg](#avg) - [CountBy](#countby) - [CountByValue](#countbyvalue) - [Max](#max) - [MaxBy](#maxby) - [Median](#median) - [Min](#min) - [MinBy](#minby) - [Mode](#mode) - [Reduce](#reduce) - [Sum](#sum) |
 | **Construction** | [Clone](#clone) - [New](#new) |
 | **Debugging** | [Dd](#dd) - [Dump](#dump) - [DumpStr](#dumpstr) - [Slice.Dump](#slice.dump) |
@@ -366,6 +374,8 @@ collection.Dump(counts)
 ### <a id="countbyvalue"></a>CountByValue - readonly - terminal
 
 CountByValue returns the number of occurrences of each distinct item in c.
+
+T must be comparable.
 
 ```go
 collection.Dump(collection.CountByValue([]string{"go", "forj", "go"}))
@@ -431,6 +441,11 @@ collection.Dump(longest, ok)
 
 Median returns the statistical median of a numeric slice as float64.
 It returns (0, false) if the slice is empty.
+Median copies the input before sorting, so it allocates O(n) storage and does
+not mutate the input slice.
+
+- Odd count: middle value.
+- Even count: average of the two middle values.
 
 _Example: integers - odd number of items_
 
@@ -570,6 +585,9 @@ collection.Dump(collection.Mode([]int{}))
 
 Reduce collapses the collection into a single accumulated value.
 The accumulator may have a different type R from the collection's elements.
+
+This is useful for computing sums, concatenations, aggregates,
+or any fold-style reduction.
 
 _Example: integers - sum_
 
@@ -744,6 +762,8 @@ Dd prints items then terminates execution.
 Like Laravel's dd(), this is intended for debugging and
 should not be used in production control flow.
 
+This method never returns.
+
 ```go
 collection.New([]string{"a", "b"}).Dd()
 // #[]string [
@@ -783,7 +803,7 @@ fmt.Println(collection.New([]int{10, 20}).DumpStr())
 ### <a id="slice.dump"></a>Slice.Dump - readonly - chainable
 
 Dump prints items with godump and returns the same collection.
-This is a no-op on the collection itself and never panics.
+This is a no-op on the collection itself.
 
 _Example: integers_
 
@@ -847,6 +867,11 @@ collection.Dump(groups["even"][:1])
 ### <a id="frommap"></a>FromMap - immutable - chainable
 
 FromMap materializes a map into a collection of key/value pairs.
+
+The iteration order of the resulting collection is unspecified,
+matching Go's map iteration semantics.
+
+This function does not mutate the input map.
 
 _Example: basic usage_
 
@@ -923,6 +948,7 @@ collection.Dump(out)
 ### <a id="tomap"></a>ToMap - readonly - terminal
 
 ToMap reduces this collection into a map using the provided key and value functions.
+If multiple items produce the same key, the value derived from the last item wins.
 
 ```go
 words := collection.New([]string{"go", "forj"})
@@ -944,6 +970,8 @@ collection.Dump(lengths)
 After returns all items after the first element for which pred returns true.
 If no element matches, an empty collection is returned.
 
+NOTE: returns a view (shares backing array). Use Clone() to detach.
+
 ```go
 collection.New([]int{1, 2, 3, 4, 5}).After(func(v int) bool { return v == 3 }).Dump()
 // #[]int [
@@ -956,6 +984,8 @@ collection.New([]int{1, 2, 3, 4, 5}).After(func(v int) bool { return v == 3 }).D
 
 Reverse reverses the order of items in the collection in place
 and returns the same collection for chaining.
+
+This operation performs no allocations.
 
 _Example: integers_
 
@@ -1019,6 +1049,8 @@ collection.Dump(users)
 
 Shuffle shuffles the collection in place and returns the same collection.
 
+This operation mutates the receiver's backing slice.
+
 _Example: integers_
 
 ```go
@@ -1062,6 +1094,13 @@ fmt.Println(len(users))
 
 Sort sorts the collection in place using the provided comparison function and
 returns the same collection for chaining.
+
+The comparison function `less(a, b)` should return true if `a` should come
+before `b` in the sorted order.
+
+This operation mutates the underlying slice and does not allocate a new
+element backing slice. The underlying sort implementation may make small
+internal allocations.
 
 _Example: integers_
 
@@ -1174,6 +1213,8 @@ collection.Dump(collection.New([]int{1, 2, 3, 4}).Any(func(v int) bool { return 
 At returns the item at the given index and a boolean indicating
 whether the index was within bounds.
 
+This method is safe and does not panic for out-of-range indices.
+
 _Example: integers_
 
 ```go
@@ -1280,6 +1321,9 @@ FirstWhere returns the first item in the collection for which the provided
 predicate function returns true. If no items match, ok=false is returned
 along with the zero value of T.
 
+This method is equivalent to Laravel's collection->first(fn) and mirrors
+the behavior found in functional collections in other languages.
+
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
 v, ok := nums.FirstWhere(func(n int) bool {
@@ -1302,6 +1346,9 @@ collection.Dump(v, ok)
 IndexWhere returns the index of the first item in the collection
 for which the provided predicate function returns true.
 If no item matches, it returns (0, false).
+
+This operation performs no allocations and short-circuits
+on the first match.
 
 _Example: integers_
 
@@ -1595,6 +1642,9 @@ collection.Dump(collection.Difference(groupA, groupB))
 Intersect returns a new collection containing elements from the second
 collection that are also present in the first.
 
+Order follows the second collection.
+Duplicates are preserved based on the second collection.
+
 _Example: integers_
 
 ```go
@@ -1798,6 +1848,8 @@ Unique returns a new collection with duplicate items removed, based on the
 equality function `eq`. The first occurrence of each unique value is kept,
 and order is preserved.
 
+The `eq` function should return true when two values are considered equal.
+
 _Example: integers_
 
 ```go
@@ -1877,7 +1929,8 @@ collection.Dump(unique)
 
 UniqueComparable returns a new collection with duplicate comparable items removed.
 The first occurrence of each value is kept, and order is preserved.
-This is a faster, allocation-friendly path for comparable types.
+It uses a map to track seen values, so it has expected linear time and allocates
+storage for both the map and the result.
 
 _Example: integers_
 
@@ -1909,6 +1962,11 @@ collection.Dump(collection.UniqueComparable([]string{"A", "a", "B", "B"}))
 
 Chunk splits the collection into chunks of the given size.
 The final chunk may be smaller if len(items) is not divisible by size.
+
+If size <= 0, nil is returned.
+
+Chunk allocates the outer result slice. Each chunk is a capacity-capped view
+that shares the backing array with the source collection.
 
 _Example: integers_
 
@@ -2122,6 +2180,9 @@ collection.Dump(active, inactive)
 
 Retain keeps items for which fn returns true in c's existing backing array.
 
+Retain returns a capacity-capped, shortened slice header, so callers should
+retain its result when subsequent operations must observe the new length.
+
 ```go
 values := collection.New([]int{1, 2, 3, 4})
 evens := values.Retain(func(value int) bool { return value%2 == 0 })
@@ -2140,6 +2201,11 @@ Skip returns a new collection with the first n items skipped.
 If n is less than or equal to zero, Skip returns the full collection.
 If n is greater than or equal to the collection length, Skip returns
 an empty collection.
+
+This operation performs no element allocations; it re-slices the
+underlying slice.
+
+NOTE: returns a view (shares backing array). Use Clone() to detach.
 
 _Example: integers_
 
@@ -2208,6 +2274,11 @@ SkipLast returns a new collection with the last n items skipped.
 If n is less than or equal to zero, SkipLast returns the full collection.
 If n is greater than or equal to the collection length, SkipLast returns
 an empty collection.
+
+This operation performs no element allocations; it re-slices the
+underlying slice.
+
+NOTE: returns a view (shares backing array). Use Clone() to detach.
 
 _Example: integers_
 
@@ -2388,6 +2459,8 @@ collection.Dump(out4)
 TakeUntil returns items until the predicate function returns true.
 The matching item is NOT included.
 
+NOTE: returns a view (shares backing array). Use Clone() to detach.
+
 _Example: integers - stop when value >= 3_
 
 ```go
@@ -2428,6 +2501,9 @@ collection.Dump(out3)
 Window returns overlapping (or stepped) windows of the collection.
 Each window is a slice of length size; iteration advances by step (default 1 if step <= 0).
 Windows that are shorter than size are omitted.
+
+Window allocates the outer result slice. Each window is a capacity-capped view
+that shares the backing array with the source collection.
 
 _Example: integers - step 1_
 
@@ -2524,6 +2600,9 @@ collection.Dump(win3)
 ### <a id="concat"></a>Concat - immutable - chainable
 
 Concat returns an independent collection containing c followed by values.
+
+Callers must capture the returned Slice because a value receiver cannot extend
+c's slice header. The returned collection never shares backing storage with c.
 
 _Example: strings_
 
@@ -2708,6 +2787,8 @@ collection.Dump(ints.Multiply(0))
 
 Prepend returns an independently backed Slice containing values followed by c.
 
+It allocates exactly enough storage for the result and leaves c unchanged.
+
 _Example: integers_
 
 ```go
@@ -2790,6 +2871,11 @@ collection.Dump(result5)
 
 Tap invokes fn with the Slice value for side effects such as logging,
 debugging, or inspection, then returns the Slice to allow chaining.
+
+The callback receives a borrowed Slice and may mutate its elements. Use Clone
+before Tap when the original backing array must remain isolated.
+The slice header is passed by value, so reslicing, appending, or assigning a
+shortened Slice inside fn does not change the header returned by Tap.
 
 _Example: integers - capture intermediate state during a chain_
 
@@ -2887,6 +2973,8 @@ collection.Dump(users2) // ensures users2 is used
 Times creates a new collection by calling fn(i) for i = 1..count.
 This mirrors Laravel's Collection::times(), which is 1-indexed.
 
+If count <= 0, an empty collection is returned.
+
 _Example: integers - double each index_
 
 ```go
@@ -2952,6 +3040,8 @@ collection.Dump(cTimes3)
 ### <a id="transform"></a>Transform - mutable - chainable
 
 Transform applies a same-type transformation in place and returns the same collection.
+
+Transform mutates the receiver's backing slice. Use Clone() if you need isolation.
 
 _Example: integers_
 

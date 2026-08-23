@@ -10,7 +10,7 @@ import (
 var exitFunc = func(v interface{}) { godump.Dd(v) }
 
 // Dump prints items with godump and returns the same collection.
-// This is a no-op on the collection itself and never panics.
+// This is a no-op on the collection itself.
 // @group Debugging
 // @behavior readonly
 // @chainable true

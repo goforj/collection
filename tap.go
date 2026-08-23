@@ -9,6 +9,8 @@ package collection
 //
 // The callback receives a borrowed Slice and may mutate its elements. Use Clone
 // before Tap when the original backing array must remain isolated.
+// The slice header is passed by value, so reslicing, appending, or assigning a
+// shortened Slice inside fn does not change the header returned by Tap.
 //
 // Example: integers - capture intermediate state during a chain
 //

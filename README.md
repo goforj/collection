@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-484-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-491-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -93,6 +93,8 @@ That design choice doesn't matter much for some single operations. It matters a 
 
 The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
 
+For the pointer-backed versus slice-backed representation A/B, see [SLICE_BACKED_BENCHMARKS.md](./SLICE_BACKED_BENCHMARKS.md).
+
 <!-- bench:embed:start -->
 
 Full raw tables: see `BENCHMARKS.md`.
@@ -113,49 +115,49 @@ Full raw tables: see `BENCHMARKS.md`.
 | **Sum** | ≈ | ≈ | ≈ |
 | **Min** | ≈ | ≈ | ≈ |
 | **Max** | ≈ | ≈ | ≈ |
-| **Each** | ≈ | ≈ | ≈ |
+| **Each** | 1.96x | ≈ | ≈ |
 
 #### Transforming ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Chunk** | **3.62x** | -8.0KB | -50 |
-| **Filter** | **3.70x** | -8.2KB | -1 |
+| **Chunk** | view trade-off | ownership trade-off | ownership trade-off |
+| **Filter** | **2.35x** | -8.2KB | -1 |
 | **Take** | ≈ | ≈ | ≈ |
-| **Skip** | ∞ | -8.2KB | -1 |
-| **SkipLast** | ∞ | -8.2KB | -1 |
-| **Zip** | **2.30x** | ≈ | ≈ |
-| **ZipWith** | **2.81x** | ≈ | ≈ |
+| **Skip** | view trade-off | ownership trade-off | ownership trade-off |
+| **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
+| **Zip** | **3.63x** | ≈ | ≈ |
+| **ZipWith** | **4.96x** | ≈ | ≈ |
 | **Unique** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
-| **Union** | ≈ | ≈ | ≈ |
-| **Intersect** | ≈ | +56B | +3 |
-| **Difference** | **1.92x** | -26.7KB | -29 |
+| **Union** | **1.14x** | ≈ | ≈ |
+| **Intersect** | ≈ | ≈ | ≈ |
+| **Difference** | different work | API trade-off | API trade-off |
 | **GroupBy** | ≈ | ≈ | ≈ |
 | **CountBy** | ≈ | ≈ | ≈ |
 | **CountByValue** | ≈ | ≈ | ≈ |
-| **ToMap** | ≈ | -48B | -1 |
+| **ToMap** | **1.16x** | ≈ | ≈ |
 
 #### Pipelines
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | **5.66x** | -12.3KB | -2 |
+| **Pipeline F→M→T→R** | **2.78x** | -12.3KB | -2 |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Map** | **5.17x** | -8.2KB | -1 |
-| **Reverse** | ≈ | ≈ | ≈ |
-| **Shuffle** | **1.43x** | ≈ | ≈ |
+| **Map** | **2.56x** | -8.2KB | -1 |
+| **Reverse** | **1.16x** | ≈ | ≈ |
+| **Shuffle** | **1.48x** | ≈ | ≈ |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
 
 * **≈** means the two libraries are effectively equivalent
-* Explicit memory deltas show allocation differences for each operation
-* Single-operation helpers are intentionally close in performance if not exceeds
+* Explicit memory deltas show allocation differences for equivalent work; ownership and API trade-offs are labeled separately
+* Single-operation helpers are expected to be close when they perform equivalent work
 * Multi-step pipelines highlight the architectural difference
 
 If you prefer immutable, one-off helpers - `lo` is outstanding.
@@ -167,10 +169,11 @@ If you write **expressive, chained data pipelines** and care about hot-path perf
 Most functional helpers (including `lo`) operate like this:
 
 ```
-input → Map → new slice → Filter → new slice → Take → new slice
+input → Map → new slice → Filter → new slice → Take → slice view
 ```
 
-That model is simple and safe - but each step typically allocates.
+That model is simple and safe. Transforming stages such as `Map` and `Filter`
+typically allocate; `Subset`, used here for `Take`, returns a view.
 
 `collection` pipelines can mix independently backed results, in-place element
 operations, and slice views:
@@ -196,11 +199,11 @@ That's why the biggest deltas appear in benchmarks like:
 
 * `Pipeline F→M→T→R`
 * `Map`
-* `Chunk`
 * `Zip / ZipWith`
-* `Skip / SkipLast`
 
-In these cases, `collection` can be **2×–30× faster** and often reduce allocations to **zero**, not by doing "clever tricks", but by making mutation *explicit and opt-in*.
+The pipeline and mutating-operation results reflect their documented mutation
+and allocation semantics. `Chunk`, `Skip`, and `SkipLast` are ownership
+trade-offs: collection returns views while lo returns copied slices.
 
 ## Explicit branching with `Clone`
 

@@ -24,8 +24,7 @@ func main() {
 	// ]
 
 	// Example: strings
-	strs := collection.New([]string{"a", "b"})
-	collection.Dump(strs.Multiply(2))
+	collection.Dump(collection.New([]string{"a", "b"}).Multiply(2))
 	// #[]string [
 	//   0 => "a" #string
 	//   1 => "b" #string

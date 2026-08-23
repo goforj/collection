@@ -780,8 +780,7 @@ c.Dd()
 Dump is a convenience function that calls godump.Dump.
 
 ```go
-c2 := collection.New([]int{1, 2, 3})
-collection.Dump(c2)
+collection.Dump(collection.New([]int{1, 2, 3}))
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int

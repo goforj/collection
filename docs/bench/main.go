@@ -752,9 +752,9 @@ func benchTransformLoHelper(input []int) []int {
 
 // benchTransformCollectionBorrow measures Transform with the CollectionBorrow implementation.
 func benchTransformCollectionBorrow(b *testing.B) {
-	copy(workA, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workA, benchInts)
 		result := benchTransformCollectionBorrowHelper(workA)
 		_ = result
 	}
@@ -771,9 +771,9 @@ func benchTransformCollectionCopy(b *testing.B) {
 
 // benchTransformLo measures Transform with lo's mutable implementation.
 func benchTransformLo(b *testing.B) {
-	copy(workB, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workB, benchInts)
 		result := benchTransformLoHelper(workB)
 		_ = result
 	}
@@ -900,9 +900,9 @@ func benchRetainLoHelper(input []int) []int {
 
 // benchRetainCollectionBorrow measures Retain with the CollectionBorrow implementation.
 func benchRetainCollectionBorrow(b *testing.B) {
-	copy(workA, benchRetainInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workA, benchRetainInts)
 		result := benchRetainCollectionBorrowHelper(workA)
 		_ = result
 	}
@@ -919,9 +919,9 @@ func benchRetainCollectionCopy(b *testing.B) {
 
 // benchRetainLo measures Retain with lo's mutable implementation.
 func benchRetainLo(b *testing.B) {
-	copy(workB, benchRetainInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workB, benchRetainInts)
 		result := benchRetainLoHelper(workB)
 		_ = result
 	}
@@ -1391,9 +1391,9 @@ func benchReverseLoHelper(input []int) []int {
 
 // benchReverseCollectionBorrow measures Reverse with the CollectionBorrow implementation.
 func benchReverseCollectionBorrow(b *testing.B) {
-	copy(workA, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workA, benchInts)
 		result := benchReverseCollectionBorrowHelper(workA)
 		_ = result
 	}
@@ -1410,9 +1410,9 @@ func benchReverseCollectionCopy(b *testing.B) {
 
 // benchReverseLo measures Reverse with the Lo implementation.
 func benchReverseLo(b *testing.B) {
-	copy(workB, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workB, benchInts)
 		result := benchReverseLoHelper(workB)
 		_ = result
 	}
@@ -1441,9 +1441,9 @@ func benchShuffleLoHelper(input []int) []int {
 
 // benchShuffleCollectionBorrow measures Shuffle with the CollectionBorrow implementation.
 func benchShuffleCollectionBorrow(b *testing.B) {
-	copy(workA, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workA, benchInts)
 		result := benchShuffleCollectionBorrowHelper(workA)
 		_ = result
 	}
@@ -1460,9 +1460,9 @@ func benchShuffleCollectionCopy(b *testing.B) {
 
 // benchShuffleLo measures Shuffle with the Lo implementation.
 func benchShuffleLo(b *testing.B) {
-	copy(workB, benchInts)
 	b.ResetTimer()
 	for b.Loop() {
+		copy(workB, benchInts)
 		result := benchShuffleLoHelper(workB)
 		_ = result
 	}
@@ -2435,7 +2435,7 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	path := filepath.Join(root, "BENCHMARKS.md")
 	var buf bytes.Buffer
 	buf.WriteString("# Benchmarks\n\n")
-	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d samples at %s each. Mutable scratch initialization is outside timed regions.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration)
+	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d samples at %s each. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration)
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
 	buf.WriteString(rawBorrowTable)
 	buf.WriteString("\n\n")

@@ -1,7 +1,7 @@
 package collection
 
-// Partition splits the collection into two new collections based on predicate fn.
-// The first collection contains items where fn returns true; the second contains
+// Partition splits the collection into two new slices based on predicate fn.
+// The first slice contains items where fn returns true; the second contains
 // items where fn returns false. Order is preserved within each partition.
 // @group Slicing
 // @behavior immutable

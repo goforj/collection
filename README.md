@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-349-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-356-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -93,8 +93,6 @@ That design choice doesn't matter much for some single operations. It matters a 
 
 The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
 
-For the pointer-backed versus slice-backed representation A/B, see [SLICE_BACKED_BENCHMARKS.md](./SLICE_BACKED_BENCHMARKS.md).
-
 <!-- bench:embed:start -->
 
 Full raw tables: see `BENCHMARKS.md`.
@@ -108,7 +106,7 @@ Full raw tables: see `BENCHMARKS.md`.
 | **None** | ≈ | ≈ | ≈ |
 | **First** | ≈ | ≈ | ≈ |
 | **Last** | ≈ | ≈ | ≈ |
-| **FirstWhere** | ≈ | ≈ | ≈ |
+| **FirstWhere** | 0.52x | ≈ | ≈ |
 | **IndexWhere** | ≈ | ≈ | ≈ |
 | **Contains** | ≈ | ≈ | ≈ |
 | **Reduce (sum)** | ≈ | ≈ | ≈ |
@@ -122,16 +120,16 @@ Full raw tables: see `BENCHMARKS.md`.
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
 | **Chunk** | view trade-off | ownership trade-off | ownership trade-off |
-| **Filter** | ≈ | ≈ | ≈ |
-| **Map** | **1.13x** | ≈ | ≈ |
+| **Filter** | **1.11x** | ≈ | ≈ |
+| **Map** | ≈ | ≈ | ≈ |
 | **Take** | ≈ | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **1.77x** | ≈ | ≈ |
-| **ZipWith** | **3.01x** | ≈ | ≈ |
+| **Zip** | **1.67x** | ≈ | ≈ |
+| **ZipWith** | **3.04x** | ≈ | ≈ |
 | **Unique** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
-| **Union** | **1.11x** | ≈ | ≈ |
+| **Union** | ≈ | ≈ | ≈ |
 | **Intersect** | ≈ | ≈ | ≈ |
 | **Difference** | different work | API trade-off | API trade-off |
 | **GroupBy** | ≈ | ≈ | ≈ |
@@ -149,9 +147,9 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | ≈ | ≈ | ≈ |
-| **Reverse** | **1.16x** | ≈ | ≈ |
-| **Shuffle** | ≈ | ≈ | ≈ |
+| **Retain** | **1.14x** | ≈ | ≈ |
+| **Reverse** | ≈ | ≈ | ≈ |
+| **Shuffle** | **3.71x** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->
 
@@ -314,6 +312,8 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 
 This package requires Go 1.27 or newer. Consumers that cannot upgrade their
 toolchain can remain on v2.
+
+Existing users should read [Migrating to v3](./MIGRATING_TO_V3.md) for the complete API and ownership changes.
 
 ```bash
 go get github.com/goforj/collection/v3
@@ -2110,8 +2110,8 @@ collection.Dump(users)
 
 ### <a id="partition"></a>Partition - immutable - terminal
 
-Partition splits the collection into two new collections based on predicate fn.
-The first collection contains items where fn returns true; the second contains
+Partition splits the collection into two new slices based on predicate fn.
+The first slice contains items where fn returns true; the second contains
 items where fn returns false. Order is preserved within each partition.
 
 _Example: integers - even/odd_

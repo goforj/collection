@@ -794,10 +794,14 @@ popped := values.PopN(2)
 ### After
 
 ```go
-n := min(2, len(values))
-split := len(values) - n
-popped := values[split:len(values):len(values)]
-values = values[:split]
+count := requestedCount
+var popped []int
+if count > 0 {
+	count = min(count, len(values))
+	split := len(values) - count
+	popped = values[split:len(values):len(values)]
+	values = values[:split]
+}
 ```
 
 ### ToJSON is removed
@@ -853,17 +857,37 @@ sum := func(input collection.Slice[int]) int {
 total := sum(values)
 ```
 
+### Tap receives a Slice value
+
+The callback now receives the borrowed `Slice` value instead of a `Collection` pointer. Element changes inside the callback remain visible through the shared backing array.
+
+### Before
+
+```go
+values.Tap(func(current *collection.Collection[int]) {
+	fmt.Println(current.Items())
+})
+```
+
+### After
+
+```go
+values.Tap(func(current collection.Slice[int]) {
+	fmt.Println(current)
+})
+```
+
 ## Concatenation and mutation
 
 ### Concat is always pure
 
-`Concat` accepts one or more slices and always allocates independent backing storage for its result.
+`Concat` accepts one or more slices and always allocates independent backing storage for its result. Capture the result because v3 no longer mutates the receiver.
 
 ### Before
 
 ```go
 combined := values.Concat([]int{4, 5})
-// combined could reuse values' spare capacity
+// values was mutated
 ```
 
 ### After
@@ -909,7 +933,7 @@ combined := values.Concat([]int{4, 5})
 
 ### Shuffle uses the package-level random source
 
-`Shuffle` remains an in-place, chainable operation. It now uses the package-level `math/rand` source rather than a collection-owned source.
+`Shuffle` remains an in-place, chainable operation. It now uses the package-level `math/rand/v2` source rather than a collection-owned source.
 
 ### Before
 

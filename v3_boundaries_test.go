@@ -120,3 +120,38 @@ func TestSliceBoundariesHandleMaximumCounts(t *testing.T) {
 		t.Fatalf("Window(1, MaxInt) = %v", got)
 	}
 }
+
+func TestPopNMigrationRecipeHandlesEveryCount(t *testing.T) {
+	tests := []struct {
+		name       string
+		count      int
+		wantValues []int
+		wantPopped []int
+	}{
+		{name: "negative", count: -1, wantValues: []int{1, 2, 3}},
+		{name: "zero", count: 0, wantValues: []int{1, 2, 3}},
+		{name: "partial", count: 2, wantValues: []int{1}, wantPopped: []int{2, 3}},
+		{name: "oversized", count: 10, wantValues: []int{}, wantPopped: []int{1, 2, 3}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			values := []int{1, 2, 3}
+			count := test.count
+			var popped []int
+			if count > 0 {
+				count = min(count, len(values))
+				split := len(values) - count
+				popped = values[split:len(values):len(values)]
+				values = values[:split]
+			}
+
+			if !reflect.DeepEqual(values, test.wantValues) {
+				t.Fatalf("values = %v, want %v", values, test.wantValues)
+			}
+			if !reflect.DeepEqual(popped, test.wantPopped) {
+				t.Fatalf("popped = %v, want %v", popped, test.wantPopped)
+			}
+		})
+	}
+}

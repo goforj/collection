@@ -76,11 +76,11 @@ func main() {
 	var missing []result
 
 	for _, res := range results {
-		if res.nondet {
-			continue
-		}
 		if res.runErr != nil {
 			failed = append(failed, res)
+			continue
+		}
+		if res.nondet {
 			continue
 		}
 

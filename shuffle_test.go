@@ -33,3 +33,26 @@ func TestShufflePreservesNilSlice(t *testing.T) {
 		t.Fatal("Shuffle should preserve a nil slice")
 	}
 }
+
+func TestShuffleDoesNotAllocate(t *testing.T) {
+	values := New(make([]int, 1_000))
+	allocs := testing.AllocsPerRun(1_000, func() {
+		values.Shuffle()
+	})
+	if allocs != 0 {
+		t.Fatalf("Shuffle allocations = %v, want 0", allocs)
+	}
+}
+
+func TestRandomIndexStaysWithinBounds(t *testing.T) {
+	state := uint64(0)
+	for range 100 {
+		if index := randomIndex(&state, 8); index >= 8 {
+			t.Fatalf("randomIndex(_, 8) = %d", index)
+		}
+		limit := uint64(1<<63 + 1)
+		if index := randomIndex(&state, limit); index >= limit {
+			t.Fatalf("randomIndex(_, %d) = %d", limit, index)
+		}
+	}
+}

@@ -12,20 +12,14 @@ func main() {
 	// If the slice is empty, Sum returns the zero value of T.
 
 	// Example: integers
-	values := []int{1, 2, 3}
-	total := collection.Sum(values)
-	collection.Dump(total)
+	collection.Dump(collection.Sum([]int{1, 2, 3}))
 	// 6 #int
 
 	// Example: floats
-	values2 := []float64{1.5, 2.5}
-	total2 := collection.Sum(values2)
-	collection.Dump(total2)
+	collection.Dump(collection.Sum([]float64{1.5, 2.5}))
 	// 4.000000 #float64
 
 	// Example: integers - empty collection
-	empty := []int{}
-	total3 := collection.Sum(empty)
-	collection.Dump(total3)
+	collection.Dump(collection.Sum([]int{}))
 	// 0 #int
 }

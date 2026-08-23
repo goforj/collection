@@ -10,9 +10,7 @@ package collection
 //
 // Example: integers
 //
-//	c := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
-//	out := collection.UniqueComparable(c)
-//	collection.Dump(out)
+//	collection.Dump(collection.UniqueComparable([]int{1, 2, 2, 3, 4, 4, 5}))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -23,9 +21,7 @@ package collection
 //
 // Example: strings
 //
-//	c2 := collection.New([]string{"A", "a", "B", "B"})
-//	out2 := collection.UniqueComparable(c2)
-//	collection.Dump(out2)
+//	collection.Dump(collection.UniqueComparable([]string{"A", "a", "B", "B"}))
 //	// #[]string [
 //	//   0 => "A" #string
 //	//   1 => "a" #string

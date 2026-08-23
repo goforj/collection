@@ -11,9 +11,7 @@ func main() {
 	// CountByValue returns the number of occurrences of each distinct item in c.
 
 	// Example: strings
-	values := []string{"go", "forj", "go"}
-	counts := collection.CountByValue(values)
-	collection.Dump(counts)
+	collection.Dump(collection.CountByValue([]string{"go", "forj", "go"}))
 	// #map[string]int {
 	//   forj => 1 #int
 	//   go => 2 #int

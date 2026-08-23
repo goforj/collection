@@ -12,9 +12,7 @@ package collection
 //
 // Example: integers - step 1
 //
-//	nums := collection.New([]int{1, 2, 3, 4, 5})
-//	win := nums.Window(3, 1)
-//	collection.Dump(win)
+//	collection.Dump(collection.New([]int{1, 2, 3, 4, 5}).Window(3, 1))
 //	// #[][]int [
 //	//   0 => #[]int [
 //	//     0 => 1 #int
@@ -35,9 +33,7 @@ package collection
 //
 // Example: strings - step 2
 //
-//	words := collection.New([]string{"a", "b", "c", "d", "e"})
-//	win2 := words.Window(2, 2)
-//	collection.Dump(win2)
+//	collection.Dump(collection.New([]string{"a", "b", "c", "d", "e"}).Window(2, 2))
 //	// #[][]string [
 //	//   0 => #[]string [
 //	//     0 => "a" #string

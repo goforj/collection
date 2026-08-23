@@ -354,16 +354,14 @@ If the slice is empty, Avg returns 0.
 _Example: integers_
 
 ```go
-values := []int{2, 4, 6}
-collection.Dump(collection.Avg(values))
+collection.Dump(collection.Avg([]int{2, 4, 6}))
 // 4.000000 #float64
 ```
 
 _Example: float_
 
 ```go
-values2 := []float64{1.5, 2.5, 3.0}
-collection.Dump(collection.Avg(values2))
+collection.Dump(collection.Avg([]float64{1.5, 2.5, 3.0}))
 // 2.333333 #float64
 ```
 
@@ -391,9 +389,7 @@ collection.Dump(counts)
 CountByValue returns the number of occurrences of each distinct item in c.
 
 ```go
-values := []string{"go", "forj", "go"}
-counts := collection.CountByValue(values)
-collection.Dump(counts)
+collection.Dump(collection.CountByValue([]string{"go", "forj", "go"}))
 // #map[string]int {
 //   forj => 1 #int
 //   go => 2 #int
@@ -559,9 +555,7 @@ in first-seen order.
 _Example: integers - single mode_
 
 ```go
-values := []int{1, 2, 2, 3}
-mode := collection.Mode(values)
-collection.Dump(mode)
+collection.Dump(collection.Mode([]int{1, 2, 2, 3}))
 // #[]int [
 //   0 => 2 #int
 // ]
@@ -570,9 +564,7 @@ collection.Dump(mode)
 _Example: integers - tie for mode_
 
 ```go
-values2 := []int{1, 2, 1, 2}
-mode2 := collection.Mode(values2)
-collection.Dump(mode2)
+collection.Dump(collection.Mode([]int{1, 2, 1, 2}))
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -582,9 +574,7 @@ collection.Dump(mode2)
 _Example: floats_
 
 ```go
-values3 := []float64{1.1, 2.2, 1.1, 3.3}
-mode3 := collection.Mode(values3)
-collection.Dump(mode3)
+collection.Dump(collection.Mode([]float64{1.1, 2.2, 1.1, 3.3}))
 // #[]float64 [
 //   0 => 1.100000 #float64
 // ]
@@ -593,9 +583,7 @@ collection.Dump(mode3)
 _Example: integers - empty collection_
 
 ```go
-empty := []int{}
-mode4 := collection.Mode(empty)
-collection.Dump(mode4)
+collection.Dump(collection.Mode([]int{}))
 // []int(nil)
 ```
 
@@ -659,27 +647,21 @@ If the slice is empty, Sum returns the zero value of T.
 _Example: integers_
 
 ```go
-values := []int{1, 2, 3}
-total := collection.Sum(values)
-collection.Dump(total)
+collection.Dump(collection.Sum([]int{1, 2, 3}))
 // 6 #int
 ```
 
 _Example: floats_
 
 ```go
-values2 := []float64{1.5, 2.5}
-total2 := collection.Sum(values2)
-collection.Dump(total2)
+collection.Dump(collection.Sum([]float64{1.5, 2.5}))
 // 4.000000 #float64
 ```
 
 _Example: integers - empty collection_
 
 ```go
-empty := []int{}
-total3 := collection.Sum(empty)
-collection.Dump(total3)
+collection.Dump(collection.Sum([]int{}))
 // 0 #int
 ```
 
@@ -1180,36 +1162,28 @@ If the collection is empty, All returns true (vacuously true).
 _Example: integers - all even_
 
 ```go
-c := collection.New([]int{2, 4, 6})
-allEven := c.All(func(v int) bool { return v%2 == 0 })
-collection.Dump(allEven)
+collection.Dump(collection.New([]int{2, 4, 6}).All(func(v int) bool { return v%2 == 0 }))
 // true #bool
 ```
 
 _Example: integers - not all even_
 
 ```go
-c2 := collection.New([]int{2, 3, 4})
-allEven2 := c2.All(func(v int) bool { return v%2 == 0 })
-collection.Dump(allEven2)
+collection.Dump(collection.New([]int{2, 3, 4}).All(func(v int) bool { return v%2 == 0 }))
 // false #bool
 ```
 
 _Example: strings - all non-empty_
 
 ```go
-c3 := collection.New([]string{"a", "b", "c"})
-allNonEmpty := c3.All(func(s string) bool { return s != "" })
-collection.Dump(allNonEmpty)
+collection.Dump(collection.New([]string{"a", "b", "c"}).All(func(s string) bool { return s != "" }))
 // true #bool
 ```
 
 _Example: empty collection (vacuously true)_
 
 ```go
-empty := collection.New([]int{})
-all := empty.All(func(v int) bool { return v > 0 })
-collection.Dump(all)
+collection.Dump(collection.New([]int{}).All(func(v int) bool { return v > 0 }))
 // true #bool
 ```
 
@@ -1218,9 +1192,7 @@ collection.Dump(all)
 Any returns true if at least one item satisfies fn.
 
 ```go
-c := collection.New([]int{1, 2, 3, 4})
-has := c.Any(func(v int) bool { return v%2 == 0 }) // true
-collection.Dump(has)
+collection.Dump(collection.New([]int{1, 2, 3, 4}).Any(func(v int) bool { return v%2 == 0 }))
 // true #bool
 ```
 
@@ -1562,27 +1534,21 @@ If the collection is empty, None returns true.
 _Example: integers - none even_
 
 ```go
-c := collection.New([]int{1, 3, 5})
-noneEven := c.None(func(v int) bool { return v%2 == 0 })
-collection.Dump(noneEven)
+collection.Dump(collection.New([]int{1, 3, 5}).None(func(v int) bool { return v%2 == 0 }))
 // true #bool
 ```
 
 _Example: integers - some even_
 
 ```go
-c2 := collection.New([]int{1, 2, 3})
-noneEven2 := c2.None(func(v int) bool { return v%2 == 0 })
-collection.Dump(noneEven2)
+collection.Dump(collection.New([]int{1, 2, 3}).None(func(v int) bool { return v%2 == 0 }))
 // false #bool
 ```
 
 _Example: empty collection_
 
 ```go
-empty := collection.New([]int{})
-none := empty.None(func(v int) bool { return v > 0 })
-collection.Dump(none)
+collection.Dump(collection.New([]int{}).None(func(v int) bool { return v > 0 }))
 // true #bool
 ```
 
@@ -1956,9 +1922,7 @@ This is a faster, allocation-friendly path for comparable types.
 _Example: integers_
 
 ```go
-c := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
-out := collection.UniqueComparable(c)
-collection.Dump(out)
+collection.Dump(collection.UniqueComparable([]int{1, 2, 2, 3, 4, 4, 5}))
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -1971,9 +1935,7 @@ collection.Dump(out)
 _Example: strings_
 
 ```go
-c2 := collection.New([]string{"A", "a", "B", "B"})
-out2 := collection.UniqueComparable(c2)
-collection.Dump(out2)
+collection.Dump(collection.UniqueComparable([]string{"A", "a", "B", "B"}))
 // #[]string [
 //   0 => "A" #string
 //   1 => "a" #string
@@ -1991,8 +1953,7 @@ The final chunk may be smaller if len(items) is not divisible by size.
 _Example: integers_
 
 ```go
-c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
-collection.Dump(c)
+collection.Dump(collection.New([]int{1, 2, 3, 4, 5}).Chunk(2))
 // #[][]int [
 //  0 => #[]int [
 //    0 => 1 #int
@@ -2511,9 +2472,7 @@ Windows that are shorter than size are omitted.
 _Example: integers - step 1_
 
 ```go
-nums := collection.New([]int{1, 2, 3, 4, 5})
-win := nums.Window(3, 1)
-collection.Dump(win)
+collection.Dump(collection.New([]int{1, 2, 3, 4, 5}).Window(3, 1))
 // #[][]int [
 //   0 => #[]int [
 //     0 => 1 #int
@@ -2536,9 +2495,7 @@ collection.Dump(win)
 _Example: strings - step 2_
 
 ```go
-words := collection.New([]string{"a", "b", "c", "d", "e"})
-win2 := words.Window(2, 2)
-collection.Dump(win2)
+collection.Dump(collection.New([]string{"a", "b", "c", "d", "e"}).Window(2, 2))
 // #[][]string [
 //   0 => #[]string [
 //     0 => "a" #string

@@ -7,9 +7,7 @@ package collection
 // @terminal true
 // Example: integers
 //
-//	c := collection.New([]int{1, 2, 3, 4})
-//	has := c.Any(func(v int) bool { return v%2 == 0 }) // true
-//	collection.Dump(has)
+//	collection.Dump(collection.New([]int{1, 2, 3, 4}).Any(func(v int) bool { return v%2 == 0 }))
 //	// true #bool
 func (c Slice[T]) Any(fn func(T) bool) bool {
 	for _, v := range c {

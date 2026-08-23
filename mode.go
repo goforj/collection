@@ -10,18 +10,14 @@ package collection
 //
 // Example: integers - single mode
 //
-//	values := []int{1, 2, 2, 3}
-//	mode := collection.Mode(values)
-//	collection.Dump(mode)
+//	collection.Dump(collection.Mode([]int{1, 2, 2, 3}))
 //	// #[]int [
 //	//   0 => 2 #int
 //	// ]
 //
 // Example: integers - tie for mode
 //
-//	values2 := []int{1, 2, 1, 2}
-//	mode2 := collection.Mode(values2)
-//	collection.Dump(mode2)
+//	collection.Dump(collection.Mode([]int{1, 2, 1, 2}))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -29,18 +25,14 @@ package collection
 //
 // Example: floats
 //
-//	values3 := []float64{1.1, 2.2, 1.1, 3.3}
-//	mode3 := collection.Mode(values3)
-//	collection.Dump(mode3)
+//	collection.Dump(collection.Mode([]float64{1.1, 2.2, 1.1, 3.3}))
 //	// #[]float64 [
 //	//   0 => 1.100000 #float64
 //	// ]
 //
 // Example: integers - empty collection
 //
-//	empty := []int{}
-//	mode4 := collection.Mode(empty)
-//	collection.Dump(mode4)
+//	collection.Dump(collection.Mode([]int{}))
 //	// []int(nil)
 func Mode[S ~[]T, T Number](items S) []T {
 	n := len(items)

@@ -12,12 +12,10 @@ func main() {
 	// If the slice is empty, Avg returns 0.
 
 	// Example: integers
-	values := []int{2, 4, 6}
-	collection.Dump(collection.Avg(values))
+	collection.Dump(collection.Avg([]int{2, 4, 6}))
 	// 4.000000 #float64
 
 	// Example: float
-	values2 := []float64{1.5, 2.5, 3.0}
-	collection.Dump(collection.Avg(values2))
+	collection.Dump(collection.Avg([]float64{1.5, 2.5, 3.0}))
 	// 2.333333 #float64
 }

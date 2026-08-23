@@ -46,10 +46,10 @@ jobs:
       - name: Audit example output
         run: go run ./docs/examples-audit/main.go
 
-      - name: Check generated README
+      - name: Check generated documentation
         run: |
-          go run ./docs/readme/main.go
-          git diff --exit-code -- README.md
+          make generate
+          git diff --exit-code -- README.md examples
 
       - name: Check examples module
         working-directory: examples

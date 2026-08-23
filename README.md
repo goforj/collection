@@ -86,13 +86,9 @@ Equivalent operations are benchmarked against `lo`, with ownership and API diffe
 <details>
 <summary>Benchmark tables and methodology</summary>
 
-`lo` is a fantastic library and a major inspiration for this project. It is battle-tested, idiomatic, and often the right choice when you want small, standalone helpers that operate on slices in isolation.
+`lo` is a major inspiration for this project.
 
-`collection` takes a different approach.
-
-Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines** over a named slice. Operations document whether they return an independent allocation, a view, or the same backing storage.
-
-That design choice doesn't matter much for some single operations. It matters a *lot* once you start chaining and especially in hot paths.
+Both libraries provide generic operations over ordinary slices. The main difference is API shape: `collection.Slice` adds receiver methods for eager fluent chains, while `lo` primarily uses free functions and provides mutable and iterator variants in separate packages. The tables label allocation, view, mutation, API, and different-work cases rather than treating them as equivalent.
 
 The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
 
@@ -169,9 +165,6 @@ Full raw tables: see `BENCHMARKS.md`.
 - Explicit memory deltas show allocation differences for equivalent work; ownership and API trade-offs are labeled separately
 - Single-operation helpers are expected to be close when they perform equivalent work
 - Multi-step pipelines show the cost of the selected ownership model
-
-If you prefer immutable, one-off helpers - `lo` is outstanding.
-If you write **expressive, chained data pipelines** and care about hot-path performance - `collection` is built for that job.
 
 </details>
 

@@ -78,19 +78,5 @@ func GroupBy[T any, K comparable](
 	c *Collection[T],
 	keyFn func(T) K,
 ) map[K]*Collection[T] {
-	out := make(map[K]*Collection[T], len(c.items))
-
-	for _, item := range c.items {
-		key := keyFn(item)
-
-		group := out[key]
-		if group == nil {
-			out[key] = &Collection[T]{items: []T{item}}
-			continue
-		}
-
-		group.items = append(group.items, item)
-	}
-
-	return out
+	return c.GroupBy(keyFn)
 }

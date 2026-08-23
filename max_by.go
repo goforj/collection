@@ -7,7 +7,6 @@ package collection
 // @chainable false
 // @terminal true
 //
-// This cannot be a method because methods can't introduce a new type parameter K.
 // When multiple items share the same maximal key, the first such item is returned.
 //
 // Example: structs - highest score
@@ -54,22 +53,5 @@ package collection
 //	// 0 #int
 //	// false #bool
 func MaxBy[T any, K Number | ~string](c *Collection[T], keyFn func(T) K) (T, bool) {
-	var zero T
-
-	if len(c.items) == 0 {
-		return zero, false
-	}
-
-	maxItem := c.items[0]
-	maxKey := keyFn(maxItem)
-
-	for _, item := range c.items[1:] {
-		key := keyFn(item)
-		if key > maxKey {
-			maxKey = key
-			maxItem = item
-		}
-	}
-
-	return maxItem, true
+	return c.MaxBy(keyFn)
 }

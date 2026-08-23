@@ -78,10 +78,5 @@ func GroupBySlice[T any, K comparable](
 	c *Collection[T],
 	keyFn func(T) K,
 ) map[K][]T {
-	out := make(map[K][]T)
-	for _, item := range c.items {
-		key := keyFn(item)
-		out[key] = append(out[key], item)
-	}
-	return out
+	return c.GroupBySlice(keyFn)
 }

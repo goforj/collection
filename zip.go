@@ -130,15 +130,15 @@ func Zip[A any, B any](a *Collection[A], b *Collection[B]) *Collection[Tuple[A, 
 //	//   0 => "Alice -> admin" #string
 //	// ]
 func ZipWith[A any, B any, R any](a *Collection[A], b *Collection[B], fn func(A, B) R) *Collection[R] {
-	n := len(a.items)
-	if len(b.items) < n {
-		n = len(b.items)
+	// This compatibility path stays direct because generic-method delegation exceeds the compiler's inline budget for this loop.
+	length := len(a.items)
+	if len(b.items) < length {
+		length = len(b.items)
 	}
 
-	out := make([]R, n)
-	for i := 0; i < n; i++ {
+	out := make([]R, length)
+	for i := 0; i < length; i++ {
 		out[i] = fn(a.items[i], b.items[i])
 	}
-
 	return New(out)
 }

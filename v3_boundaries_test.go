@@ -124,6 +124,7 @@ func TestSliceBoundariesHandleMaximumCounts(t *testing.T) {
 func TestPopNMigrationRecipeHandlesEveryCount(t *testing.T) {
 	tests := []struct {
 		name       string
+		empty      bool
 		count      int
 		wantValues []int
 		wantPopped []int
@@ -132,14 +133,18 @@ func TestPopNMigrationRecipeHandlesEveryCount(t *testing.T) {
 		{name: "zero", count: 0, wantValues: []int{1, 2, 3}},
 		{name: "partial", count: 2, wantValues: []int{1}, wantPopped: []int{2, 3}},
 		{name: "oversized", count: 10, wantValues: []int{}, wantPopped: []int{1, 2, 3}},
+		{name: "empty", empty: true, count: 2, wantValues: []int{}},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			values := []int{1, 2, 3}
+			if test.empty {
+				values = make([]int, 0)
+			}
 			count := test.count
 			var popped []int
-			if count > 0 {
+			if count > 0 && len(values) > 0 {
 				count = min(count, len(values))
 				split := len(values) - count
 				popped = values[split:len(values):len(values)]

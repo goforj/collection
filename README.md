@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-356-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-357-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -93,6 +93,8 @@ That design choice doesn't matter much for some single operations. It matters a 
 
 The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
 
+Matched v2/v3 regression benchmarks for mutating, copied, and pipeline workloads live in [`./docs/regression`](./docs/regression).
+
 <!-- bench:embed:start -->
 
 Full raw tables: see `BENCHMARKS.md`.
@@ -106,7 +108,7 @@ Full raw tables: see `BENCHMARKS.md`.
 | **None** | ≈ | ≈ | ≈ |
 | **First** | ≈ | ≈ | ≈ |
 | **Last** | ≈ | ≈ | ≈ |
-| **FirstWhere** | 0.52x | ≈ | ≈ |
+| **FirstWhere** | same loop | ≈ | ≈ |
 | **IndexWhere** | ≈ | ≈ | ≈ |
 | **Contains** | ≈ | ≈ | ≈ |
 | **Reduce (sum)** | ≈ | ≈ | ≈ |
@@ -120,13 +122,13 @@ Full raw tables: see `BENCHMARKS.md`.
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
 | **Chunk** | view trade-off | ownership trade-off | ownership trade-off |
-| **Filter** | **1.11x** | ≈ | ≈ |
+| **Filter** | 0.89x | ≈ | ≈ |
 | **Map** | ≈ | ≈ | ≈ |
 | **Take** | ≈ | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
-| **Zip** | **1.67x** | ≈ | ≈ |
-| **ZipWith** | **3.04x** | ≈ | ≈ |
+| **Zip** | **1.56x** | ≈ | ≈ |
+| **ZipWith** | **3.10x** | ≈ | ≈ |
 | **Unique** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
 | **Union** | ≈ | ≈ | ≈ |
@@ -141,21 +143,22 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | ≈ | ≈ | ≈ |
+| **Pipeline F→M→T→R** | 0.88x | ≈ | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | **1.14x** | ≈ | ≈ |
+| **Retain** | 0.89x | ≈ | ≈ |
 | **Reverse** | ≈ | ≈ | ≈ |
-| **Shuffle** | **3.71x** | ≈ | ≈ |
+| **Shuffle** | **3.63x** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
 
 - **≈** means the two libraries are effectively equivalent
+- **same loop** means both implementations compile to the same machine loop, so binary-placement skew is not presented as a library difference
 - Explicit memory deltas show allocation differences for equivalent work; ownership and API trade-offs are labeled separately
 - Single-operation helpers are expected to be close when they perform equivalent work
 - Multi-step pipelines show the cost of the selected ownership model

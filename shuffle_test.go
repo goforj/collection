@@ -1,7 +1,6 @@
 package collection
 
 import (
-	"reflect"
 	"testing"
 )
 
@@ -22,8 +21,8 @@ func TestShufflePreservesAllElements(t *testing.T) {
 func TestShuffleMutatesInPlace(t *testing.T) {
 	items := []int{1, 2, 3, 4}
 	shuffled := New(items).Shuffle()
-	if !reflect.DeepEqual(shuffled, Slice[int](items)) {
-		t.Fatalf("Shuffle result = %v, want %v", shuffled, items)
+	if &shuffled[0] != &items[0] {
+		t.Fatal("Shuffle returned a different backing array")
 	}
 }
 

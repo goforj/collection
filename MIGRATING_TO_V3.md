@@ -794,9 +794,9 @@ popped := values.PopN(2)
 ### After
 
 ```go
-count := requestedCount
+count := 2
 var popped []int
-if count > 0 {
+if count > 0 && len(values) > 0 {
 	count = min(count, len(values))
 	split := len(values) - count
 	popped = values[split:len(values):len(values)]
@@ -931,9 +931,9 @@ combined := values.Merge([]int{4, 5})
 combined := values.Concat([]int{4, 5})
 ```
 
-### Shuffle uses the package-level random source
+### Shuffle uses a locally advanced random stream
 
-`Shuffle` remains an in-place, chainable operation. It now uses the package-level `math/rand/v2` source rather than a collection-owned source.
+`Shuffle` remains an in-place, chainable operation. It seeds a local random stream from `math/rand/v2`, avoiding shared-source contention without retaining random state on the collection.
 
 ### Before
 

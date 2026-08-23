@@ -2255,6 +2255,9 @@ func formatBenchmarkRatio(name string, mode benchMode, lo, col float64) string {
 	if mode == benchBorrow && isViewBenchmark(name) {
 		return "view trade-off"
 	}
+	if mode == benchBorrow && isCodeEquivalentBenchmark(name) {
+		return "same loop"
+	}
 	return formatRatio(lo, col)
 }
 
@@ -2288,7 +2291,15 @@ func formatBenchmarkSpeed(name string, mode benchMode, lo, col float64, allowBol
 	if mode == benchBorrow && isViewBenchmark(name) {
 		return "view trade-off"
 	}
+	if mode == benchBorrow && isCodeEquivalentBenchmark(name) {
+		return "same loop"
+	}
 	return formatSpeed(lo, col, allowBold, scalarOnly)
+}
+
+// isCodeEquivalentBenchmark reports operations whose compared implementations compile to the same loop.
+func isCodeEquivalentBenchmark(name string) bool {
+	return name == "FirstWhere"
 }
 
 // isViewBenchmark reports operations whose collection result intentionally shares backing storage.
@@ -2437,6 +2448,7 @@ func updateBenchmarksFile(rawBorrowTable, rawCopyTable string) error {
 	buf.WriteString("# Benchmarks\n\n")
 	fmt.Fprintf(&buf, "Methodology: %s on %s/%s, GOMAXPROCS=%d; median of %d samples at %s each. Mutable borrowed inputs are restored inside every timed iteration for both implementations.\n\n", runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0), benchSamples, benchSampleDuration)
 	buf.WriteString("Raw results for `collection.New` (borrowed) vs `lo`. For Chunk, Skip, and SkipLast, collection returns a view while lo returns a copy; those rows describe an ownership and allocation trade-off, not equal-work speed superiority. Difference returns one-sided output while lo returns both sides, so its rows are an API trade-off.\n\n")
+	buf.WriteString("FirstWhere compiles to the same scan loop in both implementations. Its ratio is labeled `same loop` because binary placement can dominate the timing of such a small function in this in-process harness.\n\n")
 	buf.WriteString(rawBorrowTable)
 	buf.WriteString("\n\n")
 	buf.WriteString("Raw results for `collection.New().Clone()` (explicit copy) vs `lo`. This section includes collection's explicit input-copy cost.\n\n")

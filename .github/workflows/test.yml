@@ -73,6 +73,7 @@ jobs:
           git diff --exit-code -- go.mod go.sum
           go vet ./...
           go test ./...
+          go test -run '^$' -bench . -benchtime=1x
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5

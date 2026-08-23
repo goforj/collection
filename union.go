@@ -13,8 +13,7 @@ package collection
 //	a := collection.New([]int{1, 2, 2, 3})
 //	b := collection.New([]int{3, 4, 4, 5})
 //
-//	out := collection.Union(a, b)
-//	collection.Dump(out.Items())
+//	collection.Dump(collection.Union(a, b))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -28,8 +27,7 @@ package collection
 //	left := collection.New([]string{"apple", "banana"})
 //	right := collection.New([]string{"banana", "date"})
 //
-//	out2 := collection.Union(left, right)
-//	collection.Dump(out2.Items())
+//	collection.Dump(collection.Union(left, right))
 //	// #[]string [
 //	//   0 => "apple" #string
 //	//   1 => "banana" #string
@@ -53,8 +51,7 @@ package collection
 //		{ID: 3, Name: "Carol"},
 //	})
 //
-//	out3 := collection.Union(groupA, groupB)
-//	collection.Dump(out3.Items())
+//	collection.Dump(collection.Union(groupA, groupB))
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -69,11 +66,11 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func Union[T comparable](a, b *Collection[T]) *Collection[T] {
-	out := make([]T, 0, len(a.items)+len(b.items))
-	seen := make(map[T]struct{}, len(a.items)+len(b.items))
+func Union[S1 ~[]T, S2 ~[]T, T comparable](a S1, b S2) Slice[T] {
+	out := make([]T, 0, len(a)+len(b))
+	seen := make(map[T]struct{}, len(a)+len(b))
 
-	for _, v := range a.items {
+	for _, v := range a {
 		if _, ok := seen[v]; ok {
 			continue
 		}
@@ -81,7 +78,7 @@ func Union[T comparable](a, b *Collection[T]) *Collection[T] {
 		out = append(out, v)
 	}
 
-	for _, v := range b.items {
+	for _, v := range b {
 		if _, ok := seen[v]; ok {
 			continue
 		}

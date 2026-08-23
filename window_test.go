@@ -1,106 +1,41 @@
 package collection
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
-func TestWindow_IntsStep1(t *testing.T) {
-	c := New([]int{1, 2, 3, 4, 5})
-
-	out := Window(c, 3, 1)
-
-	exp := [][]int{
-		{1, 2, 3},
-		{2, 3, 4},
-		{3, 4, 5},
+func TestWindow(t *testing.T) {
+	tests := []struct {
+		name       string
+		size, step int
+		want       [][]int
+	}{
+		{"overlapping", 3, 1, [][]int{{1, 2, 3}, {2, 3, 4}, {3, 4, 5}}},
+		{"stepped", 2, 2, [][]int{{1, 2}, {3, 4}}},
+		{"default step", 2, 0, [][]int{{1, 2}, {2, 3}, {3, 4}, {4, 5}}},
 	}
-
-	if got := out.Items(); !doubleSlicesEqual(got, exp) {
-		t.Fatalf("expected %v, got %v", exp, got)
-	}
-}
-
-func TestWindow_StringsStep2(t *testing.T) {
-	c := New([]string{"a", "b", "c", "d", "e"})
-
-	out := Window(c, 2, 2)
-
-	exp := [][]string{
-		{"a", "b"},
-		{"c", "d"},
-	}
-
-	if got := out.Items(); !doubleSlicesEqual(got, exp) {
-		t.Fatalf("expected %v, got %v", exp, got)
-	}
-}
-
-func TestWindow_Structs(t *testing.T) {
-	type point struct {
-		x int
-		y int
-	}
-
-	c := New([]point{
-		{x: 0, y: 0},
-		{x: 1, y: 1},
-		{x: 2, y: 4},
-	})
-
-	out := Window(c, 2, 1)
-
-	exp := [][]point{
-		{{x: 0, y: 0}, {x: 1, y: 1}},
-		{{x: 1, y: 1}, {x: 2, y: 4}},
-	}
-
-	if got := out.Items(); !doubleSlicesEqual(got, exp) {
-		t.Fatalf("expected %v, got %v", exp, got)
-	}
-}
-
-func TestWindow_StepDefaultsToOne(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	out := Window(c, 2, 0)
-
-	exp := [][]int{{1, 2}, {2, 3}}
-	if got := out.Items(); !doubleSlicesEqual(got, exp) {
-		t.Fatalf("expected default step windows %v, got %v", exp, got)
-	}
-}
-
-func TestWindow_SizeTooLargeOrZero(t *testing.T) {
-	c := New([]int{1, 2})
-
-	if got := Window(c, 3, 1).Items(); len(got) != 0 {
-		t.Fatalf("expected empty for size > len, got %v", got)
-	}
-
-	if got := Window(c, 0, 1).Items(); len(got) != 0 {
-		t.Fatalf("expected empty for size <= 0, got %v", got)
-	}
-}
-
-func TestWindow_EmptyCollection(t *testing.T) {
-	c := New([]int{})
-
-	if got := Window(c, 2, 1).Items(); len(got) != 0 {
-		t.Fatalf("expected empty for empty collection, got %v", got)
-	}
-}
-
-func doubleSlicesEqual[T comparable](a, b [][]T) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if len(a[i]) != len(b[i]) {
-			return false
-		}
-		for j := range a[i] {
-			if a[i][j] != b[i][j] {
-				return false
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := New([]int{1, 2, 3, 4, 5}).Window(test.size, test.step)
+			if !reflect.DeepEqual(got, test.want) {
+				t.Fatalf("Window(%d, %d) = %v, want %v", test.size, test.step, got, test.want)
 			}
+		})
+	}
+}
+
+func TestWindowEdgeCasesAndViews(t *testing.T) {
+	values := New([]int{1, 2})
+	for _, args := range [][2]int{{3, 1}, {0, 1}} {
+		if got := values.Window(args[0], args[1]); got != nil {
+			t.Fatalf("Window(%d, %d) = %v, want nil", args[0], args[1], got)
 		}
 	}
-	return true
+	items := []int{1, 2, 3}
+	windows := New(items).Window(2, 1)
+	windows[1][0] = 99
+	if items[1] != 99 || cap(windows[0]) != len(windows[0]) {
+		t.Fatalf("Window() did not return capped source views: %v, source %v", windows, items)
+	}
 }

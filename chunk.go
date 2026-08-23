@@ -9,12 +9,11 @@ package collection
 //
 // If size <= 0, nil is returned.
 //
-// NOTE: chunks share the backing array with the source collection.
+// Chunk allocates the outer result slice. Each chunk is a capacity-capped view
+// that shares the backing array with the source collection.
 // Example: integers
 //
-//	c := collection.New([]int{1, 2, 3, 4, 5}).Chunk(2)
-//	collection.Dump(c)
-//
+//	collection.Dump(collection.New([]int{1, 2, 3, 4, 5}).Chunk(2))
 //	// #[][]int [
 //	//  0 => #[]int [
 //	//    0 => 1 #int
@@ -45,8 +44,6 @@ package collection
 //
 //	userChunks := collection.New(users).Chunk(2)
 //	collection.Dump(userChunks)
-//
-//	// Dump output will show [][]User grouped in size-2 chunks, e.g.:
 //	// #[][]main.User [
 //	//  0 => #[]main.User [
 //	//    0 => #main.User {
@@ -69,21 +66,24 @@ package collection
 //	//    }
 //	//  ]
 //	//]
-func (c *Collection[T]) Chunk(size int) [][]T {
+func (c Slice[T]) Chunk(size int) [][]T {
 	if size <= 0 {
 		return nil
 	}
 
-	n := len(c.items)
-	chunks := make([][]T, 0, (n+size-1)/size)
+	n := len(c)
+	count := n / size
+	if n%size != 0 {
+		count++
+	}
+	chunks := make([][]T, 0, count)
 
 	for i := 0; i < n; i += size {
 		end := i + size
 		if end > n {
 			end = n
 		}
-		// ZERO ALLOC — slice header only
-		chunks = append(chunks, c.items[i:end])
+		chunks = append(chunks, c[i:end:end])
 	}
 
 	return chunks

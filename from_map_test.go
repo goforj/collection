@@ -5,97 +5,40 @@ import (
 	"testing"
 )
 
-func TestFromMap_Basic(t *testing.T) {
-	m := map[string]int{
-		"a": 1,
-		"b": 2,
-		"c": 3,
+func TestFromMap(t *testing.T) {
+	input := map[string]int{"a": 1, "b": 2, "c": 3}
+	got := FromMap(input)
+	seen := make(map[string]int, len(got))
+	for _, pair := range got {
+		seen[pair.First] = pair.Second
 	}
-
-	c := FromMap(m)
-	items := c.Items()
-
-	if len(items) != 3 {
-		t.Fatalf("expected 3 items, got %d", len(items))
+	if !reflect.DeepEqual(seen, input) {
+		t.Fatalf("FromMap() = %v, want pairs for %v", got, input)
 	}
-
-	seen := make(map[string]int)
-	for _, p := range items {
-		seen[p.Key] = p.Value
-	}
-
-	if !reflect.DeepEqual(seen, m) {
-		t.Fatalf("expected %v, got %v", m, seen)
+	if cap(got) < len(input) {
+		t.Fatalf("FromMap() capacity = %d, want at least %d", cap(got), len(input))
 	}
 }
 
-func TestFromMap_DoesNotMutateInput(t *testing.T) {
-	m := map[string]int{
-		"a": 1,
-		"b": 2,
-	}
-
-	_ = FromMap(m)
-
-	expect := map[string]int{
-		"a": 1,
-		"b": 2,
-	}
-
-	if !reflect.DeepEqual(m, expect) {
-		t.Fatalf("input map was mutated")
+func TestFromMapDoesNotMutateInput(t *testing.T) {
+	input := map[string]int{"a": 1, "b": 2}
+	_ = FromMap(input)
+	if !reflect.DeepEqual(input, map[string]int{"a": 1, "b": 2}) {
+		t.Fatalf("FromMap() mutated input: %v", input)
 	}
 }
 
-func TestFromMap_EmptyMap(t *testing.T) {
-	m := map[string]int{}
-
-	c := FromMap(m)
-
-	if len(c.Items()) != 0 {
-		t.Fatalf("expected empty collection, got %v", c.Items())
+func TestFromMapEmptyAndStructValues(t *testing.T) {
+	if got := FromMap(map[string]int{}); len(got) != 0 {
+		t.Fatalf("FromMap(empty) = %v, want empty", got)
 	}
-}
-
-func TestFromMap_StructValues(t *testing.T) {
-	type User struct {
-		ID   int
-		Name string
+	type user struct{ id int }
+	input := map[string]user{"alice": {1}, "bob": {2}}
+	seen := map[string]user{}
+	for _, pair := range FromMap(input) {
+		seen[pair.First] = pair.Second
 	}
-
-	m := map[string]User{
-		"alice": {ID: 1, Name: "Alice"},
-		"bob":   {ID: 2, Name: "Bob"},
-	}
-
-	c := FromMap(m)
-	items := c.Items()
-
-	if len(items) != 2 {
-		t.Fatalf("expected 2 items, got %d", len(items))
-	}
-
-	seen := make(map[string]User)
-	for _, p := range items {
-		seen[p.Key] = p.Value
-	}
-
-	if !reflect.DeepEqual(seen, m) {
-		t.Fatalf("expected %v, got %v", m, seen)
-	}
-}
-
-func TestFromMap_Capacity(t *testing.T) {
-	m := map[string]int{
-		"a": 1,
-		"b": 2,
-		"c": 3,
-	}
-
-	c := FromMap(m)
-	items := c.Items()
-
-	if cap(items) < len(m) {
-		t.Fatalf("expected capacity >= %d, got %d", len(m), cap(items))
+	if !reflect.DeepEqual(seen, input) {
+		t.Fatalf("FromMap() = %v, want %v", seen, input)
 	}
 }

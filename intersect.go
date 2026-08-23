@@ -15,8 +15,7 @@ package collection
 //	a := collection.New([]int{1, 2, 2, 3, 4})
 //	b := collection.New([]int{2, 4, 4, 5})
 //
-//	out := collection.Intersect(a, b)
-//	collection.Dump(out.Items())
+//	collection.Dump(collection.Intersect(a, b))
 //	// #[]int [
 //	//   0 => 2 #int
 //	//   1 => 4 #int
@@ -28,8 +27,7 @@ package collection
 //	left := collection.New([]string{"apple", "banana", "cherry"})
 //	right := collection.New([]string{"banana", "date", "cherry", "banana"})
 //
-//	out2 := collection.Intersect(left, right)
-//	collection.Dump(out2.Items())
+//	collection.Dump(collection.Intersect(left, right))
 //	// #[]string [
 //	//   0 => "banana" #string
 //	//   1 => "cherry" #string
@@ -55,8 +53,7 @@ package collection
 //		{ID: 4, Name: "Dave"},
 //	})
 //
-//	out3 := collection.Intersect(groupA, groupB)
-//	collection.Dump(out3.Items())
+//	collection.Dump(collection.Intersect(groupA, groupB))
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 2 #int
@@ -67,18 +64,18 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func Intersect[T comparable](a, b *Collection[T]) *Collection[T] {
-	if len(a.items) == 0 || len(b.items) == 0 {
+func Intersect[S1 ~[]T, S2 ~[]T, T comparable](a S1, b S2) Slice[T] {
+	if len(a) == 0 || len(b) == 0 {
 		return New([]T{})
 	}
 
 	seen := make(map[T]struct{})
-	for _, v := range a.items {
+	for _, v := range a {
 		seen[v] = struct{}{}
 	}
 
 	var out []T
-	for _, v := range b.items {
+	for _, v := range b {
 		if _, ok := seen[v]; ok {
 			out = append(out, v)
 		}

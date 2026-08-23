@@ -3,7 +3,11 @@
 
 package main
 
-import "github.com/goforj/collection"
+import (
+	"fmt"
+
+	"github.com/goforj/collection/v3"
+)
 
 type DeviceEvent struct {
 	Device string
@@ -16,24 +20,38 @@ func main() {
 		{Device: "router-1", Region: "us-east", Errors: 3},
 		{Device: "router-2", Region: "us-east", Errors: 15},
 		{Device: "router-3", Region: "us-west", Errors: 22},
+		{Device: "router-4", Region: "us-west", Errors: 9},
+		{Device: "router-5", Region: "eu-west", Errors: 7},
 	}
 
-	// Fluent slice pipeline
+	// Clone creates a top-level ownership boundary before the mutable stages.
 	collection.
-		New(events). // Construction
-		Shuffle(). // Ordering
-		Filter(func(e DeviceEvent) bool { return e.Errors > 5 }). // Slicing
+		New(events).                                                      // Construction
+		Clone().                                                          // Construction
+		Retain(func(e DeviceEvent) bool { return e.Errors > 5 }).         // Mutation
 		Sort(func(a, b DeviceEvent) bool { return a.Errors > b.Errors }). // Ordering
-		Take(5). // Slicing
-		TakeUntilFn(func(e DeviceEvent) bool { return e.Errors < 10 }). // Slicing (stop when predicate becomes true)
-		SkipLast(1). // Slicing
-		Dump() // Debugging
+		Take(3).                                                          // Slicing
+		TakeUntil(func(e DeviceEvent) bool { return e.Errors <= 9 }).     // Slicing (stop when predicate becomes true)
+		Reverse().                                                        // Ordering
+		Dump()                                                            // Debugging
 
 	// #[]main.DeviceEvent [
 	//  0 => #main.DeviceEvent {
+	//    +Device => "router-2" #string
+	//    +Region => "us-east" #string
+	//    +Errors => 15 #int
+	//  }
+	//  1 => #main.DeviceEvent {
 	//    +Device => "router-3" #string
 	//    +Region => "us-west" #string
 	//    +Errors => 22 #int
 	//  }
 	// ]
+
+	regionsByPrefix := collection.New(events).
+		Map(func(event DeviceEvent) string { return event.Region }).
+		UniqueBy(func(region string) string { return region }).
+		GroupBy(func(region string) string { return region[:2] })
+	fmt.Println(len(regionsByPrefix))
+	// 2
 }

@@ -1,11 +1,9 @@
 package collection
 
-// TakeLast returns a new collection containing the last n items.
+// TakeLast returns a capacity-capped view containing the last n items.
 // If n is less than or equal to zero, TakeLast returns an empty collection.
 // If n is greater than or equal to the collection length, TakeLast returns
 // the full collection.
-// @chainable true
-// @terminal false
 //
 // This operation performs no element allocations; it re-slices the
 // underlying slice.
@@ -13,11 +11,13 @@ package collection
 // NOTE: returns a view (shares backing array). Use Clone() to detach.
 // @group Slicing
 // @behavior immutable
+// @chainable true
+// @terminal false
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
 //	out := c.TakeLast(2)
-//	collection.Dump(out.Items())
+//	collection.Dump(out)
 //	// #[]int [
 //	//   0 => 4 #int
 //	//   1 => 5 #int
@@ -26,14 +26,14 @@ package collection
 // Example: take none
 //
 //	out2 := c.TakeLast(0)
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]int [
 //	// ]
 //
 // Example: take all
 //
 //	out3 := c.TakeLast(10)
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -55,23 +55,23 @@ package collection
 //	})
 //
 //	out4 := users.TakeLast(1)
-//	collection.Dump(out4.Items())
+//	collection.Dump(out4)
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID => 3 #int
 //	//  }
 //	// ]
-func (c *Collection[T]) TakeLast(n int) *Collection[T] {
-	items := c.items
+func (c Slice[T]) TakeLast(n int) Slice[T] {
+	items := c
 	l := len(items)
 
 	if n <= 0 {
-		return New(items[:0])
+		return New(items[:0:0])
 	}
 
 	if n >= l {
-		return New(items)
+		return New(items[:l:l])
 	}
 
-	return New(items[l-n:])
+	return New(items[l-n : l : l])
 }

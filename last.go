@@ -54,9 +54,9 @@ package collection
 //	collection.Dump(v3, ok4)
 //	// 0 #int
 //	// false #bool
-func (c *Collection[T]) Last() (value T, ok bool) {
-	if len(c.items) == 0 {
+func (c Slice[T]) Last() (value T, ok bool) {
+	if len(c) == 0 {
 		return value, false
 	}
-	return c.items[len(c.items)-1], true
+	return c[len(c)-1], true
 }

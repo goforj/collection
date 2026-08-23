@@ -1,7 +1,7 @@
 package collection
 
-// Min returns the smallest numeric item in the collection.
-// The second return value is false if the collection is empty.
+// Min returns the smallest item in a numeric slice.
+// The second return value is false if the slice is empty.
 // @group Aggregation
 // @behavior readonly
 // @chainable false
@@ -9,36 +9,36 @@ package collection
 //
 // Example: integers
 //
-//	c := collection.NewNumeric([]int{3, 1, 2})
-//	min, ok := c.Min()
+//	values := []int{3, 1, 2}
+//	min, ok := collection.Min(values)
 //	collection.Dump(min, ok)
 //	// 1 #int
 //	// true #bool
 //
 // Example: floats
 //
-//	c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
-//	min2, ok2 := c2.Min()
+//	values2 := []float64{2.5, 9.1, 1.2}
+//	min2, ok2 := collection.Min(values2)
 //	collection.Dump(min2, ok2)
 //	// 1.200000 #float64
 //	// true #bool
 //
 // Example: integers - empty collection
 //
-//	empty := collection.NewNumeric([]int{})
-//	min3, ok3 := empty.Min()
+//	empty := []int{}
+//	min3, ok3 := collection.Min(empty)
 //	collection.Dump(min3, ok3)
 //	// 0 #int
 //	// false #bool
-func (c *NumericCollection[T]) Min() (T, bool) {
+func Min[S ~[]T, T Number](s S) (T, bool) {
 	var zero T
 
-	if len(c.items) == 0 {
+	if len(s) == 0 {
 		return zero, false
 	}
 
-	val := c.items[0]
-	for _, v := range c.items[1:] {
+	val := s[0]
+	for _, v := range s[1:] {
 		if v < val {
 			val = v
 		}

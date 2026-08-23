@@ -7,28 +7,22 @@ package collection
 // @chainable false
 // @terminal true
 //
-// Example: integers – none even
+// Example: integers - none even
 //
-//	c := collection.New([]int{1, 3, 5})
-//	noneEven := c.None(func(v int) bool { return v%2 == 0 })
-//	collection.Dump(noneEven)
+//	collection.Dump(collection.New([]int{1, 3, 5}).None(func(v int) bool { return v%2 == 0 }))
 //	// true #bool
 //
-// Example: integers – some even
+// Example: integers - some even
 //
-//	c2 := collection.New([]int{1, 2, 3})
-//	noneEven2 := c2.None(func(v int) bool { return v%2 == 0 })
-//	collection.Dump(noneEven2)
+//	collection.Dump(collection.New([]int{1, 2, 3}).None(func(v int) bool { return v%2 == 0 }))
 //	// false #bool
 //
 // Example: empty collection
 //
-//	empty := collection.New([]int{})
-//	none := empty.None(func(v int) bool { return v > 0 })
-//	collection.Dump(none)
+//	collection.Dump(collection.New([]int{}).None(func(v int) bool { return v > 0 }))
 //	// true #bool
-func (c *Collection[T]) None(fn func(T) bool) bool {
-	for _, v := range c.items {
+func (c Slice[T]) None(fn func(T) bool) bool {
+	for _, v := range c {
 		if fn(v) {
 			return false
 		}

@@ -12,13 +12,15 @@ import "sort"
 // The comparison function `less(a, b)` should return true if `a` should come
 // before `b` in the sorted order.
 //
-// This operation mutates the underlying slice (no allocation).
+// This operation mutates the underlying slice and does not allocate a new
+// element backing slice. The underlying sort implementation may make small
+// internal allocations.
 //
 // Example: integers
 //
 //	c := collection.New([]int{5, 1, 4, 2})
 //	c.Sort(func(a, b int) bool { return a < b })
-//	collection.Dump(c.Items())
+//	collection.Dump(c)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -30,7 +32,7 @@ import "sort"
 //
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
 //	c2.Sort(func(a, b string) bool { return a > b })
-//	collection.Dump(c2.Items())
+//	collection.Dump(c2)
 //	// #[]string [
 //	//   0 => "cherry" #string
 //	//   1 => "banana" #string
@@ -54,7 +56,7 @@ import "sort"
 //	users.Sort(func(a, b User) bool {
 //		return a.Age < b.Age
 //	})
-//	collection.Dump(users.Items())
+//	collection.Dump(users)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +Name => "Bob" #string
@@ -69,9 +71,9 @@ import "sort"
 //	//     +Age  => 40 #int
 //	//   }
 //	// ]
-func (c *Collection[T]) Sort(less func(a, b T) bool) *Collection[T] {
-	sort.Slice(c.items, func(i, j int) bool {
-		return less(c.items[i], c.items[j])
+func (c Slice[T]) Sort(less func(a, b T) bool) Slice[T] {
+	sort.Slice(c, func(i, j int) bool {
+		return less(c[i], c[j])
 	})
 	return c
 }

@@ -9,7 +9,7 @@ func TestUnion_Ints(t *testing.T) {
 	out := Union(a, b)
 
 	exp := []int{1, 2, 3, 4, 5}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -21,7 +21,7 @@ func TestUnion_Strings(t *testing.T) {
 	out := Union(left, right)
 
 	exp := []string{"apple", "banana", "date"}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -33,7 +33,7 @@ func TestUnion_FirstEmpty(t *testing.T) {
 	out := Union(left, right)
 
 	exp := []int{1, 2}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }

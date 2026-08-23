@@ -10,15 +10,15 @@ func TestUnique_Ints(t *testing.T) {
 
 	out := c.Unique(func(a, b int) bool { return a == b })
 
-	expected := []int{1, 2, 3, 4, 5}
+	expected := Slice[int]{1, 2, 3, 4, 5}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out, expected) {
+		t.Fatalf("expected %v, got %v", expected, out)
 	}
 
 	// Ensure original not mutated
-	if !reflect.DeepEqual(c.items, []int{1, 2, 2, 3, 4, 4, 5}) {
-		t.Fatalf("original collection was mutated: %v", c.items)
+	if !reflect.DeepEqual(c, Slice[int]{1, 2, 2, 3, 4, 4, 5}) {
+		t.Fatalf("original collection was mutated: %v", c)
 	}
 }
 
@@ -27,10 +27,10 @@ func TestUnique_NoDuplicates(t *testing.T) {
 
 	out := c.Unique(func(a, b int) bool { return a == b })
 
-	expected := []int{1, 2, 3}
+	expected := Slice[int]{1, 2, 3}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out, expected) {
+		t.Fatalf("expected %v, got %v", expected, out)
 	}
 }
 
@@ -39,8 +39,8 @@ func TestUnique_Empty(t *testing.T) {
 
 	out := c.Unique(func(a, b int) bool { return a == b })
 
-	if len(out.items) != 0 {
-		t.Fatalf("expected empty slice, got %v", out.items)
+	if len(out) != 0 {
+		t.Fatalf("expected empty slice, got %v", out)
 	}
 }
 
@@ -61,14 +61,14 @@ func TestUnique_Structs(t *testing.T) {
 		return a.Name == b.Name
 	})
 
-	expected := []User{
+	expected := Slice[User]{
 		{1, "Chris"},
 		{2, "Van"},
 		{3, "Shawn"},
 	}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out, expected) {
+		t.Fatalf("expected %v, got %v", expected, out)
 	}
 
 	// ensure original isn't mutated
@@ -79,8 +79,8 @@ func TestUnique_Structs(t *testing.T) {
 		{4, "Chris"},
 	}
 
-	if !reflect.DeepEqual(c.items, orig) {
-		t.Fatalf("original collection was mutated: %v", c.items)
+	if !reflect.DeepEqual(c, Slice[User](orig)) {
+		t.Fatalf("original collection was mutated: %v", c)
 	}
 }
 
@@ -89,10 +89,10 @@ func TestUnique_FirstOccurrencePreserved(t *testing.T) {
 
 	out := c.Unique(func(a, b int) bool { return a == b })
 
-	expected := []int{2, 1, 3}
+	expected := Slice[int]{2, 1, 3}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out, expected) {
+		t.Fatalf("expected %v, got %v", expected, out)
 	}
 }
 
@@ -102,9 +102,9 @@ func TestUnique_ReturnsCopy(t *testing.T) {
 	out := c.Unique(func(a, b int) bool { return a == b })
 
 	// Mutate original to ensure out is a copy
-	c.items[0] = 999
+	c[0] = 999
 
-	if out.items[0] == 999 {
+	if out[0] == 999 {
 		t.Fatalf("Unique returned a slice that aliases the original; must be a copy")
 	}
 }
@@ -116,9 +116,9 @@ func TestUnique_Chaining(t *testing.T) {
 		Unique(func(a, b int) bool { return a == b }).
 		Filter(func(v int) bool { return v > 1 })
 
-	expected := []int{2, 3}
+	expected := Slice[int]{2, 3}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("expected %v after chain, got %v", expected, out.items)
+	if !reflect.DeepEqual(out, expected) {
+		t.Fatalf("expected %v after chain, got %v", expected, out)
 	}
 }

@@ -9,7 +9,7 @@ func TestSymmetricDifference_Ints(t *testing.T) {
 	out := SymmetricDifference(a, b)
 
 	exp := []int{1, 2, 4, 5}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -21,7 +21,7 @@ func TestSymmetricDifference_Strings(t *testing.T) {
 	out := SymmetricDifference(left, right)
 
 	exp := []string{"apple", "date"}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -33,7 +33,7 @@ func TestSymmetricDifference_NoOverlap(t *testing.T) {
 	out := SymmetricDifference(left, right)
 
 	exp := []int{1, 2, 3, 4}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -45,7 +45,7 @@ func TestSymmetricDifference_EmptyLeft(t *testing.T) {
 	out := SymmetricDifference(left, right)
 
 	exp := []int{1, 2}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }
@@ -57,7 +57,7 @@ func TestSymmetricDifference_DedupFromLeftOnly(t *testing.T) {
 	out := SymmetricDifference(left, right)
 
 	exp := []int{1, 2}
-	if got := out.Items(); !slicesEqual(got, exp) {
+	if got := out; !slicesEqual(got, exp) {
 		t.Fatalf("expected %v, got %v", exp, got)
 	}
 }

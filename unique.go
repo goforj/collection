@@ -13,8 +13,7 @@ package collection
 // Example: integers
 //
 //	c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
-//	out1 := c1.Unique(func(a, b int) bool { return a == b })
-//	collection.Dump(out1.Items())
+//	collection.Dump(c1.Unique(func(a, b int) bool { return a == b }))
 //	// #[]int [
 //	//	0 => 1 #int
 //	//	1 => 2 #int
@@ -29,7 +28,7 @@ package collection
 //	out2 := c2.Unique(func(a, b string) bool {
 //		return strings.EqualFold(a, b)
 //	})
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]string [
 //	//	0 => "A" #string
 //	//	1 => "B" #string
@@ -52,7 +51,7 @@ package collection
 //		return a.ID == b.ID
 //	})
 //
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID   => 1 #int
@@ -63,10 +62,10 @@ package collection
 //	//    +Name => "Bob" #string
 //	//  }
 //	// ]
-func (c *Collection[T]) Unique(eq func(a, b T) bool) *Collection[T] {
-	out := make([]T, 0, len(c.items))
+func (c Slice[T]) Unique(eq func(a, b T) bool) Slice[T] {
+	out := make([]T, 0, len(c))
 
-	for _, v := range c.items {
+	for _, v := range c {
 		found := false
 		for _, existing := range out {
 			if eq(v, existing) {

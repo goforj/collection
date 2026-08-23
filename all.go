@@ -7,35 +7,27 @@ package collection
 // @chainable false
 // @terminal true
 //
-// Example: integers – all even
+// Example: integers - all even
 //
-//	c := collection.New([]int{2, 4, 6})
-//	allEven := c.All(func(v int) bool { return v%2 == 0 })
-//	collection.Dump(allEven)
+//	collection.Dump(collection.New([]int{2, 4, 6}).All(func(v int) bool { return v%2 == 0 }))
 //	// true #bool
 //
-// Example: integers – not all even
+// Example: integers - not all even
 //
-//	c2 := collection.New([]int{2, 3, 4})
-//	allEven2 := c2.All(func(v int) bool { return v%2 == 0 })
-//	collection.Dump(allEven2)
+//	collection.Dump(collection.New([]int{2, 3, 4}).All(func(v int) bool { return v%2 == 0 }))
 //	// false #bool
 //
-// Example: strings – all non-empty
+// Example: strings - all non-empty
 //
-//	c3 := collection.New([]string{"a", "b", "c"})
-//	allNonEmpty := c3.All(func(s string) bool { return s != "" })
-//	collection.Dump(allNonEmpty)
+//	collection.Dump(collection.New([]string{"a", "b", "c"}).All(func(s string) bool { return s != "" }))
 //	// true #bool
 //
 // Example: empty collection (vacuously true)
 //
-//	empty := collection.New([]int{})
-//	all := empty.All(func(v int) bool { return v > 0 })
-//	collection.Dump(all)
+//	collection.Dump(collection.New([]int{}).All(func(v int) bool { return v > 0 }))
 //	// true #bool
-func (c *Collection[T]) All(fn func(T) bool) bool {
-	for _, v := range c.items {
+func (c Slice[T]) All(fn func(T) bool) bool {
+	for _, v := range c {
 		if !fn(v) {
 			return false
 		}

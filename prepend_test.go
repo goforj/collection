@@ -10,13 +10,9 @@ func TestPrepend_Basic(t *testing.T) {
 
 	out := c.Prepend(1, 2)
 
-	if out != c {
-		t.Fatalf("expected Prepend to return same collection instance")
-	}
-
-	expected := []int{1, 2, 3, 4}
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	expected := Slice[int]{1, 2, 3, 4}
+	if !reflect.DeepEqual(out, expected) || !reflect.DeepEqual(c, Slice[int]{3, 4}) {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
 
@@ -25,13 +21,9 @@ func TestPrepend_EmptyCollection(t *testing.T) {
 
 	out := c.Prepend(1, 2, 3)
 
-	if out != c {
-		t.Fatalf("expected Prepend to return same collection instance")
-	}
-
-	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	expected := Slice[int]{1, 2, 3}
+	if !reflect.DeepEqual(out, expected) || len(c) != 0 {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
 
@@ -40,13 +32,9 @@ func TestPrepend_NoValues(t *testing.T) {
 
 	out := c.Prepend() // no-op
 
-	if out != c {
-		t.Fatalf("expected Prepend to return same collection instance")
-	}
-
-	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	expected := Slice[int]{1, 2, 3}
+	if !reflect.DeepEqual(out, expected) || !reflect.DeepEqual(c, expected) {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
 
@@ -63,19 +51,15 @@ func TestPrepend_Structs(t *testing.T) {
 
 	out := c.Prepend(User{1, "Chris"}, User{2, "Matt"})
 
-	if out != c {
-		t.Fatalf("expected Prepend to return same collection instance")
-	}
-
-	expected := []User{
+	expected := Slice[User]{
 		{1, "Chris"},
 		{2, "Matt"},
 		{3, "Shawn"},
 		{4, "Van"},
 	}
 
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	if !reflect.DeepEqual(out, expected) || len(c) != 2 {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
 
@@ -85,40 +69,48 @@ func TestPrepend_DoesNotMutateSourceSlice(t *testing.T) {
 
 	out := c.Prepend(5, 7)
 
-	if out != c {
-		t.Fatalf("expected Prepend to return same collection instance")
-	}
-
 	if !reflect.DeepEqual(orig, []int{10, 20, 30}) {
 		t.Fatalf("Prepend mutated source slice: %v", orig)
 	}
 
-	expected := []int{5, 7, 10, 20, 30}
-	if !reflect.DeepEqual(c.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, c.items)
+	expected := Slice[int]{5, 7, 10, 20, 30}
+	if !reflect.DeepEqual(out, expected) || !reflect.DeepEqual(c, Slice[int](orig)) {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
 
 func TestPrepend_NilSliceWithValues(t *testing.T) {
 	c := New([]int(nil))
 
-	c.Prepend(1, 2)
+	out := c.Prepend(1, 2)
 
-	expected := []int{1, 2}
-	if !reflect.DeepEqual(c.Items(), expected) {
-		t.Fatalf("expected %v, got %v", expected, c.Items())
+	expected := Slice[int]{1, 2}
+	if !reflect.DeepEqual(out, expected) || c != nil {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
 }
 
 func TestPrepend_NilSliceNoValuesBecomesEmpty(t *testing.T) {
 	c := New([]int(nil))
 
-	c.Prepend()
+	out := c.Prepend()
 
-	if c.Items() == nil {
-		t.Fatalf("expected empty slice, got nil")
+	if out == nil || len(out) != 0 || c != nil {
+		t.Fatalf("result=%v source=%v", out, c)
 	}
-	if len(c.Items()) != 0 {
-		t.Fatalf("expected empty slice, got %v", c.Items())
+}
+
+func TestPrepend_ResultAndSourceAreIndependentWithSpareCapacity(t *testing.T) {
+	backing := make([]int, 2, 8)
+	copy(backing, []int{3, 4})
+	c := New(backing)
+	out := c.Prepend(1, 2)
+	out[2] = 9
+	if c[0] != 3 {
+		t.Fatalf("result mutation changed source: %v", c)
+	}
+	c[1] = 8
+	if out[3] != 4 {
+		t.Fatalf("source mutation changed result: %v", out)
 	}
 }

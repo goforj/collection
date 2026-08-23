@@ -10,7 +10,7 @@ import (
 var exitFunc = func(v interface{}) { godump.Dd(v) }
 
 // Dump prints items with godump and returns the same collection.
-// This is a no-op on the collection itself and never panics.
+// This is a no-op on the collection itself.
 // @group Debugging
 // @behavior readonly
 // @chainable true
@@ -18,8 +18,7 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 //
 // Example: integers
 //
-//	c := collection.New([]int{1, 2, 3})
-//	c.Dump()
+//	collection.New([]int{1, 2, 3}).Dump()
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -35,8 +34,8 @@ var exitFunc = func(v interface{}) { godump.Dd(v) }
 //	//   0 => 2 #int
 //	//   1 => 3 #int
 //	// ]
-func (c *Collection[T]) Dump() *Collection[T] {
-	godump.Dump(c.Items())
+func (c Slice[T]) Dump() Slice[T] {
+	godump.Dump(c)
 	return c
 }
 
@@ -52,15 +51,14 @@ func (c *Collection[T]) Dump() *Collection[T] {
 //
 // Example: strings
 //
-//	c := collection.New([]string{"a", "b"})
-//	c.Dd()
+//	collection.New([]string{"a", "b"}).Dd()
 //	// #[]string [
 //	//   0 => "a" #string
 //	//   1 => "b" #string
 //	// ]
 //	// Process finished with the exit code 1
-func (c *Collection[T]) Dd() {
-	exitFunc(c.Items())
+func (c Slice[T]) Dd() {
+	exitFunc(c)
 }
 
 // DumpStr returns the pretty-printed dump of the items as a string,
@@ -73,21 +71,19 @@ func (c *Collection[T]) Dd() {
 //
 // Example: integers
 //
-//	c := collection.New([]int{10, 20})
-//	s := c.DumpStr()
-//	fmt.Println(s)
+//	fmt.Println(collection.New([]int{10, 20}).DumpStr())
 //	// #[]int [
 //	//   0 => 10 #int
 //	//   1 => 20 #int
 //	// ]
-func (c *Collection[T]) DumpStr() string {
-	return godump.DumpStr(c.Items())
+func (c Slice[T]) DumpStr() string {
+	return godump.DumpStr(c)
 }
 
 var dumpWriter io.Writer = os.Stdout
 
 // setDumpWriter allows tests to redirect dump output.
-// Not exported — production code never needs this.
+// Not exported - production code never needs this.
 func setDumpWriter(w io.Writer) {
 	dumpWriter = w
 }
@@ -100,8 +96,7 @@ func setDumpWriter(w io.Writer) {
 //
 // Example: integers
 //
-//	c2 := collection.New([]int{1, 2, 3})
-//	collection.Dump(c2.Items())
+//	collection.Dump(collection.New([]int{1, 2, 3}))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int

@@ -11,15 +11,14 @@ package collection
 //
 // Example: integers
 //
-//	c := collection.New([]int{1, 2, 3, 4, 5})
-//	c.After(func(v int) bool { return v == 3 }).Dump()
+//	collection.New([]int{1, 2, 3, 4, 5}).After(func(v int) bool { return v == 3 }).Dump()
 //	// #[]int [
 //	//  0 => 4 #int
 //	//  1 => 5 #int
 //	// ]
-func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
+func (c Slice[T]) After(pred func(T) bool) Slice[T] {
 	idx := -1
-	for i, v := range c.items {
+	for i, v := range c {
 		if pred(v) {
 			idx = i
 			break
@@ -27,9 +26,9 @@ func (c *Collection[T]) After(pred func(T) bool) *Collection[T] {
 	}
 
 	// If no match found → empty collection
-	if idx == -1 || idx+1 >= len(c.items) {
-		return New(c.items[:0])
+	if idx == -1 || idx+1 >= len(c) {
+		return New(c[:0:0])
 	}
 
-	return New(c.items[idx+1:])
+	return New(c[idx+1 : len(c) : len(c)])
 }

@@ -1,23 +1,22 @@
 package collection
 
-// Map applies a same-type transformation in place and returns the same collection.
+// Transform applies a same-type transformation in place and returns the same collection.
 // @group Transformation
 // @behavior mutable
 // @chainable true
 // @terminal false
 //
-// Use this when you're transforming T -> T (e.g., enrichment, normalization).
-// Map mutates the receiver's backing slice. Use Clone() if you need isolation.
+// Transform mutates the receiver's backing slice. Use Clone() if you need isolation.
 //
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3})
 //
-//	mapped := c.Map(func(v int) int {
+//	c.Transform(func(v int) int {
 //		return v * 10
 //	})
 //
-//	collection.Dump(mapped.Items())
+//	collection.Dump(c)
 //	// #[]int [
 //	//   0 => 10 #int
 //	//   1 => 20 #int
@@ -28,11 +27,11 @@ package collection
 //
 //	c2 := collection.New([]string{"apple", "banana", "cherry"})
 //
-//	upper := c2.Map(func(s string) string {
+//	upper := c2.Transform(func(s string) string {
 //		return strings.ToUpper(s)
 //	})
 //
-//	collection.Dump(upper.Items())
+//	collection.Dump(upper)
 //	// #[]string [
 //	//   0 => "APPLE" #string
 //	//   1 => "BANANA" #string
@@ -51,12 +50,12 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	updated := users.Map(func(u User) User {
+//	updated := users.Transform(func(u User) User {
 //		u.Name = strings.ToUpper(u.Name)
 //		return u
 //	})
 //
-//	collection.Dump(updated.Items())
+//	collection.Dump(updated)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -67,9 +66,9 @@ package collection
 //	//     +Name => "BOB" #string
 //	//   }
 //	// ]
-func (c *Collection[T]) Map(fn func(T) T) *Collection[T] {
-	for i, v := range c.items {
-		c.items[i] = fn(v)
+func (c Slice[T]) Transform(fn func(T) T) Slice[T] {
+	for i, v := range c {
+		c[i] = fn(v)
 	}
 	return c
 }

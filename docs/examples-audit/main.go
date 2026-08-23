@@ -29,7 +29,6 @@ type result struct {
 	runErr     error
 	hasOutput  bool
 	exitWanted bool
-	nondet     bool
 }
 
 func main() {
@@ -57,7 +56,6 @@ func main() {
 
 		expected := extractExpectedOutput(src)
 		exitWanted := expectsExit(src)
-		nondet := isNonDeterministicExample(src)
 		actual, runErr := runExample(name, src)
 		hasOutput := len(expected) > 0
 
@@ -68,7 +66,6 @@ func main() {
 			runErr:     runErr,
 			hasOutput:  hasOutput,
 			exitWanted: exitWanted,
-			nondet:     nondet,
 		})
 	}
 
@@ -76,14 +73,10 @@ func main() {
 	var missing []result
 
 	for _, res := range results {
-		if res.nondet {
-			continue
-		}
 		if res.runErr != nil {
 			failed = append(failed, res)
 			continue
 		}
-
 		if !res.hasOutput {
 			if len(res.actual) > 0 {
 				missing = append(missing, res)
@@ -292,10 +285,6 @@ func isOutputLine(line string) bool {
 
 func expectsExit(src []byte) bool {
 	return bytes.Contains(src, []byte(".Dd(")) || bytes.Contains(src, []byte("collection.Dd("))
-}
-
-func isNonDeterministicExample(src []byte) bool {
-	return bytes.Contains(src, []byte("Shuffle("))
 }
 
 func normalizeOutput(raw string) []string {

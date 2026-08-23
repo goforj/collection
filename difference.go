@@ -13,8 +13,7 @@ package collection
 //	a := collection.New([]int{1, 2, 2, 3, 4})
 //	b := collection.New([]int{2, 4})
 //
-//	out := collection.Difference(a, b)
-//	collection.Dump(out.Items())
+//	collection.Dump(collection.Difference(a, b))
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 3 #int
@@ -25,8 +24,7 @@ package collection
 //	left := collection.New([]string{"apple", "banana", "cherry"})
 //	right := collection.New([]string{"banana"})
 //
-//	out2 := collection.Difference(left, right)
-//	collection.Dump(out2.Items())
+//	collection.Dump(collection.Difference(left, right))
 //	// #[]string [
 //	//   0 => "apple" #string
 //	//   1 => "cherry" #string
@@ -49,8 +47,7 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	out3 := collection.Difference(groupA, groupB)
-//	collection.Dump(out3.Items())
+//	collection.Dump(collection.Difference(groupA, groupB))
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -61,20 +58,20 @@ package collection
 //	//     +Name => "Carol" #string
 //	//   }
 //	// ]
-func Difference[T comparable](a, b *Collection[T]) *Collection[T] {
-	if len(a.items) == 0 {
+func Difference[S1 ~[]T, S2 ~[]T, T comparable](a S1, b S2) Slice[T] {
+	if len(a) == 0 {
 		return New([]T{})
 	}
 
-	lookup := make(map[T]struct{}, len(b.items))
-	for _, v := range b.items {
+	lookup := make(map[T]struct{}, len(b))
+	for _, v := range b {
 		lookup[v] = struct{}{}
 	}
 
-	out := make([]T, 0, len(a.items))
-	seen := make(map[T]struct{}, len(a.items))
+	out := make([]T, 0, len(a))
+	seen := make(map[T]struct{}, len(a))
 
-	for _, v := range a.items {
+	for _, v := range a {
 		if _, inB := lookup[v]; inB {
 			continue
 		}

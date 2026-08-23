@@ -1,19 +1,9 @@
 package collection
 
 import (
-	"math/rand"
-	"time"
+	"math/bits"
+	"math/rand/v2"
 )
-
-// shuffleRand is the RNG used by Shuffle.
-// It is overridden in tests for deterministic behavior.
-var shuffleRand = rand.New(rand.NewSource(time.Now().UnixNano()))
-
-// setShuffleRand allows tests to inject a deterministic RNG.
-// Not exported — production code should not touch this.
-func setShuffleRand(r *rand.Rand) {
-	shuffleRand = r
-}
 
 // Shuffle shuffles the collection in place and returns the same collection.
 // @group Ordering
@@ -23,23 +13,21 @@ func setShuffleRand(r *rand.Rand) {
 //
 // This operation mutates the receiver's backing slice.
 //
-// The shuffle uses an internal random source. Tests may override
-// this source to achieve deterministic behavior.
-//
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
 //	c.Shuffle()
-//	collection.Dump(c.Items())
+//	fmt.Println(len(c), collection.Sum(c))
+//	// 5 15
 //
-// Example: strings – chaining
+// Example: strings - chaining
 //
 //	out2 := collection.New([]string{"a", "b", "c"}).
 //		Shuffle().
-//		Append("d").
-//		Items()
+//		Concat([]string{"d"})
 //
-//	collection.Dump(out2)
+//	fmt.Println(len(out2))
+//	// 4
 //
 // Example: structs
 //
@@ -55,15 +43,39 @@ func setShuffleRand(r *rand.Rand) {
 //	})
 //
 //	users.Shuffle()
-//	collection.Dump(users.Items())
-func (c *Collection[T]) Shuffle() *Collection[T] {
-	n := len(c.items)
-
-	// Fisher–Yates shuffle (in place)
-	for i := n - 1; i > 0; i-- {
-		j := shuffleRand.Intn(i + 1)
-		c.items[i], c.items[j] = c.items[j], c.items[i]
+//	fmt.Println(len(users))
+//	// 4
+func (c Slice[T]) Shuffle() Slice[T] {
+	state := rand.Uint64()
+	for i := len(c) - 1; i > 0; i-- {
+		j := int(randomIndex(&state, uint64(i+1)))
+		c[i], c[j] = c[j], c[i]
 	}
 
 	return c
+}
+
+// randomIndex reduces a random value into [0, n) without modulo bias.
+func randomIndex(state *uint64, n uint64) uint64 {
+	if n&(n-1) == 0 {
+		return nextRandom(state) & (n - 1)
+	}
+
+	high, low := bits.Mul64(nextRandom(state), n)
+	if low < n {
+		threshold := -n % n
+		for low < threshold {
+			high, low = bits.Mul64(nextRandom(state), n)
+		}
+	}
+	return high
+}
+
+// nextRandom advances a local SplitMix64 stream so Shuffle avoids shared-source contention.
+func nextRandom(state *uint64) uint64 {
+	*state += 0x9e3779b97f4a7c15
+	value := *state
+	value = (value ^ (value >> 30)) * 0xbf58476d1ce4e5b9
+	value = (value ^ (value >> 27)) * 0x94d049bb133111eb
+	return value ^ (value >> 31)
 }

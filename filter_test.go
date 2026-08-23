@@ -5,129 +5,34 @@ import (
 	"testing"
 )
 
-func TestFilter_Ints(t *testing.T) {
-	c := New([]int{1, 2, 3, 4, 5})
-
-	filtered := c.Filter(func(v int) bool {
-		return v%2 == 0 // keep even
-	})
-
-	expected := []int{2, 4}
-
-	if !reflect.DeepEqual(filtered.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, filtered.items)
-	}
-}
-
-func TestFilter_NoneMatch(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	filtered := c.Filter(func(v int) bool { return v > 100 })
-
-	if len(filtered.items) != 0 {
-		t.Fatalf("expected empty result, got %v", filtered.items)
-	}
-}
-
-func TestFilter_AllMatch(t *testing.T) {
-	c := New([]int{1, 2, 3})
-
-	filtered := c.Filter(func(v int) bool { return true })
-
-	expected := []int{1, 2, 3}
-
-	if !reflect.DeepEqual(filtered.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, filtered.items)
-	}
-}
-
-func TestFilter_Structs(t *testing.T) {
-	type User struct {
-		ID   int
-		Name string
-	}
-
-	c := New([]User{
-		{1, "Chris"},
-		{2, "Van"},
-		{3, "Shawn"},
-	})
-
-	filtered := c.Filter(func(u User) bool {
-		return u.ID >= 2
-	})
-
-	expected := []User{
-		{2, "Van"},
-		{3, "Shawn"},
-	}
-
-	if !reflect.DeepEqual(filtered.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, filtered.items)
-	}
-}
-
-func TestFilter_EmptyInput(t *testing.T) {
-	c := New([]int{})
-
-	filtered := c.Filter(func(v int) bool { return v%2 == 0 })
-
-	if len(filtered.items) != 0 {
-		t.Fatalf("expected empty slice, got %v", filtered.items)
-	}
-}
-
-func TestFilter_Chaining(t *testing.T) {
-	c := New([]int{1, 2, 3, 4, 5})
-
-	result := c.
-		Filter(func(v int) bool { return v > 1 }).   // [2,3,4,5]
-		Filter(func(v int) bool { return v%2 == 1 }) // [3,5]
-
-	expected := []int{3, 5}
-
-	if !reflect.DeepEqual(result.items, expected) {
-		t.Fatalf("expected %v, got %v", expected, result.items)
-	}
-}
-
-func TestFilter_PreservesNilSlice(t *testing.T) {
-	c := New([]int(nil))
-
-	c.Filter(func(v int) bool { return v%2 == 0 })
-
-	if c.Items() != nil {
-		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
-	}
-}
-
-func TestFilter_WritesThroughSourceSlice(t *testing.T) {
+func TestFilter_AllocatesWithoutMutatingSource(t *testing.T) {
 	items := []int{1, 2, 3, 4}
-	c := New(items)
-
-	c.Filter(func(v int) bool { return v%2 == 0 })
-
-	want := []int{2, 4}
-	if !reflect.DeepEqual(items[:len(want)], want) {
-		t.Fatalf("expected source prefix %v, got %v", want, items[:len(want)])
+	values := New(items)
+	filtered := values.Filter(func(value int) bool { return value%2 == 0 })
+	want := Slice[int]{2, 4}
+	if !reflect.DeepEqual(filtered, want) {
+		t.Fatalf("Filter result = %v, want %v", filtered, want)
 	}
-
-	if len(c.Items()) != len(want) {
-		t.Fatalf("expected filtered length %d, got %d", len(want), len(c.Items()))
+	wantSource := []int{1, 2, 3, 4}
+	if !reflect.DeepEqual(items, wantSource) {
+		t.Fatalf("Filter mutated source = %v, want %v", items, wantSource)
 	}
 }
 
-func TestFilter_ClearsRemovedTail(t *testing.T) {
-	a, b, cval := 1, 2, 3
-	items := []*int{&a, &b, &cval}
-	c := New(items)
-
-	c.Filter(func(v *int) bool { return *v == 2 })
-
-	if items[0] != &b {
-		t.Fatalf("expected kept value to be compacted to front")
+func TestFilter_IgnoredResultLeavesSourceUnchanged(t *testing.T) {
+	items := []int{1, 2, 3, 4}
+	values := New(items)
+	_ = values.Filter(func(value int) bool { return value%2 == 0 })
+	want := []int{1, 2, 3, 4}
+	if !reflect.DeepEqual(items, want) {
+		t.Fatalf("ignored Filter mutated source = %v, want %v", items, want)
 	}
-	if items[1] != nil || items[2] != nil {
-		t.Fatalf("expected removed tail to be cleared, got %v", items)
+}
+
+func TestFilter_NilSliceProducesAllocatedEmptyResult(t *testing.T) {
+	var values Slice[int]
+	filtered := values.Filter(func(int) bool { return true })
+	if filtered == nil || len(filtered) != 0 {
+		t.Fatalf("Filter(nil) = %#v, want allocated empty Slice", filtered)
 	}
 }

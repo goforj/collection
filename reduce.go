@@ -1,7 +1,7 @@
 package collection
 
 // Reduce collapses the collection into a single accumulated value.
-// The accumulator has the same type T as the collection's elements.
+// The accumulator may have a different type R from the collection's elements.
 // @group Aggregation
 // @behavior readonly
 // @chainable false
@@ -50,9 +50,9 @@ package collection
 //	//   +Count => 3 #int
 //	//   +Sum   => 60 #int
 //	// }
-func (c *Collection[T]) Reduce(initial T, fn func(T, T) T) T {
+func (c Slice[T]) Reduce[R any](initial R, fn func(R, T) R) R {
 	acc := initial
-	for _, v := range c.items {
+	for _, v := range c {
 		acc = fn(acc, v)
 	}
 	return acc

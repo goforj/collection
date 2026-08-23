@@ -13,7 +13,7 @@ package collection
 //
 //	c := collection.New([]int{1, 2, 3, 4})
 //	c.Reverse()
-//	collection.Dump(c.Items())
+//	collection.Dump(c)
 //	// #[]int [
 //	//   0 => 4 #int
 //	//   1 => 3 #int
@@ -21,12 +21,11 @@ package collection
 //	//   3 => 1 #int
 //	// ]
 //
-// Example: strings – chaining
+// Example: strings - chaining
 //
 //	out := collection.New([]string{"a", "b", "c"}).
 //		Reverse().
-//		Append("d").
-//		Items()
+//		Concat([]string{"d"})
 //
 //	collection.Dump(out)
 //	// #[]string [
@@ -49,7 +48,7 @@ package collection
 //	})
 //
 //	users.Reverse()
-//	collection.Dump(users.Items())
+//	collection.Dump(users)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID => 3 #int
@@ -61,8 +60,8 @@ package collection
 //	//     +ID => 1 #int
 //	//   }
 //	// ]
-func (c *Collection[T]) Reverse() *Collection[T] {
-	items := c.items
+func (c Slice[T]) Reverse() Slice[T] {
+	items := c
 	n := len(items)
 
 	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {

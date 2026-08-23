@@ -2,60 +2,62 @@ package collection
 
 import "sort"
 
-// Median returns the statistical median of the numeric collection as float64.
-// Returns (0, false) if the collection is empty.
+// Median returns the statistical median of a numeric slice as float64.
+// It returns (0, false) if the slice is empty.
+// Median copies the input before sorting, so it allocates O(n) storage and does
+// not mutate the input slice.
 // @group Aggregation
 // @behavior readonly
 // @chainable false
 // @terminal true
 //
-// Odd count  → middle value
-// Even count → average of the two middle values
+// - Odd count: middle value.
+// - Even count: average of the two middle values.
 //
 // Example: integers - odd number of items
 //
-//	c := collection.NewNumeric([]int{3, 1, 2})
+//	values := []int{3, 1, 2}
 //
-//	median1, ok1 := c.Median()
+//	median1, ok1 := collection.Median(values)
 //	collection.Dump(median1, ok1)
 //	// 2.000000 #float64
 //	// true #bool
 //
 // Example: integers - even number of items
 //
-//	c2 := collection.NewNumeric([]int{10, 2, 4, 6})
+//	values2 := []int{10, 2, 4, 6}
 //
-//	median2, ok2 := c2.Median()
+//	median2, ok2 := collection.Median(values2)
 //	collection.Dump(median2, ok2)
 //	// 5.000000 #float64
 //	// true #bool
 //
 // Example: floats
 //
-//	c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
+//	values3 := []float64{1.1, 9.9, 3.3}
 //
-//	median3, ok3 := c3.Median()
+//	median3, ok3 := collection.Median(values3)
 //	collection.Dump(median3, ok3)
 //	// 3.300000 #float64
 //	// true #bool
 //
-// Example: integers - empty numeric collection
+// Example: integers - empty numeric slice
 //
-//	c4 := collection.NewNumeric([]int{})
+//	empty := []int{}
 //
-//	median4, ok4 := c4.Median()
+//	median4, ok4 := collection.Median(empty)
 //	collection.Dump(median4, ok4)
 //	// 0.000000 #float64
 //	// false #bool
-func (c *NumericCollection[T]) Median() (float64, bool) {
-	n := len(c.items)
+func Median[S ~[]T, T Number](s S) (float64, bool) {
+	n := len(s)
 	if n == 0 {
 		return 0, false
 	}
 
 	// Make a copy so sorting does not mutate the original collection
 	cp := make([]T, n)
-	copy(cp, c.items)
+	copy(cp, s)
 
 	sort.Slice(cp, func(i, j int) bool { return cp[i] < cp[j] })
 

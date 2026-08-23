@@ -3,8 +3,8 @@ package collection
 import "testing"
 
 func TestMin_Ints(t *testing.T) {
-	c := NewNumeric([]int{3, 1, 2})
-	min, ok := c.Min()
+	c := []int{3, 1, 2}
+	min, ok := Min(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true, got false")
@@ -16,8 +16,8 @@ func TestMin_Ints(t *testing.T) {
 }
 
 func TestMin_Floats(t *testing.T) {
-	c := NewNumeric([]float64{3.5, 1.1, 2.2})
-	min, ok := c.Min()
+	c := []float64{3.5, 1.1, 2.2}
+	min, ok := Min(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true, got false")
@@ -29,8 +29,8 @@ func TestMin_Floats(t *testing.T) {
 }
 
 func TestMin_Empty(t *testing.T) {
-	c := NewNumeric([]uint{})
-	min, ok := c.Min()
+	c := []uint{}
+	min, ok := Min(c)
 
 	if ok {
 		t.Fatalf("expected ok=false on empty collection")
@@ -42,8 +42,8 @@ func TestMin_Empty(t *testing.T) {
 }
 
 func TestMin_SingleValue(t *testing.T) {
-	c := NewNumeric([]int{42})
-	min, ok := c.Min()
+	c := []int{42}
+	min, ok := Min(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true")

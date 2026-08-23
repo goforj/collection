@@ -22,6 +22,7 @@ jobs:
             go.sum
             examples/go.sum
             docs/bench/go.sum
+            docs/regression/go.sum
 
       - name: Download dependencies
         run: go mod download
@@ -57,11 +58,30 @@ jobs:
 
       - name: Check docs module
         working-directory: docs
-        run: go list -m
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+          go vet ./...
+          go test ./...
 
       - name: Check benchmark module
         working-directory: docs/bench
-        run: go test ./...
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+          go vet ./...
+          go test ./...
+
+      - name: Check regression benchmark module
+        working-directory: docs/regression
+        env:
+          GOWORK: "off"
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+          go vet ./...
+          go test ./...
+          go test -run '^$' -bench . -benchtime=1x
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5

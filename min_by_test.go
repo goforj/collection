@@ -14,7 +14,7 @@ func TestMinBy_Structs(t *testing.T) {
 		{name: "carol", score: 8},
 	})
 
-	minUser, ok := MinBy(c, func(u user) int {
+	minUser, ok := c.MinBy(func(u user) int {
 		return u.score
 	})
 
@@ -30,7 +30,7 @@ func TestMinBy_Structs(t *testing.T) {
 func TestMinBy_StringsByLength(t *testing.T) {
 	c := New([]string{"strawberry", "fig", "banana"})
 
-	minVal, ok := MinBy(c, func(s string) int {
+	minVal, ok := c.MinBy(func(s string) int {
 		return len(s)
 	})
 
@@ -46,7 +46,7 @@ func TestMinBy_StringsByLength(t *testing.T) {
 func TestMinBy_Empty(t *testing.T) {
 	c := New([]int{})
 
-	minVal, ok := MinBy(c, func(v int) int {
+	minVal, ok := c.MinBy(func(v int) int {
 		return v
 	})
 
@@ -62,7 +62,7 @@ func TestMinBy_Empty(t *testing.T) {
 func TestMinBy_TiesReturnFirst(t *testing.T) {
 	c := New([]int{3, 1, 2, 1})
 
-	minVal, ok := MinBy(c, func(v int) int {
+	minVal, ok := c.MinBy(func(v int) int {
 		return v
 	})
 

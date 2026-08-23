@@ -1,6 +1,7 @@
 package collection
 
-// MapTo maps this collection to a collection with a different element type.
+// Map maps this Slice to a newly allocated Slice with a potentially different
+// element type.
 // @group Transformation
 // @behavior immutable
 // @chainable true
@@ -9,23 +10,24 @@ package collection
 // Example: map integers to labels
 //
 //	numbers := collection.New([]int{1, 2, 3, 4})
-//	labels := numbers.MapTo(func(number int) string {
+//	labels := numbers.Map(func(number int) string {
 //		if number%2 == 0 {
 //			return "even"
 //		}
 //		return "odd"
 //	})
-//	collection.Dump(labels.Items())
+//	collection.Dump(labels)
 //	// #[]string [
 //	//   0 => "odd" #string
 //	//   1 => "even" #string
 //	//   2 => "odd" #string
 //	//   3 => "even" #string
 //	// ]
-func (c *Collection[T]) MapTo[R any](fn func(T) R) *Collection[R] {
-	items := c.Items()
-	out := make([]R, len(items))
-	for i, value := range items {
+//	fmt.Println(numbers[0])
+//	// 1
+func (c Slice[T]) Map[R any](fn func(T) R) Slice[R] {
+	out := make([]R, len(c))
+	for i, value := range c {
 		out[i] = fn(value)
 	}
 	return New(out)
@@ -46,15 +48,15 @@ func (c *Collection[T]) MapTo[R any](fn func(T) R) *Collection[R] {
 //	collection.Dump(shortest, ok)
 //	// "fig" #string
 //	// true #bool
-func (c *Collection[T]) MinBy[K Number | ~string](keyFn func(T) K) (T, bool) {
+func (c Slice[T]) MinBy[K Number | ~string](keyFn func(T) K) (T, bool) {
 	var zero T
-	if len(c.items) == 0 {
+	if len(c) == 0 {
 		return zero, false
 	}
 
-	minItem := c.items[0]
+	minItem := c[0]
 	minKey := keyFn(minItem)
-	for _, item := range c.items[1:] {
+	for _, item := range c[1:] {
 		key := keyFn(item)
 		if key < minKey {
 			minKey = key
@@ -79,15 +81,15 @@ func (c *Collection[T]) MinBy[K Number | ~string](keyFn func(T) K) (T, bool) {
 //	collection.Dump(longest, ok)
 //	// "banana" #string
 //	// true #bool
-func (c *Collection[T]) MaxBy[K Number | ~string](keyFn func(T) K) (T, bool) {
+func (c Slice[T]) MaxBy[K Number | ~string](keyFn func(T) K) (T, bool) {
 	var zero T
-	if len(c.items) == 0 {
+	if len(c) == 0 {
 		return zero, false
 	}
 
-	maxItem := c.items[0]
+	maxItem := c[0]
 	maxKey := keyFn(maxItem)
-	for _, item := range c.items[1:] {
+	for _, item := range c[1:] {
 		key := keyFn(item)
 		if key > maxKey {
 			maxKey = key
@@ -98,6 +100,7 @@ func (c *Collection[T]) MaxBy[K Number | ~string](keyFn func(T) K) (T, bool) {
 }
 
 // ToMap reduces this collection into a map using the provided key and value functions.
+// If multiple items produce the same key, the value derived from the last item wins.
 // @group Maps
 // @behavior readonly
 // @chainable false
@@ -115,15 +118,16 @@ func (c *Collection[T]) MaxBy[K Number | ~string](keyFn func(T) K) (T, bool) {
 //	//   forj => 4 #int
 //	//   go => 2 #int
 //	// }
-func (c *Collection[T]) ToMap[K comparable, V any](keyFn func(T) K, valueFn func(T) V) map[K]V {
-	out := make(map[K]V, len(c.items))
-	for _, item := range c.items {
+func (c Slice[T]) ToMap[K comparable, V any](keyFn func(T) K, valueFn func(T) V) map[K]V {
+	out := make(map[K]V, len(c))
+	for _, item := range c {
 		out[keyFn(item)] = valueFn(item)
 	}
 	return out
 }
 
-// GroupBy partitions this collection into collections keyed by the extracted value.
+// GroupBy partitions this Slice into independent built-in slices keyed by the
+// extracted value.
 // @group Grouping
 // @behavior readonly
 // @chainable false
@@ -138,44 +142,6 @@ func (c *Collection[T]) ToMap[K comparable, V any](keyFn func(T) K, valueFn func
 //		}
 //		return "odd"
 //	})
-//	collection.Dump(groups["even"].Items(), groups["odd"].Items())
-//	// #[]int [
-//	//   0 => 2 #int
-//	//   1 => 4 #int
-//	// ]
-//	// #[]int [
-//	//   0 => 1 #int
-//	//   1 => 3 #int
-//	// ]
-func (c *Collection[T]) GroupBy[K comparable](keyFn func(T) K) map[K]*Collection[T] {
-	out := make(map[K]*Collection[T], len(c.items))
-	for _, item := range c.items {
-		key := keyFn(item)
-		group := out[key]
-		if group == nil {
-			out[key] = &Collection[T]{items: []T{item}}
-			continue
-		}
-		group.items = append(group.items, item)
-	}
-	return out
-}
-
-// GroupBySlice partitions this collection into slices keyed by the extracted value.
-// @group Grouping
-// @behavior readonly
-// @chainable false
-// @terminal true
-//
-// Example: group integers by parity into slices
-//
-//	numbers := collection.New([]int{1, 2, 3, 4})
-//	groups := numbers.GroupBySlice(func(number int) string {
-//		if number%2 == 0 {
-//			return "even"
-//		}
-//		return "odd"
-//	})
 //	collection.Dump(groups["even"], groups["odd"])
 //	// #[]int [
 //	//   0 => 2 #int
@@ -185,9 +151,17 @@ func (c *Collection[T]) GroupBy[K comparable](keyFn func(T) K) map[K]*Collection
 //	//   0 => 1 #int
 //	//   1 => 3 #int
 //	// ]
-func (c *Collection[T]) GroupBySlice[K comparable](keyFn func(T) K) map[K][]T {
+//	fmt.Println(len(groups["even"]))
+//	// 2
+//	fmt.Println(groups["odd"][0])
+//	// 1
+//	collection.Dump(groups["even"][:1])
+//	// #[]int [
+//	//   0 => 2 #int
+//	// ]
+func (c Slice[T]) GroupBy[K comparable](keyFn func(T) K) map[K][]T {
 	out := make(map[K][]T)
-	for _, item := range c.items {
+	for _, item := range c {
 		key := keyFn(item)
 		out[key] = append(out[key], item)
 	}
@@ -214,9 +188,9 @@ func (c *Collection[T]) GroupBySlice[K comparable](keyFn func(T) K) map[K][]T {
 //	//   even => 1 #int
 //	//   odd => 3 #int
 //	// }
-func (c *Collection[T]) CountBy[K comparable](keyFn func(T) K) map[K]int {
+func (c Slice[T]) CountBy[K comparable](keyFn func(T) K) map[K]int {
 	result := make(map[K]int)
-	for _, item := range c.Items() {
+	for _, item := range c {
 		result[keyFn(item)]++
 	}
 	return result
@@ -234,13 +208,13 @@ func (c *Collection[T]) CountBy[K comparable](keyFn func(T) K) map[K]int {
 //	unique := words.UniqueBy(func(word string) int {
 //		return len(word)
 //	})
-//	collection.Dump(unique.Items())
+//	collection.Dump(unique)
 //	// #[]string [
 //	//   0 => "go" #string
 //	//   1 => "forj" #string
 //	// ]
-func (c *Collection[T]) UniqueBy[K comparable](keyFn func(T) K) *Collection[T] {
-	items := c.items
+func (c Slice[T]) UniqueBy[K comparable](keyFn func(T) K) Slice[T] {
+	items := c
 	if len(items) == 0 {
 		return New([]T{})
 	}
@@ -258,29 +232,7 @@ func (c *Collection[T]) UniqueBy[K comparable](keyFn func(T) K) *Collection[T] {
 	return New(out)
 }
 
-// Pipe passes this collection to fn and returns fn's result.
-// @group Transformation
-// @behavior readonly
-// @chainable false
-// @terminal true
-//
-// Example: sum a collection
-//
-//	numbers := collection.New([]int{1, 2, 3})
-//	total := numbers.Pipe(func(values *collection.Collection[int]) int {
-//		sum := 0
-//		for _, value := range values.Items() {
-//			sum += value
-//		}
-//		return sum
-//	})
-//	collection.Dump(total)
-//	// 6 #int
-func (c *Collection[T]) Pipe[R any](fn func(*Collection[T]) R) R {
-	return fn(c)
-}
-
-// ZipWith combines this collection with another collection using fn up to the shorter length.
+// ZipWith combines this collection with a slice using fn up to the shorter length.
 // @group Transformation
 // @behavior immutable
 // @chainable true
@@ -293,20 +245,20 @@ func (c *Collection[T]) Pipe[R any](fn func(*Collection[T]) R) R {
 //	sums := left.ZipWith(right, func(a, b int) int {
 //		return a + b
 //	})
-//	collection.Dump(sums.Items())
+//	collection.Dump(sums)
 //	// #[]int [
 //	//   0 => 11 #int
 //	//   1 => 22 #int
 //	// ]
-func (c *Collection[T]) ZipWith[U, R any](other *Collection[U], fn func(T, U) R) *Collection[R] {
-	length := len(c.items)
-	if len(other.items) < length {
-		length = len(other.items)
+func (c Slice[T]) ZipWith[U, R any](other []U, fn func(T, U) R) Slice[R] {
+	length := len(c)
+	if len(other) < length {
+		length = len(other)
 	}
 
 	out := make([]R, length)
 	for i := 0; i < length; i++ {
-		out[i] = fn(c.items[i], other.items[i])
+		out[i] = fn(c[i], other[i])
 	}
 	return New(out)
 }

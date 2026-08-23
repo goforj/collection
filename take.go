@@ -18,7 +18,7 @@ package collection
 //
 //	c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
 //	out1 := c1.Take(3)
-//	collection.Dump(out1.Items())
+//	collection.Dump(out1)
 //	// #[]int [
 //	//	0 => 0 #int
 //	//	1 => 1 #int
@@ -29,7 +29,7 @@ package collection
 //
 //	c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
 //	out2 := c2.Take(-2)
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]int [
 //	//	0 => 4 #int
 //	//	1 => 5 #int
@@ -39,7 +39,7 @@ package collection
 //
 //	c3 := collection.New([]int{10, 20})
 //	out3 := c3.Take(10)
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]int [
 //	//	0 => 10 #int
 //	//	1 => 20 #int
@@ -49,11 +49,11 @@ package collection
 //
 //	c4 := collection.New([]int{1, 2, 3})
 //	out4 := c4.Take(0)
-//	collection.Dump(out4.Items())
+//	collection.Dump(out4)
 //	// #[]int [
 //	// ]
-func (c *Collection[T]) Take(n int) *Collection[T] {
-	length := len(c.items)
+func (c Slice[T]) Take(n int) Slice[T] {
+	length := len(c)
 
 	// Empty or zero → empty collection
 	if n == 0 || length == 0 {
@@ -64,17 +64,17 @@ func (c *Collection[T]) Take(n int) *Collection[T] {
 	if n > 0 {
 		if n >= length {
 			// no need to allocate; just reuse original
-			return New(c.items)
+			return New(c)
 		}
-		return New(c.items[:n])
+		return New(c[:n])
 	}
 
 	// Negative → take from end
 	n = -n
 	if n >= length {
-		return New(c.items)
+		return New(c)
 	}
 
 	start := length - n
-	return New(c.items[start:])
+	return New(c[start:])
 }

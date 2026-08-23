@@ -20,14 +20,14 @@ package collection
 //
 //	clone = clone.Append(4)
 //
-//	collection.Dump(c.Items())
+//	collection.Dump(c)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
 //	//   2 => 3 #int
 //	// ]
 //
-//	collection.Dump(clone.Items())
+//	collection.Dump(clone)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -47,7 +47,7 @@ package collection
 //		return v%2 != 0
 //	})
 //
-//	collection.Dump(base.Items())
+//	collection.Dump(base)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -56,20 +56,20 @@ package collection
 //	//   4 => 5 #int
 //	// ]
 //
-//	collection.Dump(evens.Items())
+//	collection.Dump(evens)
 //	// #[]int [
 //	//   0 => 2 #int
 //	//   1 => 4 #int
 //	// ]
 //
-//	collection.Dump(odds.Items())
+//	collection.Dump(odds)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 3 #int
 //	//   2 => 5 #int
 //	// ]
-func (c *Collection[T]) Clone() *Collection[T] {
-	out := make([]T, len(c.items))
-	copy(out, c.items)
-	return &Collection[T]{items: out}
+func (c Slice[T]) Clone() Slice[T] {
+	out := make([]T, len(c))
+	copy(out, c)
+	return Slice[T](out)
 }

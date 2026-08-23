@@ -17,13 +17,18 @@ func TestGroupBy_Basic(t *testing.T) {
 			return "odd"
 		},
 	)
+	var _ map[string]Slice[int] = groups
 
-	if !reflect.DeepEqual(groups["even"].Items(), []int{2, 4}) {
-		t.Fatalf("even group incorrect: %v", groups["even"].Items())
+	if !reflect.DeepEqual(groups["even"], Slice[int]{2, 4}) {
+		t.Fatalf("even group incorrect: %v", groups["even"])
 	}
 
-	if !reflect.DeepEqual(groups["odd"].Items(), []int{1, 3, 5}) {
-		t.Fatalf("odd group incorrect: %v", groups["odd"].Items())
+	if !reflect.DeepEqual(groups["odd"], Slice[int]{1, 3, 5}) {
+		t.Fatalf("odd group incorrect: %v", groups["odd"])
+	}
+	filtered := groups["odd"].Filter(func(value int) bool { return value > 1 })
+	if !reflect.DeepEqual(filtered, Slice[int]{3, 5}) {
+		t.Fatalf("fluent group Filter result = %v", filtered)
 	}
 }
 
@@ -44,21 +49,21 @@ func TestGroupBy_Structs(t *testing.T) {
 		func(u User) string { return u.Role },
 	)
 
-	expectAdmin := []User{
+	expectAdmin := Slice[User]{
 		{ID: 1, Role: "admin"},
 		{ID: 3, Role: "admin"},
 	}
 
-	expectUser := []User{
+	expectUser := Slice[User]{
 		{ID: 2, Role: "user"},
 	}
 
-	if !reflect.DeepEqual(groups["admin"].Items(), expectAdmin) {
-		t.Fatalf("admin group incorrect: %v", groups["admin"].Items())
+	if !reflect.DeepEqual(groups["admin"], expectAdmin) {
+		t.Fatalf("admin group incorrect: %v", groups["admin"])
 	}
 
-	if !reflect.DeepEqual(groups["user"].Items(), expectUser) {
-		t.Fatalf("user group incorrect: %v", groups["user"].Items())
+	if !reflect.DeepEqual(groups["user"], expectUser) {
+		t.Fatalf("user group incorrect: %v", groups["user"])
 	}
 }
 

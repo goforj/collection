@@ -24,9 +24,9 @@ func TestClone_BackendSliceIsolated(t *testing.T) {
 	c := New([]int{1, 2, 3})
 	clone := c.Clone()
 
-	clone.items[0] = 99
+	clone.Items()[0] = 99
 
-	if c.items[0] == 99 {
+	if c.Items()[0] == 99 {
 		t.Fatalf("clone shares backing slice with original")
 	}
 }

@@ -1,18 +1,19 @@
 package collection
 
-// Pop removes and returns the last item in the collection.
+// Pop removes and returns the last item from an addressable Slice variable.
 // @group Slicing
 // @behavior mutable
 // @chainable false
 // @terminal true
 //
 // If the collection is empty, the zero value of T is returned with ok=false.
+// Pop clears the removed element and shortens the receiver's slice header.
 //
 // Example: integers
 //
 //	c := collection.New([]int{1, 2, 3})
 //	item, ok := c.Pop()
-//	collection.Dump(item, ok, c.Items())
+//	collection.Dump(item, ok, c)
 //	// 3 #int
 //	// true #bool
 //	// #[]int [
@@ -24,7 +25,7 @@ package collection
 //
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	item2, ok2 := c2.Pop()
-//	collection.Dump(item2, ok2, c2.Items())
+//	collection.Dump(item2, ok2, c2)
 //	// "c" #string
 //	// true #bool
 //	// #[]string [
@@ -45,7 +46,7 @@ package collection
 //	})
 //
 //	item3, ok3 := users.Pop()
-//	collection.Dump(item3, ok3, users.Items())
+//	collection.Dump(item3, ok3, users)
 //	// #main.User {
 //	//   +ID   => 2 #int
 //	//   +Name => "Bob" #string
@@ -62,27 +63,33 @@ package collection
 //
 //	empty := collection.New([]int{})
 //	item4, ok4 := empty.Pop()
-//	collection.Dump(item4, ok4, empty.Items())
+//	collection.Dump(item4, ok4, empty)
 //	// 0 #int
 //	// false #bool
 //	// #[]int [
 //	// ]
-func (c *Collection[T]) Pop() (T, bool) {
-	n := len(c.items)
+func (c *Slice[T]) Pop() (T, bool) {
+	n := len(*c)
 
 	if n == 0 {
 		var zero T
 		return zero, false
 	}
 
-	item := c.items[n-1]
+	item := (*c)[n-1]
 	var zero T
-	c.items[n-1] = zero
-	c.items = c.items[:n-1]
+	(*c)[n-1] = zero
+	*c = (*c)[:n-1]
 	return item, true
 }
 
-// PopN removes and returns the last n items in original order.
+// PopN removes and returns the last n items in original order from an
+// addressable Slice variable. It shortens the receiver's slice header.
+//
+// The returned slice is a view into the receiver's backing array, not a copy.
+// Other copied Slice headers keep their original length, and later appending or
+// concatenating into the shortened receiver's spare capacity can overwrite the
+// values visible through the returned view.
 // @group Slicing
 // @behavior mutable
 // @chainable false
@@ -92,7 +99,7 @@ func (c *Collection[T]) Pop() (T, bool) {
 //
 //	c := collection.New([]int{1, 2, 3, 4})
 //	popped := c.PopN(2)
-//	collection.Dump(popped, c.Items())
+//	collection.Dump(popped, c)
 //	// #[]int [
 //	//   0 => 3 #int
 //	//   1 => 4 #int
@@ -106,7 +113,7 @@ func (c *Collection[T]) Pop() (T, bool) {
 //
 //	c2 := collection.New([]string{"a", "b", "c"})
 //	popped2 := c2.PopN(1)
-//	collection.Dump(popped2, c2.Items())
+//	collection.Dump(popped2, c2)
 //	// #[]string [
 //	//   0 => "c" #string
 //	// ]
@@ -129,7 +136,7 @@ func (c *Collection[T]) Pop() (T, bool) {
 //	})
 //
 //	popped3 := users.PopN(2)
-//	collection.Dump(popped3, users.Items())
+//	collection.Dump(popped3, users)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 2 #int
@@ -151,7 +158,7 @@ func (c *Collection[T]) Pop() (T, bool) {
 //
 //	c3 := collection.New([]int{1, 2, 3})
 //	popped4 := c3.PopN(0)
-//	collection.Dump(popped4, c3.Items())
+//	collection.Dump(popped4, c3)
 //	// []int(nil)
 //	// #[]int [
 //	//   0 => 1 #int
@@ -163,24 +170,24 @@ func (c *Collection[T]) Pop() (T, bool) {
 //
 //	c4 := collection.New([]string{"x", "y"})
 //	popped5 := c4.PopN(10)
-//	collection.Dump(popped5, c4.Items())
+//	collection.Dump(popped5, c4)
 //	// #[]string [
 //	//   0 => "x" #string
 //	//   1 => "y" #string
 //	// ]
 //	// #[]string [
 //	// ]
-func (c *Collection[T]) PopN(n int) []T {
-	if n <= 0 || len(c.items) == 0 {
+func (c *Slice[T]) PopN(n int) []T {
+	if n <= 0 || len(*c) == 0 {
 		return nil
 	}
 
-	total := len(c.items)
+	total := len(*c)
 	if n > total {
 		n = total
 	}
 
-	popped := c.items[total-n:]
-	c.items = c.items[:total-n]
+	popped := (*c)[total-n:]
+	*c = (*c)[:total-n]
 	return popped
 }

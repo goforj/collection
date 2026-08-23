@@ -25,8 +25,8 @@ import (
 //	out1, _ := pj1.ToJSON()
 //	fmt.Println(out1)
 //	// ["a","b"]
-func (c *Collection[T]) ToJSON() (string, error) {
-	b, err := json.Marshal(c.items)
+func (c Slice[T]) ToJSON() (string, error) {
+	b, err := json.Marshal(c)
 	if err != nil {
 		return "", errors.Unwrap(err)
 	}
@@ -57,8 +57,8 @@ func (c *Collection[T]) ToJSON() (string, error) {
 //	//  "a",
 //	//  "b"
 //	// ]
-func (c *Collection[T]) ToPrettyJSON() (string, error) {
-	b, err := json.MarshalIndent(c.items, "", "  ")
+func (c Slice[T]) ToPrettyJSON() (string, error) {
+	b, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return "", errors.Unwrap(err)
 	}

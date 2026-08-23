@@ -12,8 +12,8 @@ func TestAppend(t *testing.T) {
 		out := c.Append(3, 4)
 		expected := []int{1, 2, 3, 4}
 
-		if !reflect.DeepEqual(out.items, expected) {
-			t.Fatalf("Append basic expected %v, got %v", expected, out.items)
+		if !reflect.DeepEqual(out.Items(), expected) {
+			t.Fatalf("Append basic expected %v, got %v", expected, out.Items())
 		}
 	})
 
@@ -23,8 +23,8 @@ func TestAppend(t *testing.T) {
 		out := c.Append(5, 6)
 		expected := []int{5, 6}
 
-		if !reflect.DeepEqual(out.items, expected) {
-			t.Fatalf("Append empty expected %v, got %v", expected, out.items)
+		if !reflect.DeepEqual(out.Items(), expected) {
+			t.Fatalf("Append empty expected %v, got %v", expected, out.Items())
 		}
 	})
 
@@ -34,8 +34,8 @@ func TestAppend(t *testing.T) {
 		out := c.Append() // no-op
 		expected := []int{10, 20, 30}
 
-		if !reflect.DeepEqual(out.items, expected) {
-			t.Fatalf("Append no-values expected %v, got %v", expected, out.items)
+		if !reflect.DeepEqual(out.Items(), expected) {
+			t.Fatalf("Append no-values expected %v, got %v", expected, out.Items())
 		}
 	})
 
@@ -45,8 +45,8 @@ func TestAppend(t *testing.T) {
 
 		_ = c.Append(4, 5)
 
-		if !reflect.DeepEqual(c.items, orig) {
-			t.Fatalf("Append mutated original %v", c.items)
+		if !reflect.DeepEqual(c.Items(), orig) {
+			t.Fatalf("Append mutated original %v", c.Items())
 		}
 	})
 }
@@ -74,7 +74,22 @@ func TestAppend_Structs(t *testing.T) {
 		{4, "Matt"},
 	}
 
-	if !reflect.DeepEqual(out.items, expected) {
-		t.Fatalf("Append structs expected %v, got %v", expected, out.items)
+	if !reflect.DeepEqual(out.Items(), expected) {
+		t.Fatalf("Append structs expected %v, got %v", expected, out.Items())
+	}
+}
+
+func TestAppend_ResultAndSourceAreIndependentWithSpareCapacity(t *testing.T) {
+	backing := make([]int, 2, 8)
+	copy(backing, []int{1, 2})
+	c := New(backing)
+	out := c.Append(3)
+	out[0] = 9
+	if c[0] != 1 {
+		t.Fatalf("result mutation changed source: %v", c)
+	}
+	c[1] = 8
+	if out[1] != 2 {
+		t.Fatalf("source mutation changed result: %v", out)
 	}
 }

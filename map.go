@@ -17,7 +17,7 @@ package collection
 //		return v * 10
 //	})
 //
-//	collection.Dump(mapped.Items())
+//	collection.Dump(mapped)
 //	// #[]int [
 //	//   0 => 10 #int
 //	//   1 => 20 #int
@@ -32,7 +32,7 @@ package collection
 //		return strings.ToUpper(s)
 //	})
 //
-//	collection.Dump(upper.Items())
+//	collection.Dump(upper)
 //	// #[]string [
 //	//   0 => "APPLE" #string
 //	//   1 => "BANANA" #string
@@ -56,7 +56,7 @@ package collection
 //		return u
 //	})
 //
-//	collection.Dump(updated.Items())
+//	collection.Dump(updated)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +ID   => 1 #int
@@ -67,9 +67,9 @@ package collection
 //	//     +Name => "BOB" #string
 //	//   }
 //	// ]
-func (c *Collection[T]) Map(fn func(T) T) *Collection[T] {
-	for i, v := range c.items {
-		c.items[i] = fn(v)
+func (c Slice[T]) Map(fn func(T) T) Slice[T] {
+	for i, v := range c {
+		c[i] = fn(v)
 	}
 	return c
 }

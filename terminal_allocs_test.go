@@ -3,8 +3,8 @@ package collection
 import "testing"
 
 var (
-	allocCollection *Collection[int]
-	allocNumeric    *NumericCollection[int]
+	allocCollection Slice[int]
+	allocNumeric    []int
 
 	allocBool  bool
 	allocInt   int
@@ -60,18 +60,18 @@ func allocReduceSum() {
 }
 
 func allocSum() {
-	allocInt = allocNumeric.Sum()
+	allocInt = Sum(allocNumeric)
 }
 
 func allocMin() {
 	var ok bool
-	allocInt, ok = allocNumeric.Min()
+	allocInt, ok = Min(allocNumeric)
 	allocBool = ok
 }
 
 func allocMax() {
 	var ok bool
-	allocInt, ok = allocNumeric.Max()
+	allocInt, ok = Max(allocNumeric)
 	allocBool = ok
 }
 
@@ -85,7 +85,7 @@ func allocIsEmpty() {
 
 func TestTerminalOps_ZeroAlloc(t *testing.T) {
 	allocCollection = New([]int{1, 2, 3, 4, 5, 6})
-	allocNumeric = NewNumeric([]int{1, 2, 3, 4, 5, 6})
+	allocNumeric = []int{1, 2, 3, 4, 5, 6}
 
 	cases := []struct {
 		name string

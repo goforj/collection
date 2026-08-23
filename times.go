@@ -14,7 +14,7 @@ package collection
 //	cTimes1 := collection.Times(5, func(i int) int {
 //		return i * 2
 //	})
-//	collection.Dump(cTimes1.Items())
+//	collection.Dump(cTimes1)
 //	// #[]int [
 //	//	0 => 2 #int
 //	//	1 => 4 #int
@@ -28,7 +28,7 @@ package collection
 //	cTimes2 := collection.Times(3, func(i int) string {
 //		return fmt.Sprintf("item-%d", i)
 //	})
-//	collection.Dump(cTimes2.Items())
+//	collection.Dump(cTimes2)
 //	// #[]string [
 //	//	0 => "item-1" #string
 //	//	1 => "item-2" #string
@@ -45,7 +45,7 @@ package collection
 //	cTimes3 := collection.Times(4, func(i int) Point {
 //		return Point{X: i, Y: i * i}
 //	})
-//	collection.Dump(cTimes3.Items())
+//	collection.Dump(cTimes3)
 //	// #[]main.Point [
 //	//	0 => #main.Point {
 //	//		+X => 1 #int
@@ -64,7 +64,7 @@ package collection
 //	//		+Y => 16 #int
 //	//	}
 //	// ]
-func Times[T any](count int, fn func(int) T) *Collection[T] {
+func Times[T any](count int, fn func(int) T) Slice[T] {
 	if count <= 0 {
 		return New([]T{})
 	}

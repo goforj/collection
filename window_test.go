@@ -88,6 +88,15 @@ func TestWindow_EmptyCollection(t *testing.T) {
 	}
 }
 
+func TestWindow_ReturnsViews(t *testing.T) {
+	c := New([]int{1, 2, 3})
+	windows := Window(c, 2, 1)
+	windows[1][0] = 9
+	if c[1] != 9 {
+		t.Fatalf("window mutation did not reach source: %v", c)
+	}
+}
+
 func doubleSlicesEqual[T comparable](a, b [][]T) bool {
 	if len(a) != len(b) {
 		return false

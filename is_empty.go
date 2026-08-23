@@ -44,6 +44,6 @@ package collection
 //	empty4 := none.IsEmpty()
 //	collection.Dump(empty4)
 //	// true #bool
-func (c *Collection[T]) IsEmpty() bool {
-	return len(c.items) == 0
+func (c Slice[T]) IsEmpty() bool {
+	return len(c) == 0
 }

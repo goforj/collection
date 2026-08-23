@@ -14,7 +14,7 @@ package collection
 //	evens, odds := nums.Partition(func(n int) bool {
 //		return n%2 == 0
 //	})
-//	collection.Dump(evens.Items(), odds.Items())
+//	collection.Dump(evens, odds)
 //	// #[]int [
 //	//   0 => 2 #int
 //	//   1 => 4 #int
@@ -31,7 +31,7 @@ package collection
 //	goWords, other := words.Partition(func(s string) bool {
 //		return strings.HasPrefix(s, "go")
 //	})
-//	collection.Dump(goWords.Items(), other.Items())
+//	collection.Dump(goWords, other)
 //	// #[]string [
 //	//   0 => "go" #string
 //	//   1 => "gopher" #string
@@ -58,7 +58,7 @@ package collection
 //		return u.Active
 //	})
 //
-//	collection.Dump(active.Items(), inactive.Items())
+//	collection.Dump(active, inactive)
 //	// #[]main.User [
 //	//   0 => #main.User {
 //	//     +Name   => "Alice" #string
@@ -75,16 +75,16 @@ package collection
 //	//     +Active => false #bool
 //	//   }
 //	// ]
-func (c *Collection[T]) Partition(fn func(T) bool) (*Collection[T], *Collection[T]) {
-	if len(c.items) == 0 {
+func (c Slice[T]) Partition(fn func(T) bool) (Slice[T], Slice[T]) {
+	if len(c) == 0 {
 		return New([]T{}), New([]T{})
 	}
 
 	// Pre-size to total length; each partition will shrink to its own length.
-	left := make([]T, 0, len(c.items))
-	right := make([]T, 0, len(c.items))
+	left := make([]T, 0, len(c))
+	right := make([]T, 0, len(c))
 
-	for _, v := range c.items {
+	for _, v := range c {
 		if fn(v) {
 			left = append(left, v)
 		} else {

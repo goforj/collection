@@ -14,16 +14,17 @@
     <img src="https://img.shields.io/github/v/tag/goforj/collection?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/collection" ><img src="https://codecov.io/github/goforj/collection/graph/badge.svg?token=3KFTK96U8C"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-486-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-484-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
 ## Features
 
 - **Fluent chaining** - pipeline your operations like Laravel Collections
-- **Fully generic** (`Collection[T]`) - no reflection, no `interface{}`
+- **Fully generic** (`Slice[T]`) - no reflection, no `interface{}`
 - **Tiny dependency footprint** - only `godump` for debugging helpers
-- **Minimal allocations** - slice views where possible; in-place ops reuse backing storage when semantics allow
+- **Go-native slice access** - use `len`, indexing, `range`, and ordinary slice conversions directly
+- **Explicit allocation behavior** - slice views and independent results are documented per operation
 - **Map / Filter / Reduce** - clean functional transforms
 - **Generic methods** - type-changing transforms remain fluent on Go 1.27+
 - **First / Last / FirstWhere / IndexWhere / Contains** helpers
@@ -35,7 +36,7 @@
 
 ## Fluent Chaining
 
-Many methods return the collection itself, allowing for fluent method chaining.
+Many methods return a `Slice`, allowing fluent method chaining without a wrapper object.
 
 Some methods may be limited due to Go's generic constraints.
 
@@ -86,11 +87,9 @@ namesByLength := collection.New(users).
 
 `collection` takes a different approach.
 
-Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines**. Many operations are designed to **mutate the same backing slice intentionally**, allowing chained workflows to avoid intermediate allocations and unnecessary copying - while still making that behavior visible and documented.
+Rather than treating each operation as an independent transformation, `collection` is built around **explicit, fluent pipelines** over a named slice. Operations document whether they return an independent allocation, a view, or the same backing storage.
 
 That design choice doesn't matter much for some single operations. It matters a *lot* once you start chaining and especially in hot paths.
-
-Below - A fixed ~24B allocation is the cost of the Collection wrapper (one-time per pipeline), not additional work per operation
 
 The below tables are automatically generated from [`./docs/bench/main.go`](./docs/bench/main.go).
 
@@ -98,64 +97,64 @@ The below tables are automatically generated from [`./docs/bench/main.go`](./doc
 
 Full raw tables: see `BENCHMARKS.md`.
 
-#### Read-only scalar ops (wrapper overhead only)
+#### Read-only scalar ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **All** | ≈ | +24B | +1 |
-| **Any** | ≈ | +24B | +1 |
-| **None** | ≈ | +24B | +1 |
-| **First** | ≈ | +24B | +1 |
-| **Last** | ≈ | +24B | +1 |
-| **FirstWhere** | ≈ | +24B | +1 |
-| **IndexWhere** | ≈ | +24B | +1 |
-| **Contains** | ≈ | +24B | +1 |
-| **Reduce (sum)** | ≈ | +24B | +1 |
-| **Sum** | ≈ | +32B | +2 |
-| **Min** | ≈ | +32B | +2 |
-| **Max** | ≈ | +32B | +2 |
-| **Each** | ≈ | +24B | +1 |
+| **All** | ≈ | ≈ | ≈ |
+| **Any** | ≈ | ≈ | ≈ |
+| **None** | ≈ | ≈ | ≈ |
+| **First** | ≈ | ≈ | ≈ |
+| **Last** | ≈ | ≈ | ≈ |
+| **FirstWhere** | ≈ | ≈ | ≈ |
+| **IndexWhere** | ≈ | ≈ | ≈ |
+| **Contains** | ≈ | ≈ | ≈ |
+| **Reduce (sum)** | ≈ | ≈ | ≈ |
+| **Sum** | ≈ | ≈ | ≈ |
+| **Min** | ≈ | ≈ | ≈ |
+| **Max** | ≈ | ≈ | ≈ |
+| **Each** | ≈ | ≈ | ≈ |
 
 #### Transforming ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Chunk** | **7.64x** | -8.0KB | -49 |
-| **Take** | ≈ | +48B | +2 |
-| **Skip** | **71.40x** | -8.2KB | ≈ |
-| **SkipLast** | **71.90x** | -8.2KB | ≈ |
-| **Zip** | **2.35x** | +48B | +2 |
-| **ZipWith** | **3.15x** | +48B | +2 |
-| **Unique** | ≈ | +24B | +1 |
-| **UniqueBy** | ≈ | +48B | +2 |
-| **Union** | ≈ | +72B | +3 |
-| **Intersect** | ≈ | +72B | +3 |
-| **Difference** | **2.33x** | -26.7KB | -29 |
-| **GroupBySlice** | ≈ | +24B | +1 |
-| **CountBy** | ≈ | +24B | +1 |
-| **CountByValue** | ≈ | +24B | +1 |
-| **ToMap** | ≈ | -24B | ≈ |
+| **Chunk** | **3.62x** | -8.0KB | -50 |
+| **Filter** | **3.70x** | -8.2KB | -1 |
+| **Take** | ≈ | ≈ | ≈ |
+| **Skip** | ∞ | -8.2KB | -1 |
+| **SkipLast** | ∞ | -8.2KB | -1 |
+| **Zip** | **2.30x** | ≈ | ≈ |
+| **ZipWith** | **2.81x** | ≈ | ≈ |
+| **Unique** | ≈ | ≈ | ≈ |
+| **UniqueBy** | ≈ | ≈ | ≈ |
+| **Union** | ≈ | ≈ | ≈ |
+| **Intersect** | ≈ | +56B | +3 |
+| **Difference** | **1.92x** | -26.7KB | -29 |
+| **GroupBy** | ≈ | ≈ | ≈ |
+| **CountBy** | ≈ | ≈ | ≈ |
+| **CountByValue** | ≈ | ≈ | ≈ |
+| **ToMap** | ≈ | -48B | -1 |
 
 #### Pipelines
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | **1.79x** | -12.2KB | ≈ |
+| **Pipeline F→M→T→R** | **5.66x** | -12.3KB | -2 |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Map** | **2.21x** | -8.2KB | ≈ |
-| **Filter** | **1.41x** | -8.2KB | ≈ |
-| **Reverse** | ≈ | +24B | +1 |
-| **Shuffle** | **1.57x** | +24B | +1 |
+| **Map** | **5.17x** | -8.2KB | -1 |
+| **Reverse** | ≈ | ≈ | ≈ |
+| **Shuffle** | **1.43x** | ≈ | ≈ |
 <!-- bench:embed:end -->
 
 ## How to read the benchmarks
 
 * **≈** means the two libraries are effectively equivalent
-* Explicit memory deltas show fixed wrapper overhead vs avoided allocations
+* Explicit memory deltas show allocation differences for each operation
 * Single-operation helpers are intentionally close in performance if not exceeds
 * Multi-step pipelines highlight the architectural difference
 
@@ -173,13 +172,20 @@ input → Map → new slice → Filter → new slice → Take → new slice
 
 That model is simple and safe - but each step typically allocates.
 
-`collection` pipelines are designed to look more like this:
+`collection` pipelines can mix independently backed results, in-place element
+operations, and slice views:
 
 ```
-input → Filter (in place) → Map (in place) → Take (slice view)
+input → Filter (compact in place) → Map (in place) → Take (slice view)
 ```
 
-When you opt into mutation, **the pipeline stays on the same backing array** unless an operation explicitly documents that it allocates. The result is:
+The representation stays Go-native throughout: the result supports `len`,
+indexing, and `range`, while fluent methods remain available. `Filter` compacts
+and clears the backing array in place, so its returned header must be captured.
+`Append` and `Prepend` allocate independent results. `Concat` reuses spare
+capacity when possible and allocates an exact-sized result otherwise. Methods
+such as `Map`, `Sort`, and `Reverse` mutate elements in the receiver's backing
+array.
 
 * **Fewer allocations**
 * **Less GC pressure**
@@ -190,7 +196,6 @@ That's why the biggest deltas appear in benchmarks like:
 
 * `Pipeline F→M→T→R`
 * `Map`
-* `Filter`
 * `Chunk`
 * `Zip / ZipWith`
 * `Skip / SkipLast`
@@ -201,8 +206,8 @@ In these cases, `collection` can be **2×–30× faster** and often reduce alloc
 
 Fluent pipelines don't mean you're locked into mutation.
 
-This library borrows slices by default. It does not perform defensive copies.
-Use `Clone()` or `ItemsCopy()` to explicitly copy.
+`New` borrows slices by default. Use `Clone()` or `ItemsCopy()` to explicitly
+copy before an in-place operation when the original data must remain unchanged.
 
 When you want to branch a pipeline or preserve the original data, `Clone()` creates a shallow copy of the collection so subsequent operations are isolated and predictable.
 
@@ -222,7 +227,7 @@ report := events.
     Sort(func(a, b DeviceEvent) bool { return a.Timestamp.Before(b.Timestamp) })
 ```
 
-This keeps the performance benefits of in-place operations **where they matter**, while making divergence points explicit and intentional.
+This makes divergence points explicit and intentional.
 
 No hidden copies. No surprises.
 
@@ -259,20 +264,45 @@ This makes transitions between unordered and ordered data visible and honest.
 Each method declares how it interacts with the collection:
 
 - **readonly** - reads data only and returns a derived value
-- **immutable** - returns a new collection; the original is unchanged
-- **mutable** - modifies the collection in place and returns the same instance
+- **immutable** - returns a value without mutating the receiver; individual method docs state whether it allocates or returns a view
+- **mutable** - modifies receiver elements or, for `Pop` and `PopN`, an addressable receiver's slice header
 - **terminal** - ends the fluent pipeline and returns a non-collection result
 
 These annotations describe **observable behavior**, not implementation details.
 
-Terminal operations do not return a Collection and cannot be chained further.
+Terminal operations do not return a `Slice` and cannot be chained further.
 They are designed to be allocation-free under `New()` where possible.
 
 Allocation and copying are **explicitly documented per method**.
 Some readonly or immutable operations may allocate internally when required
 (e.g. grouping, chunking, scratch copies), but never mutate the receiver.
 
-Borrowed slices, in-place mutation, and view semantics are intentional and visible.
+Borrowed slices, independent results, in-place element mutation, and view semantics are intentional and visible.
+
+## Native slice interoperability
+
+`Slice[T]` is a named slice, so ordinary Go operations work without calling
+`Items()`:
+
+```go
+values := collection.New([]int{10, 20, 30})
+
+fmt.Println(len(values))
+// 3
+fmt.Println(values[1])
+// 20
+
+for _, value := range values {
+    fmt.Println(value)
+}
+// 10
+// 20
+// 30
+```
+
+`Items()` remains temporarily as a migration comparison for code written
+against the former wrapper-backed API. New code can use the `Slice` value
+directly.
 
 ## Runnable examples
 
@@ -286,7 +316,7 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 
 # Installation
 
-Collection requires Go 1.27 or newer. Consumers that cannot upgrade their
+This package requires Go 1.27 or newer. Consumers that cannot upgrade their
 toolchain can remain on the v1.3 release line.
 
 ```bash
@@ -300,160 +330,58 @@ go get github.com/goforj/collection
 | Group | Functions |
 |------:|-----------|
 | **Access** | [Items](#items) · [ItemsCopy](#itemscopy) |
-| **Aggregation** | [Avg](#avg) · [Collection.CountBy](#collection.countby) · [Collection.MaxBy](#collection.maxby) · [Collection.MinBy](#collection.minby) · [Count](#count) · [CountBy](#countby) · [CountByValue](#countbyvalue) · [Max](#max) · [MaxBy](#maxby) · [Median](#median) · [Min](#min) · [MinBy](#minby) · [Mode](#mode) · [Reduce](#reduce) · [Sum](#sum) |
-| **Construction** | [Clone](#clone) · [New](#new) · [NewNumeric](#newnumeric) |
-| **Debugging** | [Collection.Dump](#collection.dump) · [Dd](#dd) · [Dump](#dump) · [DumpStr](#dumpstr) |
-| **Grouping** | [Collection.GroupBy](#collection.groupby) · [Collection.GroupBySlice](#collection.groupbyslice) · [GroupBy](#groupby) · [GroupBySlice](#groupbyslice) |
-| **Maps** | [Collection.ToMap](#collection.tomap) · [FromMap](#frommap) · [ToMap](#tomap) · [ToMapKV](#tomapkv) |
+| **Aggregation** | [Avg](#avg) · [Count](#count) · [CountBy](#countby) · [CountByValue](#countbyvalue) · [Max](#max) · [MaxBy](#maxby) · [Median](#median) · [Min](#min) · [MinBy](#minby) · [Mode](#mode) · [Reduce](#reduce) · [Slice.CountBy](#slice.countby) · [Slice.MaxBy](#slice.maxby) · [Slice.MinBy](#slice.minby) · [Sum](#sum) |
+| **Construction** | [Clone](#clone) · [New](#new) |
+| **Debugging** | [Dd](#dd) · [Dump](#dump) · [DumpStr](#dumpstr) · [Slice.Dump](#slice.dump) |
+| **Grouping** | [GroupBy](#groupby) · [Slice.GroupBy](#slice.groupby) |
+| **Maps** | [FromMap](#frommap) · [Slice.ToMap](#slice.tomap) · [ToMap](#tomap) · [ToMapKV](#tomapkv) |
 | **Ordering** | [After](#after) · [Before](#before) · [Reverse](#reverse) · [Shuffle](#shuffle) · [Sort](#sort) |
 | **Querying** | [All](#all) · [Any](#any) · [At](#at) · [Contains](#contains) · [First](#first) · [FirstWhere](#firstwhere) · [IndexWhere](#indexwhere) · [IsEmpty](#isempty) · [Last](#last) · [LastWhere](#lastwhere) · [None](#none) |
 | **Serialization** | [ToJSON](#tojson) · [ToPrettyJSON](#toprettyjson) |
-| **Set Operations** | [Collection.UniqueBy](#collection.uniqueby) · [Difference](#difference) · [Intersect](#intersect) · [SymmetricDifference](#symmetricdifference) · [Union](#union) · [Unique](#unique) · [UniqueBy](#uniqueby) · [UniqueComparable](#uniquecomparable) |
+| **Set Operations** | [Difference](#difference) · [Intersect](#intersect) · [Slice.UniqueBy](#slice.uniqueby) · [SymmetricDifference](#symmetricdifference) · [Union](#union) · [Unique](#unique) · [UniqueBy](#uniqueby) · [UniqueComparable](#uniquecomparable) |
 | **Slicing** | [Chunk](#chunk) · [Filter](#filter) · [Partition](#partition) · [Pop](#pop) · [PopN](#popn) · [Skip](#skip) · [SkipLast](#skiplast) · [Take](#take) · [TakeLast](#takelast) · [TakeUntil](#takeuntil) · [TakeUntilFn](#takeuntilfn) · [Window](#window) |
-| **Transformation** | [Append](#append) · [Collection.MapTo](#collection.mapto) · [Collection.Pipe](#collection.pipe) · [Collection.ZipWith](#collection.zipwith) · [Concat](#concat) · [Each](#each) · [Map](#map) · [MapTo](#mapto) · [Merge](#merge) · [Multiply](#multiply) · [Pipe](#pipe) · [Prepend](#prepend) · [Tap](#tap) · [Times](#times) · [Transform](#transform) · [Zip](#zip) · [ZipWith](#zipwith) |
+| **Transformation** | [Append](#append) · [Concat](#concat) · [Each](#each) · [Map](#map) · [MapTo](#mapto) · [Merge](#merge) · [Multiply](#multiply) · [Pipe](#pipe) · [Prepend](#prepend) · [Slice.MapTo](#slice.mapto) · [Slice.Pipe](#slice.pipe) · [Slice.ZipWith](#slice.zipwith) · [Tap](#tap) · [Times](#times) · [Transform](#transform) · [Zip](#zip) · [ZipWith](#zipwith) |
 
 
 ## Access
 
 ### <a id="items"></a>Items · readonly · terminal
 
-Items returns the backing slice of items.
-
-_Example: integers_
+Items returns the backing slice as []T.
 
 ```go
-c := collection.New([]int{1, 2, 3})
-items := c.Items()
-collection.Dump(items)
-// #[]int [
-//   0 => 1 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
+values := collection.New([]int{10, 20, 30})
+fmt.Println([]int(values))
+// [10 20 30]
+fmt.Println(values.Items())
+// [10 20 30]
 ```
 
-_Example: strings_
+### <a id="itemscopy"></a>ItemsCopy · immutable · terminal
 
-```go
-c2 := collection.New([]string{"apple", "banana"})
-items2 := c2.Items()
-collection.Dump(items2)
-// #[]string [
-//   0 => "apple" #string
-//   1 => "banana" #string
-// ]
-```
-
-_Example: structs_
-
-```go
-type User struct {
-	ID   int
-	Name string
-}
-
-users := collection.New([]User{
-	{ID: 1, Name: "Alice"},
-	{ID: 2, Name: "Bob"},
-})
-
-out := users.Items()
-collection.Dump(out)
-// #[]main.User [
-//   0 => #main.User {
-//     +ID   => 1 #int
-//     +Name => "Alice" #string
-//   }
-//   1 => #main.User {
-//     +ID   => 2 #int
-//     +Name => "Bob" #string
-//   }
-// ]
-```
-
-### <a id="itemscopy"></a>ItemsCopy · readonly · terminal
-
-ItemsCopy returns a copy of the collection's items.
-
-```go
-c := collection.New([]int{1, 2, 3})
-items := c.ItemsCopy()
-collection.Dump(items)
-// #[]int [
-//   0 => 1 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
-```
+ItemsCopy returns a copy of the slice's items.
 
 ## Aggregation
 
 ### <a id="avg"></a>Avg · readonly · terminal
 
-Avg returns the average of the collection values as a float64.
-If the collection is empty, Avg returns 0.
+Avg returns the average of the numeric slice values as a float64.
+If the slice is empty, Avg returns 0.
 
 _Example: integers_
 
 ```go
-c := collection.NewNumeric([]int{2, 4, 6})
-collection.Dump(c.Avg())
+values := []int{2, 4, 6}
+collection.Dump(collection.Avg(values))
 // 4.000000 #float64
 ```
 
 _Example: float_
 
 ```go
-c2 := collection.NewNumeric([]float64{1.5, 2.5, 3.0})
-collection.Dump(c2.Avg())
+values2 := []float64{1.5, 2.5, 3.0}
+collection.Dump(collection.Avg(values2))
 // 2.333333 #float64
-```
-
-### <a id="collection.countby"></a>Collection.CountBy · readonly · terminal
-
-CountBy returns occurrence counts keyed by the extracted value.
-
-```go
-numbers := collection.New([]int{1, 2, 3, 5})
-counts := numbers.CountBy(func(number int) string {
-	if number%2 == 0 {
-		return "even"
-	}
-	return "odd"
-})
-collection.Dump(counts)
-// #map[string]int {
-//   even => 1 #int
-//   odd => 3 #int
-// }
-```
-
-### <a id="collection.maxby"></a>Collection.MaxBy · readonly · terminal
-
-MaxBy returns the item whose extracted key is the largest.
-
-```go
-words := collection.New([]string{"pear", "fig", "banana"})
-longest, ok := words.MaxBy(func(word string) int {
-	return len(word)
-})
-collection.Dump(longest, ok)
-// "banana" #string
-// true #bool
-```
-
-### <a id="collection.minby"></a>Collection.MinBy · readonly · terminal
-
-MinBy returns the item whose extracted key is the smallest.
-
-```go
-words := collection.New([]string{"pear", "fig", "banana"})
-shortest, ok := words.MinBy(func(word string) int {
-	return len(word)
-})
-collection.Dump(shortest, ok)
-// "fig" #string
-// true #bool
 ```
 
 ### <a id="count"></a>Count · readonly · terminal
@@ -582,15 +510,15 @@ collection.Dump(counts3)
 
 ### <a id="max"></a>Max · readonly · terminal
 
-Max returns the largest numeric item in the collection.
-The second return value is false if the collection is empty.
+Max returns the largest item in a numeric slice.
+The second return value is false if the slice is empty.
 
 _Example: integers_
 
 ```go
-c := collection.NewNumeric([]int{3, 1, 2})
+values := []int{3, 1, 2}
 
-max1, ok1 := c.Max()
+max1, ok1 := collection.Max(values)
 collection.Dump(max1, ok1)
 // 3 #int
 // true #bool
@@ -599,20 +527,20 @@ collection.Dump(max1, ok1)
 _Example: floats_
 
 ```go
-c2 := collection.NewNumeric([]float64{1.5, 9.2, 4.4})
+values2 := []float64{1.5, 9.2, 4.4}
 
-max2, ok2 := c2.Max()
+max2, ok2 := collection.Max(values2)
 collection.Dump(max2, ok2)
 // 9.200000 #float64
 // true #bool
 ```
 
-_Example: empty numeric collection_
+_Example: empty numeric slice_
 
 ```go
-c3 := collection.NewNumeric([]int{})
+empty := []int{}
 
-max3, ok3 := c3.Max()
+max3, ok3 := collection.Max(empty)
 collection.Dump(max3, ok3)
 // 0 #int
 // false #bool
@@ -675,15 +603,15 @@ collection.Dump(maxVal, ok)
 
 ### <a id="median"></a>Median · readonly · terminal
 
-Median returns the statistical median of the numeric collection as float64.
-Returns (0, false) if the collection is empty.
+Median returns the statistical median of a numeric slice as float64.
+It returns (0, false) if the slice is empty.
 
 _Example: integers - odd number of items_
 
 ```go
-c := collection.NewNumeric([]int{3, 1, 2})
+values := []int{3, 1, 2}
 
-median1, ok1 := c.Median()
+median1, ok1 := collection.Median(values)
 collection.Dump(median1, ok1)
 // 2.000000 #float64
 // true #bool
@@ -692,9 +620,9 @@ collection.Dump(median1, ok1)
 _Example: integers - even number of items_
 
 ```go
-c2 := collection.NewNumeric([]int{10, 2, 4, 6})
+values2 := []int{10, 2, 4, 6}
 
-median2, ok2 := c2.Median()
+median2, ok2 := collection.Median(values2)
 collection.Dump(median2, ok2)
 // 5.000000 #float64
 // true #bool
@@ -703,20 +631,20 @@ collection.Dump(median2, ok2)
 _Example: floats_
 
 ```go
-c3 := collection.NewNumeric([]float64{1.1, 9.9, 3.3})
+values3 := []float64{1.1, 9.9, 3.3}
 
-median3, ok3 := c3.Median()
+median3, ok3 := collection.Median(values3)
 collection.Dump(median3, ok3)
 // 3.300000 #float64
 // true #bool
 ```
 
-_Example: integers - empty numeric collection_
+_Example: integers - empty numeric slice_
 
 ```go
-c4 := collection.NewNumeric([]int{})
+empty := []int{}
 
-median4, ok4 := c4.Median()
+median4, ok4 := collection.Median(empty)
 collection.Dump(median4, ok4)
 // 0.000000 #float64
 // false #bool
@@ -724,14 +652,14 @@ collection.Dump(median4, ok4)
 
 ### <a id="min"></a>Min · readonly · terminal
 
-Min returns the smallest numeric item in the collection.
-The second return value is false if the collection is empty.
+Min returns the smallest item in a numeric slice.
+The second return value is false if the slice is empty.
 
 _Example: integers_
 
 ```go
-c := collection.NewNumeric([]int{3, 1, 2})
-min, ok := c.Min()
+values := []int{3, 1, 2}
+min, ok := collection.Min(values)
 collection.Dump(min, ok)
 // 1 #int
 // true #bool
@@ -740,8 +668,8 @@ collection.Dump(min, ok)
 _Example: floats_
 
 ```go
-c2 := collection.NewNumeric([]float64{2.5, 9.1, 1.2})
-min2, ok2 := c2.Min()
+values2 := []float64{2.5, 9.1, 1.2}
+min2, ok2 := collection.Min(values2)
 collection.Dump(min2, ok2)
 // 1.200000 #float64
 // true #bool
@@ -750,8 +678,8 @@ collection.Dump(min2, ok2)
 _Example: integers - empty collection_
 
 ```go
-empty := collection.NewNumeric([]int{})
-min3, ok3 := empty.Min()
+empty := []int{}
+min3, ok3 := collection.Min(empty)
 collection.Dump(min3, ok3)
 // 0 #int
 // false #bool
@@ -814,15 +742,15 @@ collection.Dump(minVal, ok)
 
 ### <a id="mode"></a>Mode · readonly · terminal
 
-Mode returns the most frequent numeric value(s) in the collection.
+Mode returns the most frequent numeric value or values in a slice.
 If multiple values tie for highest frequency, all are returned
 in first-seen order.
 
 _Example: integers – single mode_
 
 ```go
-c := collection.NewNumeric([]int{1, 2, 2, 3})
-mode := c.Mode()
+values := []int{1, 2, 2, 3}
+mode := collection.Mode(values)
 collection.Dump(mode)
 // #[]int [
 //   0 => 2 #int
@@ -832,8 +760,8 @@ collection.Dump(mode)
 _Example: integers – tie for mode_
 
 ```go
-c2 := collection.NewNumeric([]int{1, 2, 1, 2})
-mode2 := c2.Mode()
+values2 := []int{1, 2, 1, 2}
+mode2 := collection.Mode(values2)
 collection.Dump(mode2)
 // #[]int [
 //   0 => 1 #int
@@ -844,8 +772,8 @@ collection.Dump(mode2)
 _Example: floats_
 
 ```go
-c3 := collection.NewNumeric([]float64{1.1, 2.2, 1.1, 3.3})
-mode3 := c3.Mode()
+values3 := []float64{1.1, 2.2, 1.1, 3.3}
+mode3 := collection.Mode(values3)
 collection.Dump(mode3)
 // #[]float64 [
 //   0 => 1.100000 #float64
@@ -855,8 +783,8 @@ collection.Dump(mode3)
 _Example: integers - empty collection_
 
 ```go
-empty := collection.NewNumeric([]int{})
-mode4 := empty.Mode()
+empty := []int{}
+mode4 := collection.Mode(empty)
 collection.Dump(mode4)
 // []int(nil)
 ```
@@ -913,16 +841,63 @@ collection.Dump(total)
 // }
 ```
 
+### <a id="slice.countby"></a>Slice.CountBy · readonly · terminal
+
+CountBy returns occurrence counts keyed by the extracted value.
+
+```go
+numbers := collection.New([]int{1, 2, 3, 5})
+counts := numbers.CountBy(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(counts)
+// #map[string]int {
+//   even => 1 #int
+//   odd => 3 #int
+// }
+```
+
+### <a id="slice.maxby"></a>Slice.MaxBy · readonly · terminal
+
+MaxBy returns the item whose extracted key is the largest.
+
+```go
+words := collection.New([]string{"pear", "fig", "banana"})
+longest, ok := words.MaxBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(longest, ok)
+// "banana" #string
+// true #bool
+```
+
+### <a id="slice.minby"></a>Slice.MinBy · readonly · terminal
+
+MinBy returns the item whose extracted key is the smallest.
+
+```go
+words := collection.New([]string{"pear", "fig", "banana"})
+shortest, ok := words.MinBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(shortest, ok)
+// "fig" #string
+// true #bool
+```
+
 ### <a id="sum"></a>Sum · readonly · terminal
 
-Sum returns the sum of all numeric items in the NumericCollection.
-If the collection is empty, Sum returns the zero value of T.
+Sum returns the sum of all items in a numeric slice.
+If the slice is empty, Sum returns the zero value of T.
 
 _Example: integers_
 
 ```go
-c := collection.NewNumeric([]int{1, 2, 3})
-total := c.Sum()
+values := []int{1, 2, 3}
+total := collection.Sum(values)
 collection.Dump(total)
 // 6 #int
 ```
@@ -930,8 +905,8 @@ collection.Dump(total)
 _Example: floats_
 
 ```go
-c2 := collection.NewNumeric([]float64{1.5, 2.5})
-total2 := c2.Sum()
+values2 := []float64{1.5, 2.5}
+total2 := collection.Sum(values2)
 collection.Dump(total2)
 // 4.000000 #float64
 ```
@@ -939,8 +914,8 @@ collection.Dump(total2)
 _Example: integers - empty collection_
 
 ```go
-c3 := collection.NewNumeric([]int{})
-total3 := c3.Sum()
+empty := []int{}
+total3 := collection.Sum(empty)
 collection.Dump(total3)
 // 0 #int
 ```
@@ -959,14 +934,14 @@ clone := c.Clone()
 
 clone = clone.Append(4)
 
-collection.Dump(c.Items())
+collection.Dump(c)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
 //   2 => 3 #int
 // ]
 
-collection.Dump(clone.Items())
+collection.Dump(clone)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -988,7 +963,7 @@ odds := base.Clone().Filter(func(v int) bool {
 	return v%2 != 0
 })
 
-collection.Dump(base.Items())
+collection.Dump(base)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -997,13 +972,13 @@ collection.Dump(base.Items())
 //   4 => 5 #int
 // ]
 
-collection.Dump(evens.Items())
+collection.Dump(evens)
 // #[]int [
 //   0 => 2 #int
 //   1 => 4 #int
 // ]
 
-collection.Dump(odds.Items())
+collection.Dump(odds)
 // #[]int [
 //   0 => 1 #int
 //   1 => 3 #int
@@ -1013,15 +988,72 @@ collection.Dump(odds.Items())
 
 ### <a id="new"></a>New · immutable · chainable
 
-New creates a new Collection from the provided slice and borrows it.
+New creates a Slice from items and borrows their backing array.
 
-### <a id="newnumeric"></a>NewNumeric · immutable · chainable
+```go
+values := collection.New([]int{10, 20, 30})
+fmt.Println(len(values))
+// 3
+fmt.Println(values[1])
+// 20
 
-NewNumeric wraps a slice of numeric types in a NumericCollection and borrows it.
+total := 0
+for _, value := range values {
+	total += value
+}
+fmt.Println(total)
+// 60
+```
 
 ## Debugging
 
-### <a id="collection.dump"></a>Collection.Dump · readonly · chainable
+### <a id="dd"></a>Dd · readonly · terminal
+
+Dd prints items then terminates execution.
+Like Laravel's dd(), this is intended for debugging and
+should not be used in production control flow.
+
+```go
+c := collection.New([]string{"a", "b"})
+c.Dd()
+// #[]string [
+//   0 => "a" #string
+//   1 => "b" #string
+// ]
+// Process finished with the exit code 1
+```
+
+### <a id="dump"></a>Dump · readonly · terminal
+
+Dump is a convenience function that calls godump.Dump.
+
+```go
+c2 := collection.New([]int{1, 2, 3})
+collection.Dump(c2)
+// #[]int [
+//   0 => 1 #int
+//   1 => 2 #int
+//   2 => 3 #int
+// ]
+```
+
+### <a id="dumpstr"></a>DumpStr · readonly · terminal
+
+DumpStr returns the pretty-printed dump of the items as a string,
+without printing or exiting.
+Useful for logging, snapshot testing, and non-interactive debugging.
+
+```go
+c := collection.New([]int{10, 20})
+s := c.DumpStr()
+fmt.Println(s)
+// #[]int [
+//   0 => 10 #int
+//   1 => 20 #int
+// ]
+```
+
+### <a id="slice.dump"></a>Slice.Dump · readonly · chainable
 
 Dump prints items with godump and returns the same collection.
 This is a no-op on the collection itself and never panics.
@@ -1050,104 +1082,12 @@ collection.New([]int{1, 2, 3}).
 // ]
 ```
 
-### <a id="dd"></a>Dd · readonly · terminal
-
-Dd prints items then terminates execution.
-Like Laravel's dd(), this is intended for debugging and
-should not be used in production control flow.
-
-```go
-c := collection.New([]string{"a", "b"})
-c.Dd()
-// #[]string [
-//   0 => "a" #string
-//   1 => "b" #string
-// ]
-// Process finished with the exit code 1
-```
-
-### <a id="dump"></a>Dump · readonly · terminal
-
-Dump is a convenience function that calls godump.Dump.
-
-```go
-c2 := collection.New([]int{1, 2, 3})
-collection.Dump(c2.Items())
-// #[]int [
-//   0 => 1 #int
-//   1 => 2 #int
-//   2 => 3 #int
-// ]
-```
-
-### <a id="dumpstr"></a>DumpStr · readonly · terminal
-
-DumpStr returns the pretty-printed dump of the items as a string,
-without printing or exiting.
-Useful for logging, snapshot testing, and non-interactive debugging.
-
-```go
-c := collection.New([]int{10, 20})
-s := c.DumpStr()
-fmt.Println(s)
-// #[]int [
-//   0 => 10 #int
-//   1 => 20 #int
-// ]
-```
-
 ## Grouping
-
-### <a id="collection.groupby"></a>Collection.GroupBy · readonly · terminal
-
-GroupBy partitions this collection into collections keyed by the extracted value.
-
-```go
-numbers := collection.New([]int{1, 2, 3, 4})
-groups := numbers.GroupBy(func(number int) string {
-	if number%2 == 0 {
-		return "even"
-	}
-	return "odd"
-})
-collection.Dump(groups["even"].Items(), groups["odd"].Items())
-// #[]int [
-//   0 => 2 #int
-//   1 => 4 #int
-// ]
-// #[]int [
-//   0 => 1 #int
-//   1 => 3 #int
-// ]
-```
-
-### <a id="collection.groupbyslice"></a>Collection.GroupBySlice · readonly · terminal
-
-GroupBySlice partitions this collection into slices keyed by the extracted value.
-
-```go
-numbers := collection.New([]int{1, 2, 3, 4})
-groups := numbers.GroupBySlice(func(number int) string {
-	if number%2 == 0 {
-		return "even"
-	}
-	return "odd"
-})
-collection.Dump(groups["even"], groups["odd"])
-// #[]int [
-//   0 => 2 #int
-//   1 => 4 #int
-// ]
-// #[]int [
-//   0 => 1 #int
-//   1 => 3 #int
-// ]
-```
 
 ### <a id="groupby"></a>GroupBy · readonly · terminal
 
-GroupBy partitions the collection into groups keyed by the value
-returned from keyFn.
+GroupBy partitions the Slice into directly slice-backed Slice values keyed by
+the value returned from keyFn. Each group retains Slice's fluent methods.
 
 _Example: grouping integers by parity_
 
@@ -1155,78 +1095,6 @@ _Example: grouping integers by parity_
 values := []int{1, 2, 3, 4, 5}
 
 groups := collection.GroupBy(
-	collection.New(values),
-	func(v int) string {
-		if v%2 == 0 {
-			return "even"
-		}
-		return "odd"
-	},
-)
-
-collection.Dump(groups["even"].Items())
-// #[]int [
-//  0 => 2 #int
-//  1 => 4 #int
-// ]
-collection.Dump(groups["odd"].Items())
-// #[]int [
-//  0 => 1 #int
-//  1 => 3 #int
-//  2 => 5 #int
-// ]
-```
-
-_Example: grouping structs by field_
-
-```go
-type User struct {
-		ID   int
-		Role string
-	}
-
-	users := []User{
-		{ID: 1, Role: "admin"},
-		{ID: 2, Role: "user"},
-		{ID: 3, Role: "admin"},
-	}
-
-	groups2 := collection.GroupBy(
-		collection.New(users),
-		func(u User) string { return u.Role },
-	)
-
-collection.Dump(groups2["admin"].Items())
-// #[]main.User [
-//  0 => #main.User {
-//    +ID   => 1 #int
-//    +Role => "admin" #string
-//  }
-//  1 => #main.User {
-//    +ID   => 3 #int
-//    +Role => "admin" #string
-//  }
-// ]
-collection.Dump(groups2["user"].Items())
-// #[]main.User [
-//  0 => #main.User {
-//    +ID   => 2 #int
-//    +Role => "user" #string
-//  }
-// ]
-```
-
-### <a id="groupbyslice"></a>GroupBySlice · readonly · terminal
-
-GroupBySlice partitions the collection into groups keyed by the value
-returned from keyFn.
-
-_Example: grouping integers by parity_
-
-```go
-values := []int{1, 2, 3, 4, 5}
-
-groups := collection.GroupBySlice(
 	collection.New(values),
 	func(v int) string {
 		if v%2 == 0 {
@@ -1263,7 +1131,7 @@ users := []User{
 	{ID: 3, Role: "admin"},
 }
 
-groups2 := collection.GroupBySlice(
+groups2 := collection.GroupBy(
 	collection.New(users),
 	func(u User) string { return u.Role },
 )
@@ -1288,24 +1156,39 @@ collection.Dump(groups2["user"])
 // ]
 ```
 
-## Maps
+### <a id="slice.groupby"></a>Slice.GroupBy · readonly · terminal
 
-### <a id="collection.tomap"></a>Collection.ToMap · readonly · terminal
-
-ToMap reduces this collection into a map using the provided key and value functions.
+GroupBy partitions this Slice into directly slice-backed Slice values keyed by
+the extracted value. Each group retains Slice's fluent methods.
 
 ```go
-words := collection.New([]string{"go", "forj"})
-lengths := words.ToMap(
-	func(word string) string { return word },
-	func(word string) int { return len(word) },
-)
-collection.Dump(lengths)
-// #map[string]int {
-//   forj => 4 #int
-//   go => 2 #int
-// }
+numbers := collection.New([]int{1, 2, 3, 4})
+groups := numbers.GroupBy(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(groups["even"], groups["odd"])
+// #[]int [
+//   0 => 2 #int
+//   1 => 4 #int
+// ]
+// #[]int [
+//   0 => 1 #int
+//   1 => 3 #int
+// ]
+fmt.Println(len(groups["even"]))
+// 2
+fmt.Println(groups["odd"][0])
+// 1
+collection.Dump(groups["even"].Take(1))
+// #[]int [
+//   0 => 2 #int
+// ]
 ```
+
+## Maps
 
 ### <a id="frommap"></a>FromMap · immutable · chainable
 
@@ -1324,7 +1207,7 @@ c := collection.FromMap(m)
 c.Sort(func(a, b collection.Pair[string, int]) bool {
 	return a.Key < b.Key
 })
-collection.Dump(c.Items())
+collection.Dump(c)
 
 // #[]collection.Pair[string,int] [
 //   0 => #collection.Pair[string,int] {
@@ -1351,9 +1234,9 @@ type Config struct {
 }
 
 configs := map[string]Config{
-	"router-1": {Enabled: true,  Timeout: 30},
+	"router-1": {Enabled: true, Timeout: 30},
 	"router-2": {Enabled: false, Timeout: 10},
-	"router-3": {Enabled: true,  Timeout: 45},
+	"router-3": {Enabled: true, Timeout: 45},
 }
 
 out := collection.
@@ -1363,8 +1246,7 @@ out := collection.
 	}).
 	Sort(func(a, b collection.Pair[string, Config]) bool {
 		return a.Key < b.Key
-	}).
-	Items()
+	})
 
 collection.Dump(out)
 
@@ -1402,6 +1284,23 @@ collection.Dump(out2)
 // #map[string]int {
 //   alice => 1 #int
 //   bob => 2 #int
+// }
+```
+
+### <a id="slice.tomap"></a>Slice.ToMap · readonly · terminal
+
+ToMap reduces this collection into a map using the provided key and value functions.
+
+```go
+words := collection.New([]string{"go", "forj"})
+lengths := words.ToMap(
+	func(word string) string { return word },
+	func(word string) int { return len(word) },
+)
+collection.Dump(lengths)
+// #map[string]int {
+//   forj => 4 #int
+//   go => 2 #int
 // }
 ```
 
@@ -1495,9 +1394,9 @@ type Config struct {
 }
 
 configs := map[string]Config{
-	"router-1": {Enabled: true,  Timeout: 30},
+	"router-1": {Enabled: true, Timeout: 30},
 	"router-2": {Enabled: false, Timeout: 10},
-	"router-3": {Enabled: true,  Timeout: 45},
+	"router-3": {Enabled: true, Timeout: 45},
 }
 
 c2 := collection.
@@ -1548,7 +1447,7 @@ _Example: integers_
 ```go
 c1 := collection.New([]int{1, 2, 3, 4, 5})
 out1 := c1.Before(func(v int) bool { return v >= 3 })
-collection.Dump(out1.Items())
+collection.Dump(out1)
 // #[]int [
 //  0 => 1 #int
 //  1 => 2 #int
@@ -1560,7 +1459,7 @@ _Example: predicate never matches → whole collection returned_
 ```go
 c2 := collection.New([]int{10, 20, 30})
 out2 := c2.Before(func(v int) bool { return v == 99 })
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]int [
 //  0 => 10 #int
 //  1 => 20 #int
@@ -1584,7 +1483,7 @@ c3 := collection.New([]User{
 })
 
 out3 := c3.Before(func(u User) bool { return u.Admin })
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]main.User [
 //  0 => #main.User {
 //    +Name  => "Alice" #string
@@ -1607,7 +1506,7 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3, 4})
 c.Reverse()
-collection.Dump(c.Items())
+collection.Dump(c)
 // #[]int [
 //   0 => 4 #int
 //   1 => 3 #int
@@ -1621,8 +1520,7 @@ _Example: strings – chaining_
 ```go
 out := collection.New([]string{"a", "b", "c"}).
 	Reverse().
-	Append("d").
-	Items()
+	Append("d")
 
 collection.Dump(out)
 // #[]string [
@@ -1647,7 +1545,7 @@ users := collection.New([]User{
 })
 
 users.Reverse()
-collection.Dump(users.Items())
+collection.Dump(users)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID => 3 #int
@@ -1670,7 +1568,7 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
 c.Shuffle()
-collection.Dump(c.Items())
+collection.Dump(c)
 ```
 
 _Example: strings – chaining_
@@ -1678,8 +1576,7 @@ _Example: strings – chaining_
 ```go
 out2 := collection.New([]string{"a", "b", "c"}).
 	Shuffle().
-	Append("d").
-	Items()
+	Append("d")
 
 collection.Dump(out2)
 ```
@@ -1699,7 +1596,7 @@ users := collection.New([]User{
 })
 
 users.Shuffle()
-collection.Dump(users.Items())
+collection.Dump(users)
 ```
 
 ### <a id="sort"></a>Sort · mutable · chainable
@@ -1712,7 +1609,7 @@ _Example: integers_
 ```go
 c := collection.New([]int{5, 1, 4, 2})
 c.Sort(func(a, b int) bool { return a < b })
-collection.Dump(c.Items())
+collection.Dump(c)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -1726,7 +1623,7 @@ _Example: strings (descending)_
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry"})
 c2.Sort(func(a, b string) bool { return a > b })
-collection.Dump(c2.Items())
+collection.Dump(c2)
 // #[]string [
 //   0 => "cherry" #string
 //   1 => "banana" #string
@@ -1752,7 +1649,7 @@ users := collection.New([]User{
 users.Sort(func(a, b User) bool {
 	return a.Age < b.Age
 })
-collection.Dump(users.Items())
+collection.Dump(users)
 // #[]main.User [
 //   0 => #main.User {
 //     +Name => "Bob" #string
@@ -2288,22 +2185,6 @@ fmt.Println(out1)
 
 ## Set Operations
 
-### <a id="collection.uniqueby"></a>Collection.UniqueBy · immutable · chainable
-
-UniqueBy returns a collection containing the first item for each extracted key.
-
-```go
-words := collection.New([]string{"go", "up", "forj", "code"})
-unique := words.UniqueBy(func(word string) int {
-	return len(word)
-})
-collection.Dump(unique.Items())
-// #[]string [
-//   0 => "go" #string
-//   1 => "forj" #string
-// ]
-```
-
 ### <a id="difference"></a>Difference · immutable · chainable
 
 Difference returns a new collection containing elements from the first collection
@@ -2317,7 +2198,7 @@ a := collection.New([]int{1, 2, 2, 3, 4})
 b := collection.New([]int{2, 4})
 
 out := collection.Difference(a, b)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 1 #int
 //   1 => 3 #int
@@ -2331,7 +2212,7 @@ left := collection.New([]string{"apple", "banana", "cherry"})
 right := collection.New([]string{"banana"})
 
 out2 := collection.Difference(left, right)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "apple" #string
 //   1 => "cherry" #string
@@ -2357,7 +2238,7 @@ groupB := collection.New([]User{
 })
 
 out3 := collection.Difference(groupA, groupB)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -2382,7 +2263,7 @@ a := collection.New([]int{1, 2, 2, 3, 4})
 b := collection.New([]int{2, 4, 4, 5})
 
 out := collection.Intersect(a, b)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 2 #int
 //   1 => 4 #int
@@ -2397,7 +2278,7 @@ left := collection.New([]string{"apple", "banana", "cherry"})
 right := collection.New([]string{"banana", "date", "cherry", "banana"})
 
 out2 := collection.Intersect(left, right)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "banana" #string
 //   1 => "cherry" #string
@@ -2426,7 +2307,7 @@ groupB := collection.New([]User{
 })
 
 out3 := collection.Intersect(groupA, groupB)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 2 #int
@@ -2436,6 +2317,22 @@ collection.Dump(out3.Items())
 //     +ID   => 3 #int
 //     +Name => "Carol" #string
 //   }
+// ]
+```
+
+### <a id="slice.uniqueby"></a>Slice.UniqueBy · immutable · chainable
+
+UniqueBy returns a collection containing the first item for each extracted key.
+
+```go
+words := collection.New([]string{"go", "up", "forj", "code"})
+unique := words.UniqueBy(func(word string) int {
+	return len(word)
+})
+collection.Dump(unique)
+// #[]string [
+//   0 => "go" #string
+//   1 => "forj" #string
 // ]
 ```
 
@@ -2452,7 +2349,7 @@ a := collection.New([]int{1, 2, 3, 3})
 b := collection.New([]int{3, 4, 4, 5})
 
 out := collection.SymmetricDifference(a, b)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -2468,7 +2365,7 @@ left := collection.New([]string{"apple", "banana"})
 right := collection.New([]string{"banana", "date"})
 
 out2 := collection.SymmetricDifference(left, right)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "apple" #string
 //   1 => "date" #string
@@ -2494,7 +2391,7 @@ groupB := collection.New([]User{
 })
 
 out3 := collection.SymmetricDifference(groupA, groupB)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -2520,7 +2417,7 @@ a := collection.New([]int{1, 2, 2, 3})
 b := collection.New([]int{3, 4, 4, 5})
 
 out := collection.Union(a, b)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -2537,7 +2434,7 @@ left := collection.New([]string{"apple", "banana"})
 right := collection.New([]string{"banana", "date"})
 
 out2 := collection.Union(left, right)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "apple" #string
 //   1 => "banana" #string
@@ -2564,7 +2461,7 @@ groupB := collection.New([]User{
 })
 
 out3 := collection.Union(groupA, groupB)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -2592,7 +2489,7 @@ _Example: integers_
 ```go
 c1 := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
 out1 := c1.Unique(func(a, b int) bool { return a == b })
-collection.Dump(out1.Items())
+collection.Dump(out1)
 // #[]int [
 //	0 => 1 #int
 //	1 => 2 #int
@@ -2609,7 +2506,7 @@ c2 := collection.New([]string{"A", "a", "B", "b", "A"})
 out2 := c2.Unique(func(a, b string) bool {
 	return strings.EqualFold(a, b)
 })
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //	0 => "A" #string
 //	1 => "B" #string
@@ -2634,7 +2531,7 @@ out3 := c3.Unique(func(a, b User) bool {
 	return a.ID == b.ID
 })
 
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]main.User [
 //  0 => #main.User {
 //    +ID   => 1 #int
@@ -2667,7 +2564,7 @@ users := collection.New([]User{
 })
 
 out := collection.UniqueBy(users, func(u User) int { return u.ID })
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]main.User [
 //  0 => #main.User {
 //    +ID   => 1 #int
@@ -2689,7 +2586,7 @@ out2 := collection.UniqueBy(values, func(s string) string {
 	return strings.ToLower(s)
 })
 
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "A" #string
 //   1 => "B" #string
@@ -2702,7 +2599,7 @@ _Example: integers – identity key_
 nums := collection.New([]int{3, 1, 2, 1, 3})
 
 out3 := collection.UniqueBy(nums, func(v int) int { return v })
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]int [
 //   0 => 3 #int
 //   1 => 1 #int
@@ -2721,7 +2618,7 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
 out := collection.UniqueComparable(c)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -2736,7 +2633,7 @@ _Example: strings_
 ```go
 c2 := collection.New([]string{"A", "a", "B", "B"})
 out2 := collection.UniqueComparable(c2)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "A" #string
 //   1 => "a" #string
@@ -2818,16 +2715,19 @@ collection.Dump(userChunks)
 ### <a id="filter"></a>Filter · mutable · chainable
 
 Filter keeps only the elements for which fn returns true.
-This method mutates the collection in place and returns the same instance.
+
+Filter compacts and clears c's backing storage in place. Callers must capture
+the returned Slice because the receiver's slice header cannot be shortened by
+a value receiver.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
-c.Filter(func(v int) bool {
+c = c.Filter(func(v int) bool {
 	return v%2 == 0
 })
-collection.Dump(c.Items())
+collection.Dump(c)
 // #[]int [
 //   0 => 2 #int
 //   1 => 4 #int
@@ -2838,10 +2738,10 @@ _Example: strings_
 
 ```go
 c2 := collection.New([]string{"apple", "banana", "cherry", "avocado"})
-c2.Filter(func(v string) bool {
+c2 = c2.Filter(func(v string) bool {
 	return strings.HasPrefix(v, "a")
 })
-collection.Dump(c2.Items())
+collection.Dump(c2)
 // #[]string [
 //   0 => "apple" #string
 //   1 => "avocado" #string
@@ -2863,11 +2763,11 @@ users := collection.New([]User{
 	{ID: 4, Name: "Carol"},
 })
 
-users.Filter(func(u User) bool {
+users = users.Filter(func(u User) bool {
 	return strings.HasPrefix(u.Name, "A")
 })
 
-collection.Dump(users.Items())
+collection.Dump(users)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -2893,7 +2793,7 @@ nums := collection.New([]int{1, 2, 3, 4, 5})
 evens, odds := nums.Partition(func(n int) bool {
 	return n%2 == 0
 })
-collection.Dump(evens.Items(), odds.Items())
+collection.Dump(evens, odds)
 // #[]int [
 //   0 => 2 #int
 //   1 => 4 #int
@@ -2912,7 +2812,7 @@ words := collection.New([]string{"go", "gopher", "rust", "ruby"})
 goWords, other := words.Partition(func(s string) bool {
 	return strings.HasPrefix(s, "go")
 })
-collection.Dump(goWords.Items(), other.Items())
+collection.Dump(goWords, other)
 // #[]string [
 //   0 => "go" #string
 //   1 => "gopher" #string
@@ -2941,7 +2841,7 @@ active, inactive := users.Partition(func(u User) bool {
 	return u.Active
 })
 
-collection.Dump(active.Items(), inactive.Items())
+collection.Dump(active, inactive)
 // #[]main.User [
 //   0 => #main.User {
 //     +Name   => "Alice" #string
@@ -2962,14 +2862,14 @@ collection.Dump(active.Items(), inactive.Items())
 
 ### <a id="pop"></a>Pop · mutable · terminal
 
-Pop removes and returns the last item in the collection.
+Pop removes and returns the last item from an addressable Slice variable.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{1, 2, 3})
 item, ok := c.Pop()
-collection.Dump(item, ok, c.Items())
+collection.Dump(item, ok, c)
 // 3 #int
 // true #bool
 // #[]int [
@@ -2983,7 +2883,7 @@ _Example: strings_
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
 item2, ok2 := c2.Pop()
-collection.Dump(item2, ok2, c2.Items())
+collection.Dump(item2, ok2, c2)
 // "c" #string
 // true #bool
 // #[]string [
@@ -3006,7 +2906,7 @@ users := collection.New([]User{
 })
 
 item3, ok3 := users.Pop()
-collection.Dump(item3, ok3, users.Items())
+collection.Dump(item3, ok3, users)
 // #main.User {
 //   +ID   => 2 #int
 //   +Name => "Bob" #string
@@ -3025,7 +2925,7 @@ _Example: empty collection_
 ```go
 empty := collection.New([]int{})
 item4, ok4 := empty.Pop()
-collection.Dump(item4, ok4, empty.Items())
+collection.Dump(item4, ok4, empty)
 // 0 #int
 // false #bool
 // #[]int [
@@ -3034,14 +2934,20 @@ collection.Dump(item4, ok4, empty.Items())
 
 ### <a id="popn"></a>PopN · mutable · terminal
 
-PopN removes and returns the last n items in original order.
+PopN removes and returns the last n items in original order from an
+addressable Slice variable. It shortens the receiver's slice header.
+
+The returned slice is a view into the receiver's backing array, not a copy.
+Other copied Slice headers keep their original length, and later appending or
+concatenating into the shortened receiver's spare capacity can overwrite the
+values visible through the returned view.
 
 _Example: integers – pop 2_
 
 ```go
 c := collection.New([]int{1, 2, 3, 4})
 popped := c.PopN(2)
-collection.Dump(popped, c.Items())
+collection.Dump(popped, c)
 // #[]int [
 //   0 => 3 #int
 //   1 => 4 #int
@@ -3057,7 +2963,7 @@ _Example: strings – pop 1_
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
 popped2 := c2.PopN(1)
-collection.Dump(popped2, c2.Items())
+collection.Dump(popped2, c2)
 // #[]string [
 //   0 => "c" #string
 // ]
@@ -3082,7 +2988,7 @@ users := collection.New([]User{
 })
 
 popped3 := users.PopN(2)
-collection.Dump(popped3, users.Items())
+collection.Dump(popped3, users)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 2 #int
@@ -3106,7 +3012,7 @@ _Example: integers - n <= 0 → returns nil, no change_
 ```go
 c3 := collection.New([]int{1, 2, 3})
 popped4 := c3.PopN(0)
-collection.Dump(popped4, c3.Items())
+collection.Dump(popped4, c3)
 // []int(nil)
 // #[]int [
 //   0 => 1 #int
@@ -3120,7 +3026,7 @@ _Example: strings - n exceeds length → all items popped, rest empty_
 ```go
 c4 := collection.New([]string{"x", "y"})
 popped5 := c4.PopN(10)
-collection.Dump(popped5, c4.Items())
+collection.Dump(popped5, c4)
 // #[]string [
 //   0 => "x" #string
 //   1 => "y" #string
@@ -3141,7 +3047,7 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
 out := c.Skip(2)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 3 #int
 //   1 => 4 #int
@@ -3153,7 +3059,7 @@ _Example: skip none_
 
 ```go
 out2 := c.Skip(0)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -3167,7 +3073,7 @@ _Example: skip all_
 
 ```go
 out3 := c.Skip(10)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]int [
 // ]
 ```
@@ -3186,7 +3092,7 @@ users := collection.New([]User{
 })
 
 out4 := users.Skip(1)
-collection.Dump(out4.Items())
+collection.Dump(out4)
 // #[]main.User [
 //  0 => #main.User {
 //    +ID => 2 #int
@@ -3209,7 +3115,7 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
 out := c.SkipLast(2)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -3221,7 +3127,7 @@ _Example: skip none_
 
 ```go
 out2 := c.SkipLast(0)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -3235,7 +3141,7 @@ _Example: skip all_
 
 ```go
 out3 := c.SkipLast(10)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]int [
 // ]
 ```
@@ -3254,7 +3160,7 @@ users := collection.New([]User{
 })
 
 out4 := users.SkipLast(1)
-collection.Dump(out4.Items())
+collection.Dump(out4)
 // #[]main.User [
 //  0 => #main.User {
 //    +ID => 1 #int
@@ -3275,7 +3181,7 @@ _Example: integers - take first 3_
 ```go
 c1 := collection.New([]int{0, 1, 2, 3, 4, 5})
 out1 := c1.Take(3)
-collection.Dump(out1.Items())
+collection.Dump(out1)
 // #[]int [
 //	0 => 0 #int
 //	1 => 1 #int
@@ -3288,7 +3194,7 @@ _Example: integers - take last 2 (negative n)_
 ```go
 c2 := collection.New([]int{0, 1, 2, 3, 4, 5})
 out2 := c2.Take(-2)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]int [
 //	0 => 4 #int
 //	1 => 5 #int
@@ -3300,7 +3206,7 @@ _Example: integers - n exceeds length → whole collection_
 ```go
 c3 := collection.New([]int{10, 20})
 out3 := c3.Take(10)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]int [
 //	0 => 10 #int
 //	1 => 20 #int
@@ -3312,7 +3218,7 @@ _Example: integers - zero → empty_
 ```go
 c4 := collection.New([]int{1, 2, 3})
 out4 := c4.Take(0)
-collection.Dump(out4.Items())
+collection.Dump(out4)
 // #[]int [
 // ]
 ```
@@ -3329,7 +3235,7 @@ _Example: integers_
 ```go
 c := collection.New([]int{1, 2, 3, 4, 5})
 out := c.TakeLast(2)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 4 #int
 //   1 => 5 #int
@@ -3340,7 +3246,7 @@ _Example: take none_
 
 ```go
 out2 := c.TakeLast(0)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]int [
 // ]
 ```
@@ -3349,7 +3255,7 @@ _Example: take all_
 
 ```go
 out3 := c.TakeLast(10)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -3373,7 +3279,7 @@ users := collection.New([]User{
 })
 
 out4 := users.TakeLast(1)
-collection.Dump(out4.Items())
+collection.Dump(out4)
 // #[]main.User [
 //  0 => #main.User {
 //    +ID => 3 #int
@@ -3391,7 +3297,7 @@ _Example: integers - stop at value 3_
 ```go
 c4 := collection.New([]int{1, 2, 3, 4})
 out4 := collection.TakeUntil(c4, 3)
-collection.Dump(out4.Items())
+collection.Dump(out4)
 // #[]int [
 //	0 => 1 #int
 //	1 => 2 #int
@@ -3403,7 +3309,7 @@ _Example: strings - value never appears → full slice_
 ```go
 c5 := collection.New([]string{"a", "b", "c"})
 out5 := collection.TakeUntil(c5, "x")
-collection.Dump(out5.Items())
+collection.Dump(out5)
 // #[]string [
 //	0 => "a" #string
 //	1 => "b" #string
@@ -3416,7 +3322,7 @@ _Example: integers - match is first item → empty result_
 ```go
 c6 := collection.New([]int{9, 10, 11})
 out6 := collection.TakeUntil(c6, 9)
-collection.Dump(out6.Items())
+collection.Dump(out6)
 // #[]int [
 // ]
 ```
@@ -3431,7 +3337,7 @@ _Example: integers - stop when value >= 3_
 ```go
 c1 := collection.New([]int{1, 2, 3, 4})
 out1 := c1.TakeUntilFn(func(v int) bool { return v >= 3 })
-collection.Dump(out1.Items())
+collection.Dump(out1)
 // #[]int [
 //	0 => 1 #int
 //	1 => 2 #int
@@ -3443,7 +3349,7 @@ _Example: integers - predicate immediately true → empty result_
 ```go
 c2 := collection.New([]int{10, 20, 30})
 out2 := c2.TakeUntilFn(func(v int) bool { return v < 50 })
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]int [
 // ]
 ```
@@ -3453,7 +3359,7 @@ _Example: integers - no match → full list returned_
 ```go
 c3 := collection.New([]int{1, 2, 3})
 out3 := c3.TakeUntilFn(func(v int) bool { return v == 99 })
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]int [
 //	0 => 1 #int
 //	1 => 2 #int
@@ -3472,7 +3378,7 @@ _Example: integers - step 1_
 ```go
 nums := collection.New([]int{1, 2, 3, 4, 5})
 win := collection.Window(nums, 3, 1)
-collection.Dump(win.Items())
+collection.Dump(win)
 // #[][]int [
 //   0 => #[]int [
 //     0 => 1 #int
@@ -3497,7 +3403,7 @@ _Example: strings - step 2_
 ```go
 words := collection.New([]string{"a", "b", "c", "d", "e"})
 win2 := collection.Window(words, 2, 2)
-collection.Dump(win2.Items())
+collection.Dump(win2)
 // #[][]string [
 //   0 => #[]string [
 //     0 => "a" #string
@@ -3526,7 +3432,7 @@ points := collection.New([]Point{
 })
 
 win3 := collection.Window(points, 2, 1)
-collection.Dump(win3.Items())
+collection.Dump(win3)
 // #[][]main.Point [
 //   0 => #[]main.Point [
 //     0 => #main.Point {
@@ -3565,7 +3471,8 @@ collection.Dump(win3.Items())
 
 ### <a id="append"></a>Append · immutable · chainable
 
-Append returns a new collection with the given values appended.
+Append returns an independently backed Slice containing c followed by values.
+It allocates exactly enough storage for the result and leaves c unchanged.
 
 _Example: integers_
 
@@ -3618,71 +3525,17 @@ users.Append(
 // ]
 ```
 
-### <a id="collection.mapto"></a>Collection.MapTo · immutable · chainable
-
-MapTo maps this collection to a collection with a different element type.
-
-```go
-numbers := collection.New([]int{1, 2, 3, 4})
-labels := numbers.MapTo(func(number int) string {
-	if number%2 == 0 {
-		return "even"
-	}
-	return "odd"
-})
-collection.Dump(labels.Items())
-// #[]string [
-//   0 => "odd" #string
-//   1 => "even" #string
-//   2 => "odd" #string
-//   3 => "even" #string
-// ]
-```
-
-### <a id="collection.pipe"></a>Collection.Pipe · readonly · terminal
-
-Pipe passes this collection to fn and returns fn's result.
-
-```go
-numbers := collection.New([]int{1, 2, 3})
-total := numbers.Pipe(func(values *collection.Collection[int]) int {
-	sum := 0
-	for _, value := range values.Items() {
-		sum += value
-	}
-	return sum
-})
-collection.Dump(total)
-// 6 #int
-```
-
-### <a id="collection.zipwith"></a>Collection.ZipWith · immutable · chainable
-
-ZipWith combines this collection with another collection using fn up to the shorter length.
-
-```go
-left := collection.New([]int{1, 2, 3})
-right := collection.New([]int{10, 20})
-sums := left.ZipWith(right, func(a, b int) int {
-	return a + b
-})
-collection.Dump(sums.Items())
-// #[]int [
-//   0 => 11 #int
-//   1 => 22 #int
-// ]
-```
-
 ### <a id="concat"></a>Concat · mutable · chainable
 
-Concat appends the values from the given slice onto the end of the collection,
+Concat appends values to c, using c's spare capacity when it is available.
+
+_Example: strings_
 
 ```go
 c := collection.New([]string{"John Doe"})
 concatenated := c.
 	Concat([]string{"Jane Doe"}).
-	Concat([]string{"Johnny Doe"}).
-	Items()
+	Concat([]string{"Johnny Doe"})
 collection.Dump(concatenated)
 
 // #[]string [
@@ -3690,6 +3543,17 @@ collection.Dump(concatenated)
 //  1 => "Jane Doe" #string
 //  2 => "Johnny Doe" #string
 // ]
+```
+
+_Example: spare capacity_
+
+```go
+backing := make([]int, 2, 4)
+copy(backing, []int{1, 2})
+values := collection.New(backing)
+values = values.Concat([]int{3, 4})
+fmt.Println(values)
+// [1 2 3 4]
 ```
 
 ### <a id="each"></a>Each · readonly · chainable
@@ -3769,7 +3633,7 @@ mapped := c.Map(func(v int) int {
 	return v * 10
 })
 
-collection.Dump(mapped.Items())
+collection.Dump(mapped)
 // #[]int [
 //   0 => 10 #int
 //   1 => 20 #int
@@ -3786,7 +3650,7 @@ upper := c2.Map(func(s string) string {
 	return strings.ToUpper(s)
 })
 
-collection.Dump(upper.Items())
+collection.Dump(upper)
 // #[]string [
 //   0 => "APPLE" #string
 //   1 => "BANANA" #string
@@ -3812,7 +3676,7 @@ updated := users.Map(func(u User) User {
 	return u
 })
 
-collection.Dump(updated.Items())
+collection.Dump(updated)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -3827,7 +3691,7 @@ collection.Dump(updated.Items())
 
 ### <a id="mapto"></a>MapTo · immutable · chainable
 
-MapTo maps a Collection[T] to a Collection[R] using fn(T) R.
+MapTo maps a Slice[T] to a Slice[R] using fn(T) R.
 
 _Example: integers - extract parity label_
 
@@ -3839,7 +3703,7 @@ parity := collection.MapTo(nums, func(n int) string {
 	}
 	return "odd"
 })
-collection.Dump(parity.Items())
+collection.Dump(parity)
 // #[]string [
 //   0 => "odd" #string
 //   1 => "even" #string
@@ -3855,7 +3719,7 @@ words := collection.New([]string{"go", "forj", "rocks"})
 lengths := collection.MapTo(words, func(s string) int {
 	return len(s)
 })
-collection.Dump(lengths.Items())
+collection.Dump(lengths)
 // #[]int [
 //   0 => 2 #int
 //   1 => 4 #int
@@ -3880,7 +3744,7 @@ names := collection.MapTo(users, func(u User) string {
 	return u.Name
 })
 
-collection.Dump(names.Items())
+collection.Dump(names)
 // #[]string [
 //   0 => "Alice" #string
 //   1 => "Bob" #string
@@ -3898,7 +3762,7 @@ ints := collection.New([]int{1, 2})
 extra := []int{3, 4}
 // Merge the extra slice into the ints collection
 merged1 := ints.Merge(extra)
-collection.Dump(merged1.Items())
+collection.Dump(merged1)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -3914,7 +3778,7 @@ strs := collection.New([]string{"a", "b"})
 more := collection.New([]string{"c", "d"})
 
 merged2 := strs.Merge(more)
-collection.Dump(merged2.Items())
+collection.Dump(merged2)
 // #[]string [
 //   0 => "a" #string
 //   1 => "b" #string
@@ -3942,7 +3806,7 @@ moreUsers := []User{
 }
 
 merged3 := users.Merge(moreUsers)
-collection.Dump(merged3.Items())
+collection.Dump(merged3)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -3973,7 +3837,7 @@ _Example: integers_
 ```go
 ints := collection.New([]int{1, 2})
 out := ints.Multiply(3)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -3989,7 +3853,7 @@ _Example: strings_
 ```go
 strs := collection.New([]string{"a", "b"})
 out2 := strs.Multiply(2)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "a" #string
 //   1 => "b" #string
@@ -4007,7 +3871,7 @@ type User struct {
 
 users := collection.New([]User{{Name: "Alice"}, {Name: "Bob"}})
 out3 := users.Multiply(2)
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]main.User [
 //   0 => #main.User {
 //     +Name => "Alice" #string
@@ -4028,23 +3892,23 @@ _Example: multiplying by zero or negative returns empty_
 
 ```go
 none := ints.Multiply(0)
-collection.Dump(none.Items())
+collection.Dump(none)
 // #[]int [
 // ]
 ```
 
 ### <a id="pipe"></a>Pipe · readonly · terminal
 
-Pipe passes the entire collection into the given function
+Pipe passes the entire Slice value into the given function
 and returns the function's result.
 
 _Example: integers – computing a sum_
 
 ```go
 c := collection.New([]int{1, 2, 3})
-sum := collection.Pipe(c, func(col *collection.Collection[int]) int {
+sum := collection.Pipe(c, func(col collection.Slice[int]) int {
 	total := 0
-	for _, v := range col.Items() {
+	for _, v := range col {
 		total += v
 	}
 	return total
@@ -4057,9 +3921,9 @@ _Example: strings – joining values_
 
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
-joined := collection.Pipe(c2, func(col *collection.Collection[string]) string {
+joined := collection.Pipe(c2, func(col collection.Slice[string]) string {
 	out := ""
-	for _, v := range col.Items() {
+	for _, v := range col {
 		out += v
 	}
 	return out
@@ -4081,9 +3945,9 @@ users := collection.New([]User{
 	{ID: 2, Name: "Bob"},
 })
 
-names := collection.Pipe(users, func(col *collection.Collection[User]) []string {
-	result := make([]string, 0, len(col.Items()))
-	for _, u := range col.Items() {
+names := collection.Pipe(users, func(col collection.Slice[User]) []string {
+	result := make([]string, 0, len(col))
+	for _, u := range col {
 		result = append(result, u.Name)
 	}
 	return result
@@ -4096,16 +3960,16 @@ collection.Dump(names)
 // ]
 ```
 
-### <a id="prepend"></a>Prepend · mutable · chainable
+### <a id="prepend"></a>Prepend · immutable · chainable
 
-Prepend adds the given values to the beginning of the collection.
+Prepend returns an independently backed Slice containing values followed by c.
 
 _Example: integers_
 
 ```go
 c := collection.New([]int{3, 4})
-c.Prepend(1, 2)
-collection.Dump(c.Items())
+result := c.Prepend(1, 2)
+collection.Dump(result)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
@@ -4118,8 +3982,8 @@ _Example: strings_
 
 ```go
 letters := collection.New([]string{"c", "d"})
-letters.Prepend("a", "b")
-collection.Dump(letters.Items())
+result2 := letters.Prepend("a", "b")
+collection.Dump(result2)
 // #[]string [
 //   0 => "a" #string
 //   1 => "b" #string
@@ -4140,8 +4004,8 @@ users := collection.New([]User{
 	{ID: 2, Name: "Bob"},
 })
 
-users.Prepend(User{ID: 1, Name: "Alice"})
-collection.Dump(users.Items())
+result3 := users.Prepend(User{ID: 1, Name: "Alice"})
+collection.Dump(result3)
 // #[]main.User [
 //   0 => #main.User {
 //     +ID   => 1 #int
@@ -4158,8 +4022,8 @@ _Example: integers - Prepending into an empty collection_
 
 ```go
 empty := collection.New([]int{})
-empty.Prepend(9, 8)
-collection.Dump(empty.Items())
+result4 := empty.Prepend(9, 8)
+collection.Dump(result4)
 // #[]int [
 //   0 => 9 #int
 //   1 => 8 #int
@@ -4170,18 +4034,73 @@ _Example: integers - Prepending no values → no change_
 
 ```go
 c2 := collection.New([]int{1, 2})
-c2.Prepend()
-collection.Dump(c2.Items())
+result5 := c2.Prepend()
+collection.Dump(result5)
 // #[]int [
 //   0 => 1 #int
 //   1 => 2 #int
 // ]
 ```
 
+### <a id="slice.mapto"></a>Slice.MapTo · immutable · chainable
+
+MapTo maps this Slice to a Slice with a different element type.
+
+```go
+numbers := collection.New([]int{1, 2, 3, 4})
+labels := numbers.MapTo(func(number int) string {
+	if number%2 == 0 {
+		return "even"
+	}
+	return "odd"
+})
+collection.Dump(labels)
+// #[]string [
+//   0 => "odd" #string
+//   1 => "even" #string
+//   2 => "odd" #string
+//   3 => "even" #string
+// ]
+```
+
+### <a id="slice.pipe"></a>Slice.Pipe · readonly · terminal
+
+Pipe passes this Slice value to fn and returns fn's result.
+
+```go
+numbers := collection.New([]int{1, 2, 3})
+total := numbers.Pipe(func(values collection.Slice[int]) int {
+	sum := 0
+	for _, value := range values {
+		sum += value
+	}
+	return sum
+})
+collection.Dump(total)
+// 6 #int
+```
+
+### <a id="slice.zipwith"></a>Slice.ZipWith · immutable · chainable
+
+ZipWith combines this collection with another collection using fn up to the shorter length.
+
+```go
+left := collection.New([]int{1, 2, 3})
+right := collection.New([]int{10, 20})
+sums := left.ZipWith(right, func(a, b int) int {
+	return a + b
+})
+collection.Dump(sums)
+// #[]int [
+//   0 => 11 #int
+//   1 => 22 #int
+// ]
+```
+
 ### <a id="tap"></a>Tap · immutable · chainable
 
-Tap invokes fn with the collection pointer for side effects (logging, debugging,
-inspection) and returns the same collection to allow chaining.
+Tap invokes fn with the Slice value for side effects such as logging,
+debugging, or inspection, then returns the Slice to allow chaining.
 
 _Example: integers - capture intermediate state during a chain_
 
@@ -4189,8 +4108,8 @@ _Example: integers - capture intermediate state during a chain_
 captured1 := []int{}
 c1 := collection.New([]int{3, 1, 2}).
 	Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
-	Tap(func(col *collection.Collection[int]) {
-		captured1 = append([]int(nil), col.Items()...) // snapshot copy
+	Tap(func(col collection.Slice[int]) {
+		captured1 = append([]int(nil), col...) // snapshot copy
 	}).
 	Filter(func(v int) bool { return v >= 2 }).
 	Dump()
@@ -4200,7 +4119,7 @@ c1 := collection.New([]int{3, 1, 2}).
 	// ]
 
 // Use BOTH variables so nothing is "declared and not used"
-collection.Dump(c1.Items())
+collection.Dump(c1)
 collection.Dump(captured1)
 // #[]int [
 //  0 => 2 #int
@@ -4217,8 +4136,8 @@ _Example: integers - tap for debugging without changing flow_
 
 ```go
 c2 := collection.New([]int{10, 20, 30}).
-	Tap(func(col *collection.Collection[int]) {
-		collection.Dump(col.Items())
+	Tap(func(col collection.Slice[int]) {
+		collection.Dump(col)
 		// #[]int [
 		//  0 => 10 #int
 		//  1 => 20 #int
@@ -4227,7 +4146,7 @@ c2 := collection.New([]int{10, 20, 30}).
 	}).
 	Filter(func(v int) bool { return v > 10 })
 
-collection.Dump(c2.Items()) // ensures c2 is used
+collection.Dump(c2) // ensures c2 is used
 // #[]int [
 //  0 => 20 #int
 //  1 => 30 #int
@@ -4247,8 +4166,8 @@ users := collection.New([]User{
 	{ID: 2, Name: "Bob"},
 })
 
-users2 := users.Tap(func(col *collection.Collection[User]) {
-	collection.Dump(col.Items())
+users2 := users.Tap(func(col collection.Slice[User]) {
+	collection.Dump(col)
 	// #[]main.User [
 	//  0 => #main.User {
 	//    +ID   => 1 #int
@@ -4261,7 +4180,7 @@ users2 := users.Tap(func(col *collection.Collection[User]) {
 	// ]
 })
 
-collection.Dump(users2.Items()) // ensures users2 is used
+collection.Dump(users2) // ensures users2 is used
 // #[]main.User [
 //  0 => #main.User {
 //    +ID   => 1 #int
@@ -4285,7 +4204,7 @@ _Example: integers - double each index_
 cTimes1 := collection.Times(5, func(i int) int {
 	return i * 2
 })
-collection.Dump(cTimes1.Items())
+collection.Dump(cTimes1)
 // #[]int [
 //	0 => 2 #int
 //	1 => 4 #int
@@ -4301,7 +4220,7 @@ _Example: strings_
 cTimes2 := collection.Times(3, func(i int) string {
 	return fmt.Sprintf("item-%d", i)
 })
-collection.Dump(cTimes2.Items())
+collection.Dump(cTimes2)
 // #[]string [
 //	0 => "item-1" #string
 //	1 => "item-2" #string
@@ -4320,7 +4239,7 @@ type Point struct {
 cTimes3 := collection.Times(4, func(i int) Point {
 	return Point{X: i, Y: i * i}
 })
-collection.Dump(cTimes3.Items())
+collection.Dump(cTimes3)
 // #[]main.Point [
 //	0 => #main.Point {
 //		+X => 1 #int
@@ -4350,7 +4269,7 @@ _Example: integers_
 ```go
 c1 := collection.New([]int{1, 2, 3})
 c1.Transform(func(v int) int { return v * 2 })
-collection.Dump(c1.Items())
+collection.Dump(c1)
 // #[]int [
 //	0 => 2 #int
 //	1 => 4 #int
@@ -4363,7 +4282,7 @@ _Example: strings_
 ```go
 c2 := collection.New([]string{"a", "b", "c"})
 c2.Transform(func(s string) string { return strings.ToUpper(s) })
-collection.Dump(c2.Items())
+collection.Dump(c2)
 // #[]string [
 //	0 => "A" #string
 //	1 => "B" #string
@@ -4389,7 +4308,7 @@ c3.Transform(func(u User) User {
 	return u
 })
 
-collection.Dump(c3.Items())
+collection.Dump(c3)
 // #[]main.User [
 //  0 => #main.User {
 //    +ID   => 1 #int
@@ -4414,7 +4333,7 @@ nums := collection.New([]int{1, 2, 3})
 words := collection.New([]string{"one", "two"})
 
 out := collection.Zip(nums, words)
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]collection.Tuple[int,string] [
 //   0 => #collection.Tuple[int,string] {
 //     +First  => 1 #int
@@ -4443,7 +4362,7 @@ users := collection.New([]User{
 roles := collection.New([]string{"admin", "user", "extra"})
 
 out2 := collection.Zip(users, roles)
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]collection.Tuple[main.User·1,string] [
 //   0 => #collection.Tuple[main.User·1,string] {
 //     +First  => #main.User {
@@ -4477,7 +4396,7 @@ out := collection.ZipWith(a, b, func(x, y int) int {
 	return x + y
 })
 
-collection.Dump(out.Items())
+collection.Dump(out)
 // #[]int [
 //   0 => 11 #int
 //   1 => 22 #int
@@ -4494,7 +4413,7 @@ out2 := collection.ZipWith(names, roles, func(name, role string) string {
 	return name + ":" + role
 })
 
-collection.Dump(out2.Items())
+collection.Dump(out2)
 // #[]string [
 //   0 => "alice:admin" #string
 //   1 => "bob:user" #string
@@ -4519,7 +4438,7 @@ out3 := collection.ZipWith(users, roles2, func(u User, r Role) string {
 	return u.Name + " -> " + r.Title
 })
 
-collection.Dump(out3.Items())
+collection.Dump(out3)
 // #[]string [
 //   0 => "Alice -> admin" #string
 // ]

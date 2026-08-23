@@ -59,8 +59,8 @@ package collection
 //	//   1 => "Bob" #string
 //	//   2 => "Charlie" #string
 //	// ]
-func (c *Collection[T]) Each(fn func(T)) *Collection[T] {
-	for _, v := range c.items {
+func (c Slice[T]) Each(fn func(T)) Slice[T] {
+	for _, v := range c {
 		fn(v)
 	}
 	return c

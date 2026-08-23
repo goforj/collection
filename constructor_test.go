@@ -17,28 +17,8 @@ func TestNew_PreservesNilSlice(t *testing.T) {
 	var items []int
 	c := New(items)
 
-	if c.Items() != nil {
+	if c != nil {
 		t.Fatalf("New should preserve nil slice")
-	}
-}
-
-func TestNewNumeric_PreservesNilSlice(t *testing.T) {
-	var items []int
-	c := NewNumeric(items)
-
-	if c.Items() != nil {
-		t.Fatalf("NewNumeric should preserve nil slice")
-	}
-}
-
-func TestNewNumeric_BorrowsInputSlice(t *testing.T) {
-	items := []int{1, 2, 3}
-	c := NewNumeric(items)
-
-	items[0] = 9
-
-	if c.Items()[0] != 9 {
-		t.Fatalf("NewNumeric should borrow input slice")
 	}
 }
 

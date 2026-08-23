@@ -6,8 +6,8 @@ import (
 )
 
 func TestMedian_OddCount(t *testing.T) {
-	c := NewNumeric([]int{3, 1, 2})
-	median, ok := c.Median()
+	c := []int{3, 1, 2}
+	median, ok := Median(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true")
@@ -19,8 +19,8 @@ func TestMedian_OddCount(t *testing.T) {
 }
 
 func TestMedian_EvenCount(t *testing.T) {
-	c := NewNumeric([]int{4, 1, 2, 3})
-	median, ok := c.Median()
+	c := []int{4, 1, 2, 3}
+	median, ok := Median(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true")
@@ -33,8 +33,8 @@ func TestMedian_EvenCount(t *testing.T) {
 }
 
 func TestMedian_Floats(t *testing.T) {
-	c := NewNumeric([]float64{1.5, 3.5, 2.5})
-	median, ok := c.Median()
+	c := []float64{1.5, 3.5, 2.5}
+	median, ok := Median(c)
 
 	if !ok {
 		t.Fatalf("expected ok=true")
@@ -46,8 +46,8 @@ func TestMedian_Floats(t *testing.T) {
 }
 
 func TestMedian_Empty(t *testing.T) {
-	c := NewNumeric([]int{})
-	median, ok := c.Median()
+	c := []int{}
+	median, ok := Median(c)
 
 	if ok {
 		t.Fatalf("expected ok=false for empty collection")
@@ -60,9 +60,9 @@ func TestMedian_Empty(t *testing.T) {
 
 func TestMedian_DoesNotMutate(t *testing.T) {
 	orig := []int{10, 1, 5}
-	c := NewNumeric(orig)
+	c := orig
 
-	_, _ = c.Median()
+	_, _ = Median(c)
 
 	// Ensure original slice unchanged
 	if orig[0] != 10 || orig[1] != 1 || orig[2] != 5 {

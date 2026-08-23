@@ -137,3 +137,26 @@ func TestPopN_PreservesNilSlice(t *testing.T) {
 		t.Fatalf("expected nil slice to remain nil, got %v", c.Items())
 	}
 }
+
+func TestPopN_ReturnsBackingViewWithIndependentHeader(t *testing.T) {
+	backing := make([]int, 4, 6)
+	copy(backing, []int{1, 2, 3, 4})
+	c := New(backing)
+	copyBeforePop := c
+
+	popped := c.PopN(2)
+	if !reflect.DeepEqual(popped, []int{3, 4}) || !reflect.DeepEqual(c.Items(), []int{1, 2}) {
+		t.Fatalf("PopN result=%v remainder=%v", popped, c)
+	}
+	if &popped[0] != &backing[2] {
+		t.Fatalf("PopN result does not view the original backing array")
+	}
+	if len(copyBeforePop) != 4 || !reflect.DeepEqual(copyBeforePop.Items(), []int{1, 2, 3, 4}) {
+		t.Fatalf("copied Slice header changed after PopN: %v", copyBeforePop)
+	}
+
+	c = append(c, 9, 10)
+	if !reflect.DeepEqual(popped, []int{9, 10}) {
+		t.Fatalf("growth into spare capacity did not overwrite popped view: %v", popped)
+	}
+}

@@ -30,14 +30,13 @@ func setShuffleRand(r *rand.Rand) {
 //
 //	c := collection.New([]int{1, 2, 3, 4, 5})
 //	c.Shuffle()
-//	collection.Dump(c.Items())
+//	collection.Dump(c)
 //
 // Example: strings – chaining
 //
 //	out2 := collection.New([]string{"a", "b", "c"}).
 //		Shuffle().
-//		Append("d").
-//		Items()
+//		Append("d")
 //
 //	collection.Dump(out2)
 //
@@ -55,14 +54,14 @@ func setShuffleRand(r *rand.Rand) {
 //	})
 //
 //	users.Shuffle()
-//	collection.Dump(users.Items())
-func (c *Collection[T]) Shuffle() *Collection[T] {
-	n := len(c.items)
+//	collection.Dump(users)
+func (c Slice[T]) Shuffle() Slice[T] {
+	n := len(c)
 
 	// Fisher–Yates shuffle (in place)
 	for i := n - 1; i > 0; i-- {
 		j := shuffleRand.Intn(i + 1)
-		c.items[i], c.items[j] = c.items[j], c.items[i]
+		c[i], c[j] = c[j], c[i]
 	}
 
 	return c

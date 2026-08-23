@@ -8,7 +8,7 @@ import (
 func TestPipe_ReturnsTransformedValue(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	result := Pipe(c, func(col *Collection[int]) int {
+	result := Pipe(c, func(col Slice[int]) int {
 		sum := 0
 		for _, v := range col.Items() {
 			sum += v
@@ -24,7 +24,7 @@ func TestPipe_ReturnsTransformedValue(t *testing.T) {
 func TestPipe_CanReturnCollection(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	result := Pipe(c, func(col *Collection[int]) *Collection[int] {
+	result := Pipe(c, func(col Slice[int]) Slice[int] {
 		return col.Filter(func(v int) bool { return v > 1 })
 	})
 
@@ -39,7 +39,7 @@ func TestPipe_CanReturnCollection(t *testing.T) {
 func TestPipe_IsNonMutating(t *testing.T) {
 	c := New([]int{1, 2, 3})
 
-	_ = Pipe(c, func(col *Collection[int]) *Collection[int] {
+	_ = Pipe(c, func(col Slice[int]) Slice[int] {
 		return col
 	})
 
@@ -53,7 +53,7 @@ func TestPipe_ReceivesCorrectCollection(t *testing.T) {
 
 	calledWith := ""
 
-	Pipe(c, func(col *Collection[string]) string {
+	Pipe(c, func(col Slice[string]) string {
 		calledWith = col.Items()[0]
 		return ""
 	})

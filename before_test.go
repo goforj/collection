@@ -112,3 +112,12 @@ func TestBefore_DoesNotMutateOriginal(t *testing.T) {
 		}
 	}
 }
+
+func TestBefore_ReturnsView(t *testing.T) {
+	nums := New([]int{1, 2, 3, 4})
+	before := nums.Before(func(value int) bool { return value == 3 })
+	before[1] = 9
+	if nums[1] != 9 {
+		t.Fatalf("Before mutation did not reach source: %v", nums)
+	}
+}

@@ -12,7 +12,7 @@ package collection
 //
 //	c := collection.New([]int{1, 2, 2, 3, 4, 4, 5})
 //	out := collection.UniqueComparable(c)
-//	collection.Dump(out.Items())
+//	collection.Dump(out)
 //	// #[]int [
 //	//   0 => 1 #int
 //	//   1 => 2 #int
@@ -25,14 +25,14 @@ package collection
 //
 //	c2 := collection.New([]string{"A", "a", "B", "B"})
 //	out2 := collection.UniqueComparable(c2)
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]string [
 //	//   0 => "A" #string
 //	//   1 => "a" #string
 //	//   2 => "B" #string
 //	// ]
-func UniqueComparable[T comparable](c *Collection[T]) *Collection[T] {
-	n := len(c.items)
+func UniqueComparable[T comparable](c Slice[T]) Slice[T] {
+	n := len(c)
 	if n == 0 {
 		return New([]T{})
 	}
@@ -41,7 +41,7 @@ func UniqueComparable[T comparable](c *Collection[T]) *Collection[T] {
 
 	out := make([]T, 0, n)
 
-	for _, v := range c.items {
+	for _, v := range c {
 		if _, ok := seen[v]; ok {
 			continue
 		}

@@ -24,7 +24,7 @@ package collection
 //	})
 //
 //	out := collection.UniqueBy(users, func(u User) int { return u.ID })
-//	collection.Dump(out.Items())
+//	collection.Dump(out)
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID   => 1 #int
@@ -44,7 +44,7 @@ package collection
 //		return strings.ToLower(s)
 //	})
 //
-//	collection.Dump(out2.Items())
+//	collection.Dump(out2)
 //	// #[]string [
 //	//   0 => "A" #string
 //	//   1 => "B" #string
@@ -55,12 +55,12 @@ package collection
 //	nums := collection.New([]int{3, 1, 2, 1, 3})
 //
 //	out3 := collection.UniqueBy(nums, func(v int) int { return v })
-//	collection.Dump(out3.Items())
+//	collection.Dump(out3)
 //	// #[]int [
 //	//   0 => 3 #int
 //	//   1 => 1 #int
 //	//   2 => 2 #int
 //	// ]
-func UniqueBy[T any, K comparable](c *Collection[T], keyFn func(T) K) *Collection[T] {
+func UniqueBy[T any, K comparable](c Slice[T], keyFn func(T) K) Slice[T] {
 	return c.UniqueBy(keyFn)
 }

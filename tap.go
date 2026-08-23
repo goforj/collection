@@ -1,7 +1,7 @@
 package collection
 
-// Tap invokes fn with the collection pointer for side effects (logging, debugging,
-// inspection) and returns the same collection to allow chaining.
+// Tap invokes fn with the Slice value for side effects such as logging,
+// debugging, or inspection, then returns the Slice to allow chaining.
 // @group Transformation
 // @behavior immutable
 // @chainable true
@@ -15,8 +15,8 @@ package collection
 //	captured1 := []int{}
 //	c1 := collection.New([]int{3, 1, 2}).
 //		Sort(func(a, b int) bool { return a < b }). // → [1, 2, 3]
-//		Tap(func(col *collection.Collection[int]) {
-//			captured1 = append([]int(nil), col.Items()...) // snapshot copy
+//		Tap(func(col collection.Slice[int]) {
+//			captured1 = append([]int(nil), col...) // snapshot copy
 //		}).
 //		Filter(func(v int) bool { return v >= 2 }).
 //		Dump()
@@ -26,7 +26,7 @@ package collection
 //		// ]
 //
 //	// Use BOTH variables so nothing is "declared and not used"
-//	collection.Dump(c1.Items())
+//	collection.Dump(c1)
 //	collection.Dump(captured1)
 //	// #[]int [
 //	//  0 => 2 #int
@@ -41,8 +41,8 @@ package collection
 // Example: integers - tap for debugging without changing flow
 //
 //	c2 := collection.New([]int{10, 20, 30}).
-//		Tap(func(col *collection.Collection[int]) {
-//			collection.Dump(col.Items())
+//		Tap(func(col collection.Slice[int]) {
+//			collection.Dump(col)
 //			// #[]int [
 //			//  0 => 10 #int
 //			//  1 => 20 #int
@@ -51,7 +51,7 @@ package collection
 //		}).
 //		Filter(func(v int) bool { return v > 10 })
 //
-//	collection.Dump(c2.Items()) // ensures c2 is used
+//	collection.Dump(c2) // ensures c2 is used
 //	// #[]int [
 //	//  0 => 20 #int
 //	//  1 => 30 #int
@@ -69,8 +69,8 @@ package collection
 //		{ID: 2, Name: "Bob"},
 //	})
 //
-//	users2 := users.Tap(func(col *collection.Collection[User]) {
-//		collection.Dump(col.Items())
+//	users2 := users.Tap(func(col collection.Slice[User]) {
+//		collection.Dump(col)
 //		// #[]main.User [
 //		//  0 => #main.User {
 //		//    +ID   => 1 #int
@@ -83,7 +83,7 @@ package collection
 //		// ]
 //	})
 //
-//	collection.Dump(users2.Items()) // ensures users2 is used
+//	collection.Dump(users2) // ensures users2 is used
 //	// #[]main.User [
 //	//  0 => #main.User {
 //	//    +ID   => 1 #int
@@ -94,7 +94,7 @@ package collection
 //	//    +Name => "Bob" #string
 //	//  }
 //	// ]
-func (c *Collection[T]) Tap(fn func(*Collection[T])) *Collection[T] {
+func (c Slice[T]) Tap(fn func(Slice[T])) Slice[T] {
 	fn(c)
 	return c
 }

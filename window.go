@@ -14,7 +14,7 @@ package collection
 //
 //	nums := collection.New([]int{1, 2, 3, 4, 5})
 //	win := collection.Window(nums, 3, 1)
-//	collection.Dump(win.Items())
+//	collection.Dump(win)
 //	// #[][]int [
 //	//   0 => #[]int [
 //	//     0 => 1 #int
@@ -37,7 +37,7 @@ package collection
 //
 //	words := collection.New([]string{"a", "b", "c", "d", "e"})
 //	win2 := collection.Window(words, 2, 2)
-//	collection.Dump(win2.Items())
+//	collection.Dump(win2)
 //	// #[][]string [
 //	//   0 => #[]string [
 //	//     0 => "a" #string
@@ -64,7 +64,7 @@ package collection
 //	})
 //
 //	win3 := collection.Window(points, 2, 1)
-//	collection.Dump(win3.Items())
+//	collection.Dump(win3)
 //	// #[][]main.Point [
 //	//   0 => #[]main.Point [
 //	//     0 => #main.Point {
@@ -97,7 +97,7 @@ package collection
 //	//     }
 //	//   ]
 //	// ]
-func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
+func Window[T any](c Slice[T], size int, step int) Slice[[]T] {
 	if size <= 0 {
 		return New([][]T(nil))
 	}
@@ -106,7 +106,7 @@ func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 		step = 1
 	}
 
-	n := len(c.items)
+	n := len(c)
 	if n < size {
 		return New([][]T(nil))
 	}
@@ -116,7 +116,7 @@ func Window[T any](c *Collection[T], size int, step int) *Collection[[]T] {
 	out := make([][]T, 0, count)
 
 	for i := 0; i+size <= n; i += step {
-		out = append(out, c.items[i:i+size])
+		out = append(out, c[i:i+size])
 	}
 
 	return New(out)

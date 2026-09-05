@@ -5,22 +5,14 @@ updates:
     schedule:
       interval: weekly
   - package-ecosystem: gomod
-    directory: /
+    directories:
+      - /
+      - /docs
+      - /docs/bench
+      - /docs/regression
+      - /examples
     schedule:
       interval: weekly
-  - package-ecosystem: gomod
-    directory: /docs
-    schedule:
-      interval: weekly
-  - package-ecosystem: gomod
-    directory: /docs/bench
-    schedule:
-      interval: weekly
-  - package-ecosystem: gomod
-    directory: /docs/regression
-    schedule:
-      interval: weekly
-  - package-ecosystem: gomod
-    directory: /examples
-    schedule:
-      interval: weekly
+    groups:
+      shared-dependencies:
+        group-by: dependency-name

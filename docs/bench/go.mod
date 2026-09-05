@@ -6,7 +6,7 @@ replace github.com/goforj/collection/v4 => ../..
 
 require (
 	github.com/goforj/collection/v4 v4.0.0-00010101000000-000000000000
-	github.com/samber/lo v1.52.0
+	github.com/samber/lo v1.53.0
 )
 
 require (

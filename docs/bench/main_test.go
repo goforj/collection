@@ -132,8 +132,8 @@ func TestCPUModelFromProc(t *testing.T) {
 
 // TestPinnedDependencyVersion reads the comparator version embedded in the benchmark binary.
 func TestPinnedDependencyVersion(t *testing.T) {
-	if got := pinnedDependencyVersion(loModulePath); got != "v1.52.0" {
-		t.Fatalf("pinnedDependencyVersion(%q) = %q, want %q", loModulePath, got, "v1.52.0")
+	if got := pinnedDependencyVersion(loModulePath); got != "v1.53.0" {
+		t.Fatalf("pinnedDependencyVersion(%q) = %q, want %q", loModulePath, got, "v1.53.0")
 	}
 }
 

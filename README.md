@@ -130,17 +130,17 @@ Full raw tables: see `BENCHMARKS.md`.
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
 | **Chunk** | view trade-off | ownership trade-off | ownership trade-off |
-| **Filter** | ≈ | ≈ | ≈ |
-| **Map** | ≈ | ≈ | ≈ |
+| **Filter** | inconclusive | ≈ | ≈ |
+| **Map** | inconclusive | ≈ | ≈ |
 | **Take** | below floor | ≈ | ≈ |
 | **Skip** | view trade-off | ownership trade-off | ownership trade-off |
 | **SkipLast** | view trade-off | ownership trade-off | ownership trade-off |
 | **Zip** | inconclusive | ≈ | ≈ |
-| **ZipWith** | **2.9x faster** | ≈ | ≈ |
+| **ZipWith** | **1.9x faster** | ≈ | ≈ |
 | **UniqueComparable** | ≈ | ≈ | ≈ |
 | **UniqueBy** | ≈ | ≈ | ≈ |
 | **Union** | inconclusive | ≈ | ≈ |
-| **Intersect** | ≈ | ≈ | ≈ |
+| **Intersect** | **1.6x faster** | -33.8KB | +10 |
 | **Difference** | different work | API trade-off | API trade-off |
 | **GroupBy** | ≈ | ≈ | ≈ |
 | **CountBy** | ≈ | ≈ | ≈ |
@@ -151,14 +151,14 @@ Full raw tables: see `BENCHMARKS.md`.
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Pipeline F→M→T→R** | ≈ | ≈ | ≈ |
+| **Pipeline F→M→T→R** | 1.5x slower | ≈ | ≈ |
 
 #### Mutating ops
 
 | Op | Speed vs lo | Memory | Allocs |
 |---:|:-----------:|:------:|:------:|
-| **Retain** | 1.6x slower | ≈ | ≈ |
-| **Reverse** | **1.1x faster** | ≈ | ≈ |
+| **Retain** | ≈ | ≈ | ≈ |
+| **Reverse** | ≈ | ≈ | ≈ |
 | **Shuffle** | **3.7x faster** | ≈ | ≈ |
 | **Transform** | ≈ | ≈ | ≈ |
 <!-- bench:embed:end -->

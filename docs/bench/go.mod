@@ -10,6 +10,6 @@ require (
 )
 
 require (
-	github.com/goforj/godump v1.7.1 // indirect
+	github.com/goforj/godump v1.9.1 // indirect
 	golang.org/x/text v0.39.0 // indirect
 )

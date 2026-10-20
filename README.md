@@ -3152,3 +3152,7 @@ collection.Dump(sums)
 ## Development
 
 Use `make test` for the root module, `make vet` for static checks, and `make generate` to refresh the generated README API reference. The `docs` and `examples` directories are separate Go modules and can be tested from their own directories when changed.
+
+## Documentation
+
+Read the [collection library documentation](https://goforj.dev/collection) for standalone installation, usage, and API reference.

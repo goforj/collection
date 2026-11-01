@@ -1,4 +1,4 @@
 github.com/goforj/collection v1.3.1-0.20260823053816-7d54a0f757fa h1:MheL7xhM7npEEUiUnqOWXRZmnr00NblLmCZIPpdeGkc=
 github.com/goforj/collection v1.3.1-0.20260823053816-7d54a0f757fa/go.mod h1:Q5bAYnvgQ20gIA32wB+bySBuxgcRJDKjJtkENSrq7eo=
-github.com/goforj/godump v1.9.1 h1:9OGpb978Ytz3B59d5Yi2PzRYYLid6UkmhYDIDNiF15Y=
-github.com/goforj/godump v1.9.1/go.mod h1:JsuL6AEZfKIU+iR5ewL6iQ2fIuhvLtPmJDH47M9Ptrc=
+github.com/goforj/godump v1.10.0 h1:/lrEddsSJXLq5PIJlsCgp07hCk4c0e+wty0STxWoCOM=
+github.com/goforj/godump v1.10.0/go.mod h1:JsuL6AEZfKIU+iR5ewL6iQ2fIuhvLtPmJDH47M9Ptrc=
